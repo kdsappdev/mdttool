@@ -1,0 +1,247 @@
+<Configuration>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="F383ADA9-1A2C-40D6-A6FC-8738658DFF83/f:MainForm.Designer.cs" caret="328" fromTop="0" />
+      <File id="F383ADA9-1A2C-40D6-A6FC-8738658DFF83/d:UI/f:ToolWindow.cs" caret="201" fromTop="7" />
+      <File id="F383ADA9-1A2C-40D6-A6FC-8738658DFF83/d:UI/f:AboutDialog.Designer.cs" caret="22" fromTop="0" />
+      <File id="F383ADA9-1A2C-40D6-A6FC-8738658DFF83/d:UI/f:AboutDialog.cs" caret="588" fromTop="22" />
+      <File id="F383ADA9-1A2C-40D6-A6FC-8738658DFF83/d:UI/f:DbExplorer.cs" caret="194" fromTop="7" />
+      <File id="F383ADA9-1A2C-40D6-A6FC-8738658DFF83/d:UI/f:Doc.designer.cs" caret="22" fromTop="0" />
+      <File id="F383ADA9-1A2C-40D6-A6FC-8738658DFF83/f:MainForm.cs" caret="883" fromTop="25" />
+      <File id="F383ADA9-1A2C-40D6-A6FC-8738658DFF83/d:UI/f:Doc.cs" caret="1482" fromTop="19" />
+      <File id="C3DDB32F-3E50-484A-9142-F93472A14323/d:Docking/f:Resources.resx" caret="6672" fromTop="85" />
+      <File id="C3DDB32F-3E50-484A-9142-F93472A14323/d:Docking/f:VS2005DockPaneCaption.cs" caret="2176" fromTop="19" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Log/f:ConsoleLog.cs" caret="209" fromTop="10" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Utils/f:LogHelper.cs" caret="387" fromTop="16" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Log/f:ILog.cs" caret="0" fromTop="0" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:App.config" caret="310" fromTop="9" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:IMq.cs" caret="121" fromTop="6" />
+      <File id="C3DDB32F-3E50-484A-9142-F93472A14323/d:Docking/f:Resources.Designer.cs" caret="1181" fromTop="7" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="6196" fromTop="10" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:Program.cs" caret="1368" fromTop="6" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq1.cs" caret="2850" fromTop="0" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq1.cs" caret="2388" fromTop="15" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="397" fromTop="12" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="4456" fromTop="18" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="4456" fromTop="20" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="5360" fromTop="4" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="4433" fromTop="4" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:Program.cs" caret="1834" fromTop="18" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq1.cs" caret="2743" fromTop="15" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="6917" fromTop="11" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="7969" fromTop="4" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="7969" fromTop="8" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="7973" fromTop="16" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="9192" fromTop="15" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="7969" fromTop="4" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="3305" fromTop="20" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="2773" fromTop="6" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:Program.cs" caret="1212" fromTop="0" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="3036" fromTop="5" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:App.config" caret="261" fromTop="7" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:Program.cs" caret="607" fromTop="6" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:Program.cs" caret="2050" fromTop="13" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:Program.cs" caret="1634" fromTop="12" />
+      <File id="02C20067-4947-4BD8-85CE-C13F5CCC7480/f:Program.cs" caret="2117" fromTop="20" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="3437" fromTop="10" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="6053" fromTop="16" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="570" fromTop="10" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="9492" fromTop="12" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="2613" fromTop="9" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="4768" fromTop="8" />
+      <File id="D53A3267-6A1D-4258-B7A7-14BBEDA88D44/d:Mq/f:Mq2.cs" caret="9350" fromTop="5" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="CSharpCodeCompletionContext">
+      <Item value="new" priority="278" />
+      <Item value="DbExplorer" priority="27" />
+      <Item value="dbExplorer" priority="92" />
+      <Item value="dockPanel1" priority="30" />
+      <Item value="AboutDialog`0" priority="30" />
+      <Item value="aboutDialog" priority="62" />
+      <Item value="AboutDialog" priority="27" />
+      <Item value="Doc`0" priority="30" />
+      <Item value="Doc" priority="27" />
+      <Item value="doc" priority="92" />
+      <Item value="catch" priority="30" />
+      <Item value="Exception`0" priority="123" />
+      <Item value="ConsoleKeyInfo`0" priority="30" />
+      <Item value="Console`0" priority="181" />
+      <Item value="ex" priority="61" />
+      <Item value="Culture" priority="30" />
+      <Item value="public" priority="337" />
+      <Item value="IMq`0" priority="30" />
+      <Item value="ILog`0" priority="61" />
+      <Item value="interface" priority="29" />
+      <Item value="void" priority="247" />
+      <Item value="string" priority="402" />
+      <Item value="static" priority="61" />
+      <Item value="ConsoleLog" priority="27" />
+      <Item value="log" priority="30" />
+      <Item value="info" priority="61" />
+      <Item value="LogHelper`0" priority="247" />
+      <Item value="if" priority="185" />
+      <Item value="newPassword" priority="30" />
+      <Item value="IEnumerator" priority="30" />
+      <Item value="DateTime`0" priority="30" />
+      <Item value="as" priority="30" />
+      <Item value="CField" priority="31" />
+      <Item value="msg" priority="61" />
+      <Item value="recConn`0" priority="61" />
+      <Item value="Mq1" priority="27" />
+      <Item value="mq" priority="123" />
+      <Item value="private" priority="185" />
+      <Item value="System" priority="154" />
+      <Item value="Threading" priority="80" />
+      <Item value="Thread`0" priority="53" />
+      <Item value="ThreadPool`0" priority="26" />
+      <Item value="object" priority="30" />
+      <Item value="Program`0" priority="26" />
+      <Item value="Configuration" priority="26" />
+      <Item value="ConfigurationSettings`0" priority="26" />
+      <Item value="char" priority="27" />
+      <Item value="for" priority="30" />
+      <Item value="topics" priority="30" />
+      <Item value="Length" priority="26" />
+      <Item value="destination" priority="31" />
+      <Item value="SettingsManageability`0" priority="26" />
+      <Item value="null" priority="90" />
+      <Item value="count" priority="30" />
+      <Item value="else" priority="61" />
+      <Item value="while" priority="30" />
+      <Item value="session" priority="29" />
+      <Item value="conn" priority="59" />
+      <Item value="i" priority="30" />
+      <Item value="doMsg`0" priority="61" />
+      <Item value="Mq2`0" priority="30" />
+      <Item value="Mq2" priority="27" />
+      <Item value="mq2" priority="30" />
+      <Item value="ServerInfo" priority="27" />
+      <Item value="si" priority="30" />
+      <Item value="MQIIIManager`0" priority="61" />
+      <Item value="IMessageProcessor`0" priority="61" />
+      <Item value="getLoginMsg`0" priority="30" />
+      <Item value="return" priority="30" />
+      <Item value="mqT" priority="30" />
+      <Item value="Atf" priority="30" />
+      <Item value="MQII" priority="26" />
+      <Item value="MQManager`0" priority="57" />
+      <Item value="IMessageListener`0" priority="30" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:MDT.Tools.UI.DbExplorer">
+      <Item value="Show`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@WeifenLuo.WinFormsUI.Docking.DockState">
+      <Item value="DockLeft" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:MDT.Tools.UI.AboutDialog">
+      <Item value="ShowDialog`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:MDT.Tools.UI.Doc">
+      <Item value="Show`0" priority="26" />
+      <Item value="FileName" priority="26" />
+      <Item value="Text" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Console">
+      <Item value="WriteLine`0" priority="80" />
+      <Item value="ReadLine`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Exception">
+      <Item value="Message" priority="53" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Globalization.CultureInfo">
+      <Item value="InstalledUICulture" priority="26" />
+      <Item value="GetCultureInfo`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:MDT.Tools.Core.Log.ILog">
+      <Item value="Debug`0" priority="26" />
+      <Item value="Equals`0" priority="26" />
+      <Item value="Error`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@MDT.Tools.Core.Log.LogHelper">
+      <Item value="Debug`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@MDT.Tools.Core.Utils.LogHelper">
+      <Item value="Error`0" priority="80" />
+      <Item value="Debug`0" priority="134" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.String">
+      <Item value="IsNullOrEmpty`0" priority="26" />
+      <Item value="Format`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:com.adaptiveMQ2.message.MessageBody">
+      <Item value="Values" priority="53" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IEnumerator`1">
+      <Item value="next`0" priority="26" />
+      <Item value="MoveNext`0" priority="26" />
+      <Item value="Current" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.DateTime">
+      <Item value="Now" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.DateTime">
+      <Item value="ToString`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.String">
+      <Item value="Equals`0" priority="80" />
+      <Item value="Split`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Threading.ThreadPool">
+      <Item value="QueueUserWorkItem`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:MDT.Tools.Core.Mq.Mq1">
+      <Item value="Start`0" priority="26" />
+      <Item value="topicStr" priority="26" />
+      <Item value="flag" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Configuration.ConfigurationSettings">
+      <Item value="AppSettings" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Threading.Thread">
+      <Item value="Sleep`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:MDT.Tools.Core.Mq.Mq2">
+      <Item value="Start`0" priority="26" />
+      <Item value="Subscribe`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Atf.MQIII.MQIIIManager">
+      <Item value="Instance" priority="53" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Atf.MQIII.MQIIIManager">
+      <Item value="StartDefaultServer`0" priority="26" />
+      <Item value="Start`0" priority="26" />
+      <Item value="StopDefaultServer`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Atf.MQII.MQManager">
+      <Item value="GetInstance`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Atf.MQ.MQManager">
+      <Item value="GetInstance`0" priority="26" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Atf.MQ.MQManager">
+      <Item value="SubScribe`0" priority="26" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>

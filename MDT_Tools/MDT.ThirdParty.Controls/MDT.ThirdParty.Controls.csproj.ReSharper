@@ -1,0 +1,5 @@
+<Configuration>
+  <NamespaceFolders>
+    <SkipFolder>C3DDB32F-3E50-484A-9142-F93472A14323/d:Docking/d:Resources</SkipFolder>
+  </NamespaceFolders>
+</Configuration>
