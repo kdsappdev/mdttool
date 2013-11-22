@@ -1,4 +1,4 @@
-﻿namespace MDT.Tools.UI
+﻿namespace MDT.Tools.Core.UI
 {
     partial class ToolWindow
     {

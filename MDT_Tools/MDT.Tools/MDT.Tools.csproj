@@ -61,18 +61,6 @@
       <DependentUpon>AboutDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\DbExplorer.resx">
-      <DependentUpon>DbExplorer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Doc.resx">
-      <DependentUpon>Doc.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ToolWindow.resx">
-      <DependentUpon>ToolWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
@@ -92,24 +80,6 @@
     <Compile Include="UI\AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\DbExplorer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\DbExplorer.Designer.cs">
-      <DependentUpon>DbExplorer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Doc.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Doc.designer.cs">
-      <DependentUpon>Doc.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\ToolWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\ToolWindow.Designer.cs">
-      <DependentUpon>ToolWindow.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Image\db.ico" />
@@ -124,6 +94,10 @@
     <ProjectReference Include="..\MDT.Tools.Core\MDT.Tools.Core.csproj">
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj">
+      <Project>{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}</Project>
+      <Name>MDT.Tools.DB.Plugin</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

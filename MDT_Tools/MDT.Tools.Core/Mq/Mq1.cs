@@ -129,6 +129,8 @@ namespace MDT.Tools.Core.Mq
                     LogHelper.Debug("Event: CONNECTION_CONNECTED");
                     break;
                 case IEventListener.CONNECTION_CLOSED:
+					//断开重连
+                    recConnBySync();
                     LogHelper.Debug("Event: CONNECTION_CLOSED");
                     break;
                 case IEventListener.CONNECTION_RECONNECT:
@@ -145,8 +147,7 @@ namespace MDT.Tools.Core.Mq
                     break;
                 case IEventListener.CONNECTION_LOST:
                     LogHelper.Debug("Event: CONNECTION_LOST");
-                    //断开重连
-                    recConnBySync();
+                    
                     break;
                 case IEventListener.CONNECTION_TIMEOUT:
                     LogHelper.Debug("Event: CONNECTION_TIMEOUT");
