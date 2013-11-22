@@ -1,0 +1,6 @@
+
+DNCCFrameWork.DataAccess
+
+创建时间：2010.8.1
+
+	该命名空间主要用于数据访问，IDbHelper为数据访问接口，DbFactory为数据加工工厂

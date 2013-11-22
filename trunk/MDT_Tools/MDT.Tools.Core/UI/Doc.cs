@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using System.IO;
 
-namespace MDT.Tools.UI
+namespace MDT.Tools.Core.UI
 {
     public partial class Doc : DockContent
     {
