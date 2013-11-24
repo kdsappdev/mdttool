@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="MDT_Tools">
+</Property><Property Name="Solution File" Value="G:\mdttool\trunk\MDT_Tools\MDT_Tools.sln">
+</Property><Property Name="Date" Value="2013年11月24日">
+</Property><Property Name="Time" Value="17:54">
+</Property></Properties><Event ErrorLevel="1" Project="MDT.Tools" Source="MDT.Tools\MDT.Tools.csproj" Description="Your project is targeting .NET Framework 2.0 or 3.0. If your project uses assemblies requiring a newer .NET Framework, your project will fail to build. You can change the .NET Framework version by clicking Properties on the project menu and then selecting a new version in the '.NET Framework' dropdown box. (In Visual Basic, this is located on the Compile tab by clicking the 'Advanced Compiler Options...' button.)">
+</Event><Event ErrorLevel="0" Project="MDT.Tools" Source="MDT.Tools\MDT.Tools.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.Tools" Source="MDT.Tools\MDT.Tools.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="MDT.Tools.Core" Source="MDT.Tools.Core\MDT.Tools.Core.csproj" Description="Your project is targeting .NET Framework 2.0 or 3.0. If your project uses assemblies requiring a newer .NET Framework, your project will fail to build. You can change the .NET Framework version by clicking Properties on the project menu and then selecting a new version in the '.NET Framework' dropdown box. (In Visual Basic, this is located on the Compile tab by clicking the 'Advanced Compiler Options...' button.)">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.Core" Source="MDT.Tools.Core\MDT.Tools.Core.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.Tools.Core" Source="MDT.Tools.Core\MDT.Tools.Core.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="MDT.ThirdParty.Controls" Source="MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj" Description="Your project is targeting .NET Framework 2.0 or 3.0. If your project uses assemblies requiring a newer .NET Framework, your project will fail to build. You can change the .NET Framework version by clicking Properties on the project menu and then selecting a new version in the '.NET Framework' dropdown box. (In Visual Basic, this is located on the Compile tab by clicking the 'Advanced Compiler Options...' button.)">
+</Event><Event ErrorLevel="0" Project="MDT.ThirdParty.Controls" Source="MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.ThirdParty.Controls" Source="MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="MDT.Tools.Console" Source="MDT.Tools.Console\MDT.Tools.Console.csproj" Description="Your project is targeting .NET Framework 2.0 or 3.0. If your project uses assemblies requiring a newer .NET Framework, your project will fail to build. You can change the .NET Framework version by clicking Properties on the project menu and then selecting a new version in the '.NET Framework' dropdown box. (In Visual Basic, this is located on the Compile tab by clicking the 'Advanced Compiler Options...' button.)">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.Console" Source="MDT.Tools.Console\MDT.Tools.Console.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.Tools.Console" Source="MDT.Tools.Console\MDT.Tools.Console.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="MDT.Tools.DB.Plugin" Source="MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj" Description="Your project is targeting .NET Framework 2.0 or 3.0. If your project uses assemblies requiring a newer .NET Framework, your project will fail to build. You can change the .NET Framework version by clicking Properties on the project menu and then selecting a new version in the '.NET Framework' dropdown box. (In Visual Basic, this is located on the Compile tab by clicking the 'Advanced Compiler Options...' button.)">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.Plugin" Source="MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.Tools.DB.Plugin" Source="MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.Csharp_ModelGen.Plugin" Source="MDT.Tools.DB.Csharp_ModelGen.Plugin\MDT.Tools.DB.Csharp_ModelGen.Plugin.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.Tools.DB.Csharp_ModelGen.Plugin" Source="MDT.Tools.DB.Csharp_ModelGen.Plugin\MDT.Tools.DB.Csharp_ModelGen.Plugin.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.DocGen.Plugin" Source="MDT.Tools.DB.DocGen.Plugin\MDT.Tools.DB.DocGen.Plugin.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.Tools.DB.DocGen.Plugin" Source="MDT.Tools.DB.DocGen.Plugin\MDT.Tools.DB.DocGen.Plugin.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin" Source="MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin" Source="MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.TriggerGen.Plugin" Source="MDT.Tools.DB.TriggerGen.Plugin\MDT.Tools.DB.TriggerGen.Plugin.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="MDT.Tools.DB.TriggerGen.Plugin" Source="MDT.Tools.DB.TriggerGen.Plugin\MDT.Tools.DB.TriggerGen.Plugin.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="MDT_Tools.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="MDT_Tools.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="MDT.Tools" Source="MDT.Tools\MDT.Tools.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.Core" Source="MDT.Tools.Core\MDT.Tools.Core.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MDT.ThirdParty.Controls" Source="MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.Console" Source="MDT.Tools.Console\MDT.Tools.Console.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.Plugin" Source="MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.Csharp_ModelGen.Plugin" Source="MDT.Tools.DB.Csharp_ModelGen.Plugin\MDT.Tools.DB.Csharp_ModelGen.Plugin.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.DocGen.Plugin" Source="MDT.Tools.DB.DocGen.Plugin\MDT.Tools.DB.DocGen.Plugin.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin" Source="MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="MDT.Tools.DB.TriggerGen.Plugin" Source="MDT.Tools.DB.TriggerGen.Plugin\MDT.Tools.DB.TriggerGen.Plugin.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
