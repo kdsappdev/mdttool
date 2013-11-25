@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MDT.Tools.DB.Plugin.Utils
 {
-    public sealed class SqlDefHelper
+    internal sealed class SqlDefHelper
     {
         private SqlDefHelper()
         { }

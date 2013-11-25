@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace MDT.Tools.DB.Plugin.UI
 {
-    public partial class ConfigForm : Form
+    internal partial class ConfigForm : Form
     {
         public ConfigForm()
         {

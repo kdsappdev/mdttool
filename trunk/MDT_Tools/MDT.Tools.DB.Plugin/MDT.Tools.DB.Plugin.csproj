@@ -75,7 +75,7 @@
     <Compile Include="Utils\DBType.cs" />
     <Compile Include="Utils\FilePathHelper.cs" />
     <Compile Include="Utils\INIConfigHelper.cs" />
-    <Compile Include="Utils\DBPluginShareHelper.cs" />
+    <Compile Include="Utils\PluginShareHelper.cs" />
     <Compile Include="Utils\SqlDefHelper.cs" />
   </ItemGroup>
   <ItemGroup>
