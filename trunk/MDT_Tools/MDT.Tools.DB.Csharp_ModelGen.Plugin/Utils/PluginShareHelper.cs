@@ -24,14 +24,16 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
         public static string DBPlugin_DBviews = "DBviews";
         public static string DBPlugin_DBtablesPrimaryKeys = "DBtablesPrimaryKeys";
 
-        
+        public static string DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0 = "BroadCast_CheckTableNumberIsGreaterThan0";//广播：选中table个数是否大于0
 
         //共享控件
         public static string DBPlugin_tsslMessage = "tsslMessage";//状态栏label
 
         public static string DBPlugin_tspbLoadDBProgress = "tspbLoadDBProgress";// 状态栏进度条
 
-        public static string DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0 = "BroadCast_CheckTableNumberIsGreaterThan0";//广播：选中table个数是否大于0
+       
 
+        public const string TapControl = "TapControl";// 配置界面
+        public const string BtnSave = "BtnSave";// 保存按钮
     }
 }
