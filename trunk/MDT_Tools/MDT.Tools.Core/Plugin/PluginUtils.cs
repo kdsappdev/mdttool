@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MDT.Tools.Core.Plugin
 {
@@ -22,19 +20,19 @@ namespace MDT.Tools.Core.Plugin
     /// </summary>
     public class PluginUtils
     {
-        private  IDictionary<string, object> DicUtil = new Dictionary<string, object>();
+        private readonly IDictionary<string, object> _dicUtil = new Dictionary<string, object>();
 
         #region 注册共享信息
         public void RegisterObject(string name, object obj)
         {
-            lock (DicUtil)
+            lock (_dicUtil)
             {
-                if (DicUtil.ContainsKey(name))
+                if (_dicUtil.ContainsKey(name))
                 {
                     Remove(name);
                 }
 
-                DicUtil.Add(name, obj);
+                _dicUtil.Add(name, obj);
             }
         }
         #endregion
@@ -42,11 +40,11 @@ namespace MDT.Tools.Core.Plugin
         #region 获取共享信息
         public object GetObject(string name)
         {
-            lock (DicUtil)
+            lock (_dicUtil)
             {
-                if (DicUtil.ContainsKey(name))
+                if (_dicUtil.ContainsKey(name))
                 {
-                    return DicUtil[name];
+                    return _dicUtil[name];
                 }
                 return null;
             }
@@ -56,11 +54,11 @@ namespace MDT.Tools.Core.Plugin
         #region 移除共享信息
         public  void Remove(string name)
         {
-            lock (DicUtil)
+            lock (_dicUtil)
             {
-                if (DicUtil.ContainsKey(name))
+                if (_dicUtil.ContainsKey(name))
                 {
-                    DicUtil.Remove(name);
+                    _dicUtil.Remove(name);
                 }
             }
         }
@@ -69,9 +67,9 @@ namespace MDT.Tools.Core.Plugin
         #region Clear
         public  void Clear()
         {
-            lock (DicUtil)
+            lock (_dicUtil)
             {
-                DicUtil.Clear();
+                _dicUtil.Clear();
             }
         }
         #endregion

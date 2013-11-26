@@ -32,7 +32,7 @@ namespace MDT.Tools.Core.UI
                         FileInfo efInfo = new FileInfo(value);
 
                         string fext = efInfo.Extension.ToUpper();
-
+                        
                         if (fext.Equals(".RTF"))
                             richTextBox1.LoadFile(s, RichTextBoxStreamType.RichText);
                         else

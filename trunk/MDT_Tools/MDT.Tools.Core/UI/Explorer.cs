@@ -12,6 +12,7 @@ namespace MDT.Tools.Core.UI
         public Explorer()
         {
             InitializeComponent();
+            
         }
        
     }

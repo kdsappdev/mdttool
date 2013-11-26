@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 using System.IO;
 namespace MDT.Tools.Core.Utils
@@ -23,10 +22,11 @@ namespace MDT.Tools.Core.Utils
     public class ReflectionHelper
     {
         #region 加载指定目录下派生类型
+
         /// <summary>
         ///  加载指定目录下所有程序集中的所有派生自baseType的类型
         /// </summary>
-        /// <typeparam name="baseType">基类（或接口）类型</typeparam>
+        /// <param name="baseType"></param>
         /// <param name="directorySearched">搜索的目录</param>
         /// <param name="searchChildFolder">是否搜索子目录中的程序集</param>
         /// <param name="config">高级配置，可以传入null采用默认配置</param>        
@@ -41,11 +41,11 @@ namespace MDT.Tools.Core.Utils
             IList<Type> derivedTypeList = new List<Type>();
             if (searchChildFolder)
             {
-                ReflectionHelper.LoadDerivedTypeInAllFolder(baseType, derivedTypeList, directorySearched, config);
+                LoadDerivedTypeInAllFolder(baseType, derivedTypeList, directorySearched, config);
             }
             else
             {
-                ReflectionHelper.LoadDerivedTypeInOneFolder(baseType, derivedTypeList, directorySearched, config);
+                LoadDerivedTypeInOneFolder(baseType, derivedTypeList, directorySearched, config);
             }
 
             return derivedTypeList;
@@ -55,14 +55,11 @@ namespace MDT.Tools.Core.Utils
         #region LoadDerivedTypeInAllFolder
         private static void LoadDerivedTypeInAllFolder(Type baseType, IList<Type> derivedTypeList, string folderPath, TypeLoadConfig config)
         {
-            ReflectionHelper.LoadDerivedTypeInOneFolder(baseType, derivedTypeList, folderPath, config);
+            LoadDerivedTypeInOneFolder(baseType, derivedTypeList, folderPath, config);
             string[] folders = Directory.GetDirectories(folderPath);
-            if (folders != null)
+            foreach (string nextFolder in folders)
             {
-                foreach (string nextFolder in folders)
-                {
-                    ReflectionHelper.LoadDerivedTypeInAllFolder(baseType, derivedTypeList, nextFolder, config);
-                }
+                LoadDerivedTypeInAllFolder(baseType, derivedTypeList, nextFolder, config);
             }
         }
         #endregion
@@ -96,9 +93,9 @@ namespace MDT.Tools.Core.Utils
                         asm = Assembly.LoadFrom(file);
                     }
                 }
-                catch
+                catch(Exception ex)
                 {
-                    
+                    LogHelper.Error(ex);
                 }
 
                 if (asm == null)
@@ -113,7 +110,7 @@ namespace MDT.Tools.Core.Utils
                 {
                     if (t.IsSubclassOf(baseType) || baseType.IsAssignableFrom(t))
                     {
-                        bool canLoad = config.LoadAbstractType ? true : (!t.IsAbstract);
+                        bool canLoad = config.LoadAbstractType || (!t.IsAbstract);
                         if (canLoad)
                         {
                             derivedTypeList.Add(t);
@@ -132,7 +129,7 @@ namespace MDT.Tools.Core.Utils
             using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open, FileAccess.Read)))
             {
                 var bs = br.ReadBytes(2);
-                var msg = "非法的PE32文件";
+                const string msg = "非法的PE32文件";
                 if (bs.Length != 2) throw new Exception(msg);
                 if (bs[0] != 'M' || bs[1] != 'Z') throw new Exception(msg);
                 br.BaseStream.Seek(0x3c, SeekOrigin.Begin);
@@ -151,7 +148,7 @@ namespace MDT.Tools.Core.Utils
         #endregion
 
         #region 获取dll版本
-        public static string getVersion(Assembly assembly)
+        public static string GetVersion(Assembly assembly)
         {
             return assembly.GetName().Version.ToString();
         }
@@ -163,48 +160,46 @@ namespace MDT.Tools.Core.Utils
     public class TypeLoadConfig
     {
         #region Ctor
-        public TypeLoadConfig() { }
+        public TypeLoadConfig()
+        {
+            LoadAbstractType = false;
+        }
+
         public TypeLoadConfig(bool copyToMem, bool loadAbstract, string postfix)
         {
-            this.copyToMemory = copyToMem;
-            this.loadAbstractType = loadAbstract;
-            this.targetFilePostfix = postfix;
+            CopyToMemory = copyToMem;
+            LoadAbstractType = loadAbstract;
+            _targetFilePostfix = postfix;
         }
         #endregion
 
         #region 拷贝到内存
-        private bool copyToMemory = false;
+
         /// <summary>
         /// CopyToMem 是否将程序集拷贝到内存后加载
         /// </summary>
-        public bool CopyToMemory
-        {
-            get { return copyToMemory; }
-            set { copyToMemory = value; }
-        }
+        public bool CopyToMemory { get; set; }
+
         #endregion
 
         #region 加载抽象类型
-        private bool loadAbstractType = false;
+
         /// <summary>
         /// LoadAbstractType 是否加载抽象类型
         /// </summary>
-        public bool LoadAbstractType
-        {
-            get { return loadAbstractType; }
-            set { loadAbstractType = value; }
-        }
+        public bool LoadAbstractType { get; set; }
+
         #endregion
 
         #region 目标程序集的后缀名
-        private string targetFilePostfix = ".dll";
+        private string _targetFilePostfix = ".dll";
         /// <summary>
         /// TargetFilePostfix 搜索的目标程序集的后缀名
         /// </summary>
         public string TargetFilePostfix
         {
-            get { return targetFilePostfix; }
-            set { targetFilePostfix = value; }
+            get { return _targetFilePostfix; }
+            set { _targetFilePostfix = value; }
         }
         #endregion
     }
