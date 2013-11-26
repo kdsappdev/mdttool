@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MDT.Tools.DB.Plugin.Utils
+﻿namespace MDT.Tools.DB.Plugin.Utils
 {
     internal class PluginShareHelper
     {
@@ -23,12 +19,12 @@ namespace MDT.Tools.DB.Plugin.Utils
         public const string DBviews = "DBviews";
         public const string DBtablesPrimaryKeys = "DBtablesPrimaryKeys";
 
-        public const string BroadCast_CheckTableNumberIsGreaterThan0 = "BroadCast_CheckTableNumberIsGreaterThan0";//广播：选中table个数是否大于0
+        public const string BroadCastCheckTableNumberIsGreaterThan0 = "BroadCast_CheckTableNumberIsGreaterThan0";//广播：选中table个数是否大于0
 
 
         //共享控件
-        public const string tsslMessage = "tsslMessage";//状态栏label
-        public const string tspbLoadDBProgress = "tspbLoadDBProgress";// 状态栏进度条
+        public const string TsslMessage = "tsslMessage";//状态栏label
+        public const string TspbLoadDBProgress = "tspbLoadDBProgress";// 状态栏进度条
 
 
     }

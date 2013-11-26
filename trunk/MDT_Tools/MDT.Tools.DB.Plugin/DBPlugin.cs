@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
@@ -13,14 +12,14 @@ using MDT.Tools.DB.Plugin.Utils;
 
 namespace MDT.Tools.DB.Plugin
 {
-    public class DBPlugin : AbstractPlugin
+    public class DbPlugin : AbstractPlugin
     {
         #region 插件信息
-        private int tag = 1;
+        private int _tag = 1;
         public override int Tag
         {
-            get { return tag; }
-            set { tag = value; }
+            get { return _tag; }
+            set { _tag = value; }
         }
 
         public override int PluginKey
@@ -45,53 +44,42 @@ namespace MDT.Tools.DB.Plugin
         #endregion
 
         #region 数据库配置信息
-        DataSet dsTable = new DataSet();//所有数据库表信息
-        DataSet dsTableColumn = new DataSet();//所有表对应的列信息
-        DataSet dsTablePrimaryKey = new DataSet();//所有表对应的主键信息
 
-        public readonly string tables = "_TABLES";
-        public readonly string tablesColumns = "_TABLES_COLUMNS";
-        public readonly string views = "_VIEWS";
-        public readonly string tablesPrimaryKeys = "_TABLES_PK";
+        private readonly DataSet _dsTable = new DataSet();//所有数据库表信息
+        private readonly DataSet _dsTableColumn = new DataSet();//所有表对应的列信息
+        private readonly DataSet _dsTablePrimaryKey = new DataSet();//所有表对应的主键信息
+
+        private const string Tables = "_TABLES";
+        private const string TablesColumns = "_TABLES_COLUMNS";
+        private const string Views = "_VIEWS";
+        private const string TablesPrimaryKeys = "_TABLES_PK";
 
         #endregion
 
-        private TreeView tvDB = new TreeView();
-        private Explorer Explorer;
-        public override void OnLoading()
+        private readonly TreeView _tvDb = new TreeView();
+        private Explorer _explorer;
+
+
+        protected override void unload()
         {
-            base.OnLoading();
-            registerObject(PluginShareHelper.DBtable,tables);
-            registerObject(PluginShareHelper.DBtablesColumns, tablesColumns);
-            registerObject(PluginShareHelper.DBviews, views);
-            registerObject(PluginShareHelper.DBtablesPrimaryKeys, tablesPrimaryKeys);
-            load();
+
+            _dsTable.Clear();
+            _dsTableColumn.Clear();
+            _dsTablePrimaryKey.Clear();
+            ClearTree();
+            RemoveShareData();
+            _explorer.Text = "Explorer";
+            RemoveTool();
+            RemoveStatus();
+            RemoveTreeControl();
+            _backgroundWorkerLoadDb.DoWork -= BackgroundWorkerLoadDbDoWork;
+            _backgroundWorkerLoadDb.RunWorkerCompleted -=
+                BackgroundWorkerLoadDbRunWorkerCompleted;
+            _backgroundWorkerLoadDb.ProgressChanged -=
+                BackgroundWorkerLoadDbProgressChanged;
+
         }
-        public override void BeforeTerminating()
-        {
-            unLoad();
-        }
-        private void unLoad()
-        {
-            if (isLoad)
-            {
-                dsTable.Clear();
-                dsTableColumn.Clear();
-                dsTablePrimaryKey.Clear();
-                clearTree();
-                removeShareData();
-                Explorer.Text = "Explorer";
-                removeTool();
-                removeStatus();
-                removeTreeControl();
-                backgroundWorkerLoadDb.DoWork -= new DoWorkEventHandler(backgroundWorkerLoadDb_DoWork);
-                backgroundWorkerLoadDb.RunWorkerCompleted -=
-                    backgroundWorkerLoadDb_RunWorkerCompleted;
-                backgroundWorkerLoadDb.ProgressChanged -=
-                    backgroundWorkerLoadDb_ProgressChanged;
-            }
-        }
-        private void removeShareData()
+        private void RemoveShareData()
         {
             remove(PluginShareHelper.DBtable);
             remove(PluginShareHelper.DBtablesColumns);
@@ -108,149 +96,151 @@ namespace MDT.Tools.DB.Plugin
         }
 
         #region 工具栏 增加数据参数配置
-        ToolStripButton tsbDBSet = new ToolStripButton();
-        ToolStripComboBox tscbDBConfig = new ToolStripComboBox();
-        ToolStripButton tsbDBReSet = new ToolStripButton();
-        ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
 
-        private void addTool()
+        readonly ToolStripButton _tsbDbSet = new ToolStripButton();
+        readonly ToolStripComboBox _tscbDbConfig = new ToolStripComboBox();
+        readonly ToolStripButton _tsbDbReSet = new ToolStripButton();
+        readonly ToolStripSeparator _toolStripSeparator = new ToolStripSeparator();
+
+        private void AddTool()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple s = new Simple(addTool);
-                Explorer.Invoke(s, null);
+                var s = new Simple(AddTool);
+                _explorer.Invoke(s, null);
             }
             else
             {
-                tsbDBSet.Text = "数据库配置";
-                tsbDBSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                tsbDBSet.Click += new EventHandler(tsbDBSet_Click);
+                _tsbDbSet.Text = "数据库配置";
+                _tsbDbSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                _tsbDbSet.Click += tsbDBSet_Click;
 
 
-                tscbDBConfig.DropDownStyle = ComboBoxStyle.DropDownList;
-                tscbDBConfig.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                tscbDBConfig.SelectedIndexChanged += new EventHandler(tscbDBConfig_SelectedIndexChanged);
+                _tscbDbConfig.DropDownStyle = ComboBoxStyle.DropDownList;
+                _tscbDbConfig.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                _tscbDbConfig.SelectedIndexChanged += TscbDbConfigSelectedIndexChanged;
 
-                tsbDBReSet.Text = "重新加载数据库";
-                tsbDBReSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                tsbDBReSet.Click += new EventHandler(tsbDBReSet_Click);
+                _tsbDbReSet.Text = "重新加载数据库";
+                _tsbDbReSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                _tsbDbReSet.Click += TsbDbReSetClick;
 
 
-                Application.MainTool.Items.Insert(0, tsbDBSet);
-                Application.MainTool.Items.Insert(1, tscbDBConfig);
-                Application.MainTool.Items.Insert(2, tsbDBReSet);
-                Application.MainTool.Items.Insert(3, toolStripSeparator);
+                Application.MainTool.Items.Insert(0, _tsbDbSet);
+                Application.MainTool.Items.Insert(1, _tscbDbConfig);
+                Application.MainTool.Items.Insert(2, _tsbDbReSet);
+                Application.MainTool.Items.Insert(3, _toolStripSeparator);
             }
         }
-        private void removeTool()
+        private void RemoveTool()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple s = new Simple(removeTool);
-                Explorer.Invoke(s, null);
+                var s = new Simple(RemoveTool);
+                _explorer.Invoke(s, null);
             }
             else
             {
-                Application.MainTool.Items.Remove(tsbDBSet);
-                Application.MainTool.Items.Remove(tscbDBConfig);
-                Application.MainTool.Items.Remove(tsbDBReSet);
-                Application.MainTool.Items.Remove(toolStripSeparator);
+                Application.MainTool.Items.Remove(_tsbDbSet);
+                Application.MainTool.Items.Remove(_tscbDbConfig);
+                Application.MainTool.Items.Remove(_tsbDbReSet);
+                Application.MainTool.Items.Remove(_toolStripSeparator);
             }
         }
 
-        void tsbDBReSet_Click(object sender, EventArgs e)
+        void TsbDbReSetClick(object sender, EventArgs e)
         {
-            run(true);
+            Run(true);
         }
 
 
-        void tscbDBConfig_SelectedIndexChanged(object sender, EventArgs e)
+        void TscbDbConfigSelectedIndexChanged(object sender, EventArgs e)
         {
-            run(false);
+            Run(false);
         }
 
 
         void tsbDBSet_Click(object sender, EventArgs e)
         {
-            ConfigForm configForm = new ConfigForm();
+            var configForm = new ConfigForm();
             configForm.ShowDialog();
         }
 
         #endregion
 
         #region 增加状态栏
-        ToolStripStatusLabel tsslMessage = new ToolStripStatusLabel();
-        ToolStripProgressBar tspbLoadDBProgress = new ToolStripProgressBar();
-        private void addStatus()
+
+        readonly ToolStripStatusLabel _tsslMessage = new ToolStripStatusLabel();
+        readonly ToolStripProgressBar _tspbLoadDbProgress = new ToolStripProgressBar();
+        private void AddStatus()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple s = new Simple(addStatus);
-                Explorer.Invoke(s, null);
+                var s = new Simple(AddStatus);
+                _explorer.Invoke(s, null);
             }
             else
             {
-                tspbLoadDBProgress.AutoSize = false;
-                tspbLoadDBProgress.Visible = false;
-                tspbLoadDBProgress.Width = 250;
-                 
-                tsslMessage.AutoSize = false;
-                tsslMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-                tsslMessage.Width = Application.StatusBar.Width - tspbLoadDBProgress.Width - 20;
-                Application.StatusBar.SizeChanged += new EventHandler(StatusBar_SizeChanged);
-                Application.StatusBar.Items.Insert(0, tsslMessage);
-                Application.StatusBar.Items.Insert(1, tspbLoadDBProgress);
-                registerObject(PluginShareHelper.tsslMessage,tsslMessage);
-                registerObject(PluginShareHelper.tspbLoadDBProgress, tspbLoadDBProgress);
+                _tspbLoadDbProgress.AutoSize = false;
+                _tspbLoadDbProgress.Visible = false;
+                _tspbLoadDbProgress.Width = 250;
+
+                _tsslMessage.AutoSize = false;
+                _tsslMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+                _tsslMessage.Width = Application.StatusBar.Width - _tspbLoadDbProgress.Width - 20;
+                Application.StatusBar.SizeChanged += StatusBarSizeChanged;
+                Application.StatusBar.Items.Insert(0, _tsslMessage);
+                Application.StatusBar.Items.Insert(1, _tspbLoadDbProgress);
+                registerObject(PluginShareHelper.TsslMessage, _tsslMessage);
+                registerObject(PluginShareHelper.TspbLoadDBProgress, _tspbLoadDbProgress);
             }
         }
 
-        private void removeStatus()
+        private void RemoveStatus()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple s = new Simple(removeStatus);
-                Explorer.Invoke(s, null);
+                var s = new Simple(RemoveStatus);
+                _explorer.Invoke(s, null);
 
             }
             else
             {
-                Application.StatusBar.Items.Remove(tsslMessage);
-                Application.StatusBar.Items.Remove(tspbLoadDBProgress);
-                remove(PluginShareHelper.tsslMessage);
-                remove(PluginShareHelper.tspbLoadDBProgress);
+                Application.StatusBar.Items.Remove(_tsslMessage);
+                Application.StatusBar.Items.Remove(_tspbLoadDbProgress);
+                remove(PluginShareHelper.TsslMessage);
+                remove(PluginShareHelper.TspbLoadDBProgress);
             }
 
         }
 
-        void StatusBar_SizeChanged(object sender, EventArgs e)
+        void StatusBarSizeChanged(object sender, EventArgs e)
         {
-            tsslMessage.Width = Application.StatusBar.Width - tspbLoadDBProgress.Width - 20;
+            _tsslMessage.Width = Application.StatusBar.Width - _tspbLoadDbProgress.Width - 20;
 
         }
 
         #endregion
 
         #region 增加树形控件
-        private void addTreeControl()
+        private void AddTreeControl()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple s = new Simple(addTreeControl);
-                Explorer.Invoke(s, null);
+                var s = new Simple(AddTreeControl);
+                _explorer.Invoke(s, null);
             }
             else
             {
-                tvDB.Dock = DockStyle.Fill;
-                tvDB.CheckBoxes = true;
-                tvDB.AfterCheck += new TreeViewEventHandler(tvDB_AfterCheck);
-                tvDB.MouseClick += new MouseEventHandler(tvDB_MouseClick);
-                Application.Explorer.Controls.Add(tvDB);
+                _tvDb.Dock = DockStyle.Fill;
+                _tvDb.CheckBoxes = true;
+                _tvDb.AfterCheck += TvDbAfterCheck;
+                _tvDb.MouseClick += TvDbMouseClick;
+                Application.Explorer.Controls.Add(_tvDb);
             }
         }
 
 
-        void tvDB_AfterCheck(object sender, TreeViewEventArgs e)
+        void TvDbAfterCheck(object sender, TreeViewEventArgs e)
         {
             bool check = e.Node.Checked;
             foreach (TreeNode node in e.Node.Nodes)
@@ -258,34 +248,34 @@ namespace MDT.Tools.DB.Plugin
                 node.Checked = check;
             }
 
-            DataRow[] dr = getCheckTable();
+            DataRow[] dr = GetCheckTable();
             registerObject(PluginShareHelper.DBCurrentCheckTable, dr);
             bool flag = false;
             if (dr != null && dr.Length > 0)
             {
                 flag = true;
             }
-            broadcast(PluginShareHelper.BroadCast_CheckTableNumberIsGreaterThan0, flag);
+            broadcast(PluginShareHelper.BroadCastCheckTableNumberIsGreaterThan0, flag);
         }
 
-        void tvDB_MouseClick(object sender, MouseEventArgs e)
+        void TvDbMouseClick(object sender, MouseEventArgs e)
         {
-            DataRow[] dr = getCheckTable();
+             
             if (e.Button == MouseButtons.Right)
             {
-                Application.MainContextMenu.Show(tvDB, e.Location);
+                Application.MainContextMenu.Show(_tvDb, e.Location);
             }
         }
-        private void removeTreeControl()
+        private void RemoveTreeControl()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple s = new Simple(removeTreeControl);
-                Explorer.Invoke(s, null);
+                var s = new Simple(RemoveTreeControl);
+                _explorer.Invoke(s, null);
             }
             else
             {
-                Application.Explorer.Controls.Remove(tvDB);
+                Application.Explorer.Controls.Remove(_tvDb);
             }
 
         }
@@ -293,122 +283,118 @@ namespace MDT.Tools.DB.Plugin
 
         #region 清除树形结构
 
-        private void clearTree()
+        private void ClearTree()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple s = new Simple(clearTree);
-                Explorer.Invoke(s, null);
+                var s = new Simple(ClearTree);
+                _explorer.Invoke(s, null);
             }
             else
             {
-                tvDB.Nodes.Clear();
+                _tvDb.Nodes.Clear();
             }
         }
         #endregion
 
         private delegate void SimpleBool(bool flag);
-        private void setEnable(bool flag)
+        private void SetEnable(bool flag)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                SimpleBool s = new SimpleBool(setEnable);
-                Explorer.Invoke(s, new object[] { flag });
+                var s = new SimpleBool(SetEnable);
+                _explorer.Invoke(s, new object[] { flag });
             }
             else
             {
-                tsbDBSet.Enabled = flag;
-                tsbDBReSet.Enabled = flag;
-                tscbDBConfig.Enabled = flag;
-                tspbLoadDBProgress.Visible = !flag;
-                setTbDbEnable(flag);
+                _tsbDbSet.Enabled = flag;
+                _tsbDbReSet.Enabled = flag;
+                _tscbDbConfig.Enabled = flag;
+                _tspbLoadDbProgress.Visible = !flag;
+                SetTbDbEnable(flag);
             }
 
         }
 
         #region 增加节点
-        private void bindTreeBySync()
+        private void BindTreeBySync()
         {
-            ThreadPool.QueueUserWorkItem(delegate(object o)
-           {
-               addNodes(tvDB.Nodes);
-               exandAllTreeNode();
-           });
+            ThreadPool.QueueUserWorkItem(state =>
+                                             {
+                                                 AddNodes(_tvDb.Nodes);
+                                                 ExandAllTreeNode();
+                                             });
         }
-        private void exandAllTreeNode()
+        private void ExandAllTreeNode()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple s = new Simple(exandAllTreeNode);
-                Explorer.Invoke(s, null);
+                var s = new Simple(ExandAllTreeNode);
+                _explorer.Invoke(s, null);
 
             }
             else
             {
-                tvDB.ExpandAll();
+                _tvDb.ExpandAll();
             }
 
         }
-        private void addNodes(TreeNodeCollection collection)
+        private void AddNodes(TreeNodeCollection collection)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                createRootNodeDel s = new createRootNodeDel(addNodes);
-                Explorer.Invoke(s, new object[] { collection });
+                var s = new CreateRootNodeDel(AddNodes);
+                _explorer.Invoke(s, new object[] { collection });
 
             }
             else
             {
-                DbConfigInfo dbConfigInfo = getCurenctDbConfigInfo();
+                DbConfigInfo dbConfigInfo = GetCurenctDbConfigInfo();
                 if (dbConfigInfo != null)
                 {
 
-                    for (int i = 0; i < dsTable.Tables.Count; i++)
+                    for (int i = 0; i < _dsTable.Tables.Count; i++)
                     {
-                        if (dsTable.Tables[i].TableName.Equals(dbConfigInfo.DbConfigName + tables))
+                        if (_dsTable.Tables[i].TableName.Equals(dbConfigInfo.DbConfigName + Tables))
                         {
-                            addNodes(collection[0].Nodes, dsTable.Tables[i]);
+                            AddNodes(collection[0].Nodes, _dsTable.Tables[i]);
                         }
-                        if (dsTable.Tables[i].TableName.Equals(dbConfigInfo.DbConfigName + views))
+                        if (_dsTable.Tables[i].TableName.Equals(dbConfigInfo.DbConfigName + Views))
                         {
-                            addNodes(collection[1].Nodes, dsTable.Tables[i]);
+                            AddNodes(collection[1].Nodes, _dsTable.Tables[i]);
                         }
                     }
                 }
             }
         }
 
-        private delegate void createRootNodeDel(TreeNodeCollection collection);
-        private void createRootNode(TreeNodeCollection collection)
+        private delegate void CreateRootNodeDel(TreeNodeCollection collection);
+        private void CreateRootNode(TreeNodeCollection collection)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                createRootNodeDel s = new createRootNodeDel(createRootNode);
-                Explorer.Invoke(s, new object[] { collection });
+                var s = new CreateRootNodeDel(CreateRootNode);
+                _explorer.Invoke(s, new object[] { collection });
 
             }
             else
             {
-                TreeNode tablesNode = new TreeNode();
-                tablesNode.Text = TagType.Tables.ToString();
-                tablesNode.Tag = TagType.Tables;
-                addTreeNode(collection, tablesNode);
+                var tablesNode = new TreeNode {Text = TagType.Tables.ToString(), Tag = TagType.Tables};
+                AddTreeNode(collection, tablesNode);
 
-                TreeNode viewsNode = new TreeNode();
-                viewsNode.Text = TagType.Views.ToString();
-                viewsNode.Tag = TagType.Views;
-                addTreeNode(collection, viewsNode);
+                var viewsNode = new TreeNode {Text = TagType.Views.ToString(), Tag = TagType.Views};
+                AddTreeNode(collection, viewsNode);
             }
 
         }
 
-        private delegate void addNodesDel(TreeNodeCollection collection, DataTable treeDataTable);
-        private void addNodes(TreeNodeCollection collection, DataTable treeDataTable)
+        private delegate void AddNodesDel(TreeNodeCollection collection, DataTable treeDataTable);
+        private void AddNodes(TreeNodeCollection collection, DataTable treeDataTable)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                addNodesDel s = new addNodesDel(addNodes);
-                Explorer.Invoke(s, new object[] { collection, treeDataTable });
+                var s = new AddNodesDel(AddNodes);
+                _explorer.Invoke(s, new object[] { collection, treeDataTable });
 
             }
             else
@@ -418,47 +404,53 @@ namespace MDT.Tools.DB.Plugin
                 foreach (DataRow row in rows)
                 {
                     //新建一个结点 =                 
-                    TreeNode node = createTreeNode(row);
+                    TreeNode node = CreateTreeNode(row);
 
-                    treeNodeimageIndex(node, false);
+                    TreeNodeimageIndex(node, _isSelected);
 
-                    addTreeNode(collection, node); //加入到结点集合中              
+                    AddTreeNode(collection, node); //加入到结点集合中              
 
                 }
                 return;
             }
         }
 
-        private delegate TreeNode createTreeNodeDel(DataRow row);
-        private TreeNode createTreeNode(DataRow row)
+        private bool _isSelected = false;
+        private delegate TreeNode CreateTreeNodeDel(DataRow row);
+        private TreeNode CreateTreeNode(DataRow row)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                createTreeNodeDel s = new createTreeNodeDel(createTreeNode);
-                return Explorer.Invoke(s, new object[] { row }) as TreeNode;
+                var s = new CreateTreeNodeDel(CreateTreeNode);
+                return _explorer.Invoke(s, new object[] { row }) as TreeNode;
 
             }
             else
             {
-                TreeNode node = new TreeNode();
-
-                node.Text = row["name"] as string;
-                string strTag = row["type"].ToString();
-                if (!string.IsNullOrEmpty(strTag))
+                if (row != null)
                 {
-                    TagType tag = (TagType)Enum.Parse(typeof(TagType), strTag, true);
-                    node.Tag = new NodeTag(tag, row);
+                    var node = new TreeNode {Text = row["name"] as string};
+
+
+                    string strTag = row["type"].ToString();
+                    if (!string.IsNullOrEmpty(strTag))
+                    {
+                        var tag = (TagType) Enum.Parse(typeof (TagType), strTag, true);
+                        node.Tag = new NodeTag(tag, row);
+                    }
+                    return node;
                 }
-                return node;
             }
+            return null;
         }
-        private delegate void addTreeNodeDel(TreeNodeCollection collection, TreeNode node);
-        private void addTreeNode(TreeNodeCollection collection, TreeNode node)
+
+        private delegate void AddTreeNodeDel(TreeNodeCollection collection, TreeNode node);
+        private void AddTreeNode(TreeNodeCollection collection, TreeNode node)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                addTreeNodeDel s = new addTreeNodeDel(addTreeNode);
-                Explorer.Invoke(s, new object[] { collection, node });
+                var s = new AddTreeNodeDel(AddTreeNode);
+                _explorer.Invoke(s, new object[] { collection, node });
             }
             else
             {
@@ -467,23 +459,23 @@ namespace MDT.Tools.DB.Plugin
 
         }
 
-        private delegate void treeNodeimageIndexDel(TreeNode node, bool selected);
-        private void treeNodeimageIndex(TreeNode node, bool selected)
+        private delegate void TreeNodeimageIndexDel(TreeNode node, bool selected);
+        private void TreeNodeimageIndex(TreeNode node, bool selected)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                treeNodeimageIndexDel s = new treeNodeimageIndexDel(treeNodeimageIndex);
-                Explorer.Invoke(s, new object[] { node, selected });
+                var s = new TreeNodeimageIndexDel(TreeNodeimageIndex);
+                _explorer.Invoke(s, new object[] { node, selected });
             }
             else
             {
-                NodeTag nodeTag = node.Tag as NodeTag;
+                var nodeTag = node.Tag as NodeTag;
                 selected = false;
                 if (nodeTag != null)
                 {
                     switch (nodeTag.Tag)
                     {
-                        case TagType.DB:
+                        case TagType.Db:
                             node.ImageIndex = 7;
                             node.SelectedImageIndex = node.ImageIndex;
                             break;
@@ -531,242 +523,237 @@ namespace MDT.Tools.DB.Plugin
         #endregion
 
         #region 绑定数据库配置信息
-        IList<DbConfigInfo> dbConfigList = new List<DbConfigInfo>();
-        Dictionary<string, DbConfigInfo> dbConfigDic = new Dictionary<string, DbConfigInfo>();
+        IList<DbConfigInfo> _dbConfigList = new List<DbConfigInfo>();
+        readonly Dictionary<string, DbConfigInfo> _dbConfigDic = new Dictionary<string, DbConfigInfo>();
         delegate void Simple();
-        public void getDbConfigList()
+        public void GetDbConfigList()
         {
-            dbConfigList.Clear();
-            tscbDBConfig.Items.Clear();
+            _dbConfigList.Clear();
+            _tscbDbConfig.Items.Clear();
 
-            dbConfigList = INIConfigHelper.ReadDBInfo();
-            bindDbConfig();
+            _dbConfigList = IniConfigHelper.ReadDBInfo();
+            BindDbConfig();
 
         }
-        private void bindDbConfig()
+        private void BindDbConfig()
         {
-            foreach (DbConfigInfo dc in dbConfigList)
+            foreach (DbConfigInfo dc in _dbConfigList)
             {
-                if (!dbConfigDic.ContainsKey(dc.DbConfigName))
+                if (!_dbConfigDic.ContainsKey(dc.DbConfigName))
                 {
-                    tscbDBConfig.Items.Add(dc.DbConfigName);
-                    dbConfigDic.Add(dc.DbConfigName, dc);
+                    _tscbDbConfig.Items.Add(dc.DbConfigName);
+                    _dbConfigDic.Add(dc.DbConfigName, dc);
                 }
 
             }
-            if (dbConfigList != null && dbConfigList.Count > 0)
+            if (_dbConfigList != null && _dbConfigList.Count > 0)
             {
-                if (String.IsNullOrEmpty(tscbDBConfig.Text))
+                if (String.IsNullOrEmpty(_tscbDbConfig.Text))
                 {
-                    tscbDBConfig.Text = dbConfigList[0].DbConfigName;
+                    _tscbDbConfig.Text = _dbConfigList[0].DbConfigName;
                 }
             }
         }
         #endregion
 
         #region 初始化
-
-
-        private object isLoadLock = new object();
-        private BackgroundWorker backgroundWorkerLoadDb = new BackgroundWorker();
-        private void load()
+        private readonly BackgroundWorker _backgroundWorkerLoadDb = new BackgroundWorker();
+        protected override void load()
         {
-            if (!isLoad)
+            registerObject(PluginShareHelper.DBtable, Tables);
+            registerObject(PluginShareHelper.DBtablesColumns, TablesColumns);
+            registerObject(PluginShareHelper.DBviews, Views);
+            registerObject(PluginShareHelper.DBtablesPrimaryKeys, TablesPrimaryKeys);
+            _explorer = Application.Explorer;
+            _explorer.Text = "数据库信息";
+            AddTool();
+            AddStatus();
+            AddTreeControl();
+            _backgroundWorkerLoadDb.DoWork += BackgroundWorkerLoadDbDoWork;
+            _backgroundWorkerLoadDb.RunWorkerCompleted += BackgroundWorkerLoadDbRunWorkerCompleted;
+            _backgroundWorkerLoadDb.ProgressChanged += BackgroundWorkerLoadDbProgressChanged;
+            GetDbConfigList();
+            isLoad = true;
+
+
+
+        }
+        private void Run(bool flag)
+        {
+            //if (!_backgroundWorkerLoadDb.IsBusy)
             {
-                lock (isLoadLock)
-                {
-                    if (!isLoad)
-                    {
-                        Explorer = Application.Explorer;
-                        Explorer.Text = "数据库信息";
-                        addTool();
-                        addStatus();
-                        addTreeControl();
-                        backgroundWorkerLoadDb.DoWork += new DoWorkEventHandler(backgroundWorkerLoadDb_DoWork);
-                        backgroundWorkerLoadDb.RunWorkerCompleted += new RunWorkerCompletedEventHandler(backgroundWorkerLoadDb_RunWorkerCompleted);
-                        backgroundWorkerLoadDb.ProgressChanged += new ProgressChangedEventHandler(backgroundWorkerLoadDb_ProgressChanged);
-                        getDbConfigList();
-                        isLoad = true;
-                    }
-                }
+                //_backgroundWorkerLoadDb.RunWorkerAsync(flag);
+                ThreadPool.QueueUserWorkItem(o =>
+                                                 {
+                                                     DoWork(flag);
+                                                     BackgroundWorkerLoadDbRunWorkerCompleted(null, null);
+                                                 });
+                ;
             }
         }
-        private void run(bool flag)
+
+        void BackgroundWorkerLoadDbProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (!backgroundWorkerLoadDb.IsBusy)
-            {
-                backgroundWorkerLoadDb.RunWorkerAsync(flag);
-            }
+            SetProgress(e.ProgressPercentage);
         }
 
-        void backgroundWorkerLoadDb_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        void BackgroundWorkerLoadDbRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            setProgress(e.ProgressPercentage);
-        }
-
-        void backgroundWorkerLoadDb_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (isLoadSuccess)
+            if (_isLoadSuccess)
             {
-                DbConfigInfo dbConfigInfo = getCurenctDbConfigInfo();
+                DbConfigInfo dbConfigInfo = GetCurenctDbConfigInfo();
                 if (dbConfigInfo != null)
                 {
-                    if (dsTable.Tables.Count == 0)
+                    if (_dsTable.Tables.Count == 0)
                     {
-                        setStatusBar(string.Format("{0}数据加载完毕，共{1}表", dbConfigInfo.DbConfigName, 0));
+                        SetStatusBar(string.Format("{0}数据加载完毕，共{1}表", dbConfigInfo.DbConfigName, 0));
                     }
-                    foreach (DataTable dt in dsTable.Tables)
+                    foreach (DataTable dt in _dsTable.Tables)
                     {
-                        if (dt.TableName.Equals(dbConfigInfo.DbConfigName + tables))
+                        if (dt.TableName.Equals(dbConfigInfo.DbConfigName + Tables))
                         {
-                            setStatusBar(string.Format("{0}数据加载完毕，共{1}表", dbConfigInfo.DbConfigName,
-                                                       dsTable.Tables[dbConfigInfo.DbConfigName + tables].Rows.Count));
+                            SetStatusBar(string.Format("{0}数据加载完毕，共{1}表", dbConfigInfo.DbConfigName,
+                                                       _dsTable.Tables[dbConfigInfo.DbConfigName + Tables].Rows.Count));
                         }
                     }
                 }
-                
-                registerObject(PluginShareHelper.DBCurrentDBAllTable, dsTable);
-                registerObject(PluginShareHelper.DBCurrentDBAllTablesColumns, dsTableColumn);
-                registerObject(PluginShareHelper.DBCurrentDBTablesPrimaryKeys, dsTablePrimaryKey);
-                setEnable(true);
+
+                registerObject(PluginShareHelper.DBCurrentDBAllTable, _dsTable);
+                registerObject(PluginShareHelper.DBCurrentDBAllTablesColumns, _dsTableColumn);
+                registerObject(PluginShareHelper.DBCurrentDBTablesPrimaryKeys, _dsTablePrimaryKey);
+                SetEnable(true);
             }
             else
             {
-                setEnable(true);
-                setTbDbEnable(false);
+                SetEnable(true);
+                SetTbDbEnable(false);
             }
-           
-           
+
+
         }
-        private void setTbDbEnable(bool flag)
+        private void SetTbDbEnable(bool flag)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                SimpleBool s = new SimpleBool(setTbDbEnable);
-                Explorer.Invoke(s, new object[] { flag });
+                var s = new SimpleBool(SetTbDbEnable);
+                _explorer.Invoke(s, new object[] { flag });
             }
             else
             {
-                tvDB.Enabled = flag;
+                _tvDb.Enabled = flag;
                 Application.MainContextMenu.Enabled = flag;
             }
         }
 
-        void backgroundWorkerLoadDb_DoWork(object sender, DoWorkEventArgs e)
+        void BackgroundWorkerLoadDbDoWork(object sender, DoWorkEventArgs e)
         {
-            bool flag = (bool)e.Argument;
-            doWork(flag);
+            var flag = (bool)e.Argument;
+            DoWork(flag);
         }
-        private void doWork(bool flag)
+        private void DoWork(bool flag)
         {
-            setEnable(false);
-            clearTree();
-            createRootNode(tvDB.Nodes);
-            setProgreesEditValue(0);
-            setProgress(0);
-            loadDbInfoBySync(flag);
+            SetEnable(false);
+            ClearTree();
+            CreateRootNode(_tvDb.Nodes);
+            SetProgreesEditValue(0);
+            SetProgress(0);
+            LoadDbInfoBySync(flag);
         }
 
         #endregion
 
         #region 加载当前选中数据库信息
 
-        public void setProgreesEditValue(int i)
+        public void SetProgreesEditValue(int i)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                SimpleInt s = new SimpleInt(setProgreesEditValue);
-                Explorer.Invoke(s, new object[] { i });
+                var s = new SimpleInt(SetProgreesEditValue);
+                _explorer.Invoke(s, new object[] { i });
             }
             else
             {
-                tspbLoadDBProgress.Value = i;
-                ;
+                _tspbLoadDbProgress.Value = i;
             }
 
         }
         delegate void SimpleInt(int i);
         delegate void SimpleStr(string str);
-        public void setProgressMax(int i)
+        public void SetProgressMax(int i)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                SimpleInt s = new SimpleInt(setProgressMax);
-                Explorer.Invoke(s, new object[] { i });
+                var s = new SimpleInt(SetProgressMax);
+                _explorer.Invoke(s, new object[] { i });
 
             }
             else
             {
-                tspbLoadDBProgress.Maximum = i;
+                _tspbLoadDbProgress.Maximum = i;
             }
 
         }
-        public void setProgress(int i)
+        public void SetProgress(int i)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                SimpleInt s = new SimpleInt(setProgress);
-                Explorer.Invoke(s, new object[] { i });
+                var s = new SimpleInt(SetProgress);
+                _explorer.Invoke(s, new object[] { i });
 
             }
             else
             {
-                if (i + (int)tspbLoadDBProgress.Value > tspbLoadDBProgress.Maximum)
+                if (i + _tspbLoadDbProgress.Value > _tspbLoadDbProgress.Maximum)
                 {
-                    tspbLoadDBProgress.Value = tspbLoadDBProgress.Maximum;
+                    _tspbLoadDbProgress.Value = _tspbLoadDbProgress.Maximum;
                 }
                 else
                 {
-                    tspbLoadDBProgress.Value += i;
-                    tspbLoadDBProgress.Text = tspbLoadDBProgress.Value + "%";
-                };
+                    _tspbLoadDbProgress.Value = _tspbLoadDbProgress.Value+i;
+                }
             }
 
         }
-        public void setStatusBar(string str)
+        public void SetStatusBar(string str)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                SimpleStr s = new SimpleStr(setStatusBar);
-                Explorer.Invoke(s, new object[] { str });
-
+                var s = new SimpleStr(SetStatusBar);
+                _explorer.Invoke(s, new object[] { str });
+                
             }
             else
             {
-                tsslMessage.Text = str;
+                _tsslMessage.Text = str;
             }
         }
 
         private delegate string Simple2();
-        public string getCurrentDBName()
+        public string GetCurrentDBName()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                Simple2 s = new Simple2(getCurrentDBName);
-                return Explorer.Invoke(s, null) as string;
+                var s = new Simple2(GetCurrentDBName);
+                return _explorer.Invoke(s, null) as string;
             }
-            else
-            {
-                return tscbDBConfig.Text;
-            }
-
+            return _tscbDbConfig.Text;
         }
 
-        private DbConfigInfo getCurenctDbConfigInfo()
+        private DbConfigInfo GetCurenctDbConfigInfo()
         {
             DbConfigInfo dbConfigInfo = null;
-            string dbConfigName = getCurrentDBName();
-            if (!string.IsNullOrEmpty(dbConfigName) && dbConfigDic.ContainsKey(dbConfigName))
+            string dbConfigName = GetCurrentDBName();
+            if (!string.IsNullOrEmpty(dbConfigName) && _dbConfigDic.ContainsKey(dbConfigName))
             {
-                dbConfigInfo = dbConfigDic[dbConfigName];
+                dbConfigInfo = _dbConfigDic[dbConfigName];
             }
             return dbConfigInfo;
         }
 
-        private bool isLoadSuccess = false;
-        private void loadDbInfoBySync(bool reloadDb)
+        private bool _isLoadSuccess;
+        private void LoadDbInfoBySync(bool reloadDb)
         {
-            DbConfigInfo dbConfigInfo = getCurenctDbConfigInfo();
+            DbConfigInfo dbConfigInfo = GetCurenctDbConfigInfo();
             if (dbConfigInfo != null)
             {
                 try
@@ -778,22 +765,22 @@ namespace MDT.Tools.DB.Plugin
                     #endregion
 
                     #region 加载所有表信息
-                    setStatusBar(string.Format("正在获取{0}中所有表信息", dbConfigInfo.DbConfigName));
-                    setProgress(0);
+                    SetStatusBar(string.Format("正在获取{0}中所有表信息", dbConfigInfo.DbConfigName));
+                    SetProgress(0);
 
-                    if (dsTable.Tables.Contains(dbConfigInfo.DbConfigName + tables))
+                    if (_dsTable.Tables.Contains(dbConfigInfo.DbConfigName + Tables))
                     {
-                        dsTable.Tables.Remove(dbConfigInfo.DbConfigName + tables);
+                        _dsTable.Tables.Remove(dbConfigInfo.DbConfigName + Tables);
                     }
 
                     #region 从本地读取数据
-                    bool status = FilePathHelper.isExist(dbConfigInfo.DbConfigName, tables);
+                    bool status = FilePathHelper.IsExist(dbConfigInfo.DbConfigName, Tables);
                     //MessageBox.Show(status + ":" + reloadDb);
                     if (!reloadDb)
                     {
                         if (status)
                         {
-                            FilePathHelper.ReadXml(dsTable, dbConfigInfo.DbConfigName, tables);
+                            FilePathHelper.ReadXml(_dsTable, dbConfigInfo.DbConfigName, Tables);
                         }
                     }
                     #endregion
@@ -801,33 +788,33 @@ namespace MDT.Tools.DB.Plugin
                     #region  从数据库中读取数据
                     if (!status || reloadDb)
                     {
-                        DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new char[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
+                        DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
                         string sql = SqlDefHelper.GetTableNames(dbConfigInfo.DbType);
                         //MessageBox.Show(sql);
-                        db.Fill(sql, dsTable, new string[] { dbConfigInfo.DbConfigName + tables });
-                        FilePathHelper.WriteXml(dsTable);//缓存表数据到本地
+                        db.Fill(sql, _dsTable, new[] { dbConfigInfo.DbConfigName + Tables });
+                        FilePathHelper.WriteXml(_dsTable);//缓存表数据到本地
                     }
                     #endregion
 
-                    setStatusBar(string.Format("{0}所有表信息加载完毕", dbConfigInfo.DbConfigName));
-                    setProgress(10);
+                    SetStatusBar(string.Format("{0}所有表信息加载完毕", dbConfigInfo.DbConfigName));
+                    SetProgress(10);
                     #endregion
 
                     #region 加载所有表主键
-                    setStatusBar(string.Format("正在获取{0}中所有表主键信息", dbConfigInfo.DbConfigName));
+                    SetStatusBar(string.Format("正在获取{0}中所有表主键信息", dbConfigInfo.DbConfigName));
 
-                    if (dsTablePrimaryKey.Tables.Contains(dbConfigInfo.DbConfigName + tablesPrimaryKeys))
+                    if (_dsTablePrimaryKey.Tables.Contains(dbConfigInfo.DbConfigName + TablesPrimaryKeys))
                     {
-                        dsTablePrimaryKey.Tables.Remove(dbConfigInfo.DbConfigName + tablesPrimaryKeys);
+                        _dsTablePrimaryKey.Tables.Remove(dbConfigInfo.DbConfigName + TablesPrimaryKeys);
                     }
 
                     #region 从本地读取数据
-                    status = FilePathHelper.isExist(dbConfigInfo.DbConfigName, tablesPrimaryKeys);
+                    status = FilePathHelper.IsExist(dbConfigInfo.DbConfigName, TablesPrimaryKeys);
                     if (!reloadDb)
                     {
                         if (status)
                         {
-                            FilePathHelper.ReadXml(dsTablePrimaryKey, dbConfigInfo.DbConfigName, tablesPrimaryKeys);
+                            FilePathHelper.ReadXml(_dsTablePrimaryKey, dbConfigInfo.DbConfigName, TablesPrimaryKeys);
                         }
                     }
                     #endregion
@@ -835,38 +822,38 @@ namespace MDT.Tools.DB.Plugin
                     #region  从数据库中读取数据
                     if (!status || reloadDb)
                     {
-                        DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new char[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
-                        string sql = Utils.SqlDefHelper.GetAllTablePrimaryKeys(dbConfigInfo.DbType);
-                        db.Fill(sql, dsTablePrimaryKey, new string[] { dbConfigInfo.DbConfigName + tablesPrimaryKeys });
-                        FilePathHelper.WriteXml(dsTablePrimaryKey);//缓存表数据到本地
+                        DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
+                        string sql = SqlDefHelper.GetAllTablePrimaryKeys(dbConfigInfo.DbType);
+                        db.Fill(sql, _dsTablePrimaryKey, new[] { dbConfigInfo.DbConfigName + TablesPrimaryKeys });
+                        FilePathHelper.WriteXml(_dsTablePrimaryKey);//缓存表数据到本地
                     }
                     #endregion
 
-                    setStatusBar(string.Format("{0}所有表主键信息加载完毕", dbConfigInfo.DbConfigName));
-                    setProgress(10);
+                    SetStatusBar(string.Format("{0}所有表主键信息加载完毕", dbConfigInfo.DbConfigName));
+                    SetProgress(10);
                     #endregion
 
                     #region 构造树形结构
-                    bindTreeBySync();
+                    BindTreeBySync();
                     #endregion
 
                     #region 加载所有表字段信息
 
-                    setStatusBar(string.Format("正在获取{0}中所有表字段信息", dbConfigInfo.DbConfigName));
+                    SetStatusBar(string.Format("正在获取{0}中所有表字段信息", dbConfigInfo.DbConfigName));
 
-                    if (dsTableColumn.Tables.Contains(dbConfigInfo.DbConfigName + tablesColumns))
+                    if (_dsTableColumn.Tables.Contains(dbConfigInfo.DbConfigName + TablesColumns))
                     {
-                        dsTableColumn.Tables.Remove(dbConfigInfo.DbConfigName + tablesColumns);
+                        _dsTableColumn.Tables.Remove(dbConfigInfo.DbConfigName + TablesColumns);
                     }
 
                     #region 从本地读取表字段信息
-                    status = FilePathHelper.isExist(dbConfigInfo.DbConfigName, tablesColumns);
+                    status = FilePathHelper.IsExist(dbConfigInfo.DbConfigName, TablesColumns);
                     if (!reloadDb)
                     {
                         if (status)
                         {
-                            FilePathHelper.ReadXml(dsTableColumn, dbConfigInfo.DbConfigName, tablesColumns);
-                            setProgress(80);
+                            FilePathHelper.ReadXml(_dsTableColumn, dbConfigInfo.DbConfigName, TablesColumns);
+                            SetProgress(80);
                         }
                     }
                     #endregion
@@ -874,91 +861,85 @@ namespace MDT.Tools.DB.Plugin
                     #region 从数据库读取表字段信息
                     if (!status || reloadDb)
                     {
-                        DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new char[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
-                        int count = dsTable.Tables[dbConfigInfo.DbConfigName + tables].Rows.Count;
+                        DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
+                        int count = _dsTable.Tables[dbConfigInfo.DbConfigName + Tables].Rows.Count;
                         int temp1 = count / 7;
-                        bool isDivisible = count % temp1 == 0 ? true : false;
-                        string sql = Utils.SqlDefHelper.GetTableColumnNames(dbConfigInfo.DbType);
+                        bool isDivisible = count % temp1 == 0;
+                        string sql = SqlDefHelper.GetTableColumnNames(dbConfigInfo.DbType);
                         for (int i = 0; i < count; i++)
                         {
-                            DataRow dr = dsTable.Tables[dbConfigInfo.DbConfigName + tables].Rows[i];
-                            DataSet temp = new DataSet();
-                            Dictionary<string, string> dicPar = new Dictionary<string, string>();
-                            dicPar.Add("@tableName", dr["name"] as string);
-                            setStatusBar(string.Format("正在获取{0}中{1}字段信息", dbConfigInfo.DbConfigName, dr["name"] as string));
-                            db.Fill(sql, temp, new string[] { dbConfigInfo.DbConfigName + tablesColumns }, dicPar);
-                            dsTableColumn.Merge(temp);
+                            DataRow dr = _dsTable.Tables[dbConfigInfo.DbConfigName + Tables].Rows[i];
+                            var temp = new DataSet();
+                            var dicPar = new Dictionary<string, string> {{"@tableName", dr["name"] as string}};
+                            SetStatusBar(string.Format("正在获取{0}中{1}字段信息", dbConfigInfo.DbConfigName, dr["name"] as string));
+                            db.Fill(sql, temp, new[] { dbConfigInfo.DbConfigName + TablesColumns }, dicPar);
+                            _dsTableColumn.Merge(temp);
                             if (i % temp1 == 0)
                             {
-                                setProgress(10);
+                                SetProgress(10);
                             }
                         }
-                        FilePathHelper.WriteXml(dsTableColumn);//缓存表字段数据到本地，
+                        FilePathHelper.WriteXml(_dsTableColumn);//缓存表字段数据到本地，
                         if (!isDivisible)
                         {
-                            setProgress(10);
+                            SetProgress(10);
                         }
                     }
                     #endregion
 
-                    setEnable(true);
+                    SetEnable(true);
 
                     #endregion
 
-                    isLoadSuccess = true;
+                    _isLoadSuccess = true;
 
                 }
                 catch (System.Data.Common.DbException ex)
                 {
-                    setStatusBar("加载数据失败[" + ex.Message + "]");
-                     
+                    SetStatusBar("加载数据失败[" + ex.Message + "]");
+
                 }
             }
             else
             {
-                setStatusBar("加载数据失败[没有获取到数据库配置]");
+                SetStatusBar("加载数据失败[没有获取到数据库配置]");
             }
         }
 
         #endregion
 
-
         #region 获取选择项
 
-        private delegate DataRow[] getCheckTableDel();
-        private DataRow[] getCheckTable()
+        private delegate DataRow[] GetCheckTableDel();
+        private DataRow[] GetCheckTable()
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                getCheckTableDel s = new getCheckTableDel(getCheckTable);
-                return Explorer.Invoke(s, null) as DataRow[];
+                var s = new GetCheckTableDel(GetCheckTable);
+                return _explorer.Invoke(s, null) as DataRow[];
             }
-            else
+            var tnCheckList = new List<TreeNode>();
+            GetTnCheck(_tvDb.Nodes, tnCheckList);
+            var drTable = new DataRow[0];
+            if (tnCheckList.Count > 0)
             {
-                IList<TreeNode> tnCheckList = new List<TreeNode>();
-                getTnCheck(tvDB.Nodes, tnCheckList);
-                DataRow[] drTable = new DataRow[0];
-                if (tnCheckList.Count > 0)
+                drTable = new DataRow[tnCheckList.Count];
+                for (int i = 0; i < drTable.Length; i++)
                 {
-                    drTable = new DataRow[tnCheckList.Count];
-                    for (int i = 0; i < drTable.Length; i++)
-                    {
-                        drTable[i] = (tnCheckList[i].Tag as NodeTag).Dr;
-                    }
+                    drTable[i] = ((NodeTag) tnCheckList[i].Tag).Dr;
                 }
-                return drTable;
             }
-
+            return drTable;
         }
 
-        private delegate void getTnCheckDel(TreeNodeCollection collection, IList<TreeNode> tnCheckList);
+        private delegate void GetTnCheckDel(TreeNodeCollection collection, IList<TreeNode> tnCheckList);
 
-        private void getTnCheck(TreeNodeCollection collection, IList<TreeNode> tnCheckList)
+        private void GetTnCheck(TreeNodeCollection collection, IList<TreeNode> tnCheckList)
         {
-            if (Explorer.InvokeRequired)
+            if (_explorer.InvokeRequired)
             {
-                getTnCheckDel s = new getTnCheckDel(getTnCheck);
-                Explorer.Invoke(s, null);
+                var s = new GetTnCheckDel(GetTnCheck);
+                _explorer.Invoke(s, null);
             }
             else
             {
@@ -970,7 +951,7 @@ namespace MDT.Tools.DB.Plugin
                     }
                     if (tn.Nodes.Count > 0)
                     {
-                        getTnCheck(tn.Nodes, tnCheckList);
+                        GetTnCheck(tn.Nodes, tnCheckList);
                     }
                 }
             }
@@ -987,27 +968,28 @@ namespace MDT.Tools.DB.Plugin
         public NodeTag(TagType tag, DataRow dr)
         {
 
-            this.tag = tag;
-            this.dr = dr;
+            _tag = tag;
+            _dr = dr;
         }
 
 
-        TagType tag = TagType.None;
+        readonly TagType _tag = TagType.None;
 
         public TagType Tag
         {
-            get { return tag; }
+            get { return _tag; }
         }
-        DataRow dr = null;
+
+        readonly DataRow _dr;
 
         public DataRow Dr
         {
-            get { return dr; }
+            get { return _dr; }
         }
     }
     internal enum TagType
     {
-        DB,
+        Db,
         Tables,
         Table,
         Views,

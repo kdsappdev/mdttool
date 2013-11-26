@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using MDT.Tools.Core.Utils;
 
@@ -25,7 +23,7 @@ namespace MDT.Tools.DB.Plugin.Utils
                 {
                     foreach (DataTable dt in ds.Tables)
                     {
-                        string path = FilePathHelper.SaveDBDataPath + dt.TableName + ".data";
+                        string path = SaveDBDataPath + dt.TableName + ".data";
                         FileHelper.CreateDirectory(path);
                         dt.WriteXml(path, XmlWriteMode.WriteSchema);
                     }
@@ -42,13 +40,13 @@ namespace MDT.Tools.DB.Plugin.Utils
             {
                 ds = new DataSet();
             }
-            bool status = isExist(dbConfigName, dataType);
+            bool status = IsExist(dbConfigName, dataType);
             if (status)
             {
                 try
                 {
-                    DataTable dt = new DataTable();
-                    string path = FilePathHelper.SaveDBDataPath + dbConfigName + dataType + ".data";
+                    var dt = new DataTable();
+                    string path = SaveDBDataPath + dbConfigName + dataType + ".data";
                     FileHelper.CreateDirectory(path);
                     dt.ReadXml(path);
                     ds.Tables.Add(dt);
@@ -60,12 +58,12 @@ namespace MDT.Tools.DB.Plugin.Utils
             }
             return ds;
         }
-        public static bool isExist(string dbConfigName, string dataType)
+        public static bool IsExist(string dbConfigName, string dataType)
         {
             bool status = false;
             if (!string.IsNullOrEmpty(dbConfigName) && !string.IsNullOrEmpty(dataType))
             {
-                string path = FilePathHelper.SaveDBDataPath + dbConfigName + dataType + ".data";
+                string path = SaveDBDataPath + dbConfigName + dataType + ".data";
                 FileHelper.CreateDirectory(path);
                 if (File.Exists(path))
                 {
