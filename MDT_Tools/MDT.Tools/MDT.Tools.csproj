@@ -133,20 +133,17 @@
       <Project>{093DCCC0-573A-4E93-A2B2-94697F676D6B}</Project>
       <Name>MDT.Tools.DB.DocGen.Plugin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin.csproj">
-      <Project>{262B5415-560C-48C6-95B1-8A538E48F5FB}</Project>
-      <Name>MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj">
       <Project>{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}</Project>
       <Name>MDT.Tools.DB.Plugin</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MDT.Tools.DB.TriggerGen.Plugin\MDT.Tools.DB.TriggerGen.Plugin.csproj">
-      <Project>{2037AEBC-23E7-4878-994C-1BCACC3E6251}</Project>
-      <Name>MDT.Tools.DB.TriggerGen.Plugin</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
       <ProductName>.NET Framework 2.0 %28x86%29</ProductName>

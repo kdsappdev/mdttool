@@ -34,6 +34,9 @@ namespace MDT.Tools
         private void Initialize()
         {
             notifyIcon1.Text = Text;
+            Text = Text + string.Format(" Beta版本:{0}", this.GetType().Assembly.GetName().Version);
+            //((System.Reflection.AssemblyDescriptionAttribute)System.Reflection.AssemblyDescriptionAttribute.GetCustomAttribute(this.GetType().Assembly,
+//typeof(System.Reflection.AssemblyDescriptionAttribute))).Description
             notifyIcon1.Icon = Icon;
             _pluginUtils=new PluginUtils();
             _pluginManager = new PluginManager(this);
