@@ -1,25 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
-using MDT.Tools.Core.UI;
-using MDT.Tools.DB.Doc.Plugin.Gen;
+using MDT.Tools.DB.DocGen.Plugin.Gen;
+using MDT.Tools.DB.DocGen.Plugin.Utils;
 
-namespace MDT.Tools.DB.Doc.Plugin
+namespace MDT.Tools.DB.DocGen.Plugin
 {
     public class DocGenPlugin : AbstractPlugin
     {
         #region 插件信息
 
-        private int tag = 2;
+        private int _tag = 2;
 
         public override int Tag
         {
-            get { return tag; }
-            set { tag = value; }
+            get { return _tag; }
+            set { _tag = value; }
         }
 
         public override int PluginKey
@@ -46,121 +44,104 @@ namespace MDT.Tools.DB.Doc.Plugin
 
         #region
 
-        private ToolStripItem tsiDocGen = new ToolStripMenuItem();
+      
 
-        public override void OnLoading()
+
+
+        protected override void load()
         {
-            base.OnLoading();
-            load();
+            AddContextMenu();
+            subscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
         }
 
-        private void load()
+        protected override void unload()
         {
-            if (!isLoad)
-            {
-                addContextMenu();
-                subscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
-            }
-        }
+            
+            unsubscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
+            Application.MainContextMenu.Items.Remove(_tsiDocGen);
 
-        private void unload()
-        {
-            if (isLoad)
-            {
-                unsubscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
-                Application.MainContextMenu.Items.Remove(tsiDocGen);
-            }
         }
 
         #region 增加上下文菜单
-
+        private readonly ToolStripItem _tsiDocGen = new ToolStripMenuItem();
         private delegate void Simple();
-        private void addContextMenu()
+        private void AddContextMenu()
         {
             if (Application.MainContextMenu.InvokeRequired)
             {
-                Simple s = new Simple(addContextMenu);
+                var s = new Simple(AddContextMenu);
                 Application.MainContextMenu.Invoke(s, null);
             }
             else
             {
-                tsiDocGen.Text = "生成数据库文档";
-                tsiDocGen.Enabled = false;
-                tsiDocGen.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                tsiDocGen.Click += new EventHandler(tsiDocGen_Click);
-                Application.MainContextMenu.Items.Add(tsiDocGen);
+                _tsiDocGen.Text = "生成数据库文档";
+                _tsiDocGen.Enabled = false;
+                _tsiDocGen.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                _tsiDocGen.Click += TsiDocGenClick;
+                Application.MainContextMenu.Items.Add(_tsiDocGen);
             }
         }
 
-        void tsiDocGen_Click(object sender, EventArgs e)
+        void TsiDocGenClick(object sender, EventArgs e)
         {
-            DataRow[] drTable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentCheckTable) as DataRow[];
-            
-            ThreadPool.QueueUserWorkItem(o=> genDBWord(drTable));
+            var drTable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentCheckTable) as DataRow[];
+
+            ThreadPool.QueueUserWorkItem(o => GenDBWord(drTable));
         }
-        private void genDBWord(DataRow[] drTable)
+        private void GenDBWord(DataRow[] drTable)
         {
-            GenDbWord genDbWord = new GenDbWord();
-            string dbName = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBName) as string;
-            string dbType = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBType) as string;
-            DataSet dsTableColumn =getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBAllTablesColumns) as DataSet;
-            DataSet dsTablePrimaryKey = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBTablesPrimaryKeys) as DataSet;
-             
-            string DBtable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtable) as string;
-            string DBtablesColumns = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesColumns) as string;
+            var gen = new GenDbWord();
+            var dbName = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBName) as string;
+            var dbType = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBType) as string;
+            var dsTableColumn = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBAllTablesColumns) as DataSet;
+            var dsTablePrimaryKey = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBTablesPrimaryKeys) as DataSet;
+
+            var dBtable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtable) as string;
+            var dBtablesColumns = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesColumns) as string;
+
+            var dBviews = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBviews) as string;
+            var dBtablesPrimaryKeys = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesPrimaryKeys) as string;
+            var tsslMessage = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tsslMessage) as ToolStripStatusLabel;
+            var tspbLoadDBProgress = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tspbLoadDBProgress) as ToolStripProgressBar;
             
-            string DBviews = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBviews) as string;
-            string DBtablesPrimaryKeys = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesPrimaryKeys) as string;
-            ToolStripStatusLabel tsslMessage = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tsslMessage) as ToolStripStatusLabel;
-            ToolStripProgressBar tspbLoadDBProgress = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tspbLoadDBProgress) as ToolStripProgressBar;
-            Explorer Explorer = Application.Explorer;
 
-            genDbWord.tsiDocGen = tsiDocGen;
-            genDbWord.DBtable = DBtable;
-            genDbWord.DBtablesColumns = DBtablesColumns;
-            genDbWord.DBviews = DBviews;
-            genDbWord.DBtablesPrimaryKeys = DBtablesPrimaryKeys;
-            genDbWord.dbName = dbName;
-            genDbWord.dbType = dbType;
-            genDbWord.tsslMessage = tsslMessage;
-            genDbWord.tspbLoadDBProgress = tspbLoadDBProgress;
-            genDbWord.Explorer = Explorer;
-            genDbWord.dsTableColumn = dsTableColumn;
-            genDbWord.dsTablePrimaryKey = dsTablePrimaryKey;
-            genDbWord.GenCode(drTable, dsTableColumn, dsTablePrimaryKey);
-            ;
-
+            gen.tsiDocGen = _tsiDocGen;
+            gen.DBtable = dBtable;
+            gen.DBtablesColumns = dBtablesColumns;
+            gen.DBviews = dBviews;
+            gen.DBtablesPrimaryKeys = dBtablesPrimaryKeys;
+            gen.dbName = dbName;
+            gen.dbType = dbType;
+            gen.tsslMessage = tsslMessage;
+            gen.tspbLoadDBProgress = tspbLoadDBProgress;
+            gen.MainContextMenu = Application.MainContextMenu;
+            gen.dsTableColumn = dsTableColumn;
+            gen.dsTablePrimaryKey = dsTablePrimaryKey;
+            gen.GenCode(drTable, dsTableColumn, dsTablePrimaryKey);
         }
         #endregion
-        public override void BeforeTerminating()
-        {
-            base.BeforeTerminating();
-            unload();
-        }
-
-
 
         public override void onNotify(string name, object o)
         {
             base.onNotify(name, o);
             if (PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0.Equals(name) && o.GetType().IsValueType)
             {
-                bool flag = (bool)o;
-                setEnable(flag);
+                var flag = (bool)o;
+                SetEnable(flag);
             }
         }
 
         private delegate void SimpleBool(bool flag);
-        private void setEnable(bool flag)
+        private void SetEnable(bool flag)
         {
             if (Application.MainContextMenu.InvokeRequired)
             {
-                SimpleBool s = new SimpleBool(setEnable);
+                var s = new SimpleBool(SetEnable);
                 Application.MainContextMenu.Invoke(s, new object[] { flag });
             }
             else
             {
-                tsiDocGen.Enabled = flag;
+                _tsiDocGen.Enabled = flag;
             }
         }
 

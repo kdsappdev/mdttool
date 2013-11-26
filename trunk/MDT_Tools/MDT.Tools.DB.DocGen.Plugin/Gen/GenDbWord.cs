@@ -6,9 +6,10 @@ using System.Data;
 using System.Windows.Forms;
 using MDT.Tools.Core.UI;
 using MDT.Tools.Core.Utils;
+using MDT.Tools.DB.DocGen.Plugin.Utils;
 using Word;
 
-namespace MDT.Tools.DB.Doc.Plugin.Gen
+namespace MDT.Tools.DB.DocGen.Plugin.Gen
 {
     public class GenDbWord
     {
@@ -22,14 +23,14 @@ namespace MDT.Tools.DB.Doc.Plugin.Gen
         public string DBtablesPrimaryKeys;
         public DataSet dsTableColumn;
         public DataSet dsTablePrimaryKey;
-        public Explorer Explorer;
+        public ContextMenuStrip MainContextMenu;
         public ToolStripItem tsiDocGen;
         protected void setProgreesEditValue(int i)
         {
-            if (Explorer.InvokeRequired)
+            if (MainContextMenu.InvokeRequired)
             {
                 SimpleInt s = new SimpleInt(setProgreesEditValue);
-                Explorer.Invoke(s, new object[] { i });
+                MainContextMenu.Invoke(s, new object[] { i });
             }
             else
             {
@@ -42,10 +43,10 @@ namespace MDT.Tools.DB.Doc.Plugin.Gen
         delegate void SimpleStr(string str);
         protected void setProgressMax(int i)
         {
-            if (Explorer.InvokeRequired)
+            if (MainContextMenu.InvokeRequired)
             {
                 SimpleInt s = new SimpleInt(setProgressMax);
-                Explorer.Invoke(s, new object[] { i });
+                MainContextMenu.Invoke(s, new object[] { i });
 
             }
             else
@@ -56,10 +57,10 @@ namespace MDT.Tools.DB.Doc.Plugin.Gen
         }
         protected void setProgress(int i)
         {
-            if (Explorer.InvokeRequired)
+            if (MainContextMenu.InvokeRequired)
             {
                 SimpleInt s = new SimpleInt(setProgress);
-                Explorer.Invoke(s, new object[] { i });
+                MainContextMenu.Invoke(s, new object[] { i });
 
             }
             else
@@ -77,10 +78,10 @@ namespace MDT.Tools.DB.Doc.Plugin.Gen
         }
         protected void setStatusBar(string str)
         {
-            if (Explorer.InvokeRequired)
+            if (MainContextMenu.InvokeRequired)
             {
                 SimpleStr s = new SimpleStr(setStatusBar);
-                Explorer.Invoke(s, new object[] { str });
+                MainContextMenu.Invoke(s, new object[] { str });
 
             }
             else
@@ -93,10 +94,10 @@ namespace MDT.Tools.DB.Doc.Plugin.Gen
         private delegate void SimpleBool(bool flag);
         private void setEnable(bool flag)
         {
-            if (Explorer.InvokeRequired)
+            if (MainContextMenu.InvokeRequired)
             {
                 SimpleBool s = new SimpleBool(setEnable);
-                Explorer.Invoke(s, new object[] { flag });
+                MainContextMenu.Invoke(s, new object[] { flag });
 
             }
             else
@@ -436,26 +437,30 @@ namespace MDT.Tools.DB.Doc.Plugin.Gen
 
             if (string.IsNullOrEmpty(msg))
             {
-                setStatusBar(string.Format("{0}数据库文档生成成功;", dbName));
+                setStatusBar(string.Format("{0}数据库文档生成成功", dbName));
                 openPath(FilePathHelper.ExportDBDocPath);
             }
             else
             {
-                setStatusBar(string.Format("{0}数据库文档生成失败[1];", dbName, msg));
+                setStatusBar(string.Format("{0}数据库文档生成失败[{1}]", dbName, msg));
             }
             setEnable(true);
         }
 
         private void openPath(string path)
         {
-            if (Explorer.InvokeRequired)
+            if (MainContextMenu.InvokeRequired)
             {
                 SimpleStr s = new SimpleStr(openPath);
-                Explorer.Invoke(s, new object[] { path });
+                MainContextMenu.Invoke(s, new object[] { path });
             }
             else
             {
-                Process.Start("Explorer.exe", path);
+                DialogResult result = MessageBox.Show(string.Format("{0}数据库文档保存成功,是否要打开文档保存目录.", dbName), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                if (result.Equals(DialogResult.Yes))
+                {
+                    Process.Start("Explorer.exe", path);
+                }
             }
         }
     }
