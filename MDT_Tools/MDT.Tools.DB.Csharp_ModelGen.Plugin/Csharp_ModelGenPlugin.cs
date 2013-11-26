@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
 using MDT.Tools.DB.Csharp_Model.Plugin.Gen;
 using MDT.Tools.DB.Csharp_Model.Plugin.Utils;
+using MDT.Tools.DB.Csharp_ModelGen.Plugin.UI;
+using MDT.Tools.DB.Csharp_ModelGen.Plugin.Utils;
 
 namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
 {
@@ -45,6 +47,7 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
         #region load,unload
         protected override void load()
         {
+            AddConfig();
             AddContextMenu();
             subscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
         }
@@ -78,6 +81,35 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
                 _tsiGen.Enabled = flag;
             }
         }
+        #endregion
+
+        #region 增加配置
+        Csharp_ModelGenConfigUI cmcUI=new Csharp_ModelGenConfigUI();
+        private void AddConfig()
+        {
+            var tabControl = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.TapControl) as TabControl;
+            TabPage page=new TabPage("CsharpModel配置");
+            cmcUI.Dock = DockStyle.Fill;
+            page.Controls.Add(cmcUI);
+            tabControl.Controls.Add(page);
+            var button = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.BtnSave) as Button;
+            button.Click += button_Click;
+        }
+
+        void button_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                cmcUI.Save();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show("保存失败["+ex.Message+"]", "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+          
+        }
+
         #endregion
 
         #region 增加上下文菜单
@@ -136,6 +168,8 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
             gen.Panel = Application.Panel;
             gen.dsTableColumn = dsTableColumn;
             gen.dsTablePrimaryKey = dsTablePrimaryKey;
+            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+            
             gen.GenCode(drTable, dsTableColumn, dsTablePrimaryKey);
         }
         #endregion

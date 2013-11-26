@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using MDT.Tools.Core.UI;
 using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Csharp_Model.Plugin.Utils;
+using MDT.Tools.DB.Csharp_ModelGen.Plugin.Model;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
@@ -29,23 +30,50 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
         public ContextMenuStrip MainContextMenu;
         public ToolStripItem tsiDocGen;
         public DockPanel Panel;
-
-        public virtual void GenCode(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
+        public CsharpModelGenConfig cmc;
+        public void GenCode(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
+
             string[] strs = null;
             if (drTables != null && dsTableColumns != null)
             {
                 strs = new string[drTables.Length];
-
+                if(!cmc.IsShowGenCode)
+                {
+                    FileHelper.DeleteDirectory(cmc.OutPut);
+                }
                 for (int i = 0; i < drTables.Length; i++)
                 {
                     DataRow drTable = drTables[i];
-                    DataRow[] drTableColumns = dsTableColumns.Tables[dbName + DBtablesColumns].Select("TABLE_NAME = '" + drTable["name"].ToString() + "'", "COLUMN_ID ASC");
-                    strs[i] = GenCode(drTable, drTableColumns);
+                    string className = drTable["name"] + "";
+                    string[] temp = cmc.TableFilter.Split(new[] { ";", "," }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var str in temp)
+                    {
+                        if (className.StartsWith(str))//过滤
+                        {
+                            continue;
+                            ;
+                        }
+                        DataRow[] drTableColumns = dsTableColumns.Tables[dbName + DBtablesColumns].Select("TABLE_NAME = '" + drTable["name"].ToString() + "'", "COLUMN_ID ASC");
+                        strs[i] = GenCode(drTable, drTableColumns);
+                    }
+                }
+                if (!cmc.IsShowGenCode)
+                {
+                    openDialog();
                 }
 
             }
         }
+        private void openDialog()
+        {
+            DialogResult result = MessageBox.Show(string.Format("文件已保存成功,是否要打开文件保存目录."), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (result.Equals(DialogResult.Yes))
+            {
+                Process.Start("Explorer.exe", cmc.OutPut);
+            }
+        }
+
         public string GenCode(DataRow drTable, DataRow[] drTableColumns)
         {
             var sb = new StringBuilder();
@@ -58,7 +86,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
             #endregion
 
             #region 命名空间
-            sb.AppendFormat("namespace {0}", "Ats.YuKon.Model").AppendFormat("\r\n");
+            sb.AppendFormat("namespace {0}", cmc.NameSpace).AppendFormat("\r\n");
             sb.Append("{").AppendFormat("\r\n");
 
             #region 类名
@@ -72,8 +100,8 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
             foreach (DataRow dr in drTableColumns)
             {
                 string dataType = "string";
-                string nullAble = dr["NULLABLE"] as string;
-                dataType = Utils.DataTypeMappingHelper.GetCSharpDataTypeByDbType(dbType, dr["DATA_TYPE"] + "", dr["DATA_SCALE"] + "", dr["DATA_LENGTH"] + "", "Y".Equals(nullAble));
+                string nullAble = dr["NULLABLE"] + "";
+                dataType = DataTypeMappingHelper.GetCSharpDataTypeByDbType(dbType, dr["DATA_TYPE"] + "", dr["DATA_SCALE"] + "", dr["DATA_LENGTH"] + "", "Y".Equals(nullAble));
                 string columnName = dr["COLUMN_NAME"] as string;
                 string fieldName = Utils.CodeGenHelper.StrFieldWith_(columnName);
                 string defaultValue = dr["DATA_DEFAULT"] as string;
@@ -126,8 +154,15 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
 
             string title = CodeGenHelper.StrFirstToUpperRemoveUnderline(drTable["name"] as string) + ".cs";
 
-            FileHelper.Write(FilePathHelper.ExportCsharpModelPath + title, new string[] { sb.ToString() });
-            CodeShow(title, sb.ToString());
+            if (cmc.IsShowGenCode)
+            {
+                CodeShow(title, sb.ToString());
+            }
+            else
+            {
+                FileHelper.Write(cmc.OutPut +title, new [] { sb.ToString() });
+            }
+
             return sb.ToString();
         }
 
@@ -187,36 +222,27 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
         void _tsiSaveAll_Click(object sender, EventArgs e)
         {
             IDockContent[] documents = Panel.DocumentsToArray();
-            FileHelper.DeleteDirectory(FilePathHelper.ExportCsharpModelPath);
+            FileHelper.DeleteDirectory(cmc.OutPut);
             foreach (var v in documents)
             {
                 Code code = v as Code;
                 if (v != null)
                 {
-                    FileHelper.Write(FilePathHelper.ExportCsharpModelPath + code.Text, new string[] { code.CodeContent });
+                    FileHelper.Write(cmc.OutPut + code.Text, new string[] { code.CodeContent });
                 }
             }
-            DialogResult result = MessageBox.Show("文件已保存成功,是否要打开文件保存目录.", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (result.Equals(DialogResult.Yes))
-            {
-                Process.Start("Explorer.exe", FilePathHelper.ExportCsharpModelPath);
-            }
+            openDialog();
         }
 
         void _tsiSave_Click(object sender, EventArgs e)
         {
             var code = Panel.ActiveContent as Code;
-            FileHelper.DeleteDirectory(FilePathHelper.ExportCsharpModelPath);
+            FileHelper.DeleteDirectory(cmc.OutPut);
             if (code != null)
             {
                 try
                 {
-                    FileHelper.Write(FilePathHelper.ExportCsharpModelPath + code.Text, new string[] { code.CodeContent });
-                    DialogResult result = MessageBox.Show(string.Format("{0}文件已保存成功,是否要打开文件保存目录.", code.Text), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (result.Equals(DialogResult.Yes))
-                    {
-                        Process.Start("Explorer.exe", FilePathHelper.ExportCsharpModelPath);
-                    }
+                    FileHelper.Write(cmc.OutPut + code.Text, new string[] { code.CodeContent });
                 }
                 catch (Exception ex)
                 {
@@ -224,6 +250,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
                     MessageBox.Show(ex.Message);
                 }
             }
+            openDialog();
         }
     }
 }
