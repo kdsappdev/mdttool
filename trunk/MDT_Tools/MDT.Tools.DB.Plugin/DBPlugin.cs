@@ -158,11 +158,10 @@ namespace MDT.Tools.DB.Plugin
             Run(false);
         }
 
-
+        ConfigForm _configForm = new ConfigForm();
         void tsbDBSet_Click(object sender, EventArgs e)
         {
-            var configForm = new ConfigForm();
-            configForm.ShowDialog();
+            _configForm.ShowDialog();
         }
 
         #endregion
@@ -260,7 +259,7 @@ namespace MDT.Tools.DB.Plugin
 
         void TvDbMouseClick(object sender, MouseEventArgs e)
         {
-             
+
             if (e.Button == MouseButtons.Right)
             {
                 Application.MainContextMenu.Show(_tvDb, e.Location);
@@ -379,10 +378,10 @@ namespace MDT.Tools.DB.Plugin
             }
             else
             {
-                var tablesNode = new TreeNode {Text = TagType.Tables.ToString(), Tag = TagType.Tables};
+                var tablesNode = new TreeNode { Text = TagType.Tables.ToString(), Tag = TagType.Tables };
                 AddTreeNode(collection, tablesNode);
 
-                var viewsNode = new TreeNode {Text = TagType.Views.ToString(), Tag = TagType.Views};
+                var viewsNode = new TreeNode { Text = TagType.Views.ToString(), Tag = TagType.Views };
                 AddTreeNode(collection, viewsNode);
             }
 
@@ -429,13 +428,13 @@ namespace MDT.Tools.DB.Plugin
             {
                 if (row != null)
                 {
-                    var node = new TreeNode {Text = row["name"] as string};
+                    var node = new TreeNode { Text = row["name"] as string };
 
 
                     string strTag = row["type"].ToString();
                     if (!string.IsNullOrEmpty(strTag))
                     {
-                        var tag = (TagType) Enum.Parse(typeof (TagType), strTag, true);
+                        var tag = (TagType)Enum.Parse(typeof(TagType), strTag, true);
                         node.Tag = new NodeTag(tag, row);
                     }
                     return node;
@@ -566,6 +565,8 @@ namespace MDT.Tools.DB.Plugin
             registerObject(PluginShareHelper.DBtablesPrimaryKeys, TablesPrimaryKeys);
             _explorer = Application.Explorer;
             _explorer.Text = "数据库信息";
+            registerObject(PluginShareHelper.TapControl, _configForm.tcConfig);
+            registerObject(PluginShareHelper.BtnSave, _configForm.btnSave);
             AddTool();
             AddStatus();
             AddTreeControl();
@@ -709,7 +710,7 @@ namespace MDT.Tools.DB.Plugin
                 }
                 else
                 {
-                    _tspbLoadDbProgress.Value = _tspbLoadDbProgress.Value+i;
+                    _tspbLoadDbProgress.Value = _tspbLoadDbProgress.Value + i;
                 }
             }
 
@@ -720,7 +721,7 @@ namespace MDT.Tools.DB.Plugin
             {
                 var s = new SimpleStr(SetStatusBar);
                 _explorer.Invoke(s, new object[] { str });
-                
+
             }
             else
             {
@@ -870,7 +871,7 @@ namespace MDT.Tools.DB.Plugin
                         {
                             DataRow dr = _dsTable.Tables[dbConfigInfo.DbConfigName + Tables].Rows[i];
                             var temp = new DataSet();
-                            var dicPar = new Dictionary<string, string> {{"@tableName", dr["name"] as string}};
+                            var dicPar = new Dictionary<string, string> { { "@tableName", dr["name"] as string } };
                             SetStatusBar(string.Format("正在获取{0}中{1}字段信息", dbConfigInfo.DbConfigName, dr["name"] as string));
                             db.Fill(sql, temp, new[] { dbConfigInfo.DbConfigName + TablesColumns }, dicPar);
                             _dsTableColumn.Merge(temp);
@@ -926,7 +927,7 @@ namespace MDT.Tools.DB.Plugin
                 drTable = new DataRow[tnCheckList.Count];
                 for (int i = 0; i < drTable.Length; i++)
                 {
-                    drTable[i] = ((NodeTag) tnCheckList[i].Tag).Dr;
+                    drTable[i] = ((NodeTag)tnCheckList[i].Tag).Dr;
                 }
             }
             return drTable;
