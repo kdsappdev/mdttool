@@ -12,7 +12,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
     {
         private FilePathHelper()
         { }
-        public static readonly string SystemConfig = Application.StartupPath + "\\MDT.Tools.DB.Csharp_ModelGen.Plugin\\config.ini";
-        public static readonly string ExportCsharpModelPath = Application.StartupPath + "\\MDT.Tools.DB.Csharp_ModelGen.Plugin\\data\\";   
+        public static readonly string SystemConfig = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Csharp_ModelGen.Plugin\\config.ini";
+        public static readonly string ExportCsharpModelPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Csharp_ModelGen.Plugin\\data\\";   
     }
 }
