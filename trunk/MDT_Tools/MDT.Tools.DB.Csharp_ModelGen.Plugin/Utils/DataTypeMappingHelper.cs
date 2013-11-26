@@ -43,19 +43,19 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
                 else
                     if (temp.Equals("NUMBER"))
                     {
-                        if (dbDataScale > 0)
+                        //if (dbDataScale > 0)
                         {
                             str = "decimal";
                         }
-                        else
-                            if (dbDataLenght < 10)
-                            {
-                                str = "int";
-                            }
-                            else
-                            {
-                                str = "long";
-                            }
+                        //else
+                        //    if (dbDataLenght < 10)
+                        //    {
+                        //        str = "int";
+                        //    }
+                        //    else
+                        //    {
+                        //        str = "long";
+                        //    }
                     }
                     else
                         if (temp.Equals("DATE"))

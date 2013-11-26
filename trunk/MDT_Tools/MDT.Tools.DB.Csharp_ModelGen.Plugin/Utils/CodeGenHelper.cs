@@ -104,35 +104,23 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
                 switch (str)
                 {
                     case "string":
-                        if (!string.IsNullOrEmpty(defaultValue))
-                        {
-                            temp = "\"" + defaultValue + "\"";
-                        }
-                        else
-                        {
-                            temp = "\"\"";
-                        }
+                        temp = !string.IsNullOrEmpty(defaultValue) && !defaultValue.Equals("EMPTY_CLOB()")
+                                   ? "\"" + defaultValue + "\""
+                                   : "\"\"";
                         break;
+                    case "decimal":
+                    case "decimal?":
+                        temp = !string.IsNullOrEmpty(defaultValue) ? defaultValue + "M" : "0M";
+                        break;
+                    case "int?":
                     case "int":
-                        if (!string.IsNullOrEmpty(defaultValue))
-                        {
-                            temp = defaultValue;
-                        }
-                        else
-                        {
-                            temp = "0";
-                        }
+                        temp = !string.IsNullOrEmpty(defaultValue) ? defaultValue : "0";
                         break;
                     case "long":
-                        if (!string.IsNullOrEmpty(defaultValue))
-                        {
-                            temp = defaultValue;
-                        }
-                        else
-                        {
-                            temp = "0";
-                        }
+                    case "long?":
+                        temp = !string.IsNullOrEmpty(defaultValue) ? defaultValue : "0";
                         break;
+                    case "DateTime?":
                     case "DateTime":
                         temp = "DateTime.Now";                        
                         break;
