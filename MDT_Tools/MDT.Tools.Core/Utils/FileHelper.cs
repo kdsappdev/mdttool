@@ -58,6 +58,15 @@ namespace MDT.Tools.Core.Utils
         {
             if (Directory.Exists(filePath))
             {
+                foreach (string d in Directory.GetFileSystemEntries(filePath))
+                {
+                    if (File.Exists(d))
+                    {
+                        File.Delete(d);
+                    }
+                    else
+                        DeleteDirectory(d);
+                }
                 Directory.Delete(filePath, true);
             }
         }
