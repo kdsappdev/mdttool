@@ -10,8 +10,8 @@ namespace MDT.Tools.DB.Plugin.Utils
     {
         private FilePathHelper()
         { }
-        public static readonly string SystemConfig = Application.StartupPath + "\\MDT.Tools.DB.Plugin\\config.ini";
-        public static readonly string SaveDBDataPath = Application.StartupPath + "\\MDT.Tools.DB.Plugin\\data\\";
+        public static readonly string SystemConfig = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Plugin\\config.ini";
+        public static readonly string SaveDBDataPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Plugin\\data\\";
 
 
         public static void WriteXml(DataSet ds)
