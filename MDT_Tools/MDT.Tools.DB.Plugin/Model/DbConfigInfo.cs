@@ -1,63 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MDT.Tools.DB.Plugin.Model
 {
     internal class DbConfigInfo
     {
-        private string dbServerName = "";
+        private string _dbServerName = "";
 
         public string DbServerName
         {
-            get { return dbServerName; }
-            set { dbServerName = value; }
+            get { return _dbServerName; }
+            set { _dbServerName = value; }
         }
-        private string dbUserName = "";
+        private string _dbUserName = "";
 
         public string DbUserName
         {
-            get { return dbUserName; }
-            set { dbUserName = value; }
+            get { return _dbUserName; }
+            set { _dbUserName = value; }
         }
-        private string dbUserPwd = "";
+        private string _dbUserPwd = "";
 
         public string DbUserPwd
         {
-            get { return dbUserPwd; }
-            set { dbUserPwd = value; }
+            get { return _dbUserPwd; }
+            set { _dbUserPwd = value; }
         }
-        private string dbType = "";
+        private string _dbType = "";
 
         public string DbType
         {
-            get { return dbType; }
-            set { dbType = value; }
+            get { return _dbType; }
+            set { _dbType = value; }
         }
-        private string dbConfigName = "";
+        private string _dbConfigName = "";
 
         public string DbConfigName
         {
-            get { return dbConfigName; }
-            set { dbConfigName = value; }
+            get { return _dbConfigName; }
+            set { _dbConfigName = value; }
         }
         public string ConnectionString
         {
             get 
             {
-                return string.Format("\"Data Source ={0}; User Id ={1}; Password ={2}\"", dbServerName, dbUserName, dbUserPwd);
+                return string.Format("\"Data Source ={0}; User Id ={1}; Password ={2}\"", _dbServerName, _dbUserName, _dbUserPwd);
             }
             set
             {
                 string temp = value;
                 if (!string.IsNullOrEmpty(temp))
                 {
-                    string[] temps = temp.Split(new char[] { '=', ';' },StringSplitOptions.RemoveEmptyEntries);
+                    string[] temps = temp.Split(new[] { '=', ';' },StringSplitOptions.RemoveEmptyEntries);
                     if (temps.Length.Equals(6))
                     {
-                        dbServerName = temps[1];
-                        dbUserName = temps[3];
-                        dbUserPwd = temps[5];
+                        _dbServerName = temps[1];
+                        _dbUserName = temps[3];
+                        _dbUserPwd = temps[5];
                     }
                 }
             }

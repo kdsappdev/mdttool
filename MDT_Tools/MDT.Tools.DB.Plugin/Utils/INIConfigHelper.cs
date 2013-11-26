@@ -1,27 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using System.IO;
 using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Plugin.Model;
 
 namespace MDT.Tools.DB.Plugin.Utils
 {
-    internal sealed class INIConfigHelper
+    internal static class IniConfigHelper
     {
-        private INIConfigHelper()
-        { }
-        [System.Runtime.InteropServices.DllImport("kernel32")]
-        private static extern long GetPrivateProfileString(string lpApplicationName, string lpKeyName, string lpDefault, System.Text.StringBuilder lpReturnedString, int nSize, string lpFileName);
         [System.Runtime.InteropServices.DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string lpApplicationName, string lpKeyName, string lpString, string lpFileName);
-        [System.Runtime.InteropServices.DllImport("kernel32")]
-        private static extern long GetPrivateProfileSectionNames(System.Text.StringBuilder lpReturnedString, int nSize, string lpFileName);
 
-   
-        private static void createFile()
+
+        private static void CreateFile()
         {
             FileHelper. CreateDirectory(FilePathHelper.SystemConfig);
             if (!File.Exists(FilePathHelper.SystemConfig))
@@ -31,7 +22,7 @@ namespace MDT.Tools.DB.Plugin.Utils
             }
         }
       
-        public static bool WriteDBInfo(Model.DbConfigInfo dbConfigInfo, ref string message)
+        public static bool WriteDBInfo(DbConfigInfo dbConfigInfo, ref string message)
         {
             bool status = false;
             if (dbConfigInfo != null)
@@ -39,7 +30,7 @@ namespace MDT.Tools.DB.Plugin.Utils
 
                 try
                 {
-                    createFile();
+                    CreateFile();
                     WritePrivateProfileString(dbConfigInfo.DbType, dbConfigInfo.DbConfigName, dbConfigInfo.ConnectionString, FilePathHelper.SystemConfig);
                     status = true;
                 }
@@ -53,14 +44,14 @@ namespace MDT.Tools.DB.Plugin.Utils
         }
         public static IList<DbConfigInfo> ReadDBInfo()
         {
-            IList<Model.DbConfigInfo> dbConfigList = new List<Model.DbConfigInfo>();
+            IList<DbConfigInfo> dbConfigList = new List<DbConfigInfo>();
             try
             {
-                createFile();               
-                FileInfo fi = new FileInfo(FilePathHelper.SystemConfig);
+                CreateFile();               
+                var fi = new FileInfo(FilePathHelper.SystemConfig);
                 StreamReader sr = fi.OpenText();
                 string content = sr.ReadToEnd();
-                string[] temps = content.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                string[] temps = content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 sr.Close();
                 string dbType = "";
                 foreach (string str in temps)
@@ -70,27 +61,22 @@ namespace MDT.Tools.DB.Plugin.Utils
                         dbType = str.Replace("[", "").Replace("]", "");
                         continue;
                     }
-                    else
+                    int index = str.IndexOf('=');
+                    if (index >= 1)
                     {
-                    
-                        int index = str.IndexOf('=');
-                        if (index >= 1)
+                        try
                         {
-                            try
-                            {
-                                DbConfigInfo dbConfigInfo = new DbConfigInfo();
-                                dbConfigInfo.DbType = dbType;
-                               
-                                string dbConfigName = str.Substring(0, index);
-                                string connectionString = str.Substring(index + 1, str.Length - index - 1).Trim(new char[] { '"' });
-                                dbConfigInfo.ConnectionString = connectionString;
-                                dbConfigInfo.DbConfigName = dbConfigName;
-                                dbConfigList.Add(dbConfigInfo);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex.Message);
-                            }
+                            var dbConfigInfo = new DbConfigInfo {DbType = dbType};
+
+                            string dbConfigName = str.Substring(0, index);
+                            string connectionString = str.Substring(index + 1, str.Length - index - 1).Trim(new[] { '"' });
+                            dbConfigInfo.ConnectionString = connectionString;
+                            dbConfigInfo.DbConfigName = dbConfigName;
+                            dbConfigList.Add(dbConfigInfo);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.Message);
                         }
                     }
                 }
