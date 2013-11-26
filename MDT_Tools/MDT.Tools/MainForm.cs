@@ -5,7 +5,7 @@ using MDT.Tools.Core.Plugin.WindowsPlugin;
 using MDT.Tools.Core.UI;
 using MDT.Tools.UI;
 using WeifenLuo.WinFormsUI.Docking;
-
+using MDT.Tools.Core.Utils;
 namespace MDT.Tools
 {
     public partial class MainForm : Form, IForm
@@ -34,7 +34,7 @@ namespace MDT.Tools
         private void Initialize()
         {
             notifyIcon1.Text = Text;
-            Text = Text + string.Format(" Beta版本:{0}", this.GetType().Assembly.GetName().Version);
+            Text = Text + string.Format(" Beta版本:{0}(build{1})", ReflectionHelper.GetVersion(this.GetType().Assembly),ReflectionHelper.GetPe32Time(this.GetType().Assembly.Location).ToString("yyyyMMdd"));
             //((System.Reflection.AssemblyDescriptionAttribute)System.Reflection.AssemblyDescriptionAttribute.GetCustomAttribute(this.GetType().Assembly,
 //typeof(System.Reflection.AssemblyDescriptionAttribute))).Description
             notifyIcon1.Icon = Icon;
