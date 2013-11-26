@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Data;
 using MDT.Tools.Core.Plugin.WindowsPlugin;
 using MDT.Tools.Core.Utils;
 
@@ -26,20 +24,11 @@ namespace MDT.Tools.Core.Plugin
     public class PluginManager : IPluginManager
     {
         #region 属性
-        private IForm _application = null;
-        private IDictionary<int, IPlugin> _dicPlugin = new Dictionary<int, IPlugin>();
+
+        private readonly IDictionary<int, IPlugin> _dicPlugin = new Dictionary<int, IPlugin>();
         private bool _copyToMemory = true;
-        public IForm Application
-        {
-            get
-            {
-                return _application;
-            }
-            set
-            {
-                _application = value;
-            }
-        }
+        public IForm Application { get; set; }
+
         public bool CopyToMemory
         {
             get
@@ -58,15 +47,11 @@ namespace MDT.Tools.Core.Plugin
             {
                 return dicToIlist(_dicPlugin);
             }
-            set
-            {
-
-            }
         }
-        private string pluginSign;
+        private string _pluginSign;
         public string PluginSign
         {
-            set { pluginSign = value; }
+            set { _pluginSign = value; }
         }
         #endregion
 
@@ -74,11 +59,11 @@ namespace MDT.Tools.Core.Plugin
         public PluginManager(IForm application)
         {
             Application = application;
-            this.PluginChanged += delegate { };
+            PluginChanged += delegate { };
         }
         public PluginManager()
         {
-            this.PluginChanged += delegate { };
+            PluginChanged += delegate { };
         }
         #endregion
 
@@ -87,33 +72,33 @@ namespace MDT.Tools.Core.Plugin
         #region 加载插件
         public void LoadDefault()
         {
-            LoadAllPlugins(AppDomain.CurrentDomain.BaseDirectory, false, this.pluginSign);
+            LoadAllPlugins(AppDomain.CurrentDomain.BaseDirectory, false, _pluginSign);
         }
         public void LoadDefault(string pluginSign)
         {
-            this.pluginSign = pluginSign;
-            LoadAllPlugins(AppDomain.CurrentDomain.BaseDirectory, true, this.pluginSign);
+            _pluginSign = pluginSign;
+            LoadAllPlugins(AppDomain.CurrentDomain.BaseDirectory, true, _pluginSign);
         }
         public void LoadAllPlugins(string pluginFolderPath, bool searchChildFolder, string pluginSign)
         {
-            TypeLoadConfig config = new TypeLoadConfig(CopyToMemory, false, pluginSign);
+            var config = new TypeLoadConfig(CopyToMemory, false, pluginSign);
             IList<Type> pluginTypeList = ReflectionHelper.LoadDerivedType(typeof(IPlugin), pluginFolderPath, searchChildFolder, config);
-            List<IPlugin> pluginList = new List<IPlugin>();
+            var pluginList = new List<IPlugin>();
             for (int i = 0; i < pluginTypeList.Count; i++)
             {
-                IPlugin plugin = (IPlugin)Activator.CreateInstance(pluginTypeList[i]);
+                var plugin = (IPlugin)Activator.CreateInstance(pluginTypeList[i]);
                 pluginList.Add(plugin);
             }
             pluginList.Sort(new PluginComparer());
             for (int i = 0; i < pluginList.Count; i++)
             {
                 IPlugin plugin = pluginList[i];
-                if (this._dicPlugin.ContainsKey(plugin.PluginKey))
+                if (_dicPlugin.ContainsKey(plugin.PluginKey))
                 {
-                    this._dicPlugin.Remove(plugin.PluginKey);
+                    _dicPlugin.Remove(plugin.PluginKey);
                 }
-                this._dicPlugin.Add(plugin.PluginKey, plugin);
-                plugin.Application = this.Application;
+                _dicPlugin.Add(plugin.PluginKey, plugin);
+                plugin.Application = Application;
                 try
                 {
                     plugin.OnLoading();
@@ -140,8 +125,8 @@ namespace MDT.Tools.Core.Plugin
                     {
                         plugin.BeforeTerminating();
                     }
-                    catch
-                    { }
+                    catch (Exception ex)
+                    { LogHelper.Error(ex);}
                 }
                 _dicPlugin.Clear();
                 PluginChanged();
@@ -159,8 +144,8 @@ namespace MDT.Tools.Core.Plugin
                     {
                         plugin.BeforeTerminating();
                     }
-                    catch
-                    { }
+                    catch (Exception ex)
+                    { LogHelper.Error(ex);}
                     _dicPlugin.Remove(pluginKey);
                     PluginChanged();
                 }
@@ -221,7 +206,7 @@ namespace MDT.Tools.Core.Plugin
         #region 是否包含指定插件
         public bool ContainsPlugin(int pluginKey)
         {
-            return this._dicPlugin.ContainsKey(pluginKey);
+            return _dicPlugin.ContainsKey(pluginKey);
         }
         #endregion
 
@@ -232,7 +217,7 @@ namespace MDT.Tools.Core.Plugin
         #endregion
 
         #region 字典集合到List转换
-        private IList<IPlugin> dicToIlist(IDictionary<int, IPlugin> dic)
+        private IList<IPlugin> dicToIlist(IEnumerable<KeyValuePair<int, IPlugin>> dic)
         {
             IList<IPlugin> pluginList = new List<IPlugin>();
             foreach (KeyValuePair<int, IPlugin> kvp in dic)

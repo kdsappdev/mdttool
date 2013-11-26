@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
 using System.IO;
 namespace MDT.Tools.Core.Utils
 {
-   public class FileHelper
+    public class FileHelper
     {
         #region ReadFileReturnBytes
         /// <summary>
@@ -17,10 +14,10 @@ namespace MDT.Tools.Core.Utils
             {
                 return null;
             }
-            
-            FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
 
-            BinaryReader br = new BinaryReader(fs);
+            var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            var br = new BinaryReader(fs);
 
             byte[] buff = br.ReadBytes((int)fs.Length);
 
@@ -31,11 +28,11 @@ namespace MDT.Tools.Core.Utils
         }
         #endregion
 
-        public static string GetFileNameNoPath(string fileName_path)
+        public static string GetFileNameNoPath(string fileNamePath)
         {
-            return Path.GetFileName(fileName_path);
+            return Path.GetFileName(fileNamePath);
         }
-       
+
         public static bool Write(string fileName, string[] strs)
         {
             bool status = true;
@@ -43,7 +40,7 @@ namespace MDT.Tools.Core.Utils
             {
                 CreateDirectory(fileName);
                 File.Delete(fileName);
-                FileInfo f = new FileInfo(fileName);
+                var f = new FileInfo(fileName);
                 StreamWriter sw = f.AppendText();
                 foreach (string str in strs)
                 {
@@ -51,19 +48,27 @@ namespace MDT.Tools.Core.Utils
                 }
                 sw.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 status = false;
             }
             return status;
         }
+        public static void DeleteDirectory(string filePath)
+        {
+            if (Directory.Exists(filePath))
+            {
+                Directory.Delete(filePath, true);
+            }
+        }
+
         public static string CreateDirectory(string fileName)
         {
             string path = "";
             if (!string.IsNullOrEmpty(fileName))
             {
-                fileName = fileName.Trim(new char[] { '\\' });
-                string[] paths = fileName.Split(new char[] { '\\' });
+                fileName = fileName.Trim(new[] { '\\' });
+                string[] paths = fileName.Split(new[] { '\\' });
 
                 for (int i = 0; i < paths.Length - 1; i++)
                 {

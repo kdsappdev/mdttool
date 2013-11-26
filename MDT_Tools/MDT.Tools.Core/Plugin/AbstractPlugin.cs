@@ -8,7 +8,7 @@ namespace MDT.Tools.Core.Plugin
 {
     public abstract class AbstractPlugin : IPlugin
     {
-
+        protected bool isLoad = false;
         private IForm application;
 
 
@@ -20,12 +20,25 @@ namespace MDT.Tools.Core.Plugin
 
         public virtual void OnLoading()
         {
-
+            if (!isLoad)
+            {
+                load();
+            }
+        }
+        protected virtual void load()
+        {
+            
+        }
+        protected virtual void unload()
+        {
         }
 
         public virtual void BeforeTerminating()
         {
-
+            if (isLoad)
+            {
+                unload();
+            }
         }
         public virtual void onNotify(string name, object o)
         {
@@ -49,19 +62,19 @@ namespace MDT.Tools.Core.Plugin
             return string.Format("{0}_{1}", pluginKey, name);
         }
 
-        public void RegisterObject(string name, object obj)
+        protected void registerObject(string name, object obj)
         {
             string key = getPluginShareKey(PluginKey, name);
             application.RegisterObject(key, obj);
         }
 
-        public object GetObject(string name)
+        protected object getObject(int pluginKey, string name)
         {
-            string key = getPluginShareKey(PluginKey, name);
+            string key = getPluginShareKey(pluginKey, name);
             return application.GetObject(key);
         }
 
-        public void Remove(string name)
+        protected void remove(string name)
         {
             string key = getPluginShareKey(PluginKey, name);
             application.Remove(key);
@@ -91,7 +104,7 @@ namespace MDT.Tools.Core.Plugin
             get
             {
                 Type type = this.GetType();//+ "Build:(" + ReflectionHelper.GetPe32Time(type.Assembly.Location) + ")"; ;
-                return ReflectionHelper.getVersion(type.Assembly);
+                return ReflectionHelper.GetVersion(type.Assembly);
             }
         }
         public abstract string Author { get; }

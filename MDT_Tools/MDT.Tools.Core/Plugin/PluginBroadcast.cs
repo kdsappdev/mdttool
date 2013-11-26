@@ -22,7 +22,7 @@ namespace MDT.Tools.Core.Plugin
                 {
                     dic = dicSub[name];
                 }
-                if (dic.ContainsKey(plugin.PluginKey))
+                if (!dic.ContainsKey(plugin.PluginKey))
                 {
                     dic.Add(plugin.PluginKey, plugin);
                 }
