@@ -112,7 +112,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
             setEnable(false);
             string msg = string.Empty;
             Stopwatch sw = Stopwatch.StartNew();
-
+            FileHelper.DeleteDirectory(FilePathHelper.ExportDBDocPath);
             if (drTables != null && dsTableColumns != null && dsTablePrimaryKeys != null)
             {
 
