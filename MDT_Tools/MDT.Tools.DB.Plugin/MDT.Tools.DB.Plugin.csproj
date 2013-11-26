@@ -31,6 +31,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>MDT.Tools.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,10 +59,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.5.0.23405, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MDT.Tools\lib\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBPlugin.cs" />
@@ -79,6 +77,10 @@
     <Compile Include="Utils\SqlDefHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
+      <Project>{C3DDB32F-3E50-484A-9142-F93472A14323}</Project>
+      <Name>MDT.ThirdParty.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.Core\MDT.Tools.Core.csproj">
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
@@ -119,6 +121,9 @@
     <Content Include="MDT.Tools.DB.Plugin\config.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MDT.Tools.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
