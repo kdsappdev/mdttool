@@ -16,6 +16,10 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>MDT.Tools.pfx</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>Image\db.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -28,7 +32,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -58,7 +61,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.5.0.23405, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainForm.cs">
@@ -87,6 +89,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="App.config" />
+    <None Include="MDT.Tools.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -113,19 +117,49 @@
     <Content Include="lib\WeifenLuo.WinFormsUI.Docking.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
+      <Project>{C3DDB32F-3E50-484A-9142-F93472A14323}</Project>
+      <Name>MDT.ThirdParty.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.Core\MDT.Tools.Core.csproj">
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.Csharp_ModelGen.Plugin\MDT.Tools.DB.Csharp_ModelGen.Plugin.csproj">
+      <Project>{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}</Project>
+      <Name>MDT.Tools.DB.Csharp_ModelGen.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.DocGen.Plugin\MDT.Tools.DB.DocGen.Plugin.csproj">
+      <Project>{093DCCC0-573A-4E93-A2B2-94697F676D6B}</Project>
+      <Name>MDT.Tools.DB.DocGen.Plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin.csproj">
+      <Project>{262B5415-560C-48C6-95B1-8A538E48F5FB}</Project>
+      <Name>MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin</Name>
     </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj">
       <Project>{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}</Project>
       <Name>MDT.Tools.DB.Plugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.TriggerGen.Plugin\MDT.Tools.DB.TriggerGen.Plugin.csproj">
+      <Project>{2037AEBC-23E7-4878-994C-1BCACC3E6251}</Project>
+      <Name>MDT.Tools.DB.TriggerGen.Plugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -138,6 +172,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="plugin\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
