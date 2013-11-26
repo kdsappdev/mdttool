@@ -187,6 +187,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
         void _tsiSaveAll_Click(object sender, EventArgs e)
         {
             IDockContent[] documents = Panel.DocumentsToArray();
+            FileHelper.DeleteDirectory(FilePathHelper.ExportCsharpModelPath);
             foreach (var v in documents)
             {
                 Code code = v as Code;
@@ -205,13 +206,13 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
         void _tsiSave_Click(object sender, EventArgs e)
         {
             var code = Panel.ActiveContent as Code;
+            FileHelper.DeleteDirectory(FilePathHelper.ExportCsharpModelPath);
             if (code != null)
             {
                 try
                 {
                     FileHelper.Write(FilePathHelper.ExportCsharpModelPath + code.Text, new string[] { code.CodeContent });
-
-                    DialogResult result = MessageBox.Show(string.Format("{0}文件保存成功,是否要打开文件保存目录.", code.Text), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    DialogResult result = MessageBox.Show(string.Format("{0}文件已保存成功,是否要打开文件保存目录.", code.Text), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                     if (result.Equals(DialogResult.Yes))
                     {
                         Process.Start("Explorer.exe", FilePathHelper.ExportCsharpModelPath);
