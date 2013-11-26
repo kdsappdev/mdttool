@@ -25,6 +25,8 @@
         //共享控件
         public const string TsslMessage = "tsslMessage";//状态栏label
         public const string TspbLoadDBProgress = "tspbLoadDBProgress";// 状态栏进度条
+        public const string TapControl = "TapControl";// 配置界面
+        public const string BtnSave = "BtnSave";// 保存按钮
 
 
     }

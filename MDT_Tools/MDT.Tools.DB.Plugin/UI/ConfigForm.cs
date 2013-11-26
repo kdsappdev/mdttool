@@ -13,6 +13,16 @@ namespace MDT.Tools.DB.Plugin.UI
         public ConfigForm()
         {
             InitializeComponent();
+            
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void ConfigForm_Load(object sender, EventArgs e)
+        {
             tvDBConfig.ExpandAll();
         }
     }
