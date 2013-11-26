@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using MDT.Tools.Core.Utils;
 
-namespace MDT.Tools.DB.Doc.Plugin
+namespace MDT.Tools.DB.DocGen.Plugin.Utils
 {
     internal class FilePathHelper
     {
