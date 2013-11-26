@@ -115,7 +115,10 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
                     sb.AppendFormat(" = {0}", defaultValue);
                 }
                 sb.AppendFormat(";");
-                sb.AppendFormat("//{0}", comments);
+                if (!string.IsNullOrEmpty(comments))
+                {
+                    sb.AppendFormat("//{0}", comments);
+                }
                 sb.AppendFormat("\r\n");
             }
             sb.AppendFormat("\r\n");
@@ -149,7 +152,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
             sb.Append("\t}").AppendFormat("\r\n");
             #endregion
 
-            sb.Append("}").AppendFormat("\r\n");
+            sb.Append("}");
             #endregion
 
             string title = CodeGenHelper.StrFirstToUpperRemoveUnderline(drTable["name"] as string) + ".cs";
