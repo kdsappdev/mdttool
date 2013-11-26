@@ -176,7 +176,7 @@
             tabGradient1.StartColor = System.Drawing.SystemColors.Control;
             tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
             autoHideStripSkin1.TabGradient = tabGradient1;
-            autoHideStripSkin1.TextFont = new System.Drawing.Font("微软雅黑", 9F);
+            autoHideStripSkin1.TextFont = new System.Drawing.Font("Microsoft YaHei", 9F);
             dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
             tabGradient2.EndColor = System.Drawing.SystemColors.ControlLightLight;
             tabGradient2.StartColor = System.Drawing.SystemColors.ControlLightLight;
@@ -190,7 +190,7 @@
             tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
             dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
             dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
-            dockPaneStripSkin1.TextFont = new System.Drawing.Font("微软雅黑", 9F);
+            dockPaneStripSkin1.TextFont = new System.Drawing.Font("Microsoft YaHei", 9F);
             tabGradient4.EndColor = System.Drawing.SystemColors.ActiveCaption;
             tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
             tabGradient4.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -232,7 +232,7 @@
             tabGradient8.StartColor = System.Drawing.SystemColors.Control;
             tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
             autoHideStripSkin2.TabGradient = tabGradient8;
-            autoHideStripSkin2.TextFont = new System.Drawing.Font("微软雅黑", 9F);
+            autoHideStripSkin2.TextFont = new System.Drawing.Font("Microsoft YaHei", 9F);
             dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
             tabGradient9.EndColor = System.Drawing.SystemColors.ControlLightLight;
             tabGradient9.StartColor = System.Drawing.SystemColors.ControlLightLight;
@@ -246,7 +246,7 @@
             tabGradient10.TextColor = System.Drawing.SystemColors.ControlText;
             dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
             dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
-            dockPaneStripSkin2.TextFont = new System.Drawing.Font("微软雅黑", 9F);
+            dockPaneStripSkin2.TextFont = new System.Drawing.Font("Microsoft YaHei", 9F);
             tabGradient11.EndColor = System.Drawing.SystemColors.ActiveCaption;
             tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
             tabGradient11.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -335,10 +335,10 @@
             this.MainMenuStrip = this.mainMenu;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Mdt 数据库工具器";
+            this.Text = "MDT 数据库工具器";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.MainFormLoad);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
+            this.Load += new System.EventHandler(this.MainFormLoad);
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.mainTool.ResumeLayout(false);
