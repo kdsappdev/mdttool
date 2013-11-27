@@ -155,7 +155,7 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
             var tspbLoadDBProgress = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tspbLoadDBProgress) as ToolStripProgressBar;
 
 
-            gen.tsiDocGen = _tsiGen;
+            gen.tsiGen = _tsiGen;
             gen.DBtable = dBtable;
             gen.DBtablesColumns = dBtablesColumns;
             gen.DBviews = dBviews;
