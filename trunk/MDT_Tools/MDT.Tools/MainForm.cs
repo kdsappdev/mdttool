@@ -33,10 +33,11 @@ namespace MDT.Tools
         #region Initialize
         private void Initialize()
         {
-            notifyIcon1.Text = Text;
+           
             Text = Text + string.Format(" Beta版本:{0}(build{1})", ReflectionHelper.GetVersion(this.GetType().Assembly),ReflectionHelper.GetPe32Time(this.GetType().Assembly.Location).ToString("yyyyMMdd"));
             //((System.Reflection.AssemblyDescriptionAttribute)System.Reflection.AssemblyDescriptionAttribute.GetCustomAttribute(this.GetType().Assembly,
 //typeof(System.Reflection.AssemblyDescriptionAttribute))).Description
+            notifyIcon1.Text = Text;
             notifyIcon1.Icon = Icon;
             _pluginUtils=new PluginUtils();
             _pluginManager = new PluginManager(this);
