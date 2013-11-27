@@ -28,6 +28,12 @@
         public const string TapControl = "TapControl";// 配置界面
         public const string BtnSave = "BtnSave";// 保存按钮
 
+        //数据库编码
+
+        public const string OriginalEncoding = "OriginalEncoding";
+        public const string TargetEncoding = "TargetEncoding";
+
+
 
     }
 }

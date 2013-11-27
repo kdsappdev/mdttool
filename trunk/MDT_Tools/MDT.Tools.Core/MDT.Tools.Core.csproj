@@ -110,6 +110,7 @@
     <Compile Include="UI\ToolWindow.Designer.cs">
       <DependentUpon>ToolWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\EncodingHelper.cs" />
     <Compile Include="Utils\FileHelper.cs" />
     <Compile Include="Utils\LogHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

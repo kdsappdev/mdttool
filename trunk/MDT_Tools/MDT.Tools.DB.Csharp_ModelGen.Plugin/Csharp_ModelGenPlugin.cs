@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
@@ -87,12 +88,12 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
         Csharp_ModelGenConfigUI cmcUI=new Csharp_ModelGenConfigUI();
         private void AddConfig()
         {
-            var tabControl = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.TapControl) as TabControl;
+            var tabControl = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_TapControl) as TabControl;
             TabPage page=new TabPage("CsharpModel配置");
             cmcUI.Dock = DockStyle.Fill;
             page.Controls.Add(cmcUI);
             tabControl.Controls.Add(page);
-            var button = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.BtnSave) as Button;
+            var button = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_BtnSave) as Button;
             button.Click += button_Click;
         }
 
@@ -153,8 +154,9 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
             var dBtablesPrimaryKeys = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesPrimaryKeys) as string;
             var tsslMessage = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tsslMessage) as ToolStripStatusLabel;
             var tspbLoadDBProgress = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tspbLoadDBProgress) as ToolStripProgressBar;
-
-
+            var originalEncoding=getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_OriginalEncoding) as string;
+            var targetEncoding=getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_TargetEncoding) as string;
+             
             gen.tsiGen = _tsiGen;
             gen.DBtable = dBtable;
             gen.DBtablesColumns = dBtablesColumns;
@@ -168,6 +170,11 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
             gen.Panel = Application.Panel;
             gen.dsTableColumn = dsTableColumn;
             gen.dsTablePrimaryKey = dsTablePrimaryKey;
+            if (!string.IsNullOrEmpty(originalEncoding) && !string.IsNullOrEmpty(targetEncoding))
+            {
+                gen.OriginalEncoding = Encoding.GetEncoding(originalEncoding);
+                gen.TargetEncoding = Encoding.GetEncoding(targetEncoding);
+            }
             gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
             
             gen.GenCode(drTable, dsTableColumn, dsTablePrimaryKey);
