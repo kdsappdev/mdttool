@@ -81,6 +81,8 @@ namespace MDT.Tools.DB.Plugin
         }
         private void RemoveShareData()
         {
+            remove(PluginShareHelper.TargetEncoding);
+            remove(PluginShareHelper.OriginalEncoding);
             remove(PluginShareHelper.DBtable);
             remove(PluginShareHelper.DBtablesColumns);
             remove(PluginShareHelper.DBviews);
@@ -559,6 +561,7 @@ namespace MDT.Tools.DB.Plugin
         private readonly BackgroundWorker _backgroundWorkerLoadDb = new BackgroundWorker();
         protected override void load()
         {
+         
             registerObject(PluginShareHelper.DBtable, Tables);
             registerObject(PluginShareHelper.DBtablesColumns, TablesColumns);
             registerObject(PluginShareHelper.DBviews, Views);
@@ -760,6 +763,16 @@ namespace MDT.Tools.DB.Plugin
                 try
                 {
                     #region 贡献当前数据库配置信息
+                    if ("Oracle".Equals(dbConfigInfo.DbType))
+                    {
+                        registerObject(PluginShareHelper.TargetEncoding, "GBK");
+                        registerObject(PluginShareHelper.OriginalEncoding, "ISO-8859-1");
+                    }
+                    else
+                    {
+                        registerObject(PluginShareHelper.TargetEncoding, "");
+                        registerObject(PluginShareHelper.OriginalEncoding, "");
+                    }
                     registerObject(PluginShareHelper.DBCurrentDBName, dbConfigInfo.DbConfigName);
                     registerObject(PluginShareHelper.DBCurrentDBConnectionString, dbConfigInfo.ConnectionString);
                     registerObject(PluginShareHelper.DBCurrentDBType, dbConfigInfo.DbType);

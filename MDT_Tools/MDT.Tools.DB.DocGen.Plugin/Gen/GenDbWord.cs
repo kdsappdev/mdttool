@@ -25,6 +25,8 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
         public DataSet dsTablePrimaryKey;
         public ContextMenuStrip MainContextMenu;
         public ToolStripItem tsiDocGen;
+        public Encoding OriginalEncoding;
+        public Encoding TargetEncoding;
         protected void setProgreesEditValue(int i)
         {
             if (MainContextMenu.InvokeRequired)
@@ -341,7 +343,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
 
 
                                 //说明
-                                newTable.Cell(i + 3, 7).Range.Text = tableColumnComments;
+                                newTable.Cell(i + 3, 7).Range.Text = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding, tableColumnComments);
                                 newTable.Cell(i + 3, 7).VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
 
                             }

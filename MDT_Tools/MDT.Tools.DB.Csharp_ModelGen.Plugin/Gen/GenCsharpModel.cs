@@ -31,6 +31,8 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
         public ToolStripItem tsiGen;
         public DockPanel Panel;
         public CsharpModelGenConfig cmc;
+        public Encoding OriginalEncoding;
+        public Encoding TargetEncoding;
         public void GenCode(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
             try
@@ -128,6 +130,16 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
             #region 类名
             string className = drTable["name"] as string;
             className = CodeGenHelper.StrFirstToUpperRemoveUnderline(className);
+            var tablecomments = drTable["comments"] as string;
+            if (!string.IsNullOrEmpty(tablecomments))
+            {
+                sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
+                sb.AppendFormat("\t\t").AppendFormat("/// ").Append(EncodingHelper.ConvertEncoder(OriginalEncoding,
+                                                                                                  TargetEncoding,
+                                                                                                  tablecomments)).
+                    AppendFormat("\r\n");
+                sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
+            }
             sb.AppendFormat("\t").AppendFormat("[Serializable]").AppendFormat("\r\n");
             sb.AppendFormat("\t").AppendFormat("public class {0}", className).AppendFormat("\r\n");
             sb.Append("\t{").AppendFormat("\r\n");
@@ -154,7 +166,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
                 sb.AppendFormat(";");
                 if (!string.IsNullOrEmpty(comments))
                 {
-                    sb.AppendFormat("//{0}", comments);
+                    sb.AppendFormat("//{0}", EncodingHelper.ConvertEncoder(OriginalEncoding,TargetEncoding, comments));
                 }
                 sb.AppendFormat("\r\n");
             }
@@ -170,10 +182,19 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
                 var dataType = "string";
                 string nullAble = dr["NULLABLE"] as string;
                 dataType = Utils.DataTypeMappingHelper.GetCSharpDataTypeByDbType(dbType, dr["DATA_TYPE"] + "", dr["DATA_SCALE"] + "", dr["DATA_LENGTH"] + "", "Y".Equals(nullAble));
-
+                string comments = dr["COMMENTS"] as string;
                 string columnName = dr["COLUMN_NAME"] as string;
                 string fieldName = CodeGenHelper.StrFieldWith_(columnName);
                 string propertyName = CodeGenHelper.StrProperty(columnName);
+                if (!string.IsNullOrEmpty(comments))
+                {
+                    sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
+                    sb.AppendFormat("\t\t").AppendFormat("/// ").Append(EncodingHelper.ConvertEncoder(OriginalEncoding,
+                                                                                                      TargetEncoding,
+                                                                                                      comments)).
+                        AppendFormat("\r\n");
+                    sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
+                }
                 sb.AppendFormat("\t\t").AppendFormat("public {0} {1}", dataType, propertyName).AppendFormat("\r\n");
                 sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
                 sb.AppendFormat("\t\t\t").AppendFormat("get ").Append("{ ").AppendFormat("return {0};", fieldName).Append(" }").AppendFormat("\r\n");
@@ -376,5 +397,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
             }
         }
         #endregion
+
+        
     }
 }

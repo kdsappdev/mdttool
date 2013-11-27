@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
@@ -103,7 +104,9 @@ namespace MDT.Tools.DB.DocGen.Plugin
             var dBtablesPrimaryKeys = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesPrimaryKeys) as string;
             var tsslMessage = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tsslMessage) as ToolStripStatusLabel;
             var tspbLoadDBProgress = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tspbLoadDBProgress) as ToolStripProgressBar;
-            
+            var originalEncoding = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_OriginalEncoding) as string;
+            var targetEncoding = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_TargetEncoding) as string;
+
 
             gen.tsiDocGen = _tsiDocGen;
             gen.DBtable = dBtable;
@@ -117,6 +120,11 @@ namespace MDT.Tools.DB.DocGen.Plugin
             gen.MainContextMenu = Application.MainContextMenu;
             gen.dsTableColumn = dsTableColumn;
             gen.dsTablePrimaryKey = dsTablePrimaryKey;
+            if (!string.IsNullOrEmpty(originalEncoding) && !string.IsNullOrEmpty(targetEncoding))
+            {
+                gen.OriginalEncoding = Encoding.GetEncoding(originalEncoding);
+                gen.TargetEncoding = Encoding.GetEncoding(targetEncoding);
+            }
             gen.GenCode(drTable, dsTableColumn, dsTablePrimaryKey);
         }
         #endregion
