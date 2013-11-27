@@ -103,7 +103,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
         }
         private void openDialog()
         {
-            DialogResult result = MessageBox.Show(string.Format("文件已保存成功,是否要打开文件保存目录."), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            DialogResult result = MessageBox.Show(MainContextMenu,string.Format("文件已保存成功,是否要打开文件保存目录."), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (result.Equals(DialogResult.Yes))
             {
                 Process.Start("Explorer.exe", cmc.OutPut);

@@ -456,7 +456,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
             }
             else
             {
-                DialogResult result = MessageBox.Show(string.Format("{0}数据库文档保存成功,是否要打开文档保存目录.", dbName), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                DialogResult result = MessageBox.Show(MainContextMenu,string.Format("{0}数据库文档保存成功,是否要打开文档保存目录.", dbName), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                 if (result.Equals(DialogResult.Yes))
                 {
                     Process.Start("Explorer.exe", path);
