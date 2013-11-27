@@ -30,7 +30,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
             string temp = str;
             if (!string.IsNullOrEmpty(str))
             {
-                temp = temp.ToLower();
+                temp = temp.Trim(new[] { '#', ' ', ';', '\r', '\n' });
                 string[] temps = temp.ToLower().Split(new char[] { '_' });
                 temp = "";
                 foreach (string s in temps)
@@ -45,7 +45,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
             string temp = str;
             if (!string.IsNullOrEmpty(str))
             {
-                temp = temp.ToLower();
+                temp =  temp.Trim(new[] { '#', ' ', ';', '\r', '\n' });
                 string[] temps = temp.ToLower().Split(new char[] { '_' });
                
                 if (temps.Length > 0)
@@ -65,6 +65,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
         {
             if (!string.IsNullOrEmpty(str))
             {
+               
                 str ="_"+ StrFirstToLowerRemoveUnderline(str);
             }
             return str;
@@ -99,7 +100,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
             if (!string.IsNullOrEmpty(str))
             {
                 if (!string.IsNullOrEmpty(defaultValue))
-                defaultValue=defaultValue.Trim(new char[]{'\''});
+                defaultValue=defaultValue.Trim(new char[]{'\'',' ','\r','\n','\t'});
            
                 switch (str)
                 {
