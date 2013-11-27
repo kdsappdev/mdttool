@@ -92,6 +92,7 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
             #region 类名
             string className = drTable["name"] as string;
             className = CodeGenHelper.StrFirstToUpperRemoveUnderline(className);
+            sb.AppendFormat("\t").AppendFormat("[Serializable]").AppendFormat("\r\n");
             sb.AppendFormat("\t").AppendFormat("public class {0}", className).AppendFormat("\r\n");
             sb.Append("\t{").AppendFormat("\r\n");
 
