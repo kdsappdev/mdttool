@@ -133,12 +133,12 @@ namespace MDT.Tools.DB.Csharp_Model.Plugin.Gen
             var tablecomments = drTable["comments"] as string;
             if (!string.IsNullOrEmpty(tablecomments))
             {
-                sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-                sb.AppendFormat("\t\t").AppendFormat("/// ").Append(EncodingHelper.ConvertEncoder(OriginalEncoding,
+                sb.AppendFormat("\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
+                sb.AppendFormat("\t").AppendFormat("/// ").Append(EncodingHelper.ConvertEncoder(OriginalEncoding,
                                                                                                   TargetEncoding,
                                                                                                   tablecomments)).
                     AppendFormat("\r\n");
-                sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
+                sb.AppendFormat("\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
             }
             sb.AppendFormat("\t").AppendFormat("[Serializable]").AppendFormat("\r\n");
             sb.AppendFormat("\t").AppendFormat("public class {0}", className).AppendFormat("\r\n");
