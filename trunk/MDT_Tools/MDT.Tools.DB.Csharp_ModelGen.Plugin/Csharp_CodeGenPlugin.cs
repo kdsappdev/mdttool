@@ -4,14 +4,14 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
-using MDT.Tools.DB.Csharp_Model.Plugin.Gen;
-using MDT.Tools.DB.Csharp_Model.Plugin.Utils;
+using MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen;
+using MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils;
 using MDT.Tools.DB.Csharp_ModelGen.Plugin.UI;
-using MDT.Tools.DB.Csharp_ModelGen.Plugin.Utils;
+ 
 
-namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
+namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
 {
-    public class Csharp_ModelGenPlugin : AbstractPlugin
+    public class Csharp_CodeGenPlugin : AbstractPlugin
     {
         #region 插件信息
 
@@ -30,7 +30,7 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
 
         public override string PluginName
         {
-            get { return "Csharp_Model代码生成插件"; }
+            get { return "Csharp代码生成插件"; }
         }
 
         public override string Description
@@ -85,7 +85,7 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
         #endregion
 
         #region 增加配置
-        Csharp_ModelGenConfigUI cmcUI=new Csharp_ModelGenConfigUI();
+        Csharp_CodeGenConfigUI cmcUI=new Csharp_CodeGenConfigUI();
         private void AddConfig()
         {
             var tabControl = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_TapControl) as TabControl;
@@ -114,7 +114,9 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
         #endregion
 
         #region 增加上下文菜单
-        private readonly ToolStripItem _tsiGen = new ToolStripMenuItem();
+        private readonly ToolStripMenuItem _tsiGen = new ToolStripMenuItem();
+        private readonly ToolStripMenuItem _tsiModelGen = new ToolStripMenuItem();
+        private readonly ToolStripMenuItem _tsiDALGen = new ToolStripMenuItem();
         private delegate void Simple();
         private void AddContextMenu()
         {
@@ -125,19 +127,71 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
             }
             else
             {
-                _tsiGen.Text = "CsharpModel代码生成";
+                _tsiGen.Text = "Csharp代码生成";
+                _tsiModelGen.Text = "Model代码生成";
+                _tsiDALGen.Text = "DALWebService代码生成";
                 _tsiGen.Enabled = false;
                 _tsiGen.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                _tsiGen.Click += TsiGenClick;
+                 _tsiGen.DropDownItems.AddRange(new []{_tsiModelGen,_tsiDALGen});
+                 _tsiModelGen.Click +=(_tsiModelGen_Click);
+                 _tsiDALGen.Click += (_tsiDALGen_Click);
                 Application.MainContextMenu.Items.Add(_tsiGen);
             }
         }
 
-        void TsiGenClick(object sender, EventArgs e)
+        void _tsiDALGen_Click(object sender, EventArgs e)
+        {
+            var drTable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentCheckTable) as DataRow[];
+
+            ThreadPool.QueueUserWorkItem(o => GenDALServer(drTable));
+        }
+
+        void _tsiModelGen_Click(object sender, EventArgs e)
         {
             var drTable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentCheckTable) as DataRow[];
 
             ThreadPool.QueueUserWorkItem(o => Gen(drTable));
+        }
+        private void GenDALServer(DataRow[] drTable)
+        {
+            var gen = new GenCsharpDALWebService ();
+            var dbName = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBName) as string;
+            var dbType = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBType) as string;
+            var dsTableColumn = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBAllTablesColumns) as DataSet;
+            var dsTablePrimaryKey = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBTablesPrimaryKeys) as DataSet;
+
+            var dBtable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtable) as string;
+            var dBtablesColumns = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesColumns) as string;
+
+            var dBviews = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBviews) as string;
+            var dBtablesPrimaryKeys = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesPrimaryKeys) as string;
+            var tsslMessage = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tsslMessage) as ToolStripStatusLabel;
+            var tspbLoadDBProgress = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tspbLoadDBProgress) as ToolStripProgressBar;
+            var originalEncoding = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_OriginalEncoding) as string;
+            var targetEncoding = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_TargetEncoding) as string;
+
+            gen.tsiGen = _tsiGen;
+            gen.DBtable = dBtable;
+            gen.DBtablesColumns = dBtablesColumns;
+            gen.DBviews = dBviews;
+            gen.DBtablesPrimaryKeys = dBtablesPrimaryKeys;
+            gen.dbName = dbName;
+            gen.dbType = dbType;
+            gen.tsslMessage = tsslMessage;
+            gen.tspbLoadDBProgress = tspbLoadDBProgress;
+            gen.MainContextMenu = Application.MainContextMenu;
+            gen.Panel = Application.Panel;
+            gen.dsTableColumn = dsTableColumn;
+            gen.dsTablePrimaryKey = dsTablePrimaryKey;
+            gen.PluginName = PluginName + "(V" + Version + ")";
+            if (!string.IsNullOrEmpty(originalEncoding) && !string.IsNullOrEmpty(targetEncoding))
+            {
+                gen.OriginalEncoding = Encoding.GetEncoding(originalEncoding);
+                gen.TargetEncoding = Encoding.GetEncoding(targetEncoding);
+            }
+            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+
+            gen.GenCode(drTable, dsTableColumn, dsTablePrimaryKey);
         }
         private void Gen(DataRow[] drTable)
         {
@@ -170,6 +224,7 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin
             gen.Panel = Application.Panel;
             gen.dsTableColumn = dsTableColumn;
             gen.dsTablePrimaryKey = dsTablePrimaryKey;
+            gen.PluginName = PluginName+"(V"+Version+")";
             if (!string.IsNullOrEmpty(originalEncoding) && !string.IsNullOrEmpty(targetEncoding))
             {
                 gen.OriginalEncoding = Encoding.GetEncoding(originalEncoding);

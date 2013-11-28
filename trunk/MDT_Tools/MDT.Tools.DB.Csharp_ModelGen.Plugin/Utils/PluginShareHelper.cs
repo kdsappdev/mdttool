@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MDT.Tools.DB.Csharp_Model.Plugin.Utils
+namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
 {
     public class PluginShareHelper
     {
