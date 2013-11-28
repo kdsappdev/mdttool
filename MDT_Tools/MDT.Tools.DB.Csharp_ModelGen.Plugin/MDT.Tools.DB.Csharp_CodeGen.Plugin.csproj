@@ -8,8 +8,8 @@
     <ProjectGuid>{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MDT.Tools.DB.Csharp_ModelGen.Plugin</RootNamespace>
-    <AssemblyName>MDT.Tools.DB.Csharp_ModelGen.Plugin</AssemblyName>
+    <RootNamespace>MDT.Tools.DB.Csharp_CodeGen.Plugin</RootNamespace>
+    <AssemblyName>MDT.Tools.DB.Csharp_CodeGen.Plugin</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -61,19 +61,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Csharp_ModelGenPlugin.cs" />
+    <Compile Include="Csharp_CodeGenPlugin.cs" />
     <Compile Include="Gen\GenCsharpModel.cs" />
-    <Compile Include="Model\CsharpModelGenConfig.cs" />
+    <Compile Include="Gen\GenCsharpDALWebService.cs" />
+    <Compile Include="Model\CsharpCodeGenConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\Csharp_ModelGenConfigUI.cs">
+    <Compile Include="UI\Csharp_CodeGenConfigUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\Csharp_ModelGenConfigUI.Designer.cs">
-      <DependentUpon>Csharp_ModelGenConfigUI.cs</DependentUpon>
+    <Compile Include="UI\Csharp_CodeGenConfigUI.Designer.cs">
+      <DependentUpon>Csharp_CodeGenConfigUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\CodeGenHelper.cs" />
+    <Compile Include="Utils\CodeGenRuleHelper.cs" />
     <Compile Include="Utils\DataTypeMappingHelper.cs" />
     <Compile Include="Utils\FilePathHelper.cs" />
+    <Compile Include="Utils\IbatisConfigHelper.cs" />
     <Compile Include="Utils\IniConfigHelper.cs" />
     <Compile Include="Utils\PluginShareHelper.cs" />
   </ItemGroup>
@@ -105,8 +108,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="UI\Csharp_ModelGenConfigUI.resx">
-      <DependentUpon>Csharp_ModelGenConfigUI.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Csharp_CodeGenConfigUI.resx">
+      <DependentUpon>Csharp_CodeGenConfigUI.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

@@ -125,9 +125,9 @@
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MDT.Tools.DB.Csharp_ModelGen.Plugin\MDT.Tools.DB.Csharp_ModelGen.Plugin.csproj">
+    <ProjectReference Include="..\MDT.Tools.DB.Csharp_ModelGen.Plugin\MDT.Tools.DB.Csharp_CodeGen.Plugin.csproj">
       <Project>{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}</Project>
-      <Name>MDT.Tools.DB.Csharp_ModelGen.Plugin</Name>
+      <Name>MDT.Tools.DB.Csharp_CodeGen.Plugin</Name>
     </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.DB.DocGen.Plugin\MDT.Tools.DB.DocGen.Plugin.csproj">
       <Project>{093DCCC0-573A-4E93-A2B2-94697F676D6B}</Project>

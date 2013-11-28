@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using MDT.Tools.Core.Utils;
-using MDT.Tools.DB.Csharp_Model.Plugin.Utils;
-using MDT.Tools.DB.Csharp_ModelGen.Plugin.Model;
+using MDT.Tools.DB.Csharp_CodeGen.Plugin.Model;
 
-namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.Utils
+
+namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
 {
     internal class IniConfigHelper
     {
@@ -25,11 +25,14 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.Utils
             }
         }
         private const string Group = "CsharpModelGenConfig";
-        private const string NameSpace = "NameSpace";
+        private const string ModelNameSpace = "ModelNameSpace";
+        private const string DALNameSpace = "DALNameSpace";
         private const string OutPut = "OutPut";
         private const string TableFilter = "TableFilter";
         private const string IsShowGenCode = "IsShowGenCode";
-        public static bool Write(CsharpModelGenConfig cms, ref string message)
+        private const string CodeRule = "CodeRule";
+        private const string Ibatis = "Ibatis";
+        public static bool Write(CsharpCodeGenConfig cms, ref string message)
         {
             bool status = false;
             if (cms != null)
@@ -38,10 +41,14 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.Utils
                 try
                 {
                     CreateFile();
-                    WritePrivateProfileString(Group, NameSpace, cms.NameSpace, FilePathHelper.SystemConfig);
+                    WritePrivateProfileString(Group, ModelNameSpace, cms.ModelNameSpace, FilePathHelper.SystemConfig);
+                    WritePrivateProfileString(Group, DALNameSpace, cms.DALNameSpace + "", FilePathHelper.SystemConfig);
                     WritePrivateProfileString(Group, OutPut, cms.OutPut, FilePathHelper.SystemConfig);
                     WritePrivateProfileString(Group, TableFilter, cms.TableFilter, FilePathHelper.SystemConfig);
                     WritePrivateProfileString(Group, IsShowGenCode, cms.IsShowGenCode + "", FilePathHelper.SystemConfig);
+                    WritePrivateProfileString(Group, CodeRule, cms.CodeRule, FilePathHelper.SystemConfig);
+                    WritePrivateProfileString(Group, Ibatis, cms.Ibatis + "", FilePathHelper.SystemConfig);
+
                     status = true;
                 }
                 catch (Exception ex)
@@ -52,21 +59,27 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.Utils
             }
             return status;
         }
-        public static CsharpModelGenConfig ReadCsharpModelGenConfig()
+        public static CsharpCodeGenConfig ReadCsharpModelGenConfig()
         {
-            CsharpModelGenConfig cmc = new CsharpModelGenConfig();
+            CsharpCodeGenConfig cmc = new CsharpCodeGenConfig();
 
             try
             {
                 StringBuilder sb = new StringBuilder(255);
-                GetPrivateProfileString(Group, NameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.NameSpace = sb.ToString();
+                GetPrivateProfileString(Group, ModelNameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+                cmc.ModelNameSpace = sb.ToString();
+                GetPrivateProfileString(Group, DALNameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+                cmc.DALNameSpace = sb.ToString();
                 GetPrivateProfileString(Group, OutPut, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                 cmc.OutPut = sb.ToString();
                 GetPrivateProfileString(Group, TableFilter, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                 cmc.TableFilter = sb.ToString();
                 GetPrivateProfileString(Group, IsShowGenCode, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                 cmc.IsShowGenCode = "true".Equals(sb.ToString().ToLower());
+                GetPrivateProfileString(Group, CodeRule, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+                cmc.CodeRule = sb.ToString();
+                GetPrivateProfileString(Group, Ibatis, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+                cmc.Ibatis = sb.ToString();
             }
             catch (Exception ex)
             {
