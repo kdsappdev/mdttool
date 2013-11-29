@@ -24,7 +24,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
                 fs.Close();
             }
         }
-        private const string Group = "CsharpModelGenConfig";
+        private const string Group = "CsharpCodeGenConfig";
         private const string ModelNameSpace = "ModelNameSpace";
         private const string DALNameSpace = "DALNameSpace";
         private const string OutPut = "OutPut";
