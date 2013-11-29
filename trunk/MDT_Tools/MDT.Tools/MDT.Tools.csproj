@@ -133,6 +133,10 @@
       <Project>{093DCCC0-573A-4E93-A2B2-94697F676D6B}</Project>
       <Name>MDT.Tools.DB.DocGen.Plugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.Java_CodeGen.Plugin\MDT.Tools.DB.Java_CodeGen.Plugin.csproj">
+      <Project>{192D868F-6350-4498-96A1-284B8F45EDF8}</Project>
+      <Name>MDT.Tools.DB.Java_CodeGen.Plugin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj">
       <Project>{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}</Project>
       <Name>MDT.Tools.DB.Plugin</Name>

@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Plugin", "..\M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.TriggerGen.Plugin", "..\MDT.Tools.DB.TriggerGen.Plugin\MDT.Tools.DB.TriggerGen.Plugin.csproj", "{2037AEBC-23E7-4878-994C-1BCACC3E6251}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin", "..\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin\MDT.Tools.DB.Java_bs_ws_CodeGen.Plugin.csproj", "{262B5415-560C-48C6-95B1-8A538E48F5FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Java_CodeGen.Plugin", "..\MDT.Tools.DB.Java_CodeGen.Plugin\MDT.Tools.DB.Java_CodeGen.Plugin.csproj", "{192D868F-6350-4498-96A1-284B8F45EDF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,10 +51,10 @@ Global
 		{2037AEBC-23E7-4878-994C-1BCACC3E6251}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2037AEBC-23E7-4878-994C-1BCACC3E6251}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2037AEBC-23E7-4878-994C-1BCACC3E6251}.Release|Any CPU.Build.0 = Release|Any CPU
-		{262B5415-560C-48C6-95B1-8A538E48F5FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{262B5415-560C-48C6-95B1-8A538E48F5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{262B5415-560C-48C6-95B1-8A538E48F5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{262B5415-560C-48C6-95B1-8A538E48F5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{192D868F-6350-4498-96A1-284B8F45EDF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{192D868F-6350-4498-96A1-284B8F45EDF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{192D868F-6350-4498-96A1-284B8F45EDF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{192D868F-6350-4498-96A1-284B8F45EDF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
