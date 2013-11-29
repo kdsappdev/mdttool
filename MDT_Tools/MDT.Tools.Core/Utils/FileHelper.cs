@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Text;
+
 namespace MDT.Tools.Core.Utils
 {
     public class FileHelper
@@ -33,20 +35,36 @@ namespace MDT.Tools.Core.Utils
             return Path.GetFileName(fileNamePath);
         }
 
+        
         public static bool Write(string fileName, string[] strs)
+        {
+            return Write(fileName, strs, Encoding.UTF8,false);
+        }
+        public static bool Write(string fileName, string[] strs, Encoding encoding)
+        {
+            return Write(fileName, strs, encoding, false);
+        }
+        public static bool Write(string fileName, string[] strs, bool isAppend)
+        {
+            return Write(fileName, strs, Encoding.UTF8, isAppend);
+        }
+        public static bool Write(string fileName, string[] strs,Encoding encoding,bool isAppend)
         {
             bool status = true;
             try
             {
                 CreateDirectory(fileName);
+                if (!isAppend)
                 File.Delete(fileName);
                 var f = new FileInfo(fileName);
-                StreamWriter sw = f.AppendText();
+                FileStream fs = f.OpenWrite();
                 foreach (string str in strs)
                 {
-                    sw.WriteLine(str);
+                    byte[] b = encoding.GetBytes(str);
+                    fs.Write(b, 0, b.Length);
                 }
-                sw.Close();
+                fs.Close();
+                
             }
             catch (Exception)
             {
