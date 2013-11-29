@@ -37,23 +37,23 @@
             this.tbOutPut = new System.Windows.Forms.TextBox();
             this.tbTableFilter = new System.Windows.Forms.TextBox();
             this.btnBrower = new System.Windows.Forms.Button();
-            this.cbShowForm = new System.Windows.Forms.CheckBox();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.label4 = new System.Windows.Forms.Label();
             this.tbDALNameSpace = new System.Windows.Forms.TextBox();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.label6 = new System.Windows.Forms.Label();
             this.rbtnDefault = new System.Windows.Forms.RadioButton();
             this.rbtnIbatis = new System.Windows.Forms.RadioButton();
             this.tbIbatis = new System.Windows.Forms.TextBox();
             this.btnIbatisBrower = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.cbShowForm = new System.Windows.Forms.CheckBox();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.gbInfo.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbInfo
@@ -169,18 +169,6 @@
             this.btnBrower.UseVisualStyleBackColor = true;
             this.btnBrower.Click += new System.EventHandler(this.btnBrower_Click);
             // 
-            // cbShowForm
-            // 
-            this.cbShowForm.AutoSize = true;
-            this.cbShowForm.Checked = true;
-            this.cbShowForm.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbShowForm.Location = new System.Drawing.Point(3, 3);
-            this.cbShowForm.Name = "cbShowForm";
-            this.cbShowForm.Size = new System.Drawing.Size(132, 16);
-            this.cbShowForm.TabIndex = 7;
-            this.cbShowForm.Text = "是否显示生成的代码";
-            this.cbShowForm.UseVisualStyleBackColor = true;
-            // 
             // label4
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -198,30 +186,6 @@
             this.tbDALNameSpace.Name = "tbDALNameSpace";
             this.tbDALNameSpace.Size = new System.Drawing.Size(426, 21);
             this.tbDALNameSpace.TabIndex = 9;
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.Controls.Add(this.cbShowForm, 0, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(145, 210);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(426, 46);
-            this.tableLayoutPanel2.TabIndex = 10;
-            // 
-            // label5
-            // 
-            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(10, 171);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(129, 36);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "代码生成规则:";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // tableLayoutPanel3
             // 
@@ -299,6 +263,42 @@
             this.btnIbatisBrower.UseVisualStyleBackColor = true;
             this.btnIbatisBrower.Click += new System.EventHandler(this.btnIbatisBrower_Click);
             // 
+            // label5
+            // 
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Location = new System.Drawing.Point(10, 171);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(129, 36);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "代码生成规则:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.Controls.Add(this.cbShowForm, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(145, 210);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(426, 46);
+            this.tableLayoutPanel2.TabIndex = 10;
+            // 
+            // cbShowForm
+            // 
+            this.cbShowForm.AutoSize = true;
+            this.cbShowForm.Checked = true;
+            this.cbShowForm.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbShowForm.Location = new System.Drawing.Point(3, 3);
+            this.cbShowForm.Name = "cbShowForm";
+            this.cbShowForm.Size = new System.Drawing.Size(132, 16);
+            this.cbShowForm.TabIndex = 7;
+            this.cbShowForm.Text = "是否显示生成的代码";
+            this.cbShowForm.UseVisualStyleBackColor = true;
+            // 
             // openFileDialog1
             // 
             this.openFileDialog1.Filter = "xml|*.xml";
@@ -315,10 +315,10 @@
             this.gbInfo.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
 
         }

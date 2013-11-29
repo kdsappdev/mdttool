@@ -301,7 +301,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             sb.AppendFormat("\t\t").AppendFormat("public AtsMsg<List<{0}>> Select(string location)", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").Append("string[] args=new []{ location };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
+            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"select\";").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<List<{0}>>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
@@ -321,7 +321,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             sb.AppendFormat("\t\t").AppendFormat("public AtsMsg<{0}> SelectByShortName(string shortName, string location)", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").Append("string[] args=new []{ shortName,location };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
+            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"selectByShortName\";").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<{0}>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
@@ -343,7 +343,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string str = MsgHelper.Serializer<{0}>({1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").Append("string[] args=new []{ str };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
+            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"insert\";").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<{0}>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
@@ -365,7 +365,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string str = MsgHelper.Serializer<{0}>({1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").Append("string[] args=new []{ str };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
+            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"delete\";").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<{0}>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
@@ -387,7 +387,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string str = MsgHelper.Serializer<{0}>({1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").Append("string[] args=new []{ str };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
+            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"update\";").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<{0}>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");

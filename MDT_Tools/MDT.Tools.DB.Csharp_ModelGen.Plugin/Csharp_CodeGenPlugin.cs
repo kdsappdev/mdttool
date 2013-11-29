@@ -89,7 +89,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
         private void AddConfig()
         {
             var tabControl = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_TapControl) as TabControl;
-            TabPage page=new TabPage("CsharpModel配置");
+            TabPage page=new TabPage("Csharp项目配置");
             cmcUI.Dock = DockStyle.Fill;
             page.Controls.Add(cmcUI);
             tabControl.Controls.Add(page);
