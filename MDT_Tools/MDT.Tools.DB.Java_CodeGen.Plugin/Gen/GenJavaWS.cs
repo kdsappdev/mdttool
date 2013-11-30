@@ -15,7 +15,7 @@ using WeifenLuo.WinFormsUI.Docking;
 namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
 {
     /// <summary>
-    /// Csharp DAL生成器
+    /// Java WS生成器
     /// </summary>
     internal class GenJavaWS
     {
@@ -42,6 +42,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             try
             {
                 setEnable(false);
+                setStatusBar("");
                 string[] strs = null;
 
                 if (drTables != null && dsTableColumns != null)
