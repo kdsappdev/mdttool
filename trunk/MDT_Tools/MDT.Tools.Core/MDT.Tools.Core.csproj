@@ -86,6 +86,11 @@
     <Compile Include="Plugin\PluginManager.cs" />
     <Compile Include="Plugin\PluginUtils.cs" />
     <Compile Include="Plugin\WindowsPlugin\IForm.cs" />
+    <Compile Include="Resources\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="UI\Code.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,8 +124,20 @@
   <ItemGroup>
     <Content Include="DataAccess\说明.txt" />
     <Content Include="Plugin\说明.txt" />
+    <Content Include="Resources\start.png" />
+    <Content Include="Resources\closeAllDocment.png" />
+    <Content Include="Resources\setting.ico" />
+    <Content Include="Resources\reload.png" />
+    <Content Include="Resources\dbSet.png" />
+    <Content Include="Resources\db.ico" />
+    <Content Include="Resources\dbConfig.png" />
+    <Content Include="Resources\exit.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Code.resx">
       <DependentUpon>Code.cs</DependentUpon>
       <SubType>Designer</SubType>
