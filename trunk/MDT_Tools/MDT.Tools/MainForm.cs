@@ -6,6 +6,7 @@ using MDT.Tools.Core.UI;
 using MDT.Tools.UI;
 using WeifenLuo.WinFormsUI.Docking;
 using MDT.Tools.Core.Utils;
+using MDT.Tools.Core.Resources;
 namespace MDT.Tools
 {
     public partial class MainForm : Form, IForm
@@ -15,7 +16,7 @@ namespace MDT.Tools
         public MainForm()
         {
             InitializeComponent();
-            Control.CheckForIllegalCrossThreadCalls = false;  
+            Control.CheckForIllegalCrossThreadCalls = false;
             Initialize();
         }
 
@@ -33,15 +34,17 @@ namespace MDT.Tools
         #region Initialize
         private void Initialize()
         {
-           
-            Text = Text + string.Format(" Beta版本:{0}(build{1})", ReflectionHelper.GetVersion(this.GetType().Assembly),ReflectionHelper.GetPe32Time(this.GetType().Assembly.Location).ToString("yyyyMMdd"));
-            //((System.Reflection.AssemblyDescriptionAttribute)System.Reflection.AssemblyDescriptionAttribute.GetCustomAttribute(this.GetType().Assembly,
-//typeof(System.Reflection.AssemblyDescriptionAttribute))).Description
-            notifyIcon1.Text = Text;
-            notifyIcon1.Icon = Icon;
-            _pluginUtils=new PluginUtils();
+            _pluginUtils = new PluginUtils();
             _pluginManager = new PluginManager(this);
             _pluginManager.LoadDefault(PluginHelper.PluginSign1);
+            Text = Text + string.Format(" Beta版本:{0}(build{1})", ReflectionHelper.GetVersion(this.GetType().Assembly), ReflectionHelper.GetPe32Time(this.GetType().Assembly.Location).ToString("yyyyMMdd"));
+            Icon = Resources.Ico;
+            //((System.Reflection.AssemblyDescriptionAttribute)System.Reflection.AssemblyDescriptionAttribute.GetCustomAttribute(this.GetType().Assembly,
+            //typeof(System.Reflection.AssemblyDescriptionAttribute))).Description
+            notifyIcon1.Text = Text;
+            notifyIcon1.Icon = Icon;
+            tsbExit.Image = Resources.exit;
+            tsmiCloseAllDocument.Image = Resources.closeAllDocment;
         }
 
         #endregion
@@ -86,12 +89,12 @@ namespace MDT.Tools
         }
         public void RegisterObject(string name, object obj)
         {
-            _pluginUtils.RegisterObject(name,obj);
+            _pluginUtils.RegisterObject(name, obj);
         }
 
         public object GetObject(string name)
         {
-            object o=_pluginUtils.GetObject(name);
+            object o = _pluginUtils.GetObject(name);
             return o;
         }
 
@@ -99,11 +102,11 @@ namespace MDT.Tools
         {
             _pluginUtils.Remove(name);
         }
-        private readonly PluginBroadCast _pluginBroadCast=new PluginBroadCast();
-        
+        private readonly PluginBroadCast _pluginBroadCast = new PluginBroadCast();
+
         public void Subscribe(string name, IPlugin plugin)
         {
-           _pluginBroadCast.Subscribe(name,plugin);
+            _pluginBroadCast.Subscribe(name, plugin);
         }
         public void Unsubscribe(string name, IPlugin plugin)
         {
@@ -139,6 +142,17 @@ namespace MDT.Tools
             ShowInTaskbar = true;
         }
 
+        #endregion
+
+        #region 关闭所有文档
+        private void tsmiCloseAllDocument_Click(object sender, EventArgs e)
+        {
+            IDockContent[] documents = Panel.DocumentsToArray();
+            foreach (var v in documents)
+            {
+                v.DockHandler.Close();
+            }
+        }
         #endregion
     }
 }

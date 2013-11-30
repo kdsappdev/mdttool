@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
 using MDT.Tools.Core.UI;
+using MDT.Tools.Core.Resources;
 using MDT.Tools.DB.Plugin.Model;
 using MDT.Tools.DB.Plugin.UI;
 using MDT.Tools.DB.Plugin.Utils;
@@ -103,7 +104,11 @@ namespace MDT.Tools.DB.Plugin
         readonly ToolStripComboBox _tscbDbConfig = new ToolStripComboBox();
         readonly ToolStripButton _tsbDbReSet = new ToolStripButton();
         readonly ToolStripSeparator _toolStripSeparator = new ToolStripSeparator();
-
+        readonly ToolStripMenuItem _tsmiSystem = new ToolStripMenuItem();
+        readonly ToolStripMenuItem _tsmiDbSet = new ToolStripMenuItem();
+        readonly ToolStripMenuItem _tsmiDbConfig = new ToolStripMenuItem();
+        readonly ToolStripSeparator _tsmiSeparator = new ToolStripSeparator();
+        readonly ToolStripMenuItem _tsmiExit = new ToolStripMenuItem();
         private void AddTool()
         {
             if (_explorer.InvokeRequired)
@@ -113,25 +118,44 @@ namespace MDT.Tools.DB.Plugin
             }
             else
             {
-                _tsbDbSet.Text = "数据库配置";
-                _tsbDbSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                _tsmiSystem.Text = "系统(&S)";
+
+
+
+                _tsmiDbSet.Text=_tsbDbSet.Text = "数据库配置";
+                _tsmiDbConfig.DisplayStyle = _tsbDbSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                 _tsbDbSet.Click += tsbDBSet_Click;
-
-
+                _tsmiDbSet.Click += tsbDBSet_Click;
+                _tsmiDbSet.Image = _tsbDbSet.Image = Resources.dbConfig;
                 _tscbDbConfig.DropDownStyle = ComboBoxStyle.DropDownList;
                 _tscbDbConfig.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                 _tscbDbConfig.SelectedIndexChanged += TscbDbConfigSelectedIndexChanged;
 
-                _tsbDbReSet.Text = "重新加载数据库";
-                _tsbDbReSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                _tsmiDbConfig.Text=_tsbDbReSet.Text = "重新加载数据库";
+                _tsmiDbConfig.DisplayStyle=_tsbDbReSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                 _tsbDbReSet.Click += TsbDbReSetClick;
-
+                _tsmiDbConfig.Click += TsbDbReSetClick;
+                _tsmiDbConfig.Image = _tsbDbReSet.Image = Resources.reload;
+                _tsmiExit.Text = "退出(&X)";
+                _tsmiExit.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                _tsmiExit.Image = Resources.exit;
+                _tsmiExit.Click += new EventHandler(_tsmiExit_Click);
+                _tsmiSystem.DropDownItems.Add(_tsmiDbSet);
+                _tsmiSystem.DropDownItems.Add( _tsmiDbConfig);
+                _tsmiSystem.DropDownItems.Add(_tsmiSeparator);
+                _tsmiSystem.DropDownItems.Add(_tsmiExit);
+                Application.MainMenu.Items.Insert(0, _tsmiSystem);
 
                 Application.MainTool.Items.Insert(0, _tsbDbSet);
                 Application.MainTool.Items.Insert(1, _tscbDbConfig);
                 Application.MainTool.Items.Insert(2, _tsbDbReSet);
                 Application.MainTool.Items.Insert(3, _toolStripSeparator);
             }
+        }
+
+        void _tsmiExit_Click(object sender, EventArgs e)
+        {
+            Application.MainTool.Items["tsbExit"].PerformClick();
         }
         private void RemoveTool()
         {

@@ -118,9 +118,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="MDT.Tools.DB.Plugin\config.ini">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="MDT.Tools.DB.Plugin\config.ini" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MDT.Tools.pfx" />

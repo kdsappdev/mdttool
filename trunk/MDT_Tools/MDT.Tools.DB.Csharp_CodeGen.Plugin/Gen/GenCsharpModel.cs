@@ -6,18 +6,16 @@ using System.Data;
 using System.Windows.Forms;
 using MDT.Tools.Core.UI;
 using MDT.Tools.Core.Utils;
-
+using MDT.Tools.DB.Csharp_CodeGen.Plugin.Model;
 using MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils;
-using MDT.Tools.DB.Java_CodeGen.Plugin.Model;
-using MDT.Tools.DB.Java_CodeGen.Plugin.Utils;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
+namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
 {
     /// <summary>
-    /// Java SpringConfig生成器
+    /// Csharp Model实体类属性生成器
     /// </summary>
-    internal class GenJavaSpringConfig
+    internal class GenCsharpModel
     {
         public string dbName;
         public string dbType;
@@ -32,31 +30,29 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
         public ContextMenuStrip MainContextMenu;
         public ToolStripItem tsiGen;
         public DockPanel Panel;
-        public JavaCodeGenConfig cmc;
+        public CsharpCodeGenConfig cmc;
         public Encoding OriginalEncoding;
         public Encoding TargetEncoding;
         public string PluginName;
         private IbatisConfigHelper ibatisConfigHelper = new IbatisConfigHelper();
-        public void GetDAOContext(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
+        public void GenCode(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
             try
             {
-                setStatusBar("");
                 setEnable(false);
-                StringBuilder SqlMapConfig = new StringBuilder();
-                StringBuilder DAOContext = new StringBuilder();
-                StringBuilder WebServiceContext = new StringBuilder();
+                setStatusBar("");
+                string[] strs = null;
                 if (drTables != null && dsTableColumns != null)
                 {
                     if (cmc.CodeRule == CodeGenRuleHelper.Ibatis)
                     {
                         ibatisConfigHelper.ReadConfig(cmc.Ibatis);
                     }
-
+                    strs = new string[drTables.Length];
                     if (!cmc.IsShowGenCode)
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
-                        setStatusBar(string.Format("正在生成Spring配置文件"));
+                        setStatusBar(string.Format("正在生成{0}命名空间的Model", cmc.ModelNameSpace));
                         setProgreesEditValue(0);
                         setProgress(0);
                         setProgressMax(drTables.Length);
@@ -80,17 +76,15 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                         }
                         if (!cmc.IsShowGenCode)
                         {
-                            setStatusBar(string.Format("正在生成Spring配置{0}的配置,共{1}个配置，已生成了{2}个配置,过滤了{3}个配置",
-                                                       cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className),
+                            setStatusBar(string.Format("正在生成{0}命名空间中{1}信息,共{2}个Model，已生成了{3}个Model,过滤了{4}个Model", cmc.ModelNameSpace,
+                                cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className),
                                                        drTables.Length, i - j, j));
                             setProgress(1);
                         }
                         if (!flag)
                         {
                             DataRow[] drTableColumns = dsTableColumns.Tables[dbName + DBtablesColumns].Select("TABLE_NAME = '" + drTable["name"].ToString() + "'", "COLUMN_ID ASC");
-                            SqlMapConfig.Append(GenSqlMapConfig(drTable, drTableColumns));
-                            DAOContext.Append(GetDAOContext(drTable, drTableColumns));
-                            WebServiceContext.Append(GetWebServiceContext(drTable, drTableColumns));
+                            strs[i] = GenCode(drTable, drTableColumns);
                         }
                     }
 
@@ -98,24 +92,13 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
 
                 if (!cmc.IsShowGenCode)
                 {
-
-                    FileHelper.Write(cmc.OutPut + CodeGenRuleHelper.SqlMapConfig, new[] { SqlMapConfig.ToString() });
-                    FileHelper.Write(cmc.OutPut + CodeGenRuleHelper.DAOContext, new[] { DAOContext.ToString() });
-                    FileHelper.Write(cmc.OutPut + CodeGenRuleHelper.WebServiceContext, new[] { WebServiceContext.ToString() });
-
-                    setStatusBar(string.Format("Spring配置生成成功"));
+                    setStatusBar(string.Format("{0}命名空间Model生成成功", cmc.ModelNameSpace));
                     openDialog();
-                }
-                else
-                {
-                    CodeShow(CodeGenRuleHelper.SqlMapConfig, SqlMapConfig.ToString());
-                    CodeShow(CodeGenRuleHelper.DAOContext, DAOContext.ToString());
-                    CodeShow(CodeGenRuleHelper.WebServiceContext, WebServiceContext.ToString());
                 }
             }
             catch (Exception ex)
             {
-                setStatusBar(string.Format("Spring配置生成失败[{0}]", ex.Message));
+                setStatusBar(string.Format("{0}命名空间Model生成失败[{1}]", cmc.ModelNameSpace, ex.Message));
 
             }
             finally
@@ -135,69 +118,124 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             }
         }
 
-        public string GenSqlMapConfig(DataRow drTable, DataRow[] drTableColumns)
+        public string GenCode(DataRow drTable, DataRow[] drTableColumns)
         {
             var sb = new StringBuilder();
-            string tableName = drTable["name"] as string;
-            sb.AppendFormat("<sqlMap resource=\"ats/common/model/dao/{0}_SqlMap.xml\" />", tableName).AppendFormat("\r\n");
+
+            #region 引入命名空间
+            sb.AppendFormat("using System;").AppendFormat("\r\n");
+            //sb.AppendFormat("using System.Collections.Generic;").AppendFormat("\r\n");
+            //sb.AppendFormat("using System.Text;").AppendFormat("\r\n");
+            //sb.AppendFormat("using System.Xml.Serialization;").AppendFormat("\r\n");
+            #endregion
+
+            #region 命名空间
+            sb.AppendFormat("namespace {0}", cmc.ModelNameSpace).AppendFormat("\r\n");
+            sb.Append("{").AppendFormat("\r\n");
+
+            #region 类名
+            string className = drTable["name"] as string;
+            className = cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className);
+            var tablecomments = drTable["comments"] as string;
+
+            sb.AppendFormat("\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("/// ").Append(string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
+                                                                                              TargetEncoding,
+                                                                                              tablecomments)).
+                AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
+
+            sb.AppendFormat("\t").AppendFormat("/// <remarks>").AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("/// ").AppendFormat("{0:0000}.{1:00}.{2:00}: 创建. {3} <br/>", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, PluginName).
+                AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("/// </remarks>").AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("[Serializable]").AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("public class {0}", className).AppendFormat("\r\n");
+            sb.Append("\t{").AppendFormat("\r\n");
+
+            #region 字段
+            sb.AppendFormat("\t\t").AppendFormat("#region 字段").AppendFormat("\r\n").AppendFormat("\r\n");
+            foreach (DataRow dr in drTableColumns)
+            {
+                string dataType = "string";
+                string nullAble = dr["NULLABLE"] + "";
+                dataType = DataTypeMappingHelper.GetCSharpDataTypeByDbType(dbType, dr["DATA_TYPE"] + "", dr["DATA_SCALE"] + "", dr["DATA_LENGTH"] + "", "Y".Equals(nullAble));
+                string columnName = dr["COLUMN_NAME"] as string;
+                string fieldName = Utils.CodeGenHelper.StrFieldWith_(columnName);
+                string defaultValue = dr["DATA_DEFAULT"] as string;
+
+
+                string comments = dr["COMMENTS"] as string;
+                sb.AppendFormat("\t\t").AppendFormat("private {0} {1}", dataType, fieldName);
+                if (nullAble.Equals("N") || !string.IsNullOrEmpty(defaultValue))
+                {
+                    defaultValue = CodeGenHelper.GetDefaultValueByDataType(dataType, defaultValue);
+                    sb.AppendFormat(" = {0}", defaultValue);
+                }
+                sb.AppendFormat(";");
+                if (!string.IsNullOrEmpty(comments))
+                {
+                    sb.AppendFormat("//{0}", EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding, comments));
+                }
+                sb.AppendFormat("\r\n");
+            }
+            sb.AppendFormat("\r\n");
+            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
+            #endregion
+            sb.AppendFormat("\r\n");
+
+            #region 属性
+            sb.AppendFormat("\t\t").AppendFormat("#region 属性").AppendFormat("\r\n").AppendFormat("\r\n");
+            foreach (DataRow dr in drTableColumns)
+            {
+                var dataType = "string";
+                string nullAble = dr["NULLABLE"] as string;
+                dataType = Utils.DataTypeMappingHelper.GetCSharpDataTypeByDbType(dbType, dr["DATA_TYPE"] + "", dr["DATA_SCALE"] + "", dr["DATA_LENGTH"] + "", "Y".Equals(nullAble));
+                string comments = dr["COMMENTS"] as string;
+                string columnName = dr["COLUMN_NAME"] as string;
+                string fieldName = CodeGenHelper.StrFieldWith_(columnName);
+                string propertyName = CodeGenHelper.StrProperty(columnName);
+                if (!string.IsNullOrEmpty(comments))
+                {
+                    sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
+                    sb.AppendFormat("\t\t").AppendFormat("/// ").Append(EncodingHelper.ConvertEncoder(OriginalEncoding,
+                                                                                                      TargetEncoding,
+                                                                                                      comments)).
+                        AppendFormat("\r\n");
+                    sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
+                }
+                sb.AppendFormat("\t\t").AppendFormat("public {0} {1}", dataType, propertyName).AppendFormat("\r\n");
+                sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
+                sb.AppendFormat("\t\t\t").AppendFormat("get ").Append("{ ").AppendFormat("return {0};", fieldName).Append(" }").AppendFormat("\r\n");
+
+                sb.AppendFormat("\t\t\t").AppendFormat("set ").Append("{ ").AppendFormat("{0} = value;", fieldName).Append(" }").AppendFormat("\r\n");
+                sb.AppendFormat("\t\t").Append("}").AppendFormat("\r\n");
+                sb.AppendFormat("\r\n");
+            }
+            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
+            sb.AppendFormat("\r\n");
+            #endregion
+
+            sb.Append("\t}").AppendFormat("\r\n");
+            #endregion
+
+            sb.Append("}");
+            #endregion
+
+            string title = className + ".cs";
+
+            if (cmc.IsShowGenCode)
+            {
+                CodeShow(title, sb.ToString());
+            }
+            else
+            {
+                FileHelper.Write(cmc.OutPut + title, new[] { sb.ToString() });
+            }
+
             return sb.ToString();
         }
 
-        public string GetDAOContext(DataRow drTable, DataRow[] drTableColumns)
-        {
-            var sb = new StringBuilder();
-            string tableName = drTable["name"] as string;
-            string className = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName));
-            string dao = className + CodeGenRuleHelper.DAO;
-            sb.AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<!-- {0} -->", dao).AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<bean id=\"{0}\" class=\"ats.common.model.dao.{0}Impl\">", dao).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("<property name=\"sqlMapClientTemplate\">").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"sqlMapClientTemplate\" />").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("</property>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("</bean>").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            return sb.ToString();
-        }
-
-        public string GetWebServiceContext(DataRow drTable, DataRow[] drTableColumns)
-        {
-            var sb = new StringBuilder();
-            string tableName = drTable["name"] as string;
-            string model = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName));
-            string bsServer = model + CodeGenRuleHelper.BSServer;
-            string wsServer = model + CodeGenRuleHelper.WSService;
-            string dao = model + CodeGenRuleHelper.DAO;
-
-            sb.AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<!-- {0} bs-->", bsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<bean id=\"I{0}\" class=\"{1}.impl.{0}\">", bsServer,cmc.BSPackage).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("<property name=\"{0}\">", CodeGenHelper.StrFirstToLower(dao)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"{0}\" />",dao).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("</property>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("<property name=\"{0}\">", "dataCheckServer").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"{0}\" />", "DataCheckServer").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("</property>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("</bean>").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-
-            sb.AppendFormat("\t").AppendFormat("<!-- {0} ws-->", wsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<bean id=\"I{0}\" class=\"{1}.impl.{0}\">", wsServer, cmc.WSPackage).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("<property name=\"i{0}\">", bsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"I{0}\" />", bsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("</property>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("</bean>").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-
-            sb.AppendFormat("\t").AppendFormat("<!-- {0} jaxws-->", wsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<jaxws:server id=\"I{0}\" serviceClass=\"{1}.I{0}\" address=\"/I{0}\">", wsServer, cmc.WSPackage).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("<jaxws:serviceBean>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"I{0}\" />", wsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("</jaxws:serviceBean>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("</jaxws:server>").AppendFormat("\r\n");
-
-            return sb.ToString();
-        }
         private delegate void CodeShowDel(string titile, string codeContent);
         private void CodeShow(string titile, string codeContent)
         {
@@ -215,7 +253,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                 mf.Show(Panel);
             }
         }
-        public GenJavaSpringConfig()
+        public GenCsharpModel()
         {
             AddContextMenu();
         }
@@ -260,7 +298,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                 Code code = v as Code;
                 if (v != null)
                 {
-                    FileHelper.Write(cmc.OutPut + code.Text, new string[] { code.CodeContent }, Encoding.GetEncoding("GBK"));
+                    FileHelper.Write(cmc.OutPut + code.Text, new string[] { code.CodeContent });
                 }
             }
             openDialog();
@@ -274,7 +312,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             {
                 try
                 {
-                    FileHelper.Write(cmc.OutPut + code.Text, new string[] { code.CodeContent }, Encoding.GetEncoding("GBK"));
+                    FileHelper.Write(cmc.OutPut + code.Text, new string[] { code.CodeContent });
                 }
                 catch (Exception ex)
                 {
