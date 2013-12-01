@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             WeifenLuo.WinFormsUI.Docking.DockPanelSkin dockPanelSkin1 = new WeifenLuo.WinFormsUI.Docking.DockPanelSkin();
             WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin autoHideStripSkin1 = new WeifenLuo.WinFormsUI.Docking.AutoHideStripSkin();
             WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient1 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
@@ -60,6 +59,7 @@
             WeifenLuo.WinFormsUI.Docking.DockPanelGradient dockPanelGradient6 = new WeifenLuo.WinFormsUI.Docking.DockPanelGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient13 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient14 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.tsmiWindow = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiCloseAllDocument = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,6 +76,7 @@
             this.notifiyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiBack = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbCloseAllDocment = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.mainTool.SuspendLayout();
             this.notifiyIconContextMenu.SuspendLayout();
@@ -125,6 +126,7 @@
             // mainTool
             // 
             this.mainTool.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbCloseAllDocment,
             this.tsbExit});
             this.mainTool.Location = new System.Drawing.Point(0, 25);
             this.mainTool.Name = "mainTool";
@@ -284,7 +286,7 @@
             this.notifyIcon1.ContextMenuStrip = this.notifiyIconContextMenu;
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
-            this.notifyIcon1.Click += new System.EventHandler(this.NotifyIcon1Click);
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
             // notifiyIconContextMenu
             // 
@@ -308,6 +310,15 @@
             this.tsmiBack.Text = "返回(&B)";
             this.tsmiBack.Click += new System.EventHandler(this.NotifyIcon1Click);
             // 
+            // tsbCloseAllDocment
+            // 
+            this.tsbCloseAllDocment.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseAllDocment.Image")));
+            this.tsbCloseAllDocment.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbCloseAllDocment.Name = "tsbCloseAllDocment";
+            this.tsbCloseAllDocment.Size = new System.Drawing.Size(100, 22);
+            this.tsbCloseAllDocment.Text = "关闭所有文档";
+            this.tsbCloseAllDocment.Click += new System.EventHandler(this.tsmiCloseAllDocument_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -323,8 +334,11 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "MDT 数据库工具器";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.MaximizedBoundsChanged += new System.EventHandler(this.MainForm_MaximizedBoundsChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
             this.Load += new System.EventHandler(this.MainFormLoad);
+            this.Move += new System.EventHandler(this.MainForm_Move);
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.mainTool.ResumeLayout(false);
@@ -353,6 +367,7 @@
         private System.Windows.Forms.ToolStripButton tsbExit;
         private System.Windows.Forms.ToolStripMenuItem tsmiWindow;
         private System.Windows.Forms.ToolStripMenuItem tsmiCloseAllDocument;
+        private System.Windows.Forms.ToolStripButton tsbCloseAllDocment;
       
     }
 }

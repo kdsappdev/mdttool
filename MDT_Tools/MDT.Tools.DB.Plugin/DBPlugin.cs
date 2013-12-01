@@ -827,8 +827,7 @@ namespace MDT.Tools.DB.Plugin
                     if (!status || reloadDb)
                     {
                         DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
-                        string sql = SqlDefHelper.GetTableNames(dbConfigInfo.DbType);
-                        //MessageBox.Show(sql);
+                        string sql = SqlDefHelper.GetTableNames(dbConfigInfo.DbType);                       
                         db.Fill(sql, _dsTable, new[] { dbConfigInfo.DbConfigName + Tables });
                         FilePathHelper.WriteXml(_dsTable);//缓存表数据到本地
                     }

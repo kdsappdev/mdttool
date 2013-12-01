@@ -14,10 +14,17 @@ namespace MDT.Tools
         {
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-           
-            Application.Run(new MainForm());
+            bool flag= MDT.Tools.Core.Utils.MachineHelper.CheckProcessIsMultiple("MDT.Tools");
+            if (flag)
+            {
+                MessageBox.Show("另一个窗口已在运行，不能重复运行", "提示");
+            }
+            else
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainForm());
+            }
         }
 
         static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

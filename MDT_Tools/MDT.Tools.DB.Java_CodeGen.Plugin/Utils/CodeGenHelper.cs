@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
-namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
+namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
 {
     public sealed class CodeGenHelper
     {

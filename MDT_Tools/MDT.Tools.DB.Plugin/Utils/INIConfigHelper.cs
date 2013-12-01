@@ -20,6 +20,10 @@ namespace MDT.Tools.DB.Plugin.Utils
                 FileStream fs = File.Create(FilePathHelper.SystemConfig);
                 fs.Close();
             }
+            else
+            {
+                File.Delete(FilePathHelper.SystemConfig);
+            }
         }
       
         public static bool WriteDBInfo(DbConfigInfo dbConfigInfo, ref string message)
@@ -47,7 +51,7 @@ namespace MDT.Tools.DB.Plugin.Utils
             IList<DbConfigInfo> dbConfigList = new List<DbConfigInfo>();
             try
             {
-                CreateFile();               
+                 
                 var fi = new FileInfo(FilePathHelper.SystemConfig);
                 StreamReader sr = fi.OpenText();
                 string content = sr.ReadToEnd();

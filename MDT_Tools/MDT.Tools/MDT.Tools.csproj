@@ -48,7 +48,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\client\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -121,26 +121,37 @@
     <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
       <Project>{C3DDB32F-3E50-484A-9142-F93472A14323}</Project>
       <Name>MDT.ThirdParty.Controls</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.Core\MDT.Tools.Core.csproj">
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.DB.Csharp_CodeGen.Plugin\MDT.Tools.DB.Csharp_CodeGen.Plugin.csproj">
       <Project>{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}</Project>
       <Name>MDT.Tools.DB.Csharp_CodeGen.Plugin</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.DB.DocGen.Plugin\MDT.Tools.DB.DocGen.Plugin.csproj">
       <Project>{093DCCC0-573A-4E93-A2B2-94697F676D6B}</Project>
       <Name>MDT.Tools.DB.DocGen.Plugin</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.DB.Java_CodeGen.Plugin\MDT.Tools.DB.Java_CodeGen.Plugin.csproj">
       <Project>{192D868F-6350-4498-96A1-284B8F45EDF8}</Project>
       <Name>MDT.Tools.DB.Java_CodeGen.Plugin</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj">
       <Project>{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}</Project>
       <Name>MDT.Tools.DB.Plugin</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.SetComment.Plugin\MDT.Tools.DB.SetComment.Plugin.csproj">
+      <Project>{5F6860D3-4CD1-4D16-8266-E1276F6C36BB}</Project>
+      <Name>MDT.Tools.DB.SetComment.Plugin</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -175,9 +186,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="plugin\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

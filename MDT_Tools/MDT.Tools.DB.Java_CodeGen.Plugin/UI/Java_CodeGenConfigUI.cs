@@ -11,7 +11,7 @@ using MDT.Tools.DB.Java_CodeGen.Plugin.Model;
 using MDT.Tools.DB.Java_CodeGen.Plugin.Utils;
 
 
-namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.UI
+namespace MDT.Tools.DB.Java_CodeGen.Plugin.UI
 {
     public partial class Java_CodeGenConfigUI : UserControl
     {

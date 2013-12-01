@@ -25,6 +25,10 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
                 FileStream fs = File.Create(FilePathHelper.SystemConfig);
                 fs.Close();
             }
+            else
+            {
+                File.Delete(FilePathHelper.SystemConfig);
+            }
         }
         private const string Group = "JavaCodeGenConfig";
         private const string ModelNameSpace = "BSPackage";

@@ -1,4 +1,4 @@
-﻿namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.UI
+﻿namespace MDT.Tools.DB.Java_CodeGen.Plugin.UI
 {
     partial class Java_CodeGenConfigUI
     {
