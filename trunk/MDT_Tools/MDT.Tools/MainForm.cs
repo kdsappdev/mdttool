@@ -44,7 +44,7 @@ namespace MDT.Tools
             notifyIcon1.Text = Text;
             notifyIcon1.Icon = Icon;
             tsbExit.Image = Resources.exit;
-            tsmiCloseAllDocument.Image = Resources.closeAllDocment;
+            tsbCloseAllDocment.Image= tsmiCloseAllDocument.Image = Resources.closeAllDocment;
         }
 
         #endregion
@@ -118,16 +118,11 @@ namespace MDT.Tools
         }
         #endregion
 
+ 
+        
+
         #region 退出
-        private void MainFormFormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-                ShowInTaskbar = false;
-                Hide();
-            }
-        }
+        
         private void TsmiExitClick(object sender, EventArgs e)
         {
             Application.Exit();
@@ -135,11 +130,63 @@ namespace MDT.Tools
         #endregion
 
         #region notifyIcon
+        private void MainFormFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Minimized&&e.CloseReason==CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                this.WindowState = FormWindowState.Minimized;
+                notifyIcon1.ShowBalloonTip(3000, "程序最小化提示",
+                     "图标已经缩小到托盘，打开窗口请双击图标即可。",
+                     ToolTipIcon.Info);
+            }
+        }
+        private void MainForm_Move(object sender, EventArgs e)
+        {
+            if (this == null)
+            {
+                return;
+            }
+
+            //最小化到托盘的时候显示图标提示信息
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.Hide();
+                notifyIcon1.ShowBalloonTip(3000, "程序最小化提示",
+                    "图标已经缩小到托盘，打开窗口请双击图标即可。",
+                    ToolTipIcon.Info);
+            }
+        }
+
+        private void MainForm_MaximizedBoundsChanged(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            showForm();
+        }
+        private void showForm()
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+                this.Show();
+                this.BringToFront();
+                this.Activate();
+                this.Focus();
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.Hide();
+            }
+        }
 
         private void NotifyIcon1Click(object sender, EventArgs e)
         {
-            Show();
-            ShowInTaskbar = true;
+            showForm();
         }
 
         #endregion
@@ -154,5 +201,7 @@ namespace MDT.Tools
             }
         }
         #endregion
+
+       
     }
 }

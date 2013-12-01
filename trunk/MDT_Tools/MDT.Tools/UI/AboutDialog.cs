@@ -19,7 +19,7 @@ namespace MDT.Tools.UI
 
         private void AboutDialog_Load(object sender, EventArgs e)
         {
-            labelAppVersion.Text = typeof(MainForm).Assembly.GetName().Version.ToString();
+            labelAppVersion.Text =MDT.Tools.Core.Utils.ReflectionHelper.GetVersion(typeof(MainForm).Assembly);
             
         }
     }

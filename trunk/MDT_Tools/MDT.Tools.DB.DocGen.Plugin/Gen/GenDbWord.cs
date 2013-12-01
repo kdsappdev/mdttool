@@ -241,7 +241,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
                             newTable.Cell(2, 6).Select();   //选中
                             dbWordApp.Selection.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;//水平居中
 
-                            newTable.Cell(2, 7).Range.Text = "说明";
+                            newTable.Cell(2, 7).Range.Text = "备注";
                             newTable.Cell(2, 7).Range.Font.Color = Word.WdColor.wdColorBlack;//设置单元格内字体颜色
                             newTable.Cell(2, 7).VerticalAlignment = WdCellVerticalAlignment.wdCellAlignVerticalCenter;
                             newTable.Cell(2, 7).Range.Font.Bold = 2;

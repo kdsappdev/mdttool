@@ -445,10 +445,8 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             }
             else
             {
-                Code mf = new Code() { Text = titile, CodeContent = codeContent };
-                //mf.MouseClick += (mf_MouseClick);
-                //mf.ContextMenuStrip = cms;
-                mf.richTextBox1.ContextMenuStrip = cms;
+                Code mf = new Code() { Text = titile, CodeContent = codeContent,  };
+                mf.tbCode.ContextMenuStrip = cms;
                 mf.Show(Panel);
             }
         }

@@ -5,10 +5,9 @@ using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
 
-using MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils;
-using MDT.Tools.DB.Csharp_ModelGen.Plugin.UI;
-using MDT.Tools.DB.Java_CodeGen.Plugin.Gen;
 using MDT.Tools.DB.Java_CodeGen.Plugin.Utils;
+using MDT.Tools.DB.Java_CodeGen.Plugin.UI;
+using MDT.Tools.DB.Java_CodeGen.Plugin.Gen;
 
 
 namespace MDT.Tools.DB.Java_CodeGen.Plugin

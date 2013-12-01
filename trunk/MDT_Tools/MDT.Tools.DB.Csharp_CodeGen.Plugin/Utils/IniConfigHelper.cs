@@ -23,6 +23,10 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
                 FileStream fs = File.Create(FilePathHelper.SystemConfig);
                 fs.Close();
             }
+            else
+            {
+                File.Delete(FilePathHelper.SystemConfig);
+            }
         }
         private const string Group = "CsharpCodeGenConfig";
         private const string ModelNameSpace = "ModelNameSpace";

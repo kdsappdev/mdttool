@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Java_CodeGen.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Csharp_CodeGen.Plugin", "MDT.Tools.DB.Csharp_CodeGen.Plugin\MDT.Tools.DB.Csharp_CodeGen.Plugin.csproj", "{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.SetTableAndTableColumnComment.Plugin", "MDT.Tools.DB.SetTableAndTableColumnComment.Plugin\MDT.Tools.DB.SetTableAndTableColumnComment.Plugin.csproj", "{5F6860D3-4CD1-4D16-8266-E1276F6C36BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.SetComment.Plugin", "MDT.Tools.DB.SetComment.Plugin\MDT.Tools.DB.SetComment.Plugin.csproj", "{5F6860D3-4CD1-4D16-8266-E1276F6C36BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
