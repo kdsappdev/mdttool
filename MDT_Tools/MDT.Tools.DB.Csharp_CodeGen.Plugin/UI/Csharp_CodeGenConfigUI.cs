@@ -65,7 +65,7 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.UI
             cmc = IniConfigHelper.ReadCsharpModelGenConfig();
             tbModelNameSpace.Text = cmc.ModelNameSpace;
 
-            tbDALNameSpace.Text = cmc.IDALNameSpace;
+            tbIDALNameSpace.Text = cmc.IDALNameSpace;
             tbDALNameSpace.Text = cmc.DALNameSpace;
             tbBLLNameSpace.Text = cmc.BLLNameSpace;
             tbPluginName.Text = cmc.PluginName;
