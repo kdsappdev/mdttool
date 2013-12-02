@@ -48,15 +48,15 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.cbShowForm = new System.Windows.Forms.CheckBox();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.cbShowComment = new System.Windows.Forms.CheckBox();
             this.tbBLLNameSpace = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.tbPluginName = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.cbShowComment = new System.Windows.Forms.CheckBox();
             this.tbIDALNameSpace = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.gbInfo.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -314,9 +314,15 @@
             this.cbShowForm.Text = "是否显示生成的代码";
             this.cbShowForm.UseVisualStyleBackColor = true;
             // 
-            // openFileDialog1
+            // cbShowComment
             // 
-            this.openFileDialog1.Filter = "xml|*.xml";
+            this.cbShowComment.AutoSize = true;
+            this.cbShowComment.Location = new System.Drawing.Point(141, 3);
+            this.cbShowComment.Name = "cbShowComment";
+            this.cbShowComment.Size = new System.Drawing.Size(120, 16);
+            this.cbShowComment.TabIndex = 8;
+            this.cbShowComment.Text = "是否显示注释信息";
+            this.cbShowComment.UseVisualStyleBackColor = true;
             // 
             // tbBLLNameSpace
             // 
@@ -354,16 +360,6 @@
             this.label8.Text = "插件名字:";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // cbShowComment
-            // 
-            this.cbShowComment.AutoSize = true;
-            this.cbShowComment.Location = new System.Drawing.Point(141, 3);
-            this.cbShowComment.Name = "cbShowComment";
-            this.cbShowComment.Size = new System.Drawing.Size(120, 16);
-            this.cbShowComment.TabIndex = 8;
-            this.cbShowComment.Text = "是否显示注释信息";
-            this.cbShowComment.UseVisualStyleBackColor = true;
-            // 
             // tbIDALNameSpace
             // 
             this.tbIDALNameSpace.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -381,6 +377,10 @@
             this.label9.TabIndex = 18;
             this.label9.Text = "IDAL命名空间:";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.Filter = "xml|*.xml";
             // 
             // Csharp_CodeGenConfigUI
             // 
