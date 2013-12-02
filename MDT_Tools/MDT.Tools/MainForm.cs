@@ -135,6 +135,7 @@ namespace MDT.Tools
             if (this.WindowState != FormWindowState.Minimized&&e.CloseReason==CloseReason.UserClosing)
             {
                 e.Cancel = true;
+                this.Hide();
                 this.WindowState = FormWindowState.Minimized;
                 notifyIcon1.ShowBalloonTip(3000, "程序最小化提示",
                      "图标已经缩小到托盘，打开窗口请双击图标即可。",
@@ -143,19 +144,19 @@ namespace MDT.Tools
         }
         private void MainForm_Move(object sender, EventArgs e)
         {
-            if (this == null)
-            {
-                return;
-            }
+            //if (this == null)
+            //{
+            //    return;
+            //}
 
-            //最小化到托盘的时候显示图标提示信息
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                this.Hide();
-                notifyIcon1.ShowBalloonTip(3000, "程序最小化提示",
-                    "图标已经缩小到托盘，打开窗口请双击图标即可。",
-                    ToolTipIcon.Info);
-            }
+            ////最小化到托盘的时候显示图标提示信息
+            //if (this.WindowState == FormWindowState.Minimized)
+            //{
+            //    this.Hide();
+            //    notifyIcon1.ShowBalloonTip(3000, "程序最小化提示",
+            //        "图标已经缩小到托盘，打开窗口请双击图标即可。",
+            //        ToolTipIcon.Info);
+            //}
         }
 
         private void MainForm_MaximizedBoundsChanged(object sender, EventArgs e)
