@@ -293,7 +293,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
 
             #region 字段
 
-            string bsInterfaceNameF = CodeGenHelper.StrFirstToLower(bsInterfaceName);
+            string bsInterfaceNameF = CodeGenHelper.StrFirstAndSecondToLower(bsInterfaceName);
             sb.AppendFormat("\t").AppendFormat("private Logger logger = Logger.getLogger(this.getClass().getName());").AppendFormat("\r\n");
             sb.AppendFormat("\t").AppendFormat("private {0} {1};", bsInterfaceName, bsInterfaceNameF).AppendFormat("\r\n");
             sb.AppendFormat("\r\n");

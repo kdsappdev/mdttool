@@ -169,7 +169,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
 
             sb.AppendFormat("\r\n");
             sb.AppendFormat("\t").AppendFormat("<!-- {0} bs-->", bsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<bean id=\"I{0}\" class=\"{1}.impl.{0}\">", bsServer,cmc.BSPackage).AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("<bean id=\"I{0}_bs\" class=\"{1}.impl.{0}\">", bsServer,cmc.BSPackage).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("<property name=\"{0}\">", CodeGenHelper.StrFirstToLower(dao)).AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"{0}\" />",dao).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("</property>").AppendFormat("\r\n");
@@ -180,9 +180,9 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat("\r\n");
 
             sb.AppendFormat("\t").AppendFormat("<!-- {0} ws-->", wsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<bean id=\"I{0}\" class=\"{1}.impl.{0}\">", wsServer, cmc.WSPackage).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("<property name=\"i{0}\">", bsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"I{0}\" />", bsServer).AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("<bean id=\"I{0}_ws\" class=\"{1}.impl.{0}\">", wsServer, cmc.WSPackage).AppendFormat("\r\n");
+            sb.AppendFormat("\t\t").AppendFormat("<property name=\"i{0}\">",CodeGenHelper.StrFirstToLower(bsServer)).AppendFormat("\r\n");
+            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"I{0}_bs\" />", bsServer).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("</property>").AppendFormat("\r\n");
             sb.AppendFormat("\t").AppendFormat("</bean>").AppendFormat("\r\n");
             sb.AppendFormat("\r\n");
@@ -190,7 +190,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat("\t").AppendFormat("<!-- {0} jaxws-->", wsServer).AppendFormat("\r\n");
             sb.AppendFormat("\t").AppendFormat("<jaxws:server id=\"I{0}\" serviceClass=\"{1}.I{0}\" address=\"/I{0}\">", wsServer, cmc.WSPackage).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("<jaxws:serviceBean>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"I{0}\" />", wsServer).AppendFormat("\r\n");
+            sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"I{0}_ws\" />", wsServer).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("</jaxws:serviceBean>").AppendFormat("\r\n");
             sb.AppendFormat("\t").AppendFormat("</jaxws:server>").AppendFormat("\r\n");
 
