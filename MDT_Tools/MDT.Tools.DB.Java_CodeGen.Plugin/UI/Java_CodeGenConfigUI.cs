@@ -5,8 +5,6 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
- 
-using MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils;
 using MDT.Tools.DB.Java_CodeGen.Plugin.Model;
 using MDT.Tools.DB.Java_CodeGen.Plugin.Utils;
 
