@@ -134,12 +134,12 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             #endregion
 
             #region 命名空间
-            sb.AppendFormat("namespace {0}", cmc.DALNameSpace).AppendFormat("\r\n");
+            sb.AppendFormat("namespace {0}", cmc.IDALNameSpace).AppendFormat("\r\n");
             sb.Append("{").AppendFormat("\r\n");
 
             #region 类名
-            string className = drTable["name"] as string;
-            className = "I" + (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className)) + CodeGenRuleHelper.DALServer;
+            string tableName = drTable["name"] as string;
+            string className = "I" + (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName)) + CodeGenRuleHelper.DALServer;
             var tablecomments = drTable["comments"] as string;
 
             sb.AppendFormat("\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
@@ -157,8 +157,8 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             sb.Append("\t{").AppendFormat("\r\n");
 
             #region 接口
-       
-            string modelClass = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(drTable["name"] as string) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className));
+
+            string modelClass = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName));
 
             #region Select
             sb.AppendFormat("\t\t").AppendFormat("#region Select").AppendFormat("\r\n");
@@ -259,7 +259,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             sb.AppendFormat("using System.Text;").AppendFormat("\r\n");
             sb.AppendFormat("using Ats.Foundation.Message;").AppendFormat("\r\n");
             sb.AppendFormat("using Ats.Foundation.Utils.Communication.WebService;").AppendFormat("\r\n");
-            sb.AppendFormat("using Ats.YuKon.DAL.Interface;").AppendFormat("\r\n");
+            sb.AppendFormat("using {0};",cmc.IDALNameSpace).AppendFormat("\r\n");
             sb.AppendFormat("using {0};", cmc.ModelNameSpace).AppendFormat("\r\n");
             #endregion
 
@@ -268,8 +268,8 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             sb.Append("{").AppendFormat("\r\n");
 
             #region 类名
-            string className = drTable["name"] as string;
-            className = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className)) + CodeGenRuleHelper.DALServer;
+            string tableName = drTable["name"] as string;
+            string className = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName)) + CodeGenRuleHelper.DALServer;
             var tablecomments = drTable["comments"] as string;
 
             sb.AppendFormat("\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
@@ -288,7 +288,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
 
             #region 方法
 
-            string modelClass = cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(drTable["name"] as string) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className);
+            string modelClass = cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName);
 
 
             #region select

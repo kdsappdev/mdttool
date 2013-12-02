@@ -29,10 +29,15 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.UI
                     cmc = new CsharpCodeGenConfig();
                 }
                 cmc.ModelNameSpace = tbModelNameSpace.Text;
+                cmc.IDALNameSpace = tbIDALNameSpace.Text;
                 cmc.DALNameSpace = tbDALNameSpace.Text;
+                cmc.BLLNameSpace = tbBLLNameSpace.Text;
+                cmc.PluginName = tbPluginName.Text;
+
                 cmc.OutPut = tbOutPut.Text;
                 cmc.TableFilter = tbTableFilter.Text;
                 cmc.IsShowGenCode = cbShowForm.Checked;
+                cmc.IsShowComment = cbShowComment.Checked;
                 if(rbtnDefault.Checked)
                 {
                     cmc.CodeRule = rbtnDefault.Text;
@@ -59,10 +64,16 @@ namespace MDT.Tools.DB.Csharp_ModelGen.Plugin.UI
         {
             cmc = IniConfigHelper.ReadCsharpModelGenConfig();
             tbModelNameSpace.Text = cmc.ModelNameSpace;
+
+            tbDALNameSpace.Text = cmc.IDALNameSpace;
             tbDALNameSpace.Text = cmc.DALNameSpace;
+            tbBLLNameSpace.Text = cmc.BLLNameSpace;
+            tbPluginName.Text = cmc.PluginName;
+
             tbOutPut.Text = cmc.OutPut;
             tbTableFilter.Text = cmc.TableFilter;
             cbShowForm.Checked = cmc.IsShowGenCode;
+            cbShowComment.Checked = cmc.IsShowComment;
             if(rbtnDefault.Text==cmc.CodeRule)
             {
                 rbtnDefault.Checked = true;
