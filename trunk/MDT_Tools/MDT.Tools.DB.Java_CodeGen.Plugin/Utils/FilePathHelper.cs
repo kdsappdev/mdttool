@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using MDT.Tools.Core.Utils;
 
-namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
+namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
 {
     internal class FilePathHelper
     {

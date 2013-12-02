@@ -28,7 +28,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
             tbScript.ShowTabs = false;
             tbScript.ShowVRuler = false;
             tbScript.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategy("TSQL");
-             
+
         }
         public DataRow drTable;
         public DataRow[] drTableColumns;
@@ -36,7 +36,8 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
         private DataTable dataTable;
         public DataTable DataTable
         {
-            set {
+            set
+            {
                 dataTable = value;
                 dgvTableInfo.DataSource = dataTable;
                 dgvTableInfo.Refresh();
@@ -46,21 +47,25 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
         private string tableNameComment;
         public string TableNameComment
         {
-            set {
+            set
+            {
                 tbComment.Text = value;
-                tableNameComment = value; }
+                tableNameComment = value;
+            }
         }
         private string tableName;
         public string TableName
         {
-            set { tableName = value;
-            Text = tableName + "表基本信息";
+            set
+            {
+                tableName = value;
+                Text = tableName + "表基本信息";
             }
         }
 
         private void bindSql()
         {
-            
+
             tbScript.Text = createTableSql() + createCommentSql();
         }
         private string createTableSql()
@@ -105,9 +110,9 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                 sb.Append(str).AppendFormat("\r\n");
             }
             return sb.ToString();
-             
+
         }
-      
+
 
         private void dgvTableInfo_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -137,15 +142,25 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
 
         private void btnExecute_Click(object sender, EventArgs e)
         {
+            System.Threading.ThreadPool.QueueUserWorkItem(o => execute());
+        }
+
+        private void execute()
+        {
             try
             {
                 bool flag = false;
                 string temp = tbComment.Text.Trim();
                 if (!string.IsNullOrEmpty(temp))
                 {
-                    if (sc.OriginalEncoding != null && sc.OriginalEncoding != null)
+                    if (sc.OriginalEncoding != null &&
+                        sc.OriginalEncoding != null)
                     {
-                        temp = MDT.Tools.Core.Utils.EncodingHelper.ConvertEncoder(sc.TargetEncoding, sc.OriginalEncoding, temp);
+                        temp =
+                            MDT.Tools.Core.Utils.EncodingHelper.
+                                ConvertEncoder(sc.TargetEncoding,
+                                               sc.OriginalEncoding,
+                                               temp);
                     }
                     drTable["comments"] = temp;
                     flag = true;
@@ -153,14 +168,23 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                 }
                 foreach (DataRow dr in drTableColumns)
                 {
-                    DataRow[] drs = dataTable.Select("列名 = '" + dr["COLUMN_NAME"].ToString() + "'");
-                   
-                    if (drs!=null&&!string.IsNullOrEmpty(drs[0]["备注"] + ""))
+                    DataRow[] drs =
+                        dataTable.Select("列名 = '" +
+                                         dr["COLUMN_NAME"].
+                                             ToString() + "'");
+
+                    if (drs != null &&
+                        !string.IsNullOrEmpty(drs[0]["备注"] + ""))
                     {
                         temp = drs[0]["备注"] + "";
-                        if (sc.OriginalEncoding != null && sc.OriginalEncoding != null)
+                        if (sc.OriginalEncoding != null &&
+                            sc.OriginalEncoding != null)
                         {
-                            temp = MDT.Tools.Core.Utils.EncodingHelper.ConvertEncoder(sc.TargetEncoding, sc.OriginalEncoding, temp);
+                            temp =
+                                MDT.Tools.Core.Utils.
+                                    EncodingHelper.ConvertEncoder(
+                                        sc.TargetEncoding,
+                                        sc.OriginalEncoding, temp);
                         }
                         dr["COMMENTS"] = temp;
                         flag = true;
@@ -169,22 +193,45 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                 }
                 if (flag)
                 {
-                    DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(sc.dbConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(sc.dbType)).IDbHelper;
-                    string sql = createCommentSql();
-                    if (sc.OriginalEncoding != null && sc.OriginalEncoding != null)
+                    DNCCFrameWork.DataAccess.IDbHelper db =
+                        new DNCCFrameWork.DataAccess.DbFactory(
+                            sc.dbConnectionString.Trim(new[] { '"' }),
+                            DBType.GetDbProviderString(sc.dbType))
+                            .IDbHelper;
+                    string[] sql = createCommentSql().Split(new string[]{";"},StringSplitOptions.RemoveEmptyEntries);
+                    if (sc.OriginalEncoding != null &&
+                        sc.OriginalEncoding != null)
                     {
-                        sql = MDT.Tools.Core.Utils.EncodingHelper.ConvertEncoder(sc.TargetEncoding, sc.OriginalEncoding, sql);
+                        foreach (var s in sql)
+                        {
+                            if (!string.IsNullOrEmpty(s))
+                            {
+                                string t = s.Trim(new[] {'\t', '\r', '\n', ' ', ';'});
+                                t = MDT.Tools.Core.Utils.EncodingHelper.
+                                    ConvertEncoder(sc.TargetEncoding,
+                                                   sc.OriginalEncoding,
+                                                   t);
+                                if (!string.IsNullOrEmpty(t))
+                                {
+                                    db.ExecuteNonQuery(t);
+                                }
+                            }
+                        }
+
                     }
-                    db.ExecuteNonQuery(sql);
+
                 }
-                MessageBox.Show("执行成功", "提示",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                MessageBox.Show("执行成功", "提示", MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("执行失败["+ex.Message+"]", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("执行失败[" + ex.Message + "]", "提示",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
             }
         }
-             
+
 
 
     }
