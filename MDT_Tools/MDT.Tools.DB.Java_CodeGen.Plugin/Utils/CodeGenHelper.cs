@@ -94,6 +94,14 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
             }
             return str;
         }
+        public static string StrFirstAndSecondToLower(string str)
+        {
+            if (!string.IsNullOrEmpty(str))
+            {
+                str = str[0].ToString().ToLower() + str[1].ToString().ToLower() + str.Substring(2, str.Length - 2);
+            }
+            return str;
+        }
         public static string GetDefaultValueByDataType(string str, string defaultValue)
         {
             string temp = "\"\"";
