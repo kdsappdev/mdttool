@@ -126,10 +126,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             string className = drTable["name"] as string;
             className = "I" + (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className)) + CodeGenRuleHelper.IWSService;
 
-            string modelClass = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(drTable["name"] as string) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className));
-
-
-
+            string modelClass = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(drTable["name"] as string) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className));      
 
             #region 引入包路径
             sb.AppendFormat("package {0};", cmc.WSPackage).AppendFormat("\r\n");
@@ -138,8 +135,6 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat("\r\n");
             sb.AppendFormat("\r\n");
             #endregion
-
-
 
             #region 类名
             var tablecomments = drTable["comments"] as string;
@@ -273,7 +268,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat("import ats.message2.CharsetConvertType;").AppendFormat("\r\n");
             sb.AppendFormat("import ats.pingo.integration.endpoint.ws.basewebservice.BaseWebService;").AppendFormat("\r\n");
             sb.AppendFormat("import ats.yukon.datamanager.bs.{0};", bsInterfaceName).AppendFormat("\r\n");
-            sb.AppendFormat(" import ats.yukon.integration.endpoint.ws.datamanager.I{0};", className).AppendFormat("\r\n");
+            sb.AppendFormat("import ats.yukon.integration.endpoint.ws.datamanager.I{0};", className).AppendFormat("\r\n");
 
             sb.AppendFormat("import ats.foundation.utils.util.ZipUtils;").AppendFormat("\r\n");
             sb.AppendFormat("import ats.foundation.utils.util.CharsetConvert;").AppendFormat("\r\n");
@@ -443,7 +438,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             }
             else
             {
-                Code mf = new Code() { Text = titile, CodeContent = codeContent,  };
+                Code mf = new Code() { CodeLanguage = "Java", Text = titile, CodeContent = codeContent };
                 mf.tbCode.ContextMenuStrip = cms;
                 mf.Show(Panel);
             }
