@@ -50,6 +50,13 @@
             this.cbShowForm = new System.Windows.Forms.CheckBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.tbBLLNameSpace = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.tbPluginName = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbShowComment = new System.Windows.Forms.CheckBox();
+            this.tbIDALNameSpace = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.gbInfo.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -62,7 +69,7 @@
             this.gbInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbInfo.Location = new System.Drawing.Point(0, 0);
             this.gbInfo.Name = "gbInfo";
-            this.gbInfo.Size = new System.Drawing.Size(648, 279);
+            this.gbInfo.Size = new System.Drawing.Size(648, 331);
             this.gbInfo.TabIndex = 0;
             this.gbInfo.TabStop = false;
             this.gbInfo.Text = "基本信息";
@@ -74,32 +81,39 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 135F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 68F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label2, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label3, 1, 7);
             this.tableLayoutPanel1.Controls.Add(this.tbModelNameSpace, 2, 1);
-            this.tableLayoutPanel1.Controls.Add(this.tbOutPut, 2, 3);
-            this.tableLayoutPanel1.Controls.Add(this.tbTableFilter, 2, 4);
-            this.tableLayoutPanel1.Controls.Add(this.btnBrower, 3, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.tbDALNameSpace, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 2, 5);
-            this.tableLayoutPanel1.Controls.Add(this.label5, 1, 5);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.tbOutPut, 2, 6);
+            this.tableLayoutPanel1.Controls.Add(this.tbTableFilter, 2, 7);
+            this.tableLayoutPanel1.Controls.Add(this.btnBrower, 3, 6);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.tbDALNameSpace, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 2, 8);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 1, 8);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 2, 9);
+            this.tableLayoutPanel1.Controls.Add(this.tbBLLNameSpace, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.label7, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.tbPluginName, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label8, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.tbIDALNameSpace, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.label9, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 17);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowCount = 10;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 7F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 85F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(642, 259);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(642, 311);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -115,7 +129,7 @@
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(10, 59);
+            this.label2.Location = new System.Drawing.Point(10, 137);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(129, 27);
             this.label2.TabIndex = 1;
@@ -125,7 +139,7 @@
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(10, 86);
+            this.label3.Location = new System.Drawing.Point(10, 164);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(129, 85);
             this.label3.TabIndex = 2;
@@ -143,7 +157,7 @@
             // tbOutPut
             // 
             this.tbOutPut.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbOutPut.Location = new System.Drawing.Point(145, 62);
+            this.tbOutPut.Location = new System.Drawing.Point(145, 140);
             this.tbOutPut.Name = "tbOutPut";
             this.tbOutPut.Size = new System.Drawing.Size(426, 21);
             this.tbOutPut.TabIndex = 4;
@@ -152,7 +166,7 @@
             // tbTableFilter
             // 
             this.tbTableFilter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbTableFilter.Location = new System.Drawing.Point(145, 89);
+            this.tbTableFilter.Location = new System.Drawing.Point(145, 167);
             this.tbTableFilter.Multiline = true;
             this.tbTableFilter.Name = "tbTableFilter";
             this.tbTableFilter.Size = new System.Drawing.Size(426, 79);
@@ -161,7 +175,7 @@
             // btnBrower
             // 
             this.btnBrower.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnBrower.Location = new System.Drawing.Point(577, 62);
+            this.btnBrower.Location = new System.Drawing.Point(577, 140);
             this.btnBrower.Name = "btnBrower";
             this.btnBrower.Size = new System.Drawing.Size(62, 21);
             this.btnBrower.TabIndex = 6;
@@ -172,7 +186,7 @@
             // label4
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(10, 33);
+            this.label4.Location = new System.Drawing.Point(10, 59);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(129, 26);
             this.label4.TabIndex = 8;
@@ -182,7 +196,7 @@
             // tbDALNameSpace
             // 
             this.tbDALNameSpace.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbDALNameSpace.Location = new System.Drawing.Point(145, 36);
+            this.tbDALNameSpace.Location = new System.Drawing.Point(145, 62);
             this.tbDALNameSpace.Name = "tbDALNameSpace";
             this.tbDALNameSpace.Size = new System.Drawing.Size(426, 21);
             this.tbDALNameSpace.TabIndex = 9;
@@ -201,7 +215,7 @@
             this.tableLayoutPanel3.Controls.Add(this.tbIbatis, 3, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnIbatisBrower, 4, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(145, 174);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(145, 252);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
@@ -266,7 +280,7 @@
             // label5
             // 
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(10, 171);
+            this.label5.Location = new System.Drawing.Point(10, 249);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(129, 36);
             this.label5.TabIndex = 11;
@@ -279,12 +293,13 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.Controls.Add(this.cbShowForm, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.cbShowComment, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(145, 210);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(145, 288);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(426, 46);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(426, 39);
             this.tableLayoutPanel2.TabIndex = 10;
             // 
             // cbShowForm
@@ -303,6 +318,70 @@
             // 
             this.openFileDialog1.Filter = "xml|*.xml";
             // 
+            // tbBLLNameSpace
+            // 
+            this.tbBLLNameSpace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbBLLNameSpace.Location = new System.Drawing.Point(145, 88);
+            this.tbBLLNameSpace.Name = "tbBLLNameSpace";
+            this.tbBLLNameSpace.Size = new System.Drawing.Size(426, 21);
+            this.tbBLLNameSpace.TabIndex = 13;
+            // 
+            // label7
+            // 
+            this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label7.Location = new System.Drawing.Point(10, 85);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(129, 26);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "BLL命名空间:";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tbPluginName
+            // 
+            this.tbPluginName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbPluginName.Location = new System.Drawing.Point(145, 114);
+            this.tbPluginName.Name = "tbPluginName";
+            this.tbPluginName.Size = new System.Drawing.Size(426, 21);
+            this.tbPluginName.TabIndex = 15;
+            // 
+            // label8
+            // 
+            this.label8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label8.Location = new System.Drawing.Point(10, 111);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(129, 26);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "插件名字:";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbShowComment
+            // 
+            this.cbShowComment.AutoSize = true;
+            this.cbShowComment.Location = new System.Drawing.Point(141, 3);
+            this.cbShowComment.Name = "cbShowComment";
+            this.cbShowComment.Size = new System.Drawing.Size(120, 16);
+            this.cbShowComment.TabIndex = 8;
+            this.cbShowComment.Text = "是否显示注释信息";
+            this.cbShowComment.UseVisualStyleBackColor = true;
+            // 
+            // tbIDALNameSpace
+            // 
+            this.tbIDALNameSpace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbIDALNameSpace.Location = new System.Drawing.Point(145, 36);
+            this.tbIDALNameSpace.Name = "tbIDALNameSpace";
+            this.tbIDALNameSpace.Size = new System.Drawing.Size(426, 21);
+            this.tbIDALNameSpace.TabIndex = 17;
+            // 
+            // label9
+            // 
+            this.label9.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label9.Location = new System.Drawing.Point(10, 33);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(129, 26);
+            this.label9.TabIndex = 18;
+            this.label9.Text = "IDAL命名空间:";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // Csharp_CodeGenConfigUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -310,7 +389,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.gbInfo);
             this.Name = "Csharp_CodeGenConfigUI";
-            this.Size = new System.Drawing.Size(648, 279);
+            this.Size = new System.Drawing.Size(648, 331);
             this.Load += new System.EventHandler(this.Csharp_ModelGenConfigUI_Load);
             this.gbInfo.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
@@ -347,5 +426,12 @@
         private System.Windows.Forms.TextBox tbIbatis;
         private System.Windows.Forms.Button btnIbatisBrower;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.TextBox tbBLLNameSpace;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox tbPluginName;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckBox cbShowComment;
+        private System.Windows.Forms.TextBox tbIDALNameSpace;
+        private System.Windows.Forms.Label label9;
     }
 }
