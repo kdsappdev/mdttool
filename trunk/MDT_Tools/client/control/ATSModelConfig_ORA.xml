@@ -30,6 +30,8 @@
 	
 	<table schema="" tableName="YUKON_PROXYUSERS" domainObjectName="YuKonProxyUsers" />
 	<table schema="" tableName="YUKON_ACCOUNT" domainObjectName="YuKonAccount" />
+	<table schema="" tableName="YUKON_MODIFIERS" domainObjectName="YuKonModifiers" />
+	<table schema="" tableName="YUKON_MODIFIERSGROUP" domainObjectName="YuKonModifiersGroup" />
 	<table schema="" tableName="YUKON_AFILTERS" domainObjectName="YuKonAFilters" />
 	<table schema="" tableName="YUKON_AFILTERSGROUP" domainObjectName="YuKonAFiltersGroup" />
 	<table schema="" tableName="YUKON_PFILTERS" domainObjectName="YuKonPFilters" />
