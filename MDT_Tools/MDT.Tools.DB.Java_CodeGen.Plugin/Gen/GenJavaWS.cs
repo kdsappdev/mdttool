@@ -126,7 +126,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             string className = drTable["name"] as string;
             className = "I" + (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className)) + CodeGenRuleHelper.IWSService;
 
-            string modelClass = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(drTable["name"] as string) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className));      
+            string modelClass = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(drTable["name"] as string) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className));
 
             #region 引入包路径
             sb.AppendFormat("package {0};", cmc.WSPackage).AppendFormat("\r\n");
@@ -298,7 +298,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat("\t").AppendFormat("private {0} {1};", bsInterfaceName, bsInterfaceNameF).AppendFormat("\r\n");
             sb.AppendFormat("\r\n");
 
-            sb.AppendFormat("\t").AppendFormat("public void set{0}({0} {1})", bsInterfaceName, bsInterfaceNameF).Append(" {").AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("public void set{1}({0} {1})", bsInterfaceName, CodeGenHelper.StrFirstToUpper(bsInterfaceNameF)).Append(" {").AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("this.{0} = {0};", bsInterfaceNameF).AppendFormat("\r\n");
             sb.AppendFormat("\t").Append("}").AppendFormat("\r\n");
             sb.AppendFormat("\r\n");
