@@ -24,14 +24,11 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
                 FileStream fs = File.Create(FilePathHelper.SystemConfig);
                 fs.Close();
             }
-            else
-            {
-                File.Delete(FilePathHelper.SystemConfig);
-            }
+            
         }
         private const string Group = "JavaCodeGenConfig";
-        private const string ModelNameSpace = "BSPackage";
-        private const string DALNameSpace = "WSPackage";
+        private const string BSPackage = "BSPackage";
+        private const string WSPackage = "WSPackage";
         private const string OutPut = "OutPut";
         private const string TableFilter = "TableFilter";
         private const string IsShowGenCode = "IsShowGenCode";
@@ -46,8 +43,8 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
                 try
                 {
                     CreateFile();
-                    WritePrivateProfileString(Group, ModelNameSpace, cms.BSPackage, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, DALNameSpace, cms.WSPackage + "", FilePathHelper.SystemConfig);
+                    WritePrivateProfileString(Group, BSPackage, cms.BSPackage, FilePathHelper.SystemConfig);
+                    WritePrivateProfileString(Group, WSPackage, cms.WSPackage + "", FilePathHelper.SystemConfig);
                     WritePrivateProfileString(Group, OutPut, cms.OutPut, FilePathHelper.SystemConfig);
                     WritePrivateProfileString(Group, TableFilter, cms.TableFilter, FilePathHelper.SystemConfig);
                     WritePrivateProfileString(Group, IsShowGenCode, cms.IsShowGenCode + "", FilePathHelper.SystemConfig);
@@ -71,9 +68,9 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
             try
             {
                 StringBuilder sb = new StringBuilder(255);
-                GetPrivateProfileString(Group, ModelNameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+                GetPrivateProfileString(Group, BSPackage, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                 cmc.BSPackage = sb.ToString();
-                GetPrivateProfileString(Group, DALNameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+                GetPrivateProfileString(Group, WSPackage, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                 cmc.WSPackage = sb.ToString();
                 GetPrivateProfileString(Group, OutPut, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                 cmc.OutPut = sb.ToString();

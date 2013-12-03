@@ -187,8 +187,8 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat("\t").AppendFormat("</bean>").AppendFormat("\r\n");
             sb.AppendFormat("\r\n");
 
-            sb.AppendFormat("\t").AppendFormat("<!-- {0} jaxws-->", wsServer).AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("<jaxws:server id=\"I{0}\" serviceClass=\"{1}.I{0}\" address=\"/I{0}\">", wsServer, cmc.WSPackage).AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("<!-- I{0} jaxws-->", model).AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("<jaxws:server id=\"I{0}\" serviceClass=\"{1}.I{2}\" address=\"/I{0}\">", model, cmc.WSPackage,wsServer).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("<jaxws:serviceBean>").AppendFormat("\r\n");
             sb.AppendFormat("\t\t\t").AppendFormat("<ref bean=\"I{0}_ws\" />", wsServer).AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("</jaxws:serviceBean>").AppendFormat("\r\n");
