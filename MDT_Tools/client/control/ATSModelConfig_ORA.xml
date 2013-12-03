@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE abatorConfiguration PUBLIC "-//Apache Software Foundation//DTD Abator for iBATIS Configuration 1.0//EN" "abator-config_1_0.dtd">
+
+<abatorConfiguration>
+  <abatorContext id="ATS" generatorSet="Java2">
+
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@192.168.2.251:1521:atsdb" userId="ukondev" password="ukondev">
+      <classPathEntry location=".\lib\classes12.jar" />
+    </jdbcConnection>
+
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="true" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="ats.common.model.po" targetProject="ORA_ATS">
+      <property name="enableSubPackages" value="false" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="ats.common.model.dao" targetProject="ORA_ATS">
+      <property name="enableSubPackages" value="false" />
+    </sqlMapGenerator>
+
+    <daoGenerator type="SPRING" targetPackage="ats.common.model.dao" targetProject="ORA_ATS">
+      <property name="enableSubPackages" value="false" />
+    </daoGenerator>
+	
+	
+<!--<generatedKey column="ID" sqlStatement="select SEQ_YUKON_ID.nextval from dual" identity="false" />-->
+	
+	<table schema="" tableName="YUKON_PROXYUSERS" domainObjectName="YuKonProxyUsers" />
+	<table schema="" tableName="YUKON_ACCOUNT" domainObjectName="YuKonAccount" />
+	<table schema="" tableName="YUKON_AFILTERS" domainObjectName="YuKonAFilters" />
+	<table schema="" tableName="YUKON_AFILTERSGROUP" domainObjectName="YuKonAFiltersGroup" />
+	<table schema="" tableName="YUKON_PFILTERS" domainObjectName="YuKonPFilters" />
+	<table schema="" tableName="YUKON_PFILTERSGROUP" domainObjectName="YuKonPFiltersGroup" />
+	
+	<table schema="" tableName="YUKON_ATSGROUP_ARCHIVEVIEW" domainObjectName="YuKonAtsGroupArchiveView" />
+	<table schema="" tableName="YUKON_ATSGROUP_INSTRUMENT" domainObjectName="YuKonAtsGroupInstrument" />
+	<table schema="" tableName="YUKON_ATSGROUP_MODIFIERSGROUP" domainObjectName="YuKonAtsGroupModifiersGroup" />
+	<table schema="" tableName="YUKON_ATSGROUP_PICKUPFILTERS" domainObjectName="YuKonAtsGroupPickUpFilters" />
+	<table schema="" tableName="YUKON_ATSGROUP_SUBMITFILTERS" domainObjectName="YuKonAtsGroupSubmitFilters" />
+	
+	<table schema="" tableName="YUKON_ATSUSER_ARCHIVEVIEW" domainObjectName="YuKonAtsUserArchiveView" />
+	<table schema="" tableName="YUKON_ATSUSER_INSTRUMENT" domainObjectName="YuKonAtsUserInstrument" />
+	<table schema="" tableName="YUKON_ATSUSER_MODIFIERSGROUP" domainObjectName="YuKonAtsUserModifiersGroup" />
+	<table schema="" tableName="YUKON_ATSUSER_PICKUPFILTERS" domainObjectName="YuKonAtsUserPickUpFilters" />
+	<table schema="" tableName="YUKON_ATSUSER_SUBMITFILTERS" domainObjectName="YuKonAtsUserSubmitFilters" />
+	<!--table schema="" tableName="FXO_DELTA_PARAM" domainObjectName="FXODeltaParam" />-->
+	<!--<table schema="" tableName="SpotFoldCrossPos" domainObjectName="SpotFoldCrossPos" />
+	<table schema="" tableName="SPOTFOLDCROSSPOSSAVE" domainObjectName="SpotFoldCrossPosSave" />
+	<table schema="" tableName="SPOTFOLDCROSSPOSREVA" domainObjectName="SpotFoldCrossPosReva" />
+	<table schema="" tableName="SPOTFOLDCROSSPOSREVAHIST" domainObjectName="SpotFoldCrossPosRevaHist" />
+	
+	
+	<table schema="" tableName="FxSwapFoldPos" domainObjectName="FxSwapFoldPos" />
+		<table schema="" tableName="FXSWAPFOLDPOSSAVE" domainObjectName="FxSwapFoldPosSave" />
+	<table schema="" tableName="FXSWAPFOLDPOSREVA" domainObjectName="SpotFoldCrossPosReva" />
+	<table schema="" tableName="FXSWAPFOLDPOSREVAHIST" domainObjectName="FxSwapFoldPosRevaHist" />
+
+	
+		<table schema="" tableName="FXSWAPREVAL" domainObjectName="FxSwapReval" />
+	<table schema="" tableName="SPOTREVAL" domainObjectName="SpotReval" />
+	<table schema="" tableName="SPOTREVALPLHIST" domainObjectName="SpotRevalPLHist" />
+	<table schema="" tableName="FXSWAPREVALPLHIST" domainObjectName="FxSwapRevalPLHist" />-->
+	
+		 
+  </abatorContext>
+</abatorConfiguration>
+
