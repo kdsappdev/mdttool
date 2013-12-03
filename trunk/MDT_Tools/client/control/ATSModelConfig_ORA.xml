@@ -27,7 +27,8 @@
 	
 	
 <!--<generatedKey column="ID" sqlStatement="select SEQ_YUKON_ID.nextval from dual" identity="false" />-->
-	
+	<table schema="" tableName="ATSGROUP" domainObjectName="ATSGroup" />
+	<table schema="" tableName="ATSUSER" domainObjectName="ATSUser" />
 	<table schema="" tableName="YUKON_PROXYUSERS" domainObjectName="YuKonProxyUsers" />
 	<table schema="" tableName="YUKON_ACCOUNT" domainObjectName="YuKonAccount" />
 	<table schema="" tableName="YUKON_MODIFIERS" domainObjectName="YuKonModifiers" />
@@ -48,6 +49,7 @@
 	<table schema="" tableName="YUKON_ATSUSER_MODIFIERSGROUP" domainObjectName="YuKonAtsUserModifiersGroup" />
 	<table schema="" tableName="YUKON_ATSUSER_PICKUPFILTERS" domainObjectName="YuKonAtsUserPickUpFilters" />
 	<table schema="" tableName="YUKON_ATSUSER_SUBMITFILTERS" domainObjectName="YuKonAtsUserSubmitFilters" />
+
 	<!--table schema="" tableName="FXO_DELTA_PARAM" domainObjectName="FXODeltaParam" />-->
 	<!--<table schema="" tableName="SpotFoldCrossPos" domainObjectName="SpotFoldCrossPos" />
 	<table schema="" tableName="SPOTFOLDCROSSPOSSAVE" domainObjectName="SpotFoldCrossPosSave" />
