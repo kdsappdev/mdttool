@@ -159,6 +159,8 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
 
                             tableName = drTable["name"] as string;//表名
                             string tableComments = drTable["comments"] as string;//表说明
+                            tableComments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding,
+                                                                          tableComments);
                             setStatusBar(string.Format("正在生成{0}中{1}表信息,共{2}张表，已生成了{3}张表", dbName, tableName, drTables.Length, j));
                             dbWordApp.Selection.ParagraphFormat.LineSpacing = 15f;
                             object count = 14;
