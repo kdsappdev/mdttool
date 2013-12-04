@@ -27,8 +27,6 @@
 	
 	
 <!--<generatedKey column="ID" sqlStatement="select SEQ_YUKON_ID.nextval from dual" identity="false" />-->
-	<table schema="" tableName="ATSGROUP" domainObjectName="ATSGroup" />
-	<table schema="" tableName="ATSUSER" domainObjectName="ATSUser" />
 	<table schema="" tableName="YUKON_PROXYUSERS" domainObjectName="YuKonProxyUsers" />
 	<table schema="" tableName="YUKON_ACCOUNT" domainObjectName="YuKonAccount" />
 	<table schema="" tableName="YUKON_MODIFIERS" domainObjectName="YuKonModifiers" />
@@ -67,7 +65,19 @@
 	<table schema="" tableName="SPOTREVAL" domainObjectName="SpotReval" />
 	<table schema="" tableName="SPOTREVALPLHIST" domainObjectName="SpotRevalPLHist" />
 	<table schema="" tableName="FXSWAPREVALPLHIST" domainObjectName="FxSwapRevalPLHist" />-->
-	
+	<!--BLENDER开头文件-->
+	<table schema="" tableName="BLENDER_BLENDINGTYPE" domainObjectName="BlenderBlendingType" />
+	<table schema="" tableName="BLENDER_BT_VWAP" domainObjectName="BlenderBTVwap" />
+	<table schema="" tableName="BLENDER_FEED_DEFINITION" domainObjectName="BlenderFeedDefinition" />
+	<table schema="" tableName="BLENDER_FEED" domainObjectName="BlenderFeed" />
+	<table schema="" tableName="BLENDER_FEEDGROUP" domainObjectName="BlenderFeedGroup" />
+	<table schema="" tableName="BLENDER_FEEDGROUP_SYMBOLS" domainObjectName="BlenderFeedGroupSymbols" />
+	<table schema="" tableName="BLENDER_FEEDSTATUS" domainObjectName="BlenderFeedStatus" />
+	<table schema="" tableName="BLENDER_FILTER" domainObjectName="BlenderFilter" />
+	<table schema="" tableName="BLENDER_ROUNDING" domainObjectName="BlenderRounding" />
+	<table schema="" tableName="BLENDER_STALING" domainObjectName="BlenderStaling" />
+	<table schema="" tableName="BLENDER_TOLERANCE" domainObjectName="BlenderTolerance" />
+	<table schema="" tableName="BLENDER_UPDATE" domainObjectName="BlenderUpdate" />
 		 
   </abatorContext>
 </abatorConfiguration>
