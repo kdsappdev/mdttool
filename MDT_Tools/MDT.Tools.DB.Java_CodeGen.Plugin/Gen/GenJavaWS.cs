@@ -251,8 +251,9 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             var sb = new StringBuilder();
             string tableName = drTable["name"] as string;
             string className = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName)) + CodeGenRuleHelper.WSService;
-            string bsInterfaceName = "I" + (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className)) + CodeGenRuleHelper.IBSServer;
-
+            string bsInterfaceName = "I" + (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName)) + CodeGenRuleHelper.IBSServer;
+            string wsInterfaceName = "I" + (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName)) + CodeGenRuleHelper.IWSService;
+            
             string modelClass = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName));
 
 
@@ -268,7 +269,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat("import ats.message2.CharsetConvertType;").AppendFormat("\r\n");
             sb.AppendFormat("import ats.pingo.integration.endpoint.ws.basewebservice.BaseWebService;").AppendFormat("\r\n");
             sb.AppendFormat("import ats.yukon.datamanager.bs.{0};", bsInterfaceName).AppendFormat("\r\n");
-            sb.AppendFormat("import ats.yukon.integration.endpoint.ws.datamanager.I{0};", className).AppendFormat("\r\n");
+            sb.AppendFormat("import ats.yukon.integration.endpoint.ws.datamanager.{0};", wsInterfaceName).AppendFormat("\r\n");
 
             sb.AppendFormat("import ats.foundation.utils.util.ZipUtils;").AppendFormat("\r\n");
             sb.AppendFormat("import ats.foundation.utils.util.CharsetConvert;").AppendFormat("\r\n");
@@ -287,7 +288,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat(" *").AppendFormat("\r\n");
             sb.AppendFormat(" *").AppendFormat("{0:0000}.{1:00}.{2:00}: 创建. {3} <br/>", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, PluginName).AppendFormat("\r\n");
             sb.AppendFormat(" */").AppendFormat("\r\n");
-            sb.AppendFormat("").AppendFormat("public class {0} extends BaseWebService implements I{0}", className).Append(" {").AppendFormat("\r\n");
+            sb.AppendFormat("").AppendFormat("public class {0} extends BaseWebService implements {1}", className, wsInterfaceName).Append(" {").AppendFormat("\r\n");
 
             #region 实现
 
@@ -298,7 +299,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             sb.AppendFormat("\t").AppendFormat("private {0} {1};", bsInterfaceName, bsInterfaceNameF).AppendFormat("\r\n");
             sb.AppendFormat("\r\n");
 
-            sb.AppendFormat("\t").AppendFormat("public void set{1}({0} {1})", bsInterfaceName, CodeGenHelper.StrFirstToUpper(bsInterfaceNameF)).Append(" {").AppendFormat("\r\n");
+            sb.AppendFormat("\t").AppendFormat("public void set{1}({0} {2})", bsInterfaceName, CodeGenHelper.StrFirstToUpper(bsInterfaceNameF), bsInterfaceNameF).Append(" {").AppendFormat("\r\n");
             sb.AppendFormat("\t\t").AppendFormat("this.{0} = {0};", bsInterfaceNameF).AppendFormat("\r\n");
             sb.AppendFormat("\t").Append("}").AppendFormat("\r\n");
             sb.AppendFormat("\r\n");
