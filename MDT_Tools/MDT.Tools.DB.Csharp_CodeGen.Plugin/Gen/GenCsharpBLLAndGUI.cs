@@ -6,6 +6,7 @@ using System.Data;
 using System.Windows.Forms;
 using MDT.Tools.Core.UI;
 using MDT.Tools.Core.Utils;
+using MDT.Tools.DB.Common;
 using MDT.Tools.DB.Csharp_CodeGen.Plugin.Model;
 using MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils;
 using WeifenLuo.WinFormsUI.Docking;
@@ -15,30 +16,19 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
     /// <summary>
     /// Csharp BLL GUI生成器
     /// </summary>
-    internal class GenCsharpBLLAndGUI
+    internal class GenCsharpBLLAndGUI:AbstractHandler
     {
-        public string dbName;
-        public string dbType;
-        public ToolStripStatusLabel tsslMessage;
-        public ToolStripProgressBar tspbLoadDBProgress;
-        public string DBtable;
-        public string DBtablesColumns;
-        public string DBviews;
-        public string DBtablesPrimaryKeys;
-        public DataSet dsTableColumn;
-        public DataSet dsTablePrimaryKey;
-        public ContextMenuStrip MainContextMenu;
-        public ToolStripItem tsiGen;
-        public DockPanel Panel;
+       
         public CsharpCodeGenConfig cmc;
-        public Encoding OriginalEncoding;
-        public Encoding TargetEncoding;
-        public string PluginName;
+        
         private IbatisConfigHelper ibatisConfigHelper = new IbatisConfigHelper();
-        public void GenCode(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
+      
+
+        public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
             try
             {
+                OutPut = cmc.OutPut;
                 setEnable(false);
                 string[] strs = null;
                 setStatusBar("");
@@ -107,17 +97,9 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                 setEnable(true);
             }
 
-
-
         }
-        private void openDialog()
-        {
-            DialogResult result = MessageBox.Show(MainContextMenu, string.Format("文件已保存成功,是否要打开文件保存目录."), "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (result.Equals(DialogResult.Yes))
-            {
-                Process.Start("Explorer.exe", cmc.OutPut);
-            }
-        }
+
+       
 
         public string GenCodeInterface(DataRow drTable, DataRow[] drTableColumns)
         {
@@ -246,176 +228,10 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             return sb.ToString();
         }
 
-        private delegate void CodeShowDel(string titile, string codeContent);
-        private void CodeShow(string titile, string codeContent)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                var s = new CodeShowDel(CodeShow);
-                MainContextMenu.Invoke(s, new object[] { titile, codeContent });
-            }
-            else
-            {
-                Code mf = new Code() {  CodeLanguage = "C#",Text = titile, CodeContent = codeContent };
-                
-                mf.tbCode.ContextMenuStrip = cms;               
-                mf.Show(Panel);
-            }
-        }
+        
         public GenCsharpBLLAndGUI()
         {
             AddContextMenu();
         }
-
-        ContextMenuStrip cms = new ContextMenuStrip();
-        void mf_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                cms.Show(sender as Control, e.Location);
-            }
-        }
-        private readonly ToolStripItem _tsiSave = new ToolStripMenuItem();
-        private readonly ToolStripItem _tsiSaveAll = new ToolStripMenuItem();
-        private delegate void Simple();
-        private void AddContextMenu()
-        {
-            //if (MainContextMenu.InvokeRequired)
-            //{
-            //    var s = new Simple(AddContextMenu);
-            //    MainContextMenu.Invoke(s, null);
-            //}
-            //else
-            {
-                _tsiSave.Text = "保存";
-                _tsiSave.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                _tsiSave.Click += _tsiSave_Click;
-                _tsiSaveAll.Text = "全部保存";
-                _tsiSaveAll.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                _tsiSaveAll.Click += new EventHandler(_tsiSaveAll_Click);
-                cms.Items.Add(_tsiSave);
-                cms.Items.Add(_tsiSaveAll);
-            }
-        }
-
-        void _tsiSaveAll_Click(object sender, EventArgs e)
-        {
-            IDockContent[] documents = Panel.DocumentsToArray();
-            FileHelper.DeleteDirectory(cmc.OutPut);
-            foreach (var v in documents)
-            {
-                Code code = v as Code;
-                if (v != null)
-                {
-                    FileHelper.Write(cmc.OutPut + code.Text, new string[] { code.CodeContent });
-                }
-            }
-            openDialog();
-        }
-
-        void _tsiSave_Click(object sender, EventArgs e)
-        {
-            var code = Panel.ActiveContent as Code;
-            FileHelper.DeleteDirectory(cmc.OutPut);
-            if (code != null)
-            {
-                try
-                {
-                    FileHelper.Write(cmc.OutPut + code.Text, new string[] { code.CodeContent });
-                }
-                catch (Exception ex)
-                {
-
-                    MessageBox.Show(ex.Message);
-                }
-            }
-            openDialog();
-        }
-
-        #region
-        protected void setProgreesEditValue(int i)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgreesEditValue);
-                MainContextMenu.Invoke(s, new object[] { i });
-            }
-            else
-            {
-                tspbLoadDBProgress.Value = i;
-                ;
-            }
-
-        }
-        delegate void SimpleInt(int i);
-        delegate void SimpleStr(string str);
-        protected void setProgressMax(int i)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgressMax);
-                MainContextMenu.Invoke(s, new object[] { i });
-
-            }
-            else
-            {
-                tspbLoadDBProgress.Maximum = i;
-            }
-
-        }
-        protected void setProgress(int i)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgress);
-                MainContextMenu.Invoke(s, new object[] { i });
-
-            }
-            else
-            {
-                if (i + (int)tspbLoadDBProgress.Value > tspbLoadDBProgress.Maximum)
-                {
-                    tspbLoadDBProgress.Value = tspbLoadDBProgress.Maximum;
-                }
-                else
-                {
-                    tspbLoadDBProgress.Value += i;
-                };
-            }
-
-        }
-        protected void setStatusBar(string str)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleStr s = new SimpleStr(setStatusBar);
-                MainContextMenu.Invoke(s, new object[] { str });
-
-            }
-            else
-            {
-                tsslMessage.Text = str;
-
-            }
-        }
-
-        private delegate void SimpleBool(bool flag);
-        private void setEnable(bool flag)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleBool s = new SimpleBool(setEnable);
-                MainContextMenu.Invoke(s, new object[] { flag });
-
-            }
-            else
-            {
-                tsiGen.Enabled = flag;
-                tspbLoadDBProgress.Visible = !flag;
-            }
-        }
-        #endregion
-
-
     }
 }
