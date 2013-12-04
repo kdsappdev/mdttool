@@ -18,7 +18,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
        public const string DAO = "DAO";
 
        //ws
-       public const string IWSService = "Service";
+       public const string IWSService = "";
        public const string WSService = "Service";
        public const string WSSummary = "WS实现";
        public const string IWSSummary = "WS接口";
