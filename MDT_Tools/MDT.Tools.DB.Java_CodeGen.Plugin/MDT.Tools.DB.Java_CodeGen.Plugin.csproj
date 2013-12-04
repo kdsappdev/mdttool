@@ -73,13 +73,9 @@
     <Compile Include="UI\Java_CodeGenConfigUI.Designer.cs">
       <DependentUpon>Java_CodeGenConfigUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils\CodeGenHelper.cs" />
     <Compile Include="Utils\CodeGenRuleHelper.cs" />
-    <Compile Include="Utils\DataTypeMappingHelper.cs" />
     <Compile Include="Utils\FilePathHelper.cs" />
-    <Compile Include="Utils\IbatisConfigHelper.cs" />
     <Compile Include="Utils\IniConfigHelper.cs" />
-    <Compile Include="Utils\PluginShareHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
@@ -91,6 +87,10 @@
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj">
+      <Project>{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}</Project>
+      <Name>MDT.Tools.DB.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -77,7 +77,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\FilePathHelper.cs" />
-    <Compile Include="Utils\PluginShareHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -106,6 +105,10 @@
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj">
+      <Project>{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}</Project>
+      <Name>MDT.Tools.DB.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

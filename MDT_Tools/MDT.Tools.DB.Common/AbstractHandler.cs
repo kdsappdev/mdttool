@@ -14,12 +14,14 @@ namespace MDT.Tools.DB.Common
     {
         public string dbName;
         public string dbType;
+        public string dbConnectionString;
         public ToolStripStatusLabel tsslMessage;
         public ToolStripProgressBar tspbLoadDBProgress;
         public string DBtable;
         public string DBtablesColumns;
         public string DBviews;
         public string DBtablesPrimaryKeys;
+        public DataSet dsTable;
         public DataSet dsTableColumn;
         public DataSet dsTablePrimaryKey;
         public ContextMenuStrip MainContextMenu;
@@ -29,7 +31,7 @@ namespace MDT.Tools.DB.Common
         public Encoding OriginalEncoding;
         public Encoding TargetEncoding;
         public string PluginName;
-
+        
 
         public abstract void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys);
          

@@ -77,7 +77,6 @@
     <Compile Include="Utils\CodeGenRuleHelper.cs" />
     <Compile Include="Utils\FilePathHelper.cs" />
     <Compile Include="Utils\IniConfigHelper.cs" />
-    <Compile Include="Utils\PluginShareHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

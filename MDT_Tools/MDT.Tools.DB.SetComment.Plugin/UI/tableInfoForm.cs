@@ -12,6 +12,7 @@ using ICSharpCode.TextEditor.Gui.CompletionWindow;
 using ICSharpCode.TextEditor.Document;
 using ICSharpCode.TextEditor.Actions;
 using MDT.Tools.DB.SetComment.Plugin.Utils;
+using MDT.Tools.DB.Common;
 namespace MDT.Tools.DB.SetComment.Plugin.UI
 {
     internal partial class tableInfoForm : DockContent

@@ -75,6 +75,8 @@ namespace MDT.Tools.DB.Common
              
             var dbName = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBName) as string;
             var dbType = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBType) as string;
+            var dbConnectionString = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBConnectionString) as string;
+            var dsTable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBAllTable) as DataSet;
             var dsTableColumn = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBAllTablesColumns) as DataSet;
             var dsTablePrimaryKey = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBTablesPrimaryKeys) as DataSet;
 
@@ -95,10 +97,12 @@ namespace MDT.Tools.DB.Common
             handler.DBtablesPrimaryKeys = dBtablesPrimaryKeys;
             handler.dbName = dbName;
             handler.dbType = dbType;
+            handler.dbConnectionString = dbConnectionString;
             handler.tsslMessage = tsslMessage;
             handler.tspbLoadDBProgress = tspbLoadDBProgress;
             handler.MainContextMenu = Application.MainContextMenu;
             handler.Panel = Application.Panel;
+            handler.dsTable = dsTable;
             handler.dsTableColumn = dsTableColumn;
             handler.dsTablePrimaryKey = dsTablePrimaryKey;
             handler.PluginName = PluginName + "(V" + Version + ")";
