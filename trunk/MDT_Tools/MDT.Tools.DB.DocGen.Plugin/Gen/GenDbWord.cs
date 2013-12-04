@@ -8,109 +8,15 @@ using MDT.Tools.Core.UI;
 using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.DocGen.Plugin.Utils;
 using Word;
-
+using MDT.Tools.DB.Common;
 namespace MDT.Tools.DB.DocGen.Plugin.Gen
 {
-    public class GenDbWord
+    internal class GenDbWord:AbstractHandler
     {
-        public string dbName;
-        public string dbType;
-        public ToolStripStatusLabel tsslMessage;
-        public ToolStripProgressBar tspbLoadDBProgress;
-        public string DBtable;
-        public string DBtablesColumns;
-        public string DBviews;
-        public string DBtablesPrimaryKeys;
-        public DataSet dsTableColumn;
-        public DataSet dsTablePrimaryKey;
-        public ContextMenuStrip MainContextMenu;
-        public ToolStripItem tsiDocGen;
-        public Encoding OriginalEncoding;
-        public Encoding TargetEncoding;
-        protected void setProgreesEditValue(int i)
+
+        public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgreesEditValue);
-                MainContextMenu.Invoke(s, new object[] { i });
-            }
-            else
-            {
-                tspbLoadDBProgress.Value = i;
-                ;
-            }
-
-        }
-        delegate void SimpleInt(int i);
-        delegate void SimpleStr(string str);
-        protected void setProgressMax(int i)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgressMax);
-                MainContextMenu.Invoke(s, new object[] { i });
-
-            }
-            else
-            {
-                tspbLoadDBProgress.Maximum = i;
-            }
-
-        }
-        protected void setProgress(int i)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgress);
-                MainContextMenu.Invoke(s, new object[] { i });
-
-            }
-            else
-            {
-                if (i + (int)tspbLoadDBProgress.Value > tspbLoadDBProgress.Maximum)
-                {
-                    tspbLoadDBProgress.Value = tspbLoadDBProgress.Maximum;
-                }
-                else
-                {
-                    tspbLoadDBProgress.Value += i;
-                };
-            }
-
-        }
-        protected void setStatusBar(string str)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleStr s = new SimpleStr(setStatusBar);
-                MainContextMenu.Invoke(s, new object[] { str });
-
-            }
-            else
-            {
-                tsslMessage.Text = str;
-
-            }
-        }
-
-        private delegate void SimpleBool(bool flag);
-        private void setEnable(bool flag)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleBool s = new SimpleBool(setEnable);
-                MainContextMenu.Invoke(s, new object[] { flag });
-
-            }
-            else
-            {
-                tsiDocGen.Enabled = flag;
-                tspbLoadDBProgress.Visible = !flag;
-            }
-        }
-
-        public void GenCode(System.Data.DataRow[] drTables, System.Data.DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
-        {
+            OutPut = FilePathHelper.ExportDBDocPath;
             setEnable(false);
             string msg = string.Empty;
             Stopwatch sw = Stopwatch.StartNew();
@@ -442,30 +348,13 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
             if (string.IsNullOrEmpty(msg))
             {
                 setStatusBar(string.Format("{0}数据库文档生成成功", dbName));
-                openPath(FilePathHelper.ExportDBDocPath);
+                openDialog();
             }
             else
             {
                 setStatusBar(string.Format("{0}数据库文档生成失败[{1}]", dbName, msg));
             }
             setEnable(true);
-        }
-
-        private void openPath(string path)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleStr s = new SimpleStr(openPath);
-                MainContextMenu.Invoke(s, new object[] { path });
-            }
-            else
-            {
-                DialogResult result = MessageBox.Show(MainContextMenu,string.Format("{0}数据库文档保存成功,是否要打开文档保存目录.", dbName), @"提示", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                if (result.Equals(DialogResult.Yes))
-                {
-                    Process.Start("Explorer.exe", path);
-                }
-            }
         }
     }
 }

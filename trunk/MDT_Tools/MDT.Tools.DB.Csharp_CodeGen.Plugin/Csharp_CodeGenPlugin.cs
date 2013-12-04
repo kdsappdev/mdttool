@@ -8,7 +8,7 @@ using MDT.Tools.DB.Common;
 using MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen;
 using MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils;
 using MDT.Tools.DB.Csharp_ModelGen.Plugin.UI;
-using PluginShareHelper = MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils.PluginShareHelper;
+
 
 
 namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
@@ -101,19 +101,20 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
             }
             else
             {
+                base.AddContextMenu();
                 _tsiGen.Text = "Csharp代码生成";
                 _tsiModelGen.Text = "Model代码生成";
                 _tsiDALGen.Text = "DALWebService代码生成";
                 _tsiBLLGen.Text = "BLL&GUI代码生成";
                 _tsispringConfigGen.Text = "Spring配置生成";
                 _tsiGen.Enabled = false;
-                _tsiGen.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+               
                 _tsiGen.DropDownItems.AddRange(new[] { _tsiModelGen, _tsiDALGen,_tsiBLLGen, _tsispringConfigGen });
                  _tsiModelGen.Click +=(_tsiModelGen_Click);
                  _tsiDALGen.Click += (_tsiDALGen_Click);
                  _tsiBLLGen.Click += (_tsiBLLGen_Click);
                  _tsispringConfigGen.Click += (_tsispringConfigGen_Click);
-                 Application.MainContextMenu.Items.Add(_tsiGen);
+                 
             }
         }
 

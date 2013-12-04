@@ -6,10 +6,10 @@ using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
 using MDT.Tools.DB.DocGen.Plugin.Gen;
 using MDT.Tools.DB.DocGen.Plugin.Utils;
-
+using MDT.Tools.DB.Common;
 namespace MDT.Tools.DB.DocGen.Plugin
 {
-    public class DocGenPlugin : AbstractPlugin
+    public class DocGenPlugin : DBSubPlugin
     {
         #region 插件信息
 
@@ -49,24 +49,11 @@ namespace MDT.Tools.DB.DocGen.Plugin
 
 
 
-        protected override void load()
-        {
-            AddContextMenu();
-            subscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
-        }
-
-        protected override void unload()
-        {
-            
-            unsubscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
-            Application.MainContextMenu.Items.Remove(_tsiDocGen);
-
-        }
+        
 
         #region 增加上下文菜单
-        private readonly ToolStripItem _tsiDocGen = new ToolStripMenuItem();
-        private delegate void Simple();
-        private void AddContextMenu()
+        
+        protected override void AddContextMenu()
         {
             if (Application.MainContextMenu.InvokeRequired)
             {
@@ -75,11 +62,9 @@ namespace MDT.Tools.DB.DocGen.Plugin
             }
             else
             {
-                _tsiDocGen.Text = "生成数据库文档";
-                _tsiDocGen.Enabled = false;
-                _tsiDocGen.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                _tsiDocGen.Click += TsiDocGenClick;
-                Application.MainContextMenu.Items.Add(_tsiDocGen);
+                base.AddContextMenu();
+                _tsiGen.Click += TsiDocGenClick;
+                _tsiGen.Text = "生成数据库文档";                
             }
         }
 
@@ -92,67 +77,11 @@ namespace MDT.Tools.DB.DocGen.Plugin
         private void GenDBWord(DataRow[] drTable)
         {
             var gen = new GenDbWord();
-            var dbName = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBName) as string;
-            var dbType = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBType) as string;
-            var dsTableColumn = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBAllTablesColumns) as DataSet;
-            var dsTablePrimaryKey = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBTablesPrimaryKeys) as DataSet;
-
-            var dBtable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtable) as string;
-            var dBtablesColumns = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesColumns) as string;
-
-            var dBviews = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBviews) as string;
-            var dBtablesPrimaryKeys = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBtablesPrimaryKeys) as string;
-            var tsslMessage = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tsslMessage) as ToolStripStatusLabel;
-            var tspbLoadDBProgress = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_tspbLoadDBProgress) as ToolStripProgressBar;
-            var originalEncoding = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_OriginalEncoding) as string;
-            var targetEncoding = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_TargetEncoding) as string;
-
-
-            gen.tsiDocGen = _tsiDocGen;
-            gen.DBtable = dBtable;
-            gen.DBtablesColumns = dBtablesColumns;
-            gen.DBviews = dBviews;
-            gen.DBtablesPrimaryKeys = dBtablesPrimaryKeys;
-            gen.dbName = dbName;
-            gen.dbType = dbType;
-            gen.tsslMessage = tsslMessage;
-            gen.tspbLoadDBProgress = tspbLoadDBProgress;
-            gen.MainContextMenu = Application.MainContextMenu;
-            gen.dsTableColumn = dsTableColumn;
-            gen.dsTablePrimaryKey = dsTablePrimaryKey;
-            if (!string.IsNullOrEmpty(originalEncoding) && !string.IsNullOrEmpty(targetEncoding))
-            {
-                gen.OriginalEncoding = Encoding.GetEncoding(originalEncoding);
-                gen.TargetEncoding = Encoding.GetEncoding(targetEncoding);
-            }
-            gen.GenCode(drTable, dsTableColumn, dsTablePrimaryKey);
+            process(drTable, gen);
         }
         #endregion
 
-        public override void onNotify(string name, object o)
-        {
-            base.onNotify(name, o);
-            if (PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0.Equals(name) && o.GetType().IsValueType)
-            {
-                var flag = (bool)o;
-                SetEnable(flag);
-            }
-        }
-
-        private delegate void SimpleBool(bool flag);
-        private void SetEnable(bool flag)
-        {
-            if (Application.MainContextMenu.InvokeRequired)
-            {
-                var s = new SimpleBool(SetEnable);
-                Application.MainContextMenu.Invoke(s, new object[] { flag });
-            }
-            else
-            {
-                _tsiDocGen.Enabled = flag;
-            }
-        }
-
+        
         #endregion
     }
 }

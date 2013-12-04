@@ -23,8 +23,15 @@ namespace MDT.Tools.DB.Common
             return str;
         }
 
-     
 
+        public static string StrFirstAndSecondToLower(string str)
+        {
+            if (!string.IsNullOrEmpty(str))
+            {
+                str = str[0].ToString().ToLower() + str[1].ToString().ToLower() + str.Substring(2, str.Length - 2);
+            }
+            return str;
+        }
         public static string StrFirstToUpperRemoveUnderline(string str)
         {
             string temp = str;

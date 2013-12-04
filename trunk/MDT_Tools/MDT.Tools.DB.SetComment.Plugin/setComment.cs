@@ -9,35 +9,17 @@ using MDT.Tools.Core.Utils;
 
 
 using WeifenLuo.WinFormsUI.Docking;
-
+using MDT.Tools.DB.Common;
 namespace MDT.Tools.DB.SetComment.Plugin
 {
     /// <summary>
     /// 设置备注
     /// </summary>
-    internal class setComment
+    internal class setComment:AbstractHandler
     {
-        public string dbName;
-        public string dbType;
-        public string dbConnectionString;
-        public ToolStripStatusLabel tsslMessage;
-        public ToolStripProgressBar tspbLoadDBProgress;
-        public string DBtable;
-        public string DBtablesColumns;
-        public string DBviews;
-        public string DBtablesPrimaryKeys;
-        public DataSet dsTable;
-        public DataSet dsTableColumn;
-        public DataSet dsTablePrimaryKey;
-        public ContextMenuStrip MainContextMenu;
-        public ToolStripItem tsiGen;
-        public DockPanel Panel;
-
-        public Encoding OriginalEncoding;
-        public Encoding TargetEncoding;
-        public string PluginName;
+        
         public DataRow[] DrTables;
-        public void set(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
+        public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
             try
             {
@@ -66,9 +48,7 @@ namespace MDT.Tools.DB.SetComment.Plugin
             {
                 setEnable(true);
             }
-
         }
-
 
         public void set(DataRow drTable, DataRow[] drTableColumns)
         {
@@ -163,92 +143,6 @@ namespace MDT.Tools.DB.SetComment.Plugin
             t.TableName = tableName;
             t.DataTable = dt;
             t.Show(Panel);
-        }
-
-        #region
-        protected void setProgreesEditValue(int i)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgreesEditValue);
-                MainContextMenu.Invoke(s, new object[] { i });
-            }
-            else
-            {
-                tspbLoadDBProgress.Value = i;
-                ;
-            }
-
-        }
-        delegate void SimpleInt(int i);
-        delegate void SimpleStr(string str);
-        protected void setProgressMax(int i)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgressMax);
-                MainContextMenu.Invoke(s, new object[] { i });
-
-            }
-            else
-            {
-                tspbLoadDBProgress.Maximum = i;
-            }
-
-        }
-        protected void setProgress(int i)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleInt s = new SimpleInt(setProgress);
-                MainContextMenu.Invoke(s, new object[] { i });
-
-            }
-            else
-            {
-                if (i + (int)tspbLoadDBProgress.Value > tspbLoadDBProgress.Maximum)
-                {
-                    tspbLoadDBProgress.Value = tspbLoadDBProgress.Maximum;
-                }
-                else
-                {
-                    tspbLoadDBProgress.Value += i;
-                };
-            }
-
-        }
-        protected void setStatusBar(string str)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleStr s = new SimpleStr(setStatusBar);
-                MainContextMenu.Invoke(s, new object[] { str });
-
-            }
-            else
-            {
-                tsslMessage.Text = str;
-
-            }
-        }
-
-        private delegate void SimpleBool(bool flag);
-        private void setEnable(bool flag)
-        {
-            if (MainContextMenu.InvokeRequired)
-            {
-                SimpleBool s = new SimpleBool(setEnable);
-                MainContextMenu.Invoke(s, new object[] { flag });
-
-            }
-            else
-            {
-                tsiGen.Enabled = flag;
-                tspbLoadDBProgress.Visible = !flag;
-            }
-        }
-        #endregion
-
-
+        }       
     }
 }
