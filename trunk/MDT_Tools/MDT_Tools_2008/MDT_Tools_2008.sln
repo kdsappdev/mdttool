@@ -19,6 +19,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.SetComment.Plu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Csharp_CodeGen.Plugin", "..\MDT.Tools.DB.Csharp_CodeGen.Plugin\MDT.Tools.DB.Csharp_CodeGen.Plugin.csproj", "{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "log4net.vs2008", "C:\Users\Administrator\Downloads\log4net-1.2.13-src\log4net-1.2.13\src\log4net.vs2008.csproj", "{181FE707-E161-4722-9F38-6AAAB6FAA106}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.Console", "..\MDT.Tools.Console\MDT.Tools.Console.csproj", "{02C20067-4947-4BD8-85CE-C13F5CCC7480}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Common", "..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj", "{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +67,18 @@ Global
 		{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E4BC7D2-4D04-44C8-9BF7-042236C78F76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{181FE707-E161-4722-9F38-6AAAB6FAA106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{181FE707-E161-4722-9F38-6AAAB6FAA106}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{181FE707-E161-4722-9F38-6AAAB6FAA106}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{181FE707-E161-4722-9F38-6AAAB6FAA106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02C20067-4947-4BD8-85CE-C13F5CCC7480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02C20067-4947-4BD8-85CE-C13F5CCC7480}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02C20067-4947-4BD8-85CE-C13F5CCC7480}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02C20067-4947-4BD8-85CE-C13F5CCC7480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
