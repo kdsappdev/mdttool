@@ -4,10 +4,16 @@ using System.Text;
 using System.Data;
 namespace MDT.Tools.DB.Common
 {
-    public sealed class CodeGenHelper
+    public class CodeGenHelper
     {
-        private CodeGenHelper()
+        public CodeGenHelper()
         { }
+        private  IbatisConfigHelper ibatisConfigHelper = new IbatisConfigHelper();
+        public   void ReadConfig(string path)
+        {
+            ibatisConfigHelper.ReadConfig(path);
+        }
+
         public static string GetDbProviderString(string dbType)
         {
             string str = "";
@@ -101,6 +107,19 @@ namespace MDT.Tools.DB.Common
             }
             return str;
         }
+        public const string Ibatis = "ibatis";
+        
+        public   string GetClassName(string tableName,string codeRule)
+        {
+            string className = (codeRule == Ibatis ? !string.IsNullOrEmpty(ibatisConfigHelper.GetClassName(tableName))?ibatisConfigHelper.GetClassName(tableName):StrFirstToUpperRemoveUnderline(tableName) : StrFirstToUpperRemoveUnderline(tableName));
+            return className;
+        }
+
+        public static bool IsNullOrEmpty(string str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
+
         public static string GetDefaultValueByDataType(string str, string defaultValue)
         {
             string temp = "\"\"";

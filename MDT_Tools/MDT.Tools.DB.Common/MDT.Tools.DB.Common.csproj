@@ -68,9 +68,11 @@
     <Compile Include="DataTypeMappingHelper.cs" />
     <Compile Include="DBSubPlugin.cs" />
     <Compile Include="DBType.cs" />
+    <Compile Include="DBFileHelper.cs" />
     <Compile Include="IbatisConfigHelper.cs" />
     <Compile Include="PluginShareHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TableInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">

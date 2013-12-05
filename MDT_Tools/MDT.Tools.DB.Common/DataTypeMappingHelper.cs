@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MDT.Tools.DB.Common
 {
-    public static class DataTypeMappingHelper
+    public  class DataTypeMappingHelper
     {
         public static string GetCSharpDataTypeByDbType(string dbType, string dbDataType, string dbDataScale, string dbDataLenght,bool isNullAble)
         {
