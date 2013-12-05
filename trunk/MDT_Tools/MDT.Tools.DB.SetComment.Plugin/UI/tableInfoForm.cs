@@ -11,7 +11,6 @@ using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Gui.CompletionWindow;
 using ICSharpCode.TextEditor.Document;
 using ICSharpCode.TextEditor.Actions;
-using MDT.Tools.DB.SetComment.Plugin.Utils;
 using MDT.Tools.DB.Common;
 namespace MDT.Tools.DB.SetComment.Plugin.UI
 {
@@ -165,7 +164,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                     }
                     drTable["comments"] = temp;
                     flag = true;
-                    FilePathHelper.WriteXml(sc.dsTable);
+                    DBFileHelper.WriteXml(sc.dsTable);
                 }
                 foreach (DataRow dr in drTableColumns)
                 {
@@ -189,7 +188,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                         }
                         dr["COMMENTS"] = temp;
                         flag = true;
-                        FilePathHelper.WriteXml(sc.dsTableColumn);
+                        DBFileHelper.WriteXml(sc.dsTableColumn);
                     }
                 }
                 if (flag)
