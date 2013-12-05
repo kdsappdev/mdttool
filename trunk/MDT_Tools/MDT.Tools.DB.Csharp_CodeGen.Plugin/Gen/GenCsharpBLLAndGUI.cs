@@ -28,6 +28,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
         {
             try
             {
+                base.process(drTables,dsTableColumns,dsTablePrimaryKeys);
                 OutPut = cmc.OutPut;
                 setEnable(false);
                 string[] strs = null;

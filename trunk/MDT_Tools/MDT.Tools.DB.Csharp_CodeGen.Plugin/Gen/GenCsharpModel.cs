@@ -21,13 +21,15 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
        
         public CsharpCodeGenConfig cmc;
  
-        private IbatisConfigHelper ibatisConfigHelper = new IbatisConfigHelper();
-
+       
+        
         #region 处理
+      
         public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
             try
             {
+                base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
                 OutPut = cmc.OutPut;
                 setEnable(false);
                 setStatusBar("");
@@ -36,7 +38,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                 {
                     if (cmc.CodeRule == CodeGenRuleHelper.Ibatis)
                     {
-                        ibatisConfigHelper.ReadConfig(cmc.Ibatis);
+                        CodeGenHelper.ReadConfig(cmc.Ibatis);
                     }
                     strs = new string[drTables.Length];
                     if (!cmc.IsShowGenCode)
@@ -48,15 +50,15 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                         setProgressMax(drTables.Length);
                     }
                     int j = 0;
-                    for (int i = 0; i < drTables.Length; i++)
+                    for (int i = 0; i <tableInfos.Count; i++)
                     {
-                        DataRow drTable = drTables[i];
-                        string className = drTable["name"] + "";
+                       
+                        string tableName =tableInfos[i].TableName;
                         string[] temp = cmc.TableFilter.Split(new[] { ";", "," }, StringSplitOptions.RemoveEmptyEntries);
                         bool flag = false;
                         foreach (var str in temp)
                         {
-                            if (className.StartsWith(str))//过滤
+                            if (tableName.StartsWith(str))//过滤
                             {
                                 flag = true;
                                 j++;
@@ -67,14 +69,14 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                         if (!cmc.IsShowGenCode)
                         {
                             setStatusBar(string.Format("正在生成{0}命名空间中{1}信息,共{2}个Model，已生成了{3}个Model,过滤了{4}个Model", cmc.ModelNameSpace,
-                                cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className),
+                                CodeGenHelper.GetClassName(tableName,cmc.CodeRule),
                                                        drTables.Length, i - j, j));
                             setProgress(1);
                         }
                         if (!flag)
                         {
-                            DataRow[] drTableColumns = dsTableColumns.Tables[dbName + DBtablesColumns].Select("TABLE_NAME = '" + drTable["name"].ToString() + "'", "COLUMN_ID ASC");
-                            strs[i] = GenCode(drTable, drTableColumns);
+                            
+                            strs[i] = GenCode(tableInfos[i]);
                         }
                     }
 
@@ -101,13 +103,39 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
 
         #endregion
 
-       
 
-    
+        private readonly NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
+        public string GenCode(TableInfo tableInfo)
+        {
+            string tableName = tableInfo.TableName;
+            string className = CodeGenHelper.GetClassName(tableName, cmc.CodeRule);
+            string path = string.Format(@"{0}", "model.cs.vm");
+            var dic = GetNVelocityVars();
+            dic.Add("tableInfo",tableInfo);
+            dic.Add("nameSpace", cmc.ModelNameSpace);
+            dic.Add("codeRule",cmc.CodeRule);
+            string str = nVelocityHelper.GenByTemplate(path, dic);
+          
+           
+            string title = className + ".cs";
+
+            if (cmc.IsShowGenCode)
+            {
+                CodeShow(title, str);
+            }
+            else
+            {
+                FileHelper.Write(cmc.OutPut + title, new[] { str });
+            }
+
+            return str;
+        }
 
         public string GenCode(DataRow drTable, DataRow[] drTableColumns)
         {
             var sb = new StringBuilder();
+
+
 
             #region 引入命名空间
             sb.AppendFormat("using System;").AppendFormat("\r\n");
@@ -122,7 +150,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
 
             #region 类名
             string className = drTable["name"] as string;
-            className = cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className);
+            className = CodeGenHelper.GetClassName(className,cmc.CodeRule);
             var tablecomments = drTable["comments"] as string;
 
             sb.AppendFormat("\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
