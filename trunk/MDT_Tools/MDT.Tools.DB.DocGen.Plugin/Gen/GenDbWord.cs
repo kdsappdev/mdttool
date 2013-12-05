@@ -16,6 +16,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
 
         public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
+            base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
             OutPut = FilePathHelper.ExportDBDocPath;
             setEnable(false);
             string msg = string.Empty;
