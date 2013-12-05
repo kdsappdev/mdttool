@@ -25,6 +25,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
         {
             try
             {
+                base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
                 CodeLanguage = "Java";
                 OutPut = cmc.OutPut;
                 setEnable(false);
