@@ -27,14 +27,85 @@ namespace MDT.Tools.DB.Common
         public ContextMenuStrip MainContextMenu;
         public ToolStripItem tsiGen;
         public DockPanel Panel;
-        protected string OutPut ;
+        protected string OutPut;
         public Encoding OriginalEncoding;
         public Encoding TargetEncoding;
         public string PluginName;
-        
+        protected List<TableInfo> tableInfos;
+        protected CodeGenHelper CodeGenHelper = new CodeGenHelper();
 
-        public abstract void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys);
-         
+        protected virtual Dictionary<string, object> GetNVelocityVars()
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("dbName", dbName);
+            dic.Add("dbType", dbType);
+            dic.Add("originalEncoding", OriginalEncoding);
+            dic.Add("targetEncoding", TargetEncoding);
+            dic.Add("pluginName", PluginName);
+            dic.Add("date", string.Format("{0:0000}.{1:00}.{2:00}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+            dic.Add("encodingHelper", new EncodingHelper());
+            dic.Add("codeGenHelper", CodeGenHelper);
+            dic.Add("dataTypeMappingHelper", new DataTypeMappingHelper());
+            dic.Add("tableInfos",tableInfos);
+            return dic;
+        }
+
+        
+        protected virtual List<TableInfo> ToTableInfo(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
+        {
+            List<TableInfo> lt = new List<TableInfo>();
+            if (drTables != null && dsTableColumns != null)
+            {
+                foreach (var drTable in drTables)
+                {
+                    string tableName = drTable["name"] + "";
+                    string tableComments = drTable["comments"] + "";
+                    tableComments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding,
+                                                                       tableComments);
+                    TableInfo tableInfo = new TableInfo();
+                    tableInfo.TableName = tableName;
+                    tableInfo.TableComments = tableComments;
+
+                    DataRow[] drTableColumns = dsTableColumns.Tables[dbName + DBtablesColumns].Select("TABLE_NAME = '" + drTable["name"].ToString() + "'", "COLUMN_ID ASC");
+
+                    foreach (var drTableColumn in drTableColumns)
+                    {
+                        ColumnInfo columnInfo = new ColumnInfo();
+                        columnInfo.Name = drTableColumn["COLUMN_NAME"] as string;//列名
+                        columnInfo.Comments = drTableColumn["COMMENTS"] as string;//列说明
+                        columnInfo.DataType = drTableColumn["DATA_TYPE"] as string;//列类型
+                        columnInfo.DataScale = drTableColumn["DATA_SCALE"] + "";//列精度
+                        columnInfo.DataLength = drTableColumn["DATA_LENGTH"] + "";//列长度
+                        columnInfo.DataNullAble = "Y".Equals(drTableColumn["NULLABLE"]+"");//可空
+                        columnInfo.DataDefault = drTableColumn["DATA_DEFAULT"] as string;//默认值
+                        columnInfo.DataPrecision = drTableColumn["Data_Precision"] + "";
+                        DataRow[] dr = dsTablePrimaryKeys.Tables[dbName + DBtablesPrimaryKeys].Select("TABLE_NAME = '" + tableName + "' AND COLUMN_NAME ='" + columnInfo.Name + "' and constraint_type='P'");
+
+                        if (dr.Length > 0)
+                        {
+                            columnInfo.IsPrimaryKeys = true;
+                        }
+                        DataRow[] dr2 = dsTablePrimaryKeys.Tables[dbName + DBtablesPrimaryKeys].Select("TABLE_NAME = '" + tableName + "' AND COLUMN_NAME ='" + columnInfo.Name + "' and constraint_type='R'");
+                        if (dr2.Length > 0)
+                        {
+                            columnInfo.IsForeignkey = true;
+                        }
+                        columnInfo.Comments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding, columnInfo.Comments);
+                          tableInfo.Columns.Add(columnInfo);
+                    }
+
+                    lt.Add(tableInfo);
+                }
+            }
+            return lt;
+        }
+
+        public virtual void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
+        {
+            tableInfos = this.ToTableInfo(drTables, dsTableColumns, dsTablePrimaryKeys);
+            
+        }
+
 
         protected void openDialog()
         {
@@ -78,14 +149,14 @@ namespace MDT.Tools.DB.Common
         protected delegate void Simple();
         protected void AddContextMenu()
         {
-                _tsiSave.Text = "保存";
-                _tsiSave.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                _tsiSave.Click += _tsiSave_Click;
-                _tsiSaveAll.Text = "全部保存";
-                _tsiSaveAll.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                _tsiSaveAll.Click += new EventHandler(_tsiSaveAll_Click);
-                cms.Items.Add(_tsiSave);
-                cms.Items.Add(_tsiSaveAll);
+            _tsiSave.Text = "保存";
+            _tsiSave.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+            _tsiSave.Click += _tsiSave_Click;
+            _tsiSaveAll.Text = "全部保存";
+            _tsiSaveAll.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+            _tsiSaveAll.Click += new EventHandler(_tsiSaveAll_Click);
+            cms.Items.Add(_tsiSave);
+            cms.Items.Add(_tsiSaveAll);
         }
 
         void _tsiSaveAll_Click(object sender, EventArgs e)
@@ -207,6 +278,6 @@ namespace MDT.Tools.DB.Common
         }
         #endregion
 
- 
+
     }
 }
