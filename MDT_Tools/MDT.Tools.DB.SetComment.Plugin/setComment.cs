@@ -23,6 +23,7 @@ namespace MDT.Tools.DB.SetComment.Plugin
         {
             try
             {
+                base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
                 setStatusBar("");
                 setEnable(false);
                 DrTables = drTables;

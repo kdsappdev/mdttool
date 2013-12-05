@@ -4,7 +4,6 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
-using MDT.Tools.DB.SetComment.Plugin.Utils;
 using MDT.Tools.DB.Common;
 namespace MDT.Tools.DB.SetComment.Plugin
 {
