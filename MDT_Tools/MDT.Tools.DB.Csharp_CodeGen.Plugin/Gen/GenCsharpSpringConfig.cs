@@ -27,6 +27,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
         {
             try
             {
+                base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
                 CodeLanguage = "XML";
                 OutPut = cmc.OutPut;
                 setStatusBar("");

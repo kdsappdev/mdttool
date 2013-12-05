@@ -68,6 +68,9 @@
     <Compile Include="Gen\GenCsharpBLLAndGUI.cs" />
     <Compile Include="Model\CsharpCodeGenConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Templates\model.cs.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="UI\Csharp_CodeGenConfigUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
