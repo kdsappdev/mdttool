@@ -2,20 +2,27 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Commons.Collections;
 using NVelocity;
 using NVelocity.App;
+using NVelocity.Runtime;
 
 namespace MDT.Tools.Core.Utils
 {
     public class NVelocityHelper
     {
 
-        static NVelocityHelper()
+        public NVelocityHelper(string path)
         {
-            Velocity.Init();
+            ExtendedProperties extendedProperties=new ExtendedProperties();
+            extendedProperties.AddProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
+            extendedProperties.AddProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
+            extendedProperties.AddProperty(RuntimeConstants.RESOURCE_LOADER, "file"); ;
+            extendedProperties.AddProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, path);
+            Velocity.Init(extendedProperties);
         }
 
-        public static string GenByTemplate(string path, Dictionary<string, object> vars)
+        public  string GenByTemplate(string path,Dictionary<string, object> vars)
         {
             VelocityContext context = new VelocityContext();
             if (vars != null)
@@ -28,7 +35,9 @@ namespace MDT.Tools.Core.Utils
             StringWriter writer = new StringWriter();
             Template template = Velocity.GetTemplate(path);
             template.Merge(context, writer);
-            return writer.GetStringBuilder().ToString();
+            string str= writer.GetStringBuilder().ToString();
+            Console.WriteLine(str);
+            return str;
         }
 
     }
