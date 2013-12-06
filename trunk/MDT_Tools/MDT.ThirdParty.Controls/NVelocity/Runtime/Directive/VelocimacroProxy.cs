@@ -1,330 +1,318 @@
-using System;
-using System.Collections;
-using Token = NVelocity.Runtime.Parser.Token;
-using SimpleNode = NVelocity.Runtime.Parser.Node.SimpleNode;
-using StringUtils = NVelocity.Util.StringUtils;
-using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-using NVelocity.Context;
-using NVelocity.Runtime.Parser.Node;
-using NVelocity.Runtime.Visitor;
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
 
-namespace NVelocity.Runtime.Directive {
-	
-    /// <summary>  
-    /// VelocimacroProxy.java
+namespace NVelocity.Runtime.Directive
+{
+    using Context;
+    using Exception;
+    using Parser.Node;
+
+    /// <summary>  VelocimacroProxy.java
+    /// 
     /// a proxy Directive-derived object to fit with the current directive system
+    /// 
     /// </summary>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
-    /// <version> $Id: VelocimacroProxy.cs,v 1.3 2002/07/30 08:25:26 corts Exp $ </version>
-    public class VelocimacroProxy:Directive {
-	public VelocimacroProxy() {
-	    InitBlock();
-	}
+    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// </author>
+    /// <version>  $Id: VelocimacroProxy.java 704172 2008-10-13 17:29:25Z nbubna $
+    /// </version>
+    public class VelocimacroProxy : Directive
+    {
+        /// <summary> Velocimacros are always LINE type directives.</summary>
+        /// <returns> The type of this directive.
+        /// </returns>
+        override public int Type
+        {
+            get
+            {
+                return NVelocity.Runtime.Directive.DirectiveType.LINE;
+            }
 
-	private void  InitBlock() {
-	    proxyArgHash = new Hashtable();
-	}
+        }
+        /// <summary> sets the array of arguments specified in the macro definition
+        /// 
+        /// </summary>
+        /// <param name="arr">
+        /// </param>
+        virtual public string[] ArgArray
+        {
+            set
+            {
+                argArray = value;
 
-	public override System.String Name {
-	    get {
-		return macroName;
-	    }
-	    set {
-		macroName = value;
-	    }
-	}
+                // for performance reasons we precache these strings - they are needed in
+                // "render literal if null" functionality
+                literalArgArray = new string[value.Length];
+                for (int i = 0; i < value.Length; i++)
+                {
+                    literalArgArray[i] = ".literal.$" + argArray[i];
+                }
 
-	public override int Type {
-	    get {
-		return NVelocity.Runtime.Directive.DirectiveConstants_Fields.LINE;
-	    }
-			
-	}
-	public virtual System.String[] ArgArray {
-	    set {
-		argArray = value;
-				
-		/*
-				*  get the arg count from the arg array.  remember that the arg array 
-				*  has the macro name as it's 0th element
-				*/
-				
-		numMacroArgs = argArray.Length - 1;
-	    }
-			
-	}
-	public virtual SimpleNode NodeTree {
-	    set {
-		nodeTree = value;
-	    }
-			
-	}
-	public virtual int NumArgs {
-	    get {
-		return numMacroArgs;
-	    }
-			
-	}
-	public virtual System.String Macrobody {
-	    set {
-		macroBody = value;
-	    }
-			
-	}
-	public virtual System.String Namespace {
-	    set {
-		this.namespace_Renamed = value;
-	    }
-			
-	}
-	private System.String macroName = "";
-	private System.String macroBody = "";
-	private System.String[] argArray = null;
-	private SimpleNode nodeTree = null;
-	private int numMacroArgs = 0;
-	private System.String namespace_Renamed = "";
-		
-	//UPGRADE_NOTE: Field init was renamed. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1029"'
-	private bool init_Renamed_Field = false;
-	private System.String[] callingArgs;
-	private int[] callingArgTypes;
-	//UPGRADE_NOTE: The initialization of  'proxyArgHash' was moved to method 'InitBlock'. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1005"'
-	private Hashtable proxyArgHash;
-		
-		
-	/// <summary> Return name of this Velocimacro.
-	/// </summary>
-		
-	/// <summary> Velocimacros are always LINE
-	/// type directives.
-	/// </summary>
-		
-	/// <summary>   sets the directive name of this VM
-	/// </summary>
-		
-	/// <summary>  sets the array of arguments specified in the macro definition
-	/// </summary>
-		
-		
-	/// <summary>  returns the number of ars needed for this VM
-	/// </summary>
-		
-	/// <summary>   Sets the orignal macro body.  This is simply the cat of the macroArray, but the 
-	/// Macro object creates this once during parsing, and everyone shares it.
-	/// Note : it must not be modified.
-	/// </summary>
-		
-		
-	/// <summary>   Renders the macro using the context
-	/// </summary>
-	public override bool render(InternalContextAdapter context, System.IO.TextWriter writer, INode node) {
-	    try {
-		/*
-		*  it's possible the tree hasn't been parsed yet, so get 
-		*  the VMManager to parse and init it
-		*/
-				
-		if (nodeTree != null) {
-		    if (!init_Renamed_Field) {
-			nodeTree.init(context, rsvc);
-			init_Renamed_Field = true;
-		    }
-					
-		    /*
-		    *  wrap the current context and add the VMProxyArg objects
-		    */
-					
-		    VMContext vmc = new VMContext(context, rsvc);
-					
-		    for (int i = 1; i < argArray.Length; i++) {
-			/*
-			*  we can do this as VMProxyArgs don't change state. They change
-			*  the context.
-			*/
-						
-			VMProxyArg arg = (VMProxyArg) proxyArgHash[argArray[i]];
-			vmc.AddVMProxyArg(arg);
-		    }
-					
-		    /*
-		    *  now render the VM
-		    */
-					
-		    nodeTree.render(vmc, writer);
-		} else {
-		    rsvc.error("VM error : " + macroName + ". Null AST");
-		}
-	    } catch (System.Exception e) {
-		/*
-		*  if it's a MIE, it came from the render.... throw it...
-		*/
-				
-		if (e is MethodInvocationException) {
-		    throw (MethodInvocationException) e;
-		}
-				
-		rsvc.error("VelocimacroProxy.render() : exception VM = #" + macroName + "() : " + StringUtils.stackTrace(e));
-	    }
-			
-	    return true;
-	}
-		
-	/// <summary>   The major meat of VelocimacroProxy, init() checks the # of arguments, patches the
-	/// macro body, renders the macro into an AST, and then inits the AST, so it is ready 
-	/// for quick rendering.  Note that this is only AST dependant stuff. Not context.
-	/// </summary>
-	public override void  init(RuntimeServices rs, InternalContextAdapter context, INode node) {
-	    base.init(rs, context, node);
-			
-	    /*
-	    *  how many args did we get?
-	    */
-			
-	    int i = node.jjtGetNumChildren();
-			
-	    /*
-	    *  right number of args?
-	    */
-			
-	    if (NumArgs != i) {
-		rsvc.error("VM #" + macroName + ": error : too " + ((NumArgs > i)?"few":"many") + " arguments to macro. Wanted " + NumArgs + " got " + i);
-				
-		return ;
-	    }
-			
-	    /*
-	    *  get the argument list to the instance use of the VM
-	    */
-	    callingArgs = getArgArray(node);
-			
-	    /*
-	    *  now proxy each arg in the context
-	    */
-	    setupMacro(callingArgs, callingArgTypes);
-	    return ;
-	}
-		
-	/// <summary> 
-	/// basic VM setup.  Sets up the proxy args for this
-	/// use, and parses the tree
-	/// </summary>
-	public virtual bool setupMacro(System.String[] callArgs, int[] callArgTypes) {
-	    setupProxyArgs(callArgs, callArgTypes);
-	    parseTree(callArgs);
-			
-	    return true;
-	}
-		
-	/// <summary>
-	/// parses the macro.  We need to do this here, at init time, or else
-	/// the local-scope template feature is hard to get to work :)
-	/// </summary>
-	private void  parseTree(System.String[] callArgs) {
-	    try {
-		//UPGRADE_ISSUE: The equivalent of constructor 'java.io.BufferedReader.BufferedReader' is incompatible with the expected type in C#. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1109"'
-		System.IO.TextReader br = new System.IO.StringReader(macroBody);
-				
-		/*
-		*  now parse the macro - and don't dump the namespace
-		*/
-				
-		nodeTree = rsvc.parse(br, namespace_Renamed, false);
-				
-		/*
-		*  now, to make null references render as proper schmoo
-		*  we need to tweak the tree and change the literal of
-		*  the appropriate references
-		*
-		*  we only do this at init time, so it's the overhead
-		*  is irrelevant
-		*/
-		Hashtable hm = new Hashtable();
-				
-		for (int i = 1; i < argArray.Length; i++) {
-		    System.String arg = callArgs[i - 1];
-					
-		    /*
-		    *  if the calling arg is indeed a reference
-		    *  then we add to the map.  We ignore other
-		    *  stuff
-		    */
-		    if (arg[0] == '$') {
-			hm[argArray[i]] = arg;
-		    }
-		}
-				
-		/*
-		*  now make one of our reference-munging visitor, and 
-		*  let 'er rip
-		*/
-		VMReferenceMungeVisitor v = new VMReferenceMungeVisitor(hm);
-		nodeTree.jjtAccept(v, null);
-	    } catch (System.Exception e) {
-		rsvc.error("VelocimacroManager.parseTree() : exception " + macroName + " : " + StringUtils.stackTrace(e));
-	    }
-	}
-		
-	private void  setupProxyArgs(System.String[] callArgs, int[] callArgTypes) {
-	    /*
-	    * for each of the args, make a ProxyArg
-	    */
-			
-	    for (int i = 1; i < argArray.Length; i++) {
-		VMProxyArg arg = new VMProxyArg(rsvc, argArray[i], callArgs[i - 1], callArgTypes[i - 1]);
-		proxyArgHash[argArray[i]] = arg;
-	    }
-	}
-		
-	/// <summary>   gets the args to the VM from the instance-use AST
-	/// </summary>
-	private System.String[] getArgArray(INode node) {
-	    int numArgs = node.jjtGetNumChildren();
-			
-	    System.String[] args = new System.String[numArgs];
-	    callingArgTypes = new int[numArgs];
-			
-	    /*
-	    *  eat the args
-	    */
-	    int i = 0;
-	    Token t = null;
-	    Token tLast = null;
-			
-	    while (i < numArgs) {
-		args[i] = "";
-		/*
-		*  we want string literalss to lose the quotes.  #foo( "blargh" ) should have 'blargh' patched 
-		*  into macro body.  So for each arg in the use-instance, treat the stringlierals specially...
-		*/
-				
-		callingArgTypes[i] = node.jjtGetChild(i).Type;
-				
-				
-		if (false && node.jjtGetChild(i).Type == NVelocity.Runtime.Parser.ParserTreeConstants.JJTSTRINGLITERAL) {
-		    args[i] += node.jjtGetChild(i).FirstToken.image.Substring(1, (node.jjtGetChild(i).FirstToken.image.Length - 1) - (1));
-		}
-		else {
-		    /*
-		    *  just wander down the token list, concatenating everything together
-		    */
-		    t = node.jjtGetChild(i).FirstToken;
-		    tLast = node.jjtGetChild(i).LastToken;
-					
-		    while (t != tLast) {
-			args[i] += t.image;
-			t = t.next;
-		    }
-					
-		    /*
-		    *  don't forget the last one... :)
-		    */
-		    args[i] += t.image;
-		}
-		i++;
-	    }
-	    return args;
-	}
+                /*
+                * Get the arg count from the arg array. remember that the arg array has the macro name as
+                * it's 0th element
+                */
 
+                numMacroArgs = argArray.Length - 1;
+            }
 
+        }
+        /// <param name="tree">
+        /// </param>
+        virtual public SimpleNode NodeTree
+        {
+            set
+            {
+                nodeTree = value;
+            }
+
+        }
+        /// <summary> returns the number of ars needed for this VM
+        /// 
+        /// </summary>
+        /// <returns> The number of ars needed for this VM
+        /// </returns>
+        virtual public int NumArgs
+        {
+            get
+            {
+                return numMacroArgs;
+            }
+
+        }
+        private string macroName;
+        private string[] argArray = null;
+        private string[] literalArgArray = null;
+        private SimpleNode nodeTree = null;
+        private int numMacroArgs = 0;
+        private bool preInit = false;
+        private bool strictArguments;
+        private bool localContextScope = false;
+        private int maxCallDepth;
+
+        /// <summary> Return name of this Velocimacro.</summary>
+        /// <returns> The name of this Velocimacro.
+        /// </returns>
+        public override string Name
+        {
+            get
+            {
+                return macroName;
+            }
+        }
+
+        /// <summary> sets the directive name of this VM
+        /// 
+        /// </summary>
+        /// <param name="name">
+        /// </param>
+        public virtual void SetName(string name)
+        {
+            macroName = name;
+        }
+
+        /// <summary> Renders the macro using the context.
+        /// 
+        /// </summary>
+        /// <param name="context">Current rendering context
+        /// </param>
+        /// <param name="writer">Writer for output
+        /// </param>
+        /// <param name="node">AST that calls the macro
+        /// </param>
+        /// <returns> True if the directive rendered successfully.
+        /// </returns>
+        /// <throws>  IOException </throws>
+        /// <throws>  MethodInvocationException </throws>
+        /// <throws>  MacroOverflowException </throws>
+        public override bool Render(IInternalContextAdapter context, System.IO.TextWriter writer, INode node)
+        {
+            // wrap the current context and Add the macro arguments
+
+            // the creation of this context is a major bottleneck (incl 2x HashMap)
+            //UPGRADE_NOTE: Final 已从“vmc ”的声明中移除。 "ms-help://MS.VSCC.v80/dv_commoner/local/redirect.htm?index='!DefaultContextWindowIndex'&keyword='jlca1003'"
+            ProxyVMContext vmc = new ProxyVMContext(context, rsvc, localContextScope);
+
+            int callArguments = node.GetNumChildren();
+
+            if (callArguments > 0)
+            {
+                // the 0th element is the macro name
+                for (int i = 1; i < argArray.Length && i <= callArguments; i++)
+                {
+                    INode macroCallArgument = node.GetChild(i - 1);
+
+                    /*
+                    * literalArgArray[i] is needed for "render literal if null" functionality.
+                    * The value is used in ASTReference render-method.
+                    * 
+                    * The idea is to avoid generating the literal until absolutely necessary.
+                    * 
+                    * This makes VMReferenceMungeVisitor obsolete and it would not work anyway 
+                    * when the macro AST is shared
+                    */
+                    vmc.AddVMProxyArg(context, argArray[i], literalArgArray[i], macroCallArgument);
+                }
+            }
+
+            /*
+            * check that we aren't already at the max call depth
+            */
+            if (maxCallDepth > 0 && maxCallDepth == vmc.CurrentMacroCallDepth)
+            {
+                string templateName = vmc.CurrentTemplateName;
+                object[] stack = vmc.MacroNameStack;
+
+                System.Text.StringBuilder out_Renamed = new System.Text.StringBuilder(100).Append("Max calling depth of ").Append(maxCallDepth).Append(" was exceeded in Template:").Append(templateName).Append(" and Macro:").Append(macroName).Append(" with Call Stack:");
+                for (int i = 0; i < stack.Length; i++)
+                {
+                    if (i != 0)
+                    {
+                        out_Renamed.Append("->");
+                    }
+
+                    out_Renamed.Append(stack[i]);
+                }
+                rsvc.Log.Error(out_Renamed);
+
+                try
+                {
+                    throw new MacroOverflowException(out_Renamed.ToString());
+                }
+                finally
+                {
+                    // clean out the macro stack, since we just broke it
+                    while (vmc.CurrentMacroCallDepth > 0)
+                    {
+                        vmc.PopCurrentMacroName();
+                    }
+                }
+            }
+
+            try
+            {
+                // render the velocity macro
+                vmc.PushCurrentMacroName(macroName);
+                nodeTree.Render(vmc, writer);
+                vmc.PopCurrentMacroName();
+                return true;
+            }
+            catch (System.SystemException e)
+            {
+                throw e;
+            }
+            catch (System.Exception e)
+            {
+                string msg = "VelocimacroProxy.render() : exception VM = #" + macroName + "()";
+                rsvc.Log.Error(msg, e);
+                throw new VelocityException(msg, e);
+            }
+        }
+
+        /// <summary> The major meat of VelocimacroProxy, Init() checks the # of arguments.
+        /// 
+        /// </summary>
+        /// <param name="rs">
+        /// </param>
+        /// <param name="context">
+        /// </param>
+        /// <param name="node">
+        /// </param>
+        /// <throws>  TemplateInitException </throws>
+        public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
+        {
+            // there can be multiple threads here so avoid double inits
+            lock (this)
+            {
+                if (!preInit)
+                {
+                    base.Init(rs, context, node);
+
+                    // this is a very expensive call (ExtendedProperties is very slow)
+                    strictArguments = rs.Configuration.GetBoolean(NVelocity.Runtime.RuntimeConstants.VM_ARGUMENTS_STRICT, false);
+
+                    // support for local context scope feature, where all references are local
+                    // we do not have to check this at every invocation of ProxyVMContext
+                    localContextScope = rsvc.GetBoolean(NVelocity.Runtime.RuntimeConstants.VM_CONTEXT_LOCALSCOPE, false);
+
+                    // Get the macro call depth limit
+                    maxCallDepth = rsvc.GetInt(NVelocity.Runtime.RuntimeConstants.VM_MAX_DEPTH);
+
+                    // Initialize the parsed AST
+                    // since this is context independent we need to do this only once so
+                    // do it here instead of the render method
+                    nodeTree.Init(context, rs);
+
+                    preInit = true;
+                }
+            }
+
+            // check how many arguments we got
+            int i = node.GetNumChildren();
+
+            // Throw exception for invalid number of arguments?
+            if (NumArgs != i)
+            {
+                // If we have a not-yet defined macro, we do Get no arguments because
+                // the syntax tree looks different than with a already defined macro.
+                // But we do know that we must be in a macro definition context somewhere up the
+                // syntax tree.
+                // Check for that, if it is true, suppress the Error message.
+                // Fixes VELOCITY-71.
+
+                for (INode parent = node.Parent; parent != null; )
+                {
+                    if ((parent is ASTDirective) && string.Equals(((ASTDirective)parent).DirectiveName, "macro"))
+                    {
+                        return;
+                    }
+                    parent = parent.Parent;
+                }
+
+                string msg = "VM #" + macroName + ": too " + ((NumArgs > i) ? "few" : "many") + " arguments to macro. Wanted " + NumArgs + " got " + i;
+
+                if (strictArguments)
+                {
+                    /**
+                    * indicate col/line assuming it starts at 0 - this will be corrected one call up
+                    */
+                    throw new TemplateInitException(msg, context.CurrentTemplateName, 0, 0);
+                }
+                else
+                {
+                    rsvc.Log.Debug(msg);
+                    return;
+                }
+            }
+
+            /* now validate that none of the arguments are plain words, (VELOCITY-614)
+            * they should be string literals, references, inline maps, or inline lists */
+            for (int n = 0; n < i; n++)
+            {
+                INode child = node.GetChild(n);
+                if (child.Type == NVelocity.Runtime.Parser.ParserTreeConstants.JJTWORD)
+                {
+                    /* indicate col/line assuming it starts at 0
+                    * this will be corrected one call up  */
+                    throw new TemplateInitException("Invalid arg #" + n + " in VM #" + macroName, context.CurrentTemplateName, 0, 0);
+                }
+            }
+        }
     }
 }

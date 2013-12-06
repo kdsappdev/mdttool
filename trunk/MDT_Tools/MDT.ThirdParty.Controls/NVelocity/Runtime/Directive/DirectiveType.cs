@@ -26,7 +26,7 @@ namespace NVelocity.Runtime.Directive
     /// </author>
     /// <version>  $Id: DirectiveConstants.java 463298 2006-10-12 16:10:32Z henning $
     /// </version>
-    public class DirectiveConstants
+    public struct DirectiveType
     {
         /// <summary>Block directive indicator </summary>
         public const int BLOCK = 1;

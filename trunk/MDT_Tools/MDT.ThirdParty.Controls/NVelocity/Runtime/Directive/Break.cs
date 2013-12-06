@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -19,20 +19,19 @@
 
 namespace NVelocity.Runtime.Directive
 {
+    using System;
+
     using Context;
     using Parser.Node;
 
-    /// <summary> A very simple directive that leverages the Node.literal()
-    /// to grab the literal rendition of a node. We basically
-    /// grab the literal value on Init(), then repeatedly use
-    /// that during render().
+    /// <summary> Break directive used for interrupting foreach loops.
     /// 
     /// </summary>
-    /// <author>  <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+    /// <author>  <a href="mailto:wyla@removethis.sci.fi">Jarkko Viinamaki</a>
     /// </author>
-    /// <version>  $Id: Literal.java 471381 2006-11-05 08:56:58Z wglass $
+    /// <version>  $Id$
     /// </version>
-    public class Literal : Directive
+    public class Break : Directive
     {
         /// <summary> Return type of this directive.</summary>
         /// <returns> The type of this directive.
@@ -41,12 +40,10 @@ namespace NVelocity.Runtime.Directive
         {
             get
             {
-                return NVelocity.Runtime.Directive.DirectiveType.BLOCK;
+                return NVelocity.Runtime.Directive.DirectiveType.LINE;
             }
 
         }
-        internal string literalText;
-
         /// <summary> Return name of this directive.</summary>
         /// <returns> The name of this directive.
         /// </returns>
@@ -54,12 +51,12 @@ namespace NVelocity.Runtime.Directive
         {
             get
             {
-                return "literal";
+                return "break";
             }
         }
 
-        /// <summary> Store the literal rendition of a node using
-        /// the Node.literal().
+        /// <summary>  simple Init - Init the tree and Get the elementKey from
+        /// the AST
         /// </summary>
         /// <param name="rs">
         /// </param>
@@ -71,12 +68,15 @@ namespace NVelocity.Runtime.Directive
         public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
         {
             base.Init(rs, context, node);
-
-            literalText = node.GetChild(0).Literal;
         }
 
-        /// <summary> Throw the literal rendition of the block between
-        /// #literal()/#end into the writer.
+        /// <summary> Break directive does not actually do any rendering. 
+        /// 
+        /// This directive throws a BreakException (RuntimeException) which
+        /// signals foreach directive to break out of the loop. Note that this
+        /// directive does not verify that it is being called inside a foreach
+        /// loop.
+        /// 
         /// </summary>
         /// <param name="context">
         /// </param>
@@ -84,13 +84,21 @@ namespace NVelocity.Runtime.Directive
         /// </param>
         /// <param name="node">
         /// </param>
-        /// <returns> True if the directive rendered successfully.
+        /// <returns> true if the directive rendered successfully.
         /// </returns>
         /// <throws>  IOException </throws>
+        /// <throws>  MethodInvocationException </throws>
+        /// <throws>  ResourceNotFoundException </throws>
+        /// <throws>  ParseErrorException </throws>
         public override bool Render(IInternalContextAdapter context, System.IO.TextWriter writer, INode node)
         {
-            writer.Write(literalText);
-            return true;
+            throw new BreakException();
+        }
+
+        [Serializable]
+        public class BreakException : System.SystemException
+        {
+
         }
     }
 }
