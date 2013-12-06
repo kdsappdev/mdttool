@@ -19,12 +19,22 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
-    /// <summary> </summary>
-    public class ASTprocess : SimpleNode
+    using Context;
+
+    /// <summary> AST Node for creating a map / dictionary.
+    /// 
+    /// This class was originally generated from Parset.jjt.
+    /// 
+    /// </summary>
+    /// <version>  $Id: ASTMap.java 685685 2008-08-13 21:43:27Z nbubna $
+    /// </version>
+    /// <since> 1.5
+    /// </since>
+    public class ASTMap : SimpleNode
     {
         /// <param name="id">
         /// </param>
-        public ASTprocess(int id)
+        public ASTMap(int id)
             : base(id)
         {
         }
@@ -33,7 +43,7 @@ namespace NVelocity.Runtime.Parser.Node
         /// </param>
         /// <param name="id">
         /// </param>
-        public ASTprocess(Parser p, int id)
+        public ASTMap(Parser p, int id)
             : base(p, id)
         {
         }
@@ -43,6 +53,28 @@ namespace NVelocity.Runtime.Parser.Node
         public override object Accept(IParserVisitor visitor, object data)
         {
             return visitor.Visit(this, data);
+        }
+
+        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Value(NVelocity.Context.IInternalContextAdapter)">
+        /// </seealso>
+        public override object Value(IInternalContextAdapter context)
+        {
+            int size = GetNumChildren();
+
+            System.Collections.IDictionary objectMap = new System.Collections.Hashtable();
+
+            for (int i = 0; i < size; i += 2)
+            {
+                SimpleNode keyNode = (SimpleNode)GetChild(i);
+                SimpleNode valueNode = (SimpleNode)GetChild(i + 1);
+
+                object key = (keyNode == null ? null : keyNode.Value(context));
+                object value = (valueNode == null ? null : valueNode.Value(context));
+
+                objectMap[key] = value;
+            }
+
+            return objectMap;
         }
     }
 }
