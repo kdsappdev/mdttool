@@ -11,7 +11,7 @@ namespace MDT.Tools.DB.SetComment.Plugin
     {
         #region 插件信息
 
-        private int _tag = 5;
+        private int _tag = 6;
 
         public override int Tag
         {
@@ -21,7 +21,7 @@ namespace MDT.Tools.DB.SetComment.Plugin
 
         public override int PluginKey
         {
-            get { return 15; }
+            get { return 16; }
         }
 
         public override string PluginName
