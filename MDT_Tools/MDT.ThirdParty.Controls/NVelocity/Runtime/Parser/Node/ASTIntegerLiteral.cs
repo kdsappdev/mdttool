@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -19,16 +19,26 @@
 
 namespace NVelocity.Runtime.Parser.Node
 {
+    using System;
+
     using Context;
 
-    /// <summary> </summary>
-    public class ASTFalse : SimpleNode
+    /// <summary> Handles integer numbers.  The value will be either an Integer, a Long, or a BigInteger.
+    /// 
+    /// </summary>
+    /// <author>  <a href="mailto:wglass@forio.com">Will Glass-Husain</a>
+    /// </author>
+    /// <since> 1.5
+    /// </since>
+    public class ASTIntegerLiteral : SimpleNode
     {
-        private static bool val = false;
+
+        // This may be of type Integer, Long or BigInteger
+        private System.ValueType value = null;
 
         /// <param name="id">
         /// </param>
-        public ASTFalse(int id)
+        public ASTIntegerLiteral(int id)
             : base(id)
         {
         }
@@ -37,10 +47,11 @@ namespace NVelocity.Runtime.Parser.Node
         /// </param>
         /// <param name="id">
         /// </param>
-        public ASTFalse(Parser p, int id)
+        public ASTIntegerLiteral(Parser p, int id)
             : base(p, id)
         {
         }
+
 
         /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Accept(NVelocity.Runtime.Paser.Node.IParserVisitor, System.Object)">
         /// </seealso>
@@ -49,18 +60,45 @@ namespace NVelocity.Runtime.Parser.Node
             return visitor.Visit(this, data);
         }
 
-        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Evaluate(org.apache.velocity.context.InternalContextAdapter)">
+        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Init(org.apache.velocity.context.InternalContextAdapter, java.lang.Object)">
         /// </seealso>
-        public override bool Evaluate(IInternalContextAdapter context)
+        public override object Init(IInternalContextAdapter context, object data)
         {
-            return false;
+            /*
+            *  Init the tree correctly
+            */
+
+            base.Init(context, data);
+
+            /**
+            * Determine the size of the item and make it an Integer, Long, or BigInteger as appropriate.
+            */
+            string str = FirstToken.Image;
+            try
+            {
+                value = System.Int32.Parse(str);
+            }
+            catch (FormatException)
+            {
+                try
+                {
+                    value = System.Int64.Parse(str);
+                }
+                catch (FormatException)
+                {
+
+                    value = System.Decimal.Parse(str, System.Globalization.NumberStyles.Any);
+                }
+            }
+
+            return data;
         }
 
         /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Value(NVelocity.Context.IInternalContextAdapter)">
         /// </seealso>
         public override object Value(IInternalContextAdapter context)
         {
-            return val;
+            return value;
         }
     }
 }

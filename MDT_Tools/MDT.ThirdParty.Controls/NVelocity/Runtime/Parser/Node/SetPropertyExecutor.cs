@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -23,13 +23,20 @@ namespace NVelocity.Runtime.Parser.Node
     using Log;
     using Util.Introspection;
 
-    /// <summary> Returned the value of object property when executed.</summary>
-    public class PropertyExecutor : AbstractExecutor
+    /// <summary> Executor for looking up property names in the passed in class
+    /// This will try to find a set&lt;foo&gt;(key, value) method
+    /// 
+    /// </summary>
+    /// <author>  <a href="mailto:henning@apache.org">Henning P. Schmiedehausen</a>
+    /// </author>
+    /// <version>  $Id: SetPropertyExecutor.java 687177 2008-08-19 22:00:32Z nbubna $
+    /// </version>
+    /// <since> 1.5
+    /// </since>
+    public class SetPropertyExecutor : SetExecutor
     {
         /// <returns> The current introspector.
         /// </returns>
-        /// <since> 1.5
-        /// </since>
         virtual protected internal Introspector Introspector
         {
             get
@@ -38,8 +45,8 @@ namespace NVelocity.Runtime.Parser.Node
             }
 
         }
-
-        private Introspector introspector;
+       
+        private readonly Introspector introspector;
 
         /// <param name="Log">
         /// </param>
@@ -49,9 +56,9 @@ namespace NVelocity.Runtime.Parser.Node
         /// </param>
         /// <param name="property">
         /// </param>
-        /// <since> 1.5
-        /// </since>
-        public PropertyExecutor(Log log, Introspector introspector, System.Type clazz, string property)
+        /// <param name="arg">
+        /// </param>
+        public SetPropertyExecutor(Log log, Introspector introspector, System.Type clazz, string property, object arg)
         {
             this.log = log;
             this.introspector = introspector;
@@ -61,24 +68,23 @@ namespace NVelocity.Runtime.Parser.Node
             // or the introspector will Get confused.
             if (!string.IsNullOrEmpty(property))
             {
-                Discover(clazz, property);
+                Discover(clazz, property, arg);
             }
         }
-
 
         /// <param name="clazz">
         /// </param>
         /// <param name="property">
         /// </param>
-        protected internal virtual void Discover(System.Type clazz, string property)
+        /// <param name="arg">
+        /// </param>
+        protected internal virtual void Discover(System.Type clazz, string property, object arg)
         {
-            /*
-            *  this is gross and linear, but it keeps it straightforward.
-            */
+            object[] parameters = new object[] { arg };
 
             try
             {
-                Property = introspector.GetProperty(clazz, property);
+                Method = (introspector.GetMethod(clazz, "set_" + property, parameters));
             }
             /**
             * pass through application level runtime exceptions
@@ -89,17 +95,25 @@ namespace NVelocity.Runtime.Parser.Node
             }
             catch (System.Exception e)
             {
-                string msg = "Exception while looking for property getter for '" + property;
+                string msg = "Exception while looking for property setter for '" + property;
                 log.Error(msg, e);
                 throw new VelocityException(msg, e);
             }
         }
 
-        /// <seealso cref="NVelocity.Runtime.Paser.Node.AbstractExecutor.Execute(java.lang.Object)">
-        /// </seealso>
-        public override object Execute(object o)
+        /// <summary> Execute method against context.</summary>
+        /// <param name="instance">
+        /// </param>
+        /// <param name="value">
+        /// </param>
+        /// <returns> The value of the invocation.
+        /// </returns>
+        /// <throws>  IllegalAccessException </throws>
+        /// <throws>  InvocationTargetException </throws>
+        public override object Execute(object o, object value)
         {
-            return Alive ? Property.Accessor.GetValue(o) : null;
+            object[] params_Renamed = new object[] { value };
+            return Alive ? Method.Invoker.Invoke(o, (object[])params_Renamed) : null;
         }
     }
 }

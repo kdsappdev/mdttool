@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -21,14 +21,23 @@ namespace NVelocity.Runtime.Parser.Node
 {
     using Context;
 
-    /// <summary> </summary>
-    public class ASTFalse : SimpleNode
+    /// <summary> Handles floating point numbers.  The value will be either a Double
+    /// or a BigDecimal.
+    /// 
+    /// </summary>
+    /// <author>  <a href="mailto:wglass@forio.com">Will Glass-Husain</a>
+    /// </author>
+    /// <since> 1.5
+    /// </since>
+    public class ASTFloatingPointLiteral : SimpleNode
     {
-        private static bool val = false;
+
+        // This may be of type Double or BigDecimal
+        private System.ValueType value = null;
 
         /// <param name="id">
         /// </param>
-        public ASTFalse(int id)
+        public ASTFloatingPointLiteral(int id)
             : base(id)
         {
         }
@@ -37,10 +46,11 @@ namespace NVelocity.Runtime.Parser.Node
         /// </param>
         /// <param name="id">
         /// </param>
-        public ASTFalse(Parser p, int id)
+        public ASTFloatingPointLiteral(Parser p, int id)
             : base(p, id)
         {
         }
+
 
         /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Accept(NVelocity.Runtime.Paser.Node.IParserVisitor, System.Object)">
         /// </seealso>
@@ -49,18 +59,47 @@ namespace NVelocity.Runtime.Parser.Node
             return visitor.Visit(this, data);
         }
 
-        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Evaluate(org.apache.velocity.context.InternalContextAdapter)">
-        /// </seealso>
-        public override bool Evaluate(IInternalContextAdapter context)
+        /// <summary>  Initialization method - doesn't do much but do the object
+        /// creation.  We only need to do it once.
+        /// </summary>
+        /// <param name="context">
+        /// </param>
+        /// <param name="data">
+        /// </param>
+        /// <returns> The data object.
+        /// </returns>
+        /// <throws>  TemplateInitException </throws>
+        public override object Init(IInternalContextAdapter context, object data)
         {
-            return false;
+            /*
+            *  Init the tree correctly
+            */
+
+            base.Init(context, data);
+
+            /**
+            * Determine the size of the item and make it a Double or BigDecimal as appropriate.
+            */
+            string str = FirstToken.Image;
+            try
+            {
+                value = double.Parse(str);
+            }
+            catch (System.FormatException)
+            {
+
+                // if there's still an Exception it will propogate out
+                value = decimal.Parse(str, System.Globalization.NumberStyles.Any);
+            }
+
+            return data;
         }
 
         /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Value(NVelocity.Context.IInternalContextAdapter)">
         /// </seealso>
         public override object Value(IInternalContextAdapter context)
         {
-            return val;
+            return value;
         }
     }
 }

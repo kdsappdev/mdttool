@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -26,55 +26,58 @@ namespace NVelocity.Runtime.Parser.Node
 
     /// <summary> Abstract class that is used to Execute an arbitrary
     /// method that is in introspected. This is the superclass
-    /// for the GetExecutor and PropertyExecutor.
+    /// for the PutExecutor and SetPropertyExecutor.
+    /// 
+    /// There really should be a superclass for this and AbstractExecutor (which should
+    /// be refactored to GetExecutor) because they differ only in the Execute() method.
     /// 
     /// </summary>
     /// <author>  <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
     /// </author>
     /// <author>  <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a>
     /// </author>
-    /// <version>  $Id: AbstractExecutor.java 685685 2008-08-13 21:43:27Z nbubna $
+    /// <author>  <a href="mailto:henning@apache.org">Henning P. Schmiedehausen</a>
+    /// </author>
+    /// <version>  $Id: SetExecutor.java 685685 2008-08-13 21:43:27Z nbubna $
     /// </version>
-    public abstract class AbstractExecutor
+    /// <since> 1.5
+    /// </since>
+    public abstract class SetExecutor
     {
-        private MethodEntry method;
-        private PropertyEntry property;
-
         /// <summary> Tell whether the executor is alive by looking
         /// at the value of the method.
-        /// 
         /// </summary>
-        /// <returns> True if executor is alive.
+        /// <returns> True if the executor is alive.
         /// </returns>
-        public virtual bool Alive
+        virtual public bool Alive
         {
             get
             {
-                return (property != null);
+                return (method != null);
             }
 
         }
-
+        /// <summary>Class logger </summary>
         protected internal Log log = null;
 
-
+        /// <summary> Method to be executed.</summary>
+        private MethodEntry method;
 
         /// <summary> Execute method against context.</summary>
         /// <param name="instance">
         /// </param>
-        /// <returns> The resulting object.
+        /// <param name="value">
+        /// </param>
+        /// <returns> The result of the invocation.
         /// </returns>
         /// <throws>  IllegalAccessException </throws>
         /// <throws>  InvocationTargetException </throws>
-        public abstract object Execute(object o);
+        public abstract object Execute(object o, object value);
 
-        /// <summary> Method to be executed.</summary>
-        /// <param name="method">
-        /// </param>
-        /// <since> 1.5
-        /// </since>
-        /// <returns> The current method.
+        /// <returns> The method to invoke.
         /// </returns>
+        ///  /// <param name="method">
+        /// </param>
         public virtual MethodEntry Method
         {
             get
@@ -84,22 +87,6 @@ namespace NVelocity.Runtime.Parser.Node
             protected set
             {
                 method = value;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public virtual PropertyEntry Property
-        {
-            get
-            {
-                return property;
-            }
-
-            protected set
-            {
-                property = value;
             }
         }
     }

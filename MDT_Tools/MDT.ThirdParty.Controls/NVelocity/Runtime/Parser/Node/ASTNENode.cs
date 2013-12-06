@@ -1,113 +1,140 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
+
 namespace NVelocity.Runtime.Parser.Node
 {
-	/*
-	* The Apache Software License, Version 1.1
-	*
-	* Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
-	* reserved.
-	*
-	* Redistribution and use in source and binary forms, with or without
-	* modification, are permitted provided that the following conditions
-	* are met:
-	*
-	* 1. Redistributions of source code must retain the above copyright
-	*    notice, this list of conditions and the following disclaimer.
-	*
-	* 2. Redistributions in binary form must reproduce the above copyright
-	*    notice, this list of conditions and the following disclaimer in
-	*    the documentation and/or other materials provided with the
-	*    distribution.
-	*
-	* 3. The end-user documentation included with the redistribution, if
-	*    any, must include the following acknowlegement:
-	*       "This product includes software developed by the
-	*        Apache Software Foundation (http://www.apache.org/)."
-	*    Alternately, this acknowlegement may appear in the software itself,
-	*    if and wherever such third-party acknowlegements normally appear.
-	*
-	* 4. The names "The Jakarta Project", "Velocity", and "Apache Software
-	*    Foundation" must not be used to endorse or promote products derived
-	*    from this software without prior written permission. For written
-	*    permission, please contact apache@apache.org.
-	*
-	* 5. Products derived from this software may not be called "Apache"
-	*    nor may "Apache" appear in their names without prior written
-	*    permission of the Apache Group.
-	*
-	* THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-	* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-	* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	* DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
-	* ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-	* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-	* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-	* USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-	* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-	* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-	* OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-	* SUCH DAMAGE.
-	* ====================================================================
-	*
-	* This software consists of voluntary contributions made by many
-	* individuals on behalf of the Apache Software Foundation.  For more
-	* information on the Apache Software Foundation, please see
-	* <http://www.apache.org/>.
-	*/
-	using System;
-	using Parser = NVelocity.Runtime.Parser.Parser;
-	using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-	using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
-	
-	public class ASTNENode:SimpleNode
-	{
-		public ASTNENode(int id):base(id)
-		{
-		}
-		
-		public ASTNENode(Parser p, int id):base(p, id)
-		{
-		}
-		
-		/// <summary>Accept the visitor. *
-		/// </summary>
-		public override System.Object jjtAccept(ParserVisitor visitor, System.Object data)
-		{
-			return visitor.visit(this, data);
-		}
-		
-		public override bool evaluate(InternalContextAdapter context)
-		{
-			System.Object left = jjtGetChild(0).value_Renamed(context);
-			System.Object right = jjtGetChild(1).value_Renamed(context);
-			
-			/*
-			*  null check
-			*/
-			
-			if (left == null || right == null)
-			{
-				rsvc.error((left == null?"Left":"Right") + " side (" + jjtGetChild((left == null?0:1)).literal() + ") of '!=' operation has null value." + " Operation not possible. " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "]");
-				return false;
-				
-			}
-			
-			
-			/*
-			*  check to see if they are the same class.  I don't think this is slower
-			*  as I don't think that getClass() results in object creation, and we can
-			*  extend == to handle all classes
-			*/
-			
-			if (left.GetType().Equals(right.GetType()))
-			{
-				return !(left.Equals(right));
-			}
-			else
-			{
-				rsvc.error("Error in evaluation of != expression." + " Both arguments must be of the same Class." + " Currently left = " + left.GetType() + ", right = " + right.GetType() + ". " + context.CurrentTemplateName + " [line " + Line + ", column " + Column + "] (ASTEQNode)");
-				
-				return false;
-			}
-		}
-	}
+    using Context;
+    using Util;
+
+    /// <summary>  Handles <code>arg1  != arg2</code>
+    /// 
+    /// This operator requires that the LHS and RHS are both of the
+    /// same Class OR both are subclasses of java.lang.Number
+    /// 
+    /// </summary>
+    /// <author>  <a href="mailto:wglass@forio.com">Will Glass-Husain</a>
+    /// </author>
+    /// <author>  <a href="mailto:pero@antaramusic.de">Peter Romianowski</a>
+    /// </author>
+    public class ASTNENode : SimpleNode
+    {
+        /// <param name="id">
+        /// </param>
+        public ASTNENode(int id)
+            : base(id)
+        {
+        }
+
+        /// <param name="p">
+        /// </param>
+        /// <param name="id">
+        /// </param>
+        public ASTNENode(Parser p, int id)
+            : base(p, id)
+        {
+        }
+
+        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Accept(NVelocity.Runtime.Paser.Node.IParserVisitor, System.Object)">
+        /// </seealso>
+        public override object Accept(IParserVisitor visitor, object data)
+        {
+            return visitor.Visit(this, data);
+        }
+
+        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Evaluate(org.apache.velocity.context.InternalContextAdapter)">
+        /// </seealso>
+        public override bool Evaluate(IInternalContextAdapter context)
+        {
+            object left = GetChild(0).Value(context);
+            object right = GetChild(1).Value(context);
+
+            /*
+            *  convert to Number if applicable
+            */
+            if (left is ITemplateNumber)
+            {
+                left = ((ITemplateNumber)left).AsNumber;
+            }
+            if (right is ITemplateNumber)
+            {
+                right = ((ITemplateNumber)right).AsNumber;
+            }
+
+            /*
+            * If comparing Numbers we do not care about the Class.
+            */
+            if (left is System.ValueType && right is System.ValueType)
+            {
+                return !left.Equals(right);
+            }
+
+            /**
+            * if both are not null, then assume that if one class
+            * is a subclass of the other that we should use the equals operator
+            */
+            if (left != null && right != null && (left.GetType().IsAssignableFrom(right.GetType()) || right.GetType().IsAssignableFrom(left.GetType())))
+            {
+                return !left.Equals(right);
+            }
+
+            /*
+            * Ok, time to Compare string values
+            */
+
+            left = (left == null) ? null : left.ToString();
+
+            right = (right == null) ? null : right.ToString();
+
+            if (left == null && right == null)
+            {
+                if (log.DebugEnabled)
+                {
+                    log.Debug("Both right (" + GetLiteral(false) + " and left " + GetLiteral(true) + " sides of '!=' operation returned null." + "If references, they may not be in the context." + GetLocation(context));
+                }
+                return false;
+            }
+            else if (left == null || right == null)
+            {
+                if (log.DebugEnabled)
+                {
+                    log.Debug((left == null ? "Left" : "Right") + " side (" + GetLiteral(left == null) + ") of '!=' operation has null value. If it is a " + "reference, it may not be in the context or its " + "toString() returned null. " + GetLocation(context));
+                }
+                return true;
+            }
+            else
+            {
+                return !left.Equals(right);
+            }
+        }
+
+        private string GetLiteral(bool left)
+        {
+            return GetChild(left ? 0 : 1).Literal;
+        }
+
+        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Value(NVelocity.Context.IInternalContextAdapter)">
+        /// </seealso>
+        public override object Value(IInternalContextAdapter context)
+        {
+            bool val = Evaluate(context);
+
+            return val ? true : false;
+        }
+    }
 }

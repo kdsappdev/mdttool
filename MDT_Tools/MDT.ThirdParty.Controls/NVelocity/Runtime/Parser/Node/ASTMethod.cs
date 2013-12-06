@@ -1,15 +1,32 @@
-using System;
-using System.Reflection;
-using NVelocity.Runtime.Parser;
-using Introspector = NVelocity.Util.Introspection.Introspector;
-using IntrospectionCacheData = NVelocity.Util.Introspection.IntrospectionCacheData;
-using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
-using NVelocity.App.Events;
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
 
-namespace NVelocity.Runtime.Parser.Node {
-    /// <summary>  
-    /// ASTMethod.java
+namespace NVelocity.Runtime.Parser.Node
+{
+    using System;
+
+    using Context;
+    using App.Event;
+    using Exception;
+    using Util.Introspection;
+
+    /// <summary>  ASTMethod.java
     /// 
     /// Method support for references :  $foo.method()
     /// 
@@ -19,252 +36,400 @@ namespace NVelocity.Runtime.Parser.Node {
     /// 
     /// Please look at the Parser.jjt file which is
     /// what controls the generation of this class.
+    /// 
     /// </summary>
-    /// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
-    /// <version> $Id: ASTMethod.cs,v 1.4 2002/10/19 10:22:52 corts Exp $ </version>
-    public class ASTMethod:SimpleNode {
-	private System.String methodName = "";
-	private int paramCount = 0;
-	private System.Object[] params_Renamed;
-		
-	public ASTMethod(int id):base(id) {
-	}
-		
-	public ASTMethod(Parser p, int id):base(p, id) {
-	}
-		
-	/// <summary>
-	/// Accept the visitor.
-	/// </summary>
-	public override System.Object jjtAccept(ParserVisitor visitor, System.Object data) {
-	    return visitor.visit(this, data);
-	}
-		
-	/// <summary>
-	/// simple init - init our subtree and get what we can from 
-	/// the AST
-	/// </summary>
-	public override System.Object init(InternalContextAdapter context, System.Object data) {
-	    base.init(context, data);
-			
-	    /*
-	    *  this is about all we can do
-	    */
-			
-	    methodName = FirstToken.image;
-	    paramCount = jjtGetNumChildren() - 1;
-	    params_Renamed = new System.Object[paramCount];
-			
-	    return data;
-	}
-		
-	/// <summary>
-	/// does the instrospection of the class for the method needed.
-	/// Note, as this calls value() on the args if any, this must
-	/// only be called at execute() / render() time.
-	/// 
-	/// NOTE: this will try to flip the case of the first character for 
-	/// convience (compatability with Java version).  If there are no arguments, 
-	/// it will also try to find a property with the same name (also flipping first character).
-	/// </summary>
-	private Object doIntrospection(InternalContextAdapter context, System.Type data) {
-	    /*
-	    *  Now the parameters have to be processed, there
-	    *  may be references contained within that need
-	    *  to be introspected.
-	    */
-	    for (int j = 0; j < paramCount; j++) {
-		params_Renamed[j] = jjtGetChild(j + 1).value_Renamed(context);
-	    }
+    /// <author>  <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+    /// </author>
+    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// </author>
+    /// <version>  $Id: ASTMethod.java 720228 2008-11-24 16:58:33Z nbubna $
+    /// </version>
+    public class ASTMethod : SimpleNode
+    {
+        /// <returns> Returns the methodName.
+        /// </returns>
+        /// <since> 1.5
+        /// </since>
+        virtual public string MethodName
+        {
+            get
+            {
+                return methodName;
+            }
 
-	    String methodNameUsed = methodName;
-	    MethodInfo m = rsvc.Introspector.getMethod(data, methodNameUsed, params_Renamed);
-	    PropertyInfo p = null;
-	    if (m==null) {
-		methodNameUsed = methodName.Substring(0,1).ToUpper() + methodName.Substring(1);
-		m = rsvc.Introspector.getMethod(data, methodNameUsed, params_Renamed);
-		if (m==null) {
-		    methodNameUsed = methodName.Substring(0,1).ToLower() + methodName.Substring(1);
-		    m = rsvc.Introspector.getMethod(data, methodNameUsed, params_Renamed);
+        }
+        private string methodName = "";
+        private int paramCount = 0;
 
-		    // if there are no arguments, look for a property
-		    if (m==null && paramCount==0) {
-			methodNameUsed = methodName;
-			p = rsvc.Introspector.getProperty(data, methodNameUsed);
-			if (p==null) {
-			    methodNameUsed = methodName.Substring(0,1).ToUpper() + methodName.Substring(1);
-			    p = rsvc.Introspector.getProperty(data, methodNameUsed);
-			    if (p==null) {
-				methodNameUsed = methodName.Substring(0,1).ToLower() + methodName.Substring(1);
-				p = rsvc.Introspector.getProperty(data, methodNameUsed);
-			    }
-			}
-		    }
-		}
-	    }
+        protected internal Info uberInfo;
 
-	    // if a method was found, return it.  Otherwise, return whatever was found with a property, may be null	
-	    if (m!= null) {
-		return m;
-	    } else {
-		return p;
-	    }
-	}
-		
-	/// <summary>
-	/// invokes the method.  Returns null if a problem, the
-	/// actual return if the method returns something, or 
-	/// an empty string "" if the method returns void
-	/// </summary>
-	public override System.Object execute(System.Object o, InternalContextAdapter context) {
-	    /*
-	    *  new strategy (strategery!) for introspection. Since we want 
-	    *  to be thread- as well as context-safe, we *must* do it now,
-	    *  at execution time.  There can be no in-node caching,
-	    *  but if we are careful, we can do it in the context.
-	    */
-			
-	    MethodInfo method = null;
-	    PropertyInfo property = null;
-			
-	    try {
-		/*
-		*   check the cache 
-		*/
-				
-		IntrospectionCacheData icd = context.ICacheGet(this);
-		System.Type c = o.GetType();
-				
-		/*
-		*  like ASTIdentifier, if we have cache information, and the
-		*  Class of Object o is the same as that in the cache, we are
-		*  safe.
-		*/
-				
-		if (icd != null && icd.contextData == c) {
-		    /*
-		    * sadly, we do need recalc the values of the args, as this can 
-		    * change from visit to visit
-		    */
-					
-		    for (int j = 0; j < paramCount; j++)
-			params_Renamed[j] = jjtGetChild(j + 1).value_Renamed(context);
-					
-		    /*
-		    * and get the method from the cache
-		    */
-		    if (icd.thingy is MethodInfo) {					
-			method = (MethodInfo) icd.thingy;
-		    }
-		    if (icd.thingy is PropertyInfo) {					
-			property = (PropertyInfo) icd.thingy;
-		    }
+        /// <summary> Indicates if we are running in strict reference mode.</summary>
+        protected internal bool strictRef = false;
 
-		} else {
-		    /*
-		    *  otherwise, do the introspection, and then
-		    *  cache it
-		    */
+        /// <param name="id">
+        /// </param>
+        public ASTMethod(int id)
+            : base(id)
+        {
+        }
 
-		    Object obj = doIntrospection(context, c);
-		    if (obj is MethodInfo) {
-			method = (MethodInfo)obj;
-		    }
-		    if (obj is PropertyInfo) {
-			property = (PropertyInfo)obj;
-		    }
+        /// <param name="p">
+        /// </param>
+        /// <param name="id">
+        /// </param>
+        public ASTMethod(Parser p, int id)
+            : base(p, id)
+        {
+        }
 
-		    if (obj != null) {
-			icd = new IntrospectionCacheData();
-			icd.contextData = c;
-			icd.thingy = obj;
-			context.ICachePut(this, icd);
-		    }
-		}
-				
-		/*
-		*  if we still haven't gotten the method, either we are calling 
-		*  a method that doesn't exist (which is fine...)  or I screwed
-		*  it up.
-		*/
-				
-		if (method == null && property == null) {
-		    return null;
-		}
-	    } catch (MethodInvocationException mie) {
-		/*
-		*  this can come from the doIntrospection(), as the arg values
-		*  are evaluated to find the right method signature.  We just
-		*  want to propogate it here, not do anything fancy
-		*/
-				
-		throw mie;
-	    } catch (System.Exception e) {
-		/*
-		*  can come from the doIntropection() also, from Introspector
-		*/
-				
-		rsvc.error("ASTMethod.execute() : exception from introspection : " + e);
-		return null;
-	    }
-			
-	    try {
-		/*
-		*  get the returned object.  It may be null, and that is
-		*  valid for something declared with a void return type.
-		*  Since the caller is expecting something to be returned,
-		*  as long as things are peachy, we can return an empty 
-		*  String so ASTReference() correctly figures out that
-		*  all is well.
-		*/
-		
-		Object obj = null;
-		if (method != null) {
-		    obj = method.Invoke(o, (System.Object[]) params_Renamed);
-		    if (obj == null && method.ReturnType == System.Type.GetType("System.Void")) {
-			obj = String.Empty;
-		    }
-		} else {
-		    obj = property.GetValue(o, null);
-		}
+        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Accept(NVelocity.Runtime.Paser.Node.IParserVisitor, System.Object)">
+        /// </seealso>
+        public override object Accept(IParserVisitor visitor, object data)
+        {
+            return visitor.Visit(this, data);
+        }
 
-		return obj;
-	    } catch (System.Reflection.TargetInvocationException ite) {
-		/*
-		*  In the event that the invocation of the method
-		*  itself throws an exception, we want to catch that
-		*  wrap it, and throw.  We don't log here as we want to figure
-		*  out which reference threw the exception, so do that 
-		*  above
-		*/
-				
-		EventCartridge ec = context.EventCartridge;
-				
-		/*
-		*  if we have an event cartridge, see if it wants to veto
-		*  also, let non-Exception Throwables go...
-		*/
+        /// <summary>  simple Init - Init our subtree and Get what we can from
+        /// the AST
+        /// </summary>
+        /// <param name="context">
+        /// </param>
+        /// <param name="data">
+        /// </param>
+        /// <returns> The Init result
+        /// </returns>
+        /// <throws>  TemplateInitException </throws>
+        public override object Init(IInternalContextAdapter context, object data)
+        {
+            base.Init(context, data);
 
-		if (ec != null && ite.GetBaseException() is System.Exception) {
-		    try {
-			return ec.methodException(o.GetType(), methodName, (System.Exception) ite.GetBaseException());
-		    } catch (System.Exception e) {
-			throw new MethodInvocationException("Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " + e.GetType() + " : " + e.Message, e, methodName);
-		    }
-		} else {
-		    /*
-		    * no event cartridge to override. Just throw
-		    */
-					
-		    throw new MethodInvocationException("Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " + ite.GetBaseException().GetType() + " : " + ite.GetBaseException().Message, ite.GetBaseException(), methodName);
-		}
-	    } catch (System.Exception e) {
-		rsvc.error("ASTMethod.execute() : exception invoking method '" + methodName + "' in " + o.GetType() + " : " + e);
-		return null;
-	    }
-	}
+            /*
+            * make an uberinfo - saves new's later on
+            */
+
+            uberInfo = new Info(TemplateName, Line, Column);
+            /*
+            *  this is about all we can do
+            */
+
+            methodName = FirstToken.Image;
+            paramCount = GetNumChildren() - 1;
+
+            strictRef = rsvc.GetBoolean(NVelocity.Runtime.RuntimeConstants.RUNTIME_REFERENCES_STRICT, false);
+
+            return data;
+        }
+
+        /// <summary>  invokes the method.  Returns null if a problem, the
+        /// parameters return if the method returns something, or
+        /// an empty string "" if the method returns void
+        /// </summary>
+        /// <param name="instance">
+        /// </param>
+        /// <param name="context">
+        /// </param>
+        /// <returns> Result or null.
+        /// </returns>
+        /// <throws>  MethodInvocationException </throws>
+        public override object Execute(object o, IInternalContextAdapter context)
+        {
+            /*
+            *  new strategy (strategery!) for introspection. Since we want
+            *  to be thread- as well as context-safe, we *must* do it now,
+            *  at execution time.  There can be no in-node caching,
+            *  but if we are careful, we can do it in the context.
+            */
+
+            IVelMethod method = null;
+
+            object[] params_Renamed = new object[paramCount];
+
+            try
+            {
+                /*
+                * sadly, we do need recalc the values of the args, as this can
+                * change from visit to visit
+                */
+
+                System.Type[] paramClasses = paramCount > 0 ? new System.Type[paramCount] : new System.Collections.Generic.List<Type>().ToArray();
+
+                for (int j = 0; j < paramCount; j++)
+                {
+                    params_Renamed[j] = GetChild(j + 1).Value(context);
+
+                    if (params_Renamed[j] != null)
+                    {
+                        paramClasses[j] = params_Renamed[j].GetType();
+                    }
+                }
+
+                /*
+                *   check the cache
+                */
+
+                MethodCacheKey mck = new MethodCacheKey(methodName, paramClasses);
+                IntrospectionCacheData icd = context.ICacheGet(mck);
+
+                /*
+                *  like ASTIdentifier, if we have cache information, and the
+                *  Class of Object instance is the same as that in the cache, we are
+                *  safe.
+                */
+
+                if (icd != null && (o != null && icd.ContextData == o.GetType()))
+                {
+
+                    /*
+                    * Get the method from the cache
+                    */
+
+                    method = (IVelMethod)icd.Thingy;
+                }
+                else
+                {
+                    /*
+                    *  otherwise, do the introspection, and then
+                    *  cache it
+                    */
+
+                    method = rsvc.Uberspect.GetMethod(o, methodName, params_Renamed, new Info(TemplateName, Line, Column));
+
+                    if ((method != null) && (o != null))
+                    {
+                        icd = new IntrospectionCacheData();
+                        icd.ContextData = o.GetType();
+                        icd.Thingy = method;
+
+                        context.ICachePut(mck, icd);
+                    }
+                }
+
+                /*
+                *  if we still haven't gotten the method, either we are calling
+                *  a method that doesn't exist (which is fine...)  or I screwed
+                *  it up.
+                */
+
+                if (method == null)
+                {
+                    if (strictRef)
+                    {
+                        // Create a parameter list for the exception Error message
+                        System.Text.StringBuilder plist = new System.Text.StringBuilder();
+                        for (int i = 0; i < params_Renamed.Length; i++)
+                        {
+                            System.Type param = paramClasses[i];
+                          
+                            plist.Append(param == null ? "null" : param.FullName);
+                            if (i < params_Renamed.Length - 1)
+                                plist.Append(", ");
+                        }
+                       
+                        throw new MethodInvocationException("Object '" + o.GetType().FullName + "' does not contain method " + methodName + "(" + plist + ")", null, methodName, uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (MethodInvocationException mie)
+            {
+                /*
+                *  this can come from the doIntrospection(), as the arg values
+                *  are evaluated to find the right method signature.  We just
+                *  want to propogate it here, not do anything fancy
+                */
+
+                throw mie;
+            }
+            /**
+            * pass through application level runtime exceptions
+            */
+            catch (System.SystemException e)
+            {
+                throw e;
+            }
+            catch (System.Exception e)
+            {
+                /*
+                *  can come from the doIntropection() also, from Introspector
+                */
+                string msg = "ASTMethod.Execute() : exception from introspection";
+                log.Error(msg, e);
+                throw new VelocityException(msg, e);
+            }
+
+            try
+            {
+                /*
+                *  Get the returned object.  It may be null, and that is
+                *  valid for something declared with a void return type.
+                *  Since the caller is expecting something to be returned,
+                *  as long as things are peachy, we can return an empty
+                *  String so ASTReference() correctly figures out that
+                *  all is well.
+                */
+
+                object obj = method.Invoke(o, params_Renamed);
+
+                if (obj == null)
+                {
+                    if (method.ReturnType == System.Type.GetType("System.Void"))
+                    {
+                        return "";
+                    }
+                }
+
+                return obj;
+            }
+            catch (System.Reflection.TargetInvocationException ite)
+            {
+                return HandleInvocationException(o, context, ite.GetBaseException());
+            }
+            /** Can also be thrown by method invocation **/
+            catch (System.ArgumentException t)
+            {
+                return HandleInvocationException(o, context, t);
+            }
+            /**
+            * pass through application level runtime exceptions
+            */
+            catch (System.SystemException e)
+            {
+                throw e;
+            }
+            catch (System.Exception e)
+            {
+                string msg = "ASTMethod.Execute() : exception invoking method '" + methodName + "' in " + o.GetType();
+                log.Error(msg, e);
+                throw new VelocityException(msg, e);
+            }
+        }
+
+        
+        private object HandleInvocationException(object o, IInternalContextAdapter context, System.Exception t)
+        {
+            /*
+            *  In the event that the invocation of the method
+            *  itself throws an exception, we want to catch that
+            *  wrap it, and throw.  We don't Log here as we want to figure
+            *  out which reference threw the exception, so do that
+            *  above
+            */
+
+            /*
+            *  let non-Exception Throwables go...
+            */
+
+            if (t is System.Exception)
+            {
+                try
+                {
+                    return EventHandlerUtil.MethodException(rsvc, context, o.GetType(), methodName, (System.Exception)t);
+                }
+                /**
+                * If the event handler throws an exception, then wrap it
+                * in a MethodInvocationException.  Don't pass through RuntimeExceptions like other
+                * similar catchall code blocks.
+                */
+                catch (System.Exception e)
+                {
+                    throw new MethodInvocationException("Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " + e.ToString(), e, methodName, TemplateName, this.Line, this.Column);
+                }
+            }
+            else
+            {
+                /*
+                * no event cartridge to override. Just throw
+                */
+
+                throw new MethodInvocationException("Invocation of method '" + methodName + "' in  " + o.GetType() + " threw exception " + t.ToString(), t, methodName, TemplateName, this.Line, this.Column);
+            }
+        }
+
+        /// <summary> Internal class used as key for method cache.  Combines
+        /// ASTMethod fields with array of parameter classes.  Has
+        /// public access (and complete constructor) for unit test 
+        /// purposes.
+        /// </summary>
+        /// <since> 1.5
+        /// </since>
+        public class MethodCacheKey
+        {
+            
+            private string methodName;
+          
+            private System.Type[] params_Renamed;
+
+            public MethodCacheKey(string methodName, System.Type[] params_Renamed)
+            {
+                /// <summary> Should never be initialized with nulls, but to be safe we refuse 
+                /// to accept them.
+                /// </summary>
+                this.methodName = (methodName != null) ? methodName : string.Empty;
+                this.params_Renamed = (params_Renamed != null) ? params_Renamed : new System.Collections.Generic.List<Type>().ToArray();
+            }
+
+            /// <seealso cref="java.lang.Object.equals(java.lang.Object)">
+            /// </seealso>
+            public override bool Equals(object o)
+            {
+                /** 
+                * note we skip the null test for methodName and params
+                * due to the earlier test in the constructor
+                */
+                if (o is MethodCacheKey)
+                {
+                   
+                    MethodCacheKey other = (MethodCacheKey)o;
+                    if (params_Renamed.Length == other.params_Renamed.Length && methodName.Equals(other.methodName))
+                    {
+                        for (int i = 0; i < params_Renamed.Length; ++i)
+                        {
+                            if (params_Renamed[i] == null)
+                            {
+                                if (params_Renamed[i] != other.params_Renamed[i])
+                                {
+                                    return false;
+                                }
+                            }
+                            else if (!params_Renamed[i].Equals(other.params_Renamed[i]))
+                            {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
 
 
+            /// <seealso cref="java.lang.Object.hashCode()">
+            /// </seealso>
+            public override int GetHashCode()
+            {
+                int result = 17;
+
+                /** 
+                * note we skip the null test for methodName and params
+                * due to the earlier test in the constructor
+                */
+                for (int i = 0; i < params_Renamed.Length; ++i)
+                {
+                   
+                    System.Type param = params_Renamed[i];
+                    if (param != null)
+                    {
+                        result = result * 37 + param.GetHashCode();
+                    }
+                }
+
+                result = result * 37 + methodName.GetHashCode();
+
+                return result;
+            }
+        }
     }
 }

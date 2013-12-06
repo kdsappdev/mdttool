@@ -1,231 +1,236 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
+
 namespace NVelocity.Runtime.Parser.Node
 {
-	/*
-	* The Apache Software License, Version 1.1
-	*
-	* Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
-	* reserved.
-	*
-	* Redistribution and use in source and binary forms, with or without
-	* modification, are permitted provided that the following conditions
-	* are met:
-	*
-	* 1. Redistributions of source code must retain the above copyright
-	*    notice, this list of conditions and the following disclaimer.
-	*
-	* 2. Redistributions in binary form must reproduce the above copyright
-	*    notice, this list of conditions and the following disclaimer in
-	*    the documentation and/or other materials provided with the
-	*    distribution.
-	*
-	* 3. The end-user documentation included with the redistribution, if
-	*    any, must include the following acknowlegement:
-	*       "This product includes software developed by the
-	*        Apache Software Foundation (http://www.apache.org/)."
-	*    Alternately, this acknowlegement may appear in the software itself,
-	*    if and wherever such third-party acknowlegements normally appear.
-	*
-	* 4. The names "The Jakarta Project", "Velocity", and "Apache Software
-	*    Foundation" must not be used to endorse or promote products derived
-	*    from this software without prior written permission. For written
-	*    permission, please contact apache@apache.org.
-	*
-	* 5. Products derived from this software may not be called "Apache"
-	*    nor may "Apache" appear in their names without prior written
-	*    permission of the Apache Group.
-	*
-	* THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-	* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-	* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	* DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
-	* ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-	* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-	* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-	* USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-	* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-	* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-	* OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-	* SUCH DAMAGE.
-	* ====================================================================
-	*
-	* This software consists of voluntary contributions made by many
-	* individuals on behalf of the Apache Software Foundation.  For more
-	* information on the Apache Software Foundation, please see
-	* <http://www.apache.org/>.
-	*/
-	using System;
-	using Parser = NVelocity.Runtime.Parser.Parser;
-	using IntrospectionCacheData = NVelocity.Util.Introspection.IntrospectionCacheData;
-	using Introspector = NVelocity.Util.Introspection.Introspector;
-	using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-	using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
-	
-	/// <summary>  ASTIdentifier.java
-	/// *
-	/// Method support for identifiers :  $foo
-	/// *
-	/// mainly used by ASTRefrence
-	/// *
-	/// Introspection is now moved to 'just in time' or at render / execution 
-	/// time. There are many reasons why this has to be done, but the 
-	/// primary two are   thread safety, to remove any context-derived 
-	/// information from class member  variables.
-	/// *
-	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ASTIdentifier.cs,v 1.3 2002/07/30 08:25:27 corts Exp $ 
-	/// 
-	/// </version>
-	public class ASTIdentifier:SimpleNode
-	{
-		private System.String identifier = "";
-		
-		public ASTIdentifier(int id):base(id)
-		{
-		}
-		
-		public ASTIdentifier(Parser p, int id):base(p, id)
-		{
-		}
-		
-		/// <summary>Accept the visitor. *
-		/// </summary>
-		public override System.Object jjtAccept(ParserVisitor visitor, System.Object data)
-		{
-			return visitor.visit(this, data);
-		}
-		
-		/// <summary>  simple init - don't do anything that is context specific.
-		/// just get what we need from the AST, which is static.
-		/// </summary>
-		public override System.Object init(InternalContextAdapter context, System.Object data)
-		{
-			base.init(context, data);
-			
-			identifier = FirstToken.image;
-			
-			return data;
-		}
-		
-		/// <summary>  introspects the class to find the method name of the node,
-		/// or if that fails, treats the reference object as a map
-		/// and treats the identifier as a key in that map.
-		/// This needs work.
-		/// *
-		/// </summary>
-		/// <param name="data">Class to be introspected
-		/// 
-		/// </param>
-		private AbstractExecutor doIntrospection(System.Type data)
-		{
-			AbstractExecutor executor;
-			
-			/*
-			*  first try for a getFoo() type of property
-			*  (also getfoo() )
-			*/
-			
-			executor = new PropertyExecutor(rsvc, data, identifier);
-			
-			/*
-			*  if that didn't work, look for get("foo")
-			*/
-			
-			if (executor.isAlive() == false)
-			{
-				executor = new GetExecutor(rsvc, data, identifier);
-			}
-			
-			/*
-			*  finally, look for boolean isFoo() 
-			*/
-			
-			if (executor.isAlive() == false)
-			{
-				executor = new BooleanPropertyExecutor(rsvc, data, identifier);
-			}
-			
-			return executor;
-		}
-		
-		/// <summary>  invokes the method on the object passed in
-		/// </summary>
-		public override System.Object execute(System.Object o, InternalContextAdapter context)
-		{
-			AbstractExecutor executor = null;
-			
-			try
-			{
-				System.Type c = o.GetType();
-				
-				/*
-				*  first, see if we have this information cached.
-				*/
-				
-				IntrospectionCacheData icd = context.ICacheGet(this);
-				
-				/*
-				* if we have the cache data and the class of the object we are 
-				* invoked with is the same as that in the cache, then we must
-				* be allright.  The last 'variable' is the method name, and 
-				* that is fixed in the template :)
-				*/
-				
-				if (icd != null && icd.contextData == c)
-				{
-					executor = (AbstractExecutor) icd.thingy;
-				}
-				else
-				{
-					/*
-					*  otherwise, do the introspection, and cache it
-					*/
-					
-					executor = doIntrospection(c);
-					
-					if (executor != null)
-					{
-						icd = new IntrospectionCacheData();
-						icd.contextData = c;
-						icd.thingy = executor;
-						context.ICachePut(this, icd);
-					}
-				}
-			}
-			catch (System.Exception e)
-			{
-				rsvc.error("ASTIdentifier.execute() : identifier = " + identifier + " : " + e);
-			}
-			
-			/*
-			*  we have no executor... punt...
-			*/
-			if (executor == null)
-			{
-				return null;
-			}
-			
-			/*
-			*  now try and execute.  If we get a MIE, throw that
-			*  as the app wants to get these.  If not, log and punt.
-			*/
-			try
-			{
-				return executor.execute(o, context);
-			}
-			catch (MethodInvocationException mie)
-			{
-				throw mie;
-			}
-			catch (System.Exception e)
-			{
-				rsvc.error("ASTIdentifier() : exception invoking method for identifier '" + identifier + "' in " + o.GetType() + " : " + e);
-			}
-			
-			return null;
-		}
-	}
+    using App.Event;
+    using Context;
+    using Exception;
+    using Util.Introspection;
+
+    /// <summary>  ASTIdentifier.java
+    /// 
+    /// Method support for identifiers :  $foo
+    /// 
+    /// mainly used by ASTRefrence
+    /// 
+    /// Introspection is now moved to 'just in time' or at render / execution
+    /// time. There are many reasons why this has to be done, but the
+    /// primary two are   thread safety, to remove any context-derived
+    /// information from class member  variables.
+    /// 
+    /// </summary>
+    /// <author>  <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+    /// </author>
+    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// </author>
+    /// <version>  $Id: ASTIdentifier.java 720228 2008-11-24 16:58:33Z nbubna $
+    /// </version>
+    public class ASTIdentifier : SimpleNode
+    {
+        private string identifier = "";
+
+        /// <summary>  This is really immutable after the Init, so keep one for this node</summary>
+        protected internal Info uberInfo;
+
+        /// <summary> Indicates if we are running in strict reference mode.</summary>
+        protected internal bool strictRef = false;
+
+        /// <param name="id">
+        /// </param>
+        public ASTIdentifier(int id)
+            : base(id)
+        {
+        }
+
+        /// <param name="p">
+        /// </param>
+        /// <param name="id">
+        /// </param>
+        public ASTIdentifier(Parser p, int id)
+            : base(p, id)
+        {
+        }
+
+
+        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Accept(NVelocity.Runtime.Paser.Node.IParserVisitor, System.Object)">
+        /// </seealso>
+        public override object Accept(IParserVisitor visitor, object data)
+        {
+            return visitor.Visit(this, data);
+        }
+
+        /// <summary>  simple Init - don't do anything that is context specific.
+        /// just Get what we need from the AST, which is static.
+        /// </summary>
+        /// <param name="context">
+        /// </param>
+        /// <param name="data">
+        /// </param>
+        /// <returns> The data object.
+        /// </returns>
+        /// <throws>  TemplateInitException </throws>
+        public override object Init(IInternalContextAdapter context, object data)
+        {
+            base.Init(context, data);
+
+            identifier = FirstToken.Image;
+
+            uberInfo = new Info(TemplateName, Line, Column);
+
+            strictRef = rsvc.GetBoolean(NVelocity.Runtime.RuntimeConstants.RUNTIME_REFERENCES_STRICT, false);
+
+            return data;
+        }
+
+        /// <seealso cref="NVelocity.Runtime.Paser.Node.SimpleNode.Execute(java.lang.Object, org.apache.velocity.context.InternalContextAdapter)">
+        /// </seealso>
+        public override object Execute(object o, IInternalContextAdapter context)
+        {
+
+            IVelPropertyGet vg = null;
+
+            try
+            {
+                /*
+                *  first, see if we have this information cached.
+                */
+
+                IntrospectionCacheData icd = context.ICacheGet(this);
+
+                /*
+                * if we have the cache data and the class of the object we are
+                * invoked with is the same as that in the cache, then we must
+                * be allright.  The last 'variable' is the method name, and
+                * that is fixed in the template :)
+                */
+
+                if (icd != null && (o != null) && (icd.ContextData == o.GetType()))
+                {
+                    vg = (IVelPropertyGet)icd.Thingy;
+                }
+                else
+                {
+                    /*
+                    *  otherwise, do the introspection, and cache it.  Use the
+                    *  uberspector
+                    */
+
+                    vg = rsvc.Uberspect.GetPropertyGet(o, identifier, uberInfo);
+
+                    if (vg != null && vg.Cacheable && (o != null))
+                    {
+                        icd = new IntrospectionCacheData();
+                        icd.ContextData = o.GetType();
+                        icd.Thingy = vg;
+                        context.ICachePut(this, icd);
+                    }
+                }
+            }
+            /**
+            * pass through application level runtime exceptions
+            */
+            catch (System.SystemException e)
+            {
+                throw e;
+            }
+            catch (System.Exception e)
+            {
+                string msg = "ASTIdentifier.Execute() : identifier = " + identifier;
+                log.Error(msg, e);
+                throw new VelocityException(msg, e);
+            }
+
+            /*
+            *  we have no getter... punt...
+            */
+
+            if (vg == null)
+            {
+                if (strictRef)
+                {
+                    throw new MethodInvocationException("Object '" + o.GetType().FullName + "' does not contain property '" + identifier + "'", null, identifier, uberInfo.TemplateName, uberInfo.Line, uberInfo.Column);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            /*
+            *  now try and Execute.  If we Get a MIE, throw that
+            *  as the app wants to Get these.  If not, Log and punt.
+            */
+            try
+            {
+                return vg.Invoke(o);
+            }
+            catch (System.Reflection.TargetInvocationException ite)
+            {
+                /*
+                *  if we have an event cartridge, see if it wants to veto
+                *  also, let non-Exception Throwables go...
+                */
+
+                System.Exception t = ite.GetBaseException();
+                if (t is System.Exception)
+                {
+                    try
+                    {
+                        return EventHandlerUtil.MethodException(rsvc, context, o.GetType(), vg.MethodName, (System.Exception)t);
+                    }
+                    /**
+                    * If the event handler throws an exception, then wrap it
+                    * in a MethodInvocationException.  Don't pass through RuntimeExceptions like other
+                    * similar catchall code blocks.
+                    */
+                    catch (System.Exception)
+                    {
+                        throw new MethodInvocationException("Invocation of method '" + vg.MethodName + "'" + " in  " + o.GetType() + " threw exception " + ite.GetBaseException().ToString(), ite.GetBaseException(), vg.MethodName, TemplateName, this.Line, this.Column);
+                    }
+                }
+                else
+                {
+                    /*
+                    * no event cartridge to override. Just throw
+                    */
+
+                    throw new MethodInvocationException("Invocation of method '" + vg.MethodName + "'" + " in  " + o.GetType() + " threw exception " + ite.GetBaseException().ToString(), ite.GetBaseException(), vg.MethodName, TemplateName, this.Line, this.Column);
+                }
+            }
+            catch (System.ArgumentException)
+            {
+                return null;
+            }
+            /**
+            * pass through application level runtime exceptions
+            */
+            catch (System.SystemException e)
+            {
+                throw e;
+            }
+            catch (System.Exception e)
+            {
+                string msg = "ASTIdentifier() : exception invoking method " + "for identifier '" + identifier + "' in " + o.GetType();
+                log.Error(msg, e);
+                throw new VelocityException(msg, e);
+            }
+        }
+    }
 }
