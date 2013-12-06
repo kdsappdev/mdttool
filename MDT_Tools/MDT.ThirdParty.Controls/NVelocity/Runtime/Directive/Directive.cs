@@ -1,132 +1,140 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
+
 namespace NVelocity.Runtime.Directive
 {
-	/*
-	* The Apache Software License, Version 1.1
-	*
-	* Copyright (c) 2000-2001 The Apache Software Foundation.  All rights
-	* reserved.
-	*
-	* Redistribution and use in source and binary forms, with or without
-	* modification, are permitted provided that the following conditions
-	* are met:
-	*
-	* 1. Redistributions of source code must retain the above copyright
-	*    notice, this list of conditions and the following disclaimer.
-	*
-	* 2. Redistributions in binary form must reproduce the above copyright
-	*    notice, this list of conditions and the following disclaimer in
-	*    the documentation and/or other materials provided with the
-	*    distribution.
-	*
-	* 3. The end-user documentation included with the redistribution, if
-	*    any, must include the following acknowlegement:
-	*       "This product includes software developed by the
-	*        Apache Software Foundation (http://www.apache.org/)."
-	*    Alternately, this acknowlegement may appear in the software itself,
-	*    if and wherever such third-party acknowlegements normally appear.
-	*
-	* 4. The names "The Jakarta Project", "Velocity", and "Apache Software
-	*    Foundation" must not be used to endorse or promote products derived
-	*    from this software without prior written permission. For written
-	*    permission, please contact apache@apache.org.
-	*
-	* 5. Products derived from this software may not be called "Apache"
-	*    nor may "Apache" appear in their names without prior written
-	*    permission of the Apache Group.
-	*
-	* THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-	* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-	* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	* DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
-	* ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-	* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-	* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-	* USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-	* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-	* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-	* OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-	* SUCH DAMAGE.
-	* ====================================================================
-	*
-	* This software consists of voluntary contributions made by many
-	* individuals on behalf of the Apache Software Foundation.  For more
-	* information on the Apache Software Foundation, please see
-	* <http://www.apache.org/>.
-	*/
-	using System;
-	using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-	using ParseErrorException = NVelocity.Exception.ParseErrorException;
-	using ResourceNotFoundException = NVelocity.Exception.ResourceNotFoundException;
-	using InternalContextAdapter = NVelocity.Context.InternalContextAdapter;
-	using INode = NVelocity.Runtime.Parser.Node.INode;
-	
-	/// <summary> Base class for all directives used in Velocity.
-	/// *
-	/// </summary>
-	/// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
-	/// </author>
-	/// <version> $Id: Directive.cs,v 1.2 2002/07/30 07:26:50 corts Exp $ 
-	/// 
-	/// </version>
-	public abstract class Directive : DirectiveConstants  //,System.ICloneable
-	{
-		public abstract System.String Name{get; set;}
-		public abstract int Type{get;}
-		public virtual int Line
-		{
-			get
-			{
-				return line;
-			}
-			
-		}
-		public virtual int Column
-		{
-			get
-			{
-				return column;
-			}
-			
-		}
-		private int line = 0;
-		private int column = 0;
-		
-		protected internal RuntimeServices rsvc = null;
-		
-		/// <summary>Return the name of this directive 
-		/// </summary>
-		
-		/// <summary>Get the directive type BLOCK/LINE 
-		/// </summary>
-		
-		/// <summary>Allows the template location to be set 
-		/// </summary>
-		public virtual void  setLocation(int line, int column)
-		{
-			this.line = line;
-			this.column = column;
-		}
-		
-		/// <summary>for log msg purposes 
-		/// </summary>
-		
-		/// <summary>for log msg purposes 
-		/// </summary>
-		
-		/// <summary> How this directive is to be initialized.
-		/// </summary>
-		public virtual void  init(RuntimeServices rs, InternalContextAdapter context, INode node)
-		{
-			rsvc = rs;
-			
-			//        int i, k = node.jjtGetNumChildren();
-			
-			//for (i = 0; i < k; i++)
-			//    node.jjtGetChild(i).init(context, rs);
-		}
-		
-		/// <summary> How this directive is to be rendered 
-		/// </summary>
-		public abstract bool render(InternalContextAdapter context, System.IO.TextWriter writer, INode node);
-	}
+    using Context;
+    using Parser.Node;
+
+    /// <summary> Base class for all directives used in Velocity.
+    /// 
+    /// </summary>
+    /// <author>  <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+    /// </author>
+    /// <version>  $Id: Directive.java 724825 2008-12-09 18:56:06Z nbubna $
+    /// </version>
+    public abstract class Directive
+    {
+        /// <summary> Get the directive type BLOCK/LINE.</summary>
+        /// <returns> The directive type BLOCK/LINE.
+        /// </returns>
+        public abstract int Type { get; }
+        /// <summary> for Log msg purposes</summary>
+        /// <returns> The current line for Log msg purposes.
+        /// </returns>
+        virtual public int Line
+        {
+            get
+            {
+                return line;
+            }
+
+        }
+        /// <summary> for Log msg purposes</summary>
+        /// <returns> The current column for Log msg purposes.
+        /// </returns>
+        virtual public int Column
+        {
+            get
+            {
+                return column;
+            }
+
+        }
+
+        /// <returns> The template file name this directive was defined in, or null if not 
+        /// defined in a file.
+        /// </returns>
+        virtual public string TemplateName
+        {
+            get
+            {
+                return templateName;
+            }
+
+        }
+
+        private int line = 0;
+        private int column = 0;
+        private string templateName;
+
+        /// <summary> </summary>
+        protected internal IRuntimeServices rsvc = null;
+
+        /// <summary> Return the name of this directive.</summary>
+        /// <returns> The name of this directive.
+        /// </returns>
+        public abstract string Name { get; }
+
+        /// <summary> Allows the template location to be set.</summary>
+        /// <param name="line">
+        /// </param>
+        /// <param name="column">
+        /// </param>
+        public virtual void SetLocation(int line, int column)
+        {
+            this.line = line;
+            this.column = column;
+        }
+
+        /// <summary> Allows the template location to be set.</summary>
+        /// <param name="line">
+        /// </param>
+        /// <param name="column">
+        /// </param>
+        public virtual void SetLocation(int line, int column, string templateName)
+        {
+            SetLocation(line, column);
+            this.templateName = templateName;
+        }
+
+        /// <summary> How this directive is to be initialized.</summary>
+        /// <param name="rs">
+        /// </param>
+        /// <param name="context">
+        /// </param>
+        /// <param name="node">
+        /// </param>
+        /// <throws>  TemplateInitException </throws>
+        public virtual void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
+        {
+            rsvc = rs;
+
+            //        int i, k = node.jjtGetNumChildren();
+
+            //for (i = 0; i < k; i++)
+            //    node.jjtGetChild(i).Init(context, rs);
+        }
+
+        /// <summary> How this directive is to be rendered</summary>
+        /// <param name="context">
+        /// </param>
+        /// <param name="writer">
+        /// </param>
+        /// <param name="node">
+        /// </param>
+        /// <returns> True if the directive rendered successfully.
+        /// </returns>
+        /// <throws>  IOException </throws>
+        /// <throws>  ResourceNotFoundException </throws>
+        /// <throws>  ParseErrorException </throws>
+        /// <throws>  MethodInvocationException </throws>
+        public abstract bool Render(IInternalContextAdapter context, System.IO.TextWriter writer, INode node);
+    }
 }

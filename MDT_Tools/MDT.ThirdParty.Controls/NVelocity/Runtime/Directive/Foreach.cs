@@ -1,276 +1,387 @@
-using System;
-using System.Collections;
-//using ArrayIterator = NVelocity.Util.ArrayIterator;
-//using EnumerationIterator = NVelocity.Util.EnumerationIterator;
-using Token = NVelocity.Runtime.Parser.Token;
-using MethodInvocationException = NVelocity.Exception.MethodInvocationException;
-using ParseErrorException = NVelocity.Exception.ParseErrorException;
-using ResourceNotFoundException = NVelocity.Exception.ResourceNotFoundException;
-using Introspector = NVelocity.Util.Introspection.Introspector;
-using IntrospectionCacheData = NVelocity.Util.Introspection.IntrospectionCacheData;
-using NVelocity.Context;
-using NVelocity.Runtime.Parser.Node;
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
 
-namespace NVelocity.Runtime.Directive {
-	
-    /// <summary>
-    /// Foreach directive used for moving through arrays,
+namespace NVelocity.Runtime.Directive
+{
+    using System;
+    using System.Collections;
+    using System.IO;
+
+    using Context;
+    using Exception;
+    using Log;
+    using Parser.Node;
+    using Util.Introspection;
+
+    /// <summary> Foreach directive used for moving through arrays,
     /// or objects that provide an Iterator.
+    /// 
     /// </summary>
-    /// <author> <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a></author>
-    /// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a></author>
-    /// <version> $Id: Foreach.cs,v 1.5 2002/10/19 10:30:21 corts Exp $</version>
-    public class Foreach:Directive {
+    /// <author>  <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+    /// </author>
+    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// </author>
+    /// <author>  Daniel Rall
+    /// </author>
+    /// <version>  $Id: Foreach.java 730367 2008-12-31 10:29:21Z byron $
+    /// </version>
+    public class Foreach : Directive
+    {
+        /// <summary> Return type of this directive.</summary>
+        /// <returns> The type of this directive.
+        /// </returns>
+        public override int Type
+        {
+            get
+            {
+                return DirectiveType.BLOCK;
+            }
 
-	public override System.String Name {
-	    get {
-		return "foreach";
-	    }
-	    set {
-		throw new NotSupportedException();
-	    }
-	}
+        }
+        /// <summary> A special context to use when the foreach iterator returns a null.  This
+        /// is required since the standard context may not support nulls.
+        /// All puts and gets are passed through, except for the foreach iterator key.
+        /// </summary>
+        /// <since> 1.5
+        /// </since>
+        protected internal class NullHolderContext : ChainedInternalContextAdapter
+        {
+            private string loopVariableKey = "";
+            private bool active = true;
 
-	public override int Type {
-	    get {
-		return NVelocity.Runtime.Directive.DirectiveConstants_Fields.BLOCK;
-	    }
-	}
+            /// <summary> Create the context as a wrapper to be used within the foreach</summary>
+            /// <param name="key">the reference used in the foreach
+            /// </param>
+            /// <param name="context">the parent context
+            /// </param>
+            internal NullHolderContext(string key, IInternalContextAdapter context)
+                : base(context)
+            {
+                if (key != null)
+                    loopVariableKey = key;
+            }
 
-	/// <summary> Return name of this directive.
-	/// </summary>
-		
-	/// <summary> Return type of this directive.
-	/// </summary>
-		
-	private static int UNKNOWN = - 1;
-		
-	/// <summary> Flag to indicate that the list object being used
-	/// in an array.
-	/// </summary>
-	private const int INFO_ARRAY = 1;
-		
-	/// <summary> Flag to indicate that the list object being used
-	/// provides an Iterator.
-	/// </summary>
-	private const int INFO_ITERATOR = 2;
-		
-	/// <summary> Flag to indicate that the list object being used
-	/// is a Map.
-	/// </summary>
-	private const int INFO_MAP = 3;
-		
-	/// <summary> Flag to indicate that the list object being used
-	/// is a Collection.
-	/// </summary>
-	private const int INFO_COLLECTION = 4;
-		
-	/// <summary>  Flag to indicate that the list object being used
-	/// is an Enumeration
-	/// </summary>
-	private const int INFO_ENUMERATION = 5;
-		
-	/// <summary>  Flag to indicate that the list object being used
-	/// is an IEnumerable
-	/// </summary>
-	private const int INFO_ENUMERABLE = 6;
+            /// <summary> Get an object from the context, or null if the key is equal to the loop variable</summary>
+            /// <seealso cref="org.apache.velocity.context.InternalContextAdapter.get(java.lang.String)">
+            /// </seealso>
+            /// <exception cref="MethodInvocationException">passes on potential exception from reference method call
+            /// </exception>
+            public override object Get(string key)
+            {
+                return (active && loopVariableKey.Equals(key)) ? null : base.Get(key);
+            }
 
-	/// <summary> The name of the variable to use when placing
-	/// the counter value into the context. Right
-	/// now the default is $velocityCount.
-	/// </summary>
-	private System.String counterName;
-		
-	/// <summary> What value to start the loop counter at.
-	/// </summary>
-	private int counterInitialValue;
-		
-	/// <summary> The reference name used to access each
-	/// of the elements in the list object. It
-	/// is the $item in the following:
-	/// 
-	/// #foreach ($item in $list)
-	/// 
-	/// This can be used class wide because
-	/// it is immutable.
-	/// </summary>
-	private System.String elementKey;
-		
-		
-	/// <summary>  simple init - init the tree and get the elementKey from
-	/// the AST
-	/// </summary>
-	public override void  init(RuntimeServices rs, InternalContextAdapter context, INode node) {
-	    base.init(rs, context, node);
-			
-	    counterName = rsvc.getString(NVelocity.Runtime.RuntimeConstants_Fields.COUNTER_NAME);
-	    counterInitialValue = rsvc.getInt(NVelocity.Runtime.RuntimeConstants_Fields.COUNTER_INITIAL_VALUE);
-			
-	    /*
-	    *  this is really the only thing we can do here as everything
-	    *  else is context sensitive
-	    */
-			
-	    elementKey = node.jjtGetChild(0).FirstToken.image.Substring(1);
-	}
-		
-	/// <summary>  returns an Iterator to the collection in the #foreach()
-	/// 
-	/// </summary>
-	/// <param name="context"> current context
-	/// </param>
-	/// <param name="node">  AST node
-	/// </param>
-	/// <returns>Iterator to do the dataset
-	/// 
-	/// </returns>
-	private IEnumerator getIterator(InternalContextAdapter context, INode node) {
-	    /*
-	    *  get our list object, and punt if it's null.
-	    */
-	    Object listObject = node.jjtGetChild(2).value_Renamed(context);
-	    if (listObject == null)
-		return null;
-			
-	    /*
-	    *  See if we already know what type this is. 
-	    *  Use the introspection cache
-	    */
-	    int type = UNKNOWN;
-			
-	    IntrospectionCacheData icd = context.ICacheGet(this);
-	    System.Type c = listObject.GetType();
-			
-	    /*
-	    *  if we have an entry in the cache, and the Class we have
-	    *  cached is the same as the Class of the data object
-	    *  then we are ok
-	    */
-			
-	    if (icd != null && icd.contextData == c) {
-		/* dig the type out of the cata object */
-		type = ((System.Int32) icd.thingy);
-	    }
-			
-	    /* 
-	    * If we still don't know what this is, 
-	    * figure out what type of object the list
-	    * element is, and get the iterator for it
-	    */
-			
-	    if (type == UNKNOWN) {
-		if (listObject.GetType().IsArray)
-		    type = INFO_ARRAY;
+            /// <seealso cref="org.apache.velocity.context.InternalContextAdapter.put(java.lang.String key, java.lang.Object value)">
+            /// </seealso>
+            public override object Put(string key, object value)
+            {
+                if (loopVariableKey.Equals(key) && (value == null))
+                {
+                    active = true;
+                }
 
-		// NOTE: IDictionary needs to come before ICollection as it support ICollection 
-		else if (listObject is IDictionary)
-		    type = INFO_MAP;
-		else if (listObject is ICollection)
-		    type = INFO_COLLECTION;
-		else if (listObject is IEnumerable)
-		    type = INFO_ENUMERABLE;
-		else if (listObject is IEnumerator)
-		    type = INFO_ENUMERATION;
+                return base.Put(key, value);
+            }
 
-		/*
-		*  if we did figure it out, cache it
-		*/
-				
-		if (type != UNKNOWN) {
-		    icd = new IntrospectionCacheData();
-		    icd.thingy = type;
-		    icd.contextData = c;
-		    context.ICachePut(this, icd);
-		}
-	    }
-			
-	    /*
-	    *  now based on the type from either cache or examination...
-	    */
-			
-	    switch (type) {
-				
-		case INFO_COLLECTION: 
-		    return ((ICollection) listObject).GetEnumerator();
+            /// <summary> Allows callers to explicitly put objects in the local context.
+            /// Objects added to the context through this method always end up
+            /// in the top-level context of possible wrapped contexts.
+            /// 
+            /// </summary>
+            /// <param name="key">name of item to set.
+            /// </param>
+            /// <param name="value">object to set to key.
+            /// </param>
+            /// <seealso cref="org.apache.velocity.context.InternalWrapperContext.localPut(String, Object)">
+            /// </seealso>
+            public override object LocalPut(string key, object value)
+            {
+                return Put(key, value);
+            }
 
-		case INFO_ENUMERABLE: 
-		    return ((IEnumerable) listObject).GetEnumerator();
-				
-		case INFO_ENUMERATION: 
-		    rsvc.warn("Warning! The reference " + node.jjtGetChild(2).FirstToken.image + " is an Enumeration in the #foreach() loop at [" + Line + "," + Column + "]" + " in template " + context.CurrentTemplateName + ". Because it's not resetable," + " if used in more than once, this may lead to" + " unexpected results.");
-		    return (IEnumerator)listObject;
+            /// <summary> Remove an object from the context</summary>
+            /// <seealso cref="org.apache.velocity.context.InternalContextAdapter.remove(java.lang.Object key)">
+            /// </seealso>
+            public override object Remove(object key)
+            {
+                if (loopVariableKey.Equals(key))
+                {
+                    active = false;
+                }
+                return base.Remove(key);
+            }
+        }
 
-		case INFO_ARRAY: 
-		    return ((Array)listObject).GetEnumerator();
-				
-		case INFO_MAP: 
-		    return ((IDictionary)listObject).GetEnumerator();
-				
-		default: 
-					
-		    /*  we have no clue what this is  */
-		    rsvc.warn("Could not determine type of enumerator (" + listObject.GetType().Name + ") in " + "#foreach loop for " + node.jjtGetChild(2).FirstToken.image + " at [" + Line + "," + Column + "]" + " in template " + context.CurrentTemplateName);
-					
-		    return null;
-				
-	    }
-	}
-		
-	/// <summary>  renders the #foreach() block
-	/// </summary>
-	public override bool render(InternalContextAdapter context, System.IO.TextWriter writer, INode node) {
-	    /*
-	    *  do our introspection to see what our collection is
-	    */
-			
-	    IEnumerator i = getIterator(context, node);
-			
-	    if (i == null)
-		return false;
-			
-	    int counter = counterInitialValue;
-			
-	    /*
-	    *  save the element key if there is one,
-	    *  and the loop counter
-	    */
-			
-	    System.Object o = context.Get(elementKey);
-	    System.Object ctr = context.Get(counterName);
+        /// <summary> Return name of this directive.</summary>
+        /// <returns> The name of this directive.
+        /// </returns>
+        public override string Name
+        {
+            get
+            {
+                return "foreach";
+            }
+        }
 
-	    while (i.MoveNext()) {
-		context.Put(counterName, counter);
-		context.Put(elementKey, i.Current);
-		node.jjtGetChild(3).render(context, writer);
-		counter++;
-	    }
-			
-	    /*
-	    * restores the loop counter (if we were nested)
-	    * if we have one, else just removes
-	    */
-			
-	    if (ctr != null) {
-		context.Put(counterName, ctr);
-	    }
-	    else {
-		context.Remove(counterName);
-	    }
-			
-			
-	    /*
-	    *  restores element key if exists
-	    *  otherwise just removes
-	    */
-			
-	    if (o != null) {
-		context.Put(elementKey, o);
-	    }
-	    else {
-		context.Remove(elementKey);
-	    }
-			
-	    return true;
-	}
+        /// <summary> The name of the variable to use when placing
+        /// the counter value into the context. Right
+        /// now the default is $velocityCount.
+        /// </summary>
+        private string counterName;
+
+        /// <summary> What value to start the loop counter at.</summary>
+        private int counterInitialValue;
+
+        /// <summary> The maximum number of times we're allowed to loop.</summary>
+        private int maxNbrLoops;
+
+        /// <summary> Whether or not to throw an Exception if the iterator is null.</summary>
+        private bool skipInvalidIterator;
+
+        /// <summary> The reference name used to access each
+        /// of the elements in the list object. It
+        /// is the $item in the following:
+        /// 
+        /// #foreach ($item in $list)
+        /// 
+        /// This can be used class wide because
+        /// it is immutable.
+        /// </summary>
+        private string elementKey;
+
+        /// <summary>  immutable, so create in init</summary>
+        protected internal Info uberInfo;
+
+        /// <summary>  simple init - init the tree and get the elementKey from
+        /// the AST
+        /// </summary>
+        /// <param name="rs">
+        /// </param>
+        /// <param name="context">
+        /// </param>
+        /// <param name="node">
+        /// </param>
+        /// <throws>  TemplateInitException </throws>
+        public override void Init(IRuntimeServices rs, IInternalContextAdapter context, INode node)
+        {
+            base.Init(rs, context, node);
+
+            counterName = rsvc.GetString(RuntimeConstants.COUNTER_NAME);
+            counterInitialValue = rsvc.GetInt(RuntimeConstants.COUNTER_INITIAL_VALUE);
+            maxNbrLoops = rsvc.GetInt(RuntimeConstants.MAX_NUMBER_LOOPS, int.MaxValue);
+            if (maxNbrLoops < 1)
+            {
+                maxNbrLoops = int.MaxValue;
+            }
+            skipInvalidIterator = rsvc.GetBoolean(RuntimeConstants.SKIP_INVALID_ITERATOR, true);
+
+            if (rsvc.GetBoolean(RuntimeConstants.RUNTIME_REFERENCES_STRICT, false))
+            {
+                // If we are in strict mode then the default for skipInvalidItarator
+                // is true.  However, if the property is explicitly set, then honor the setting.
+                skipInvalidIterator = rsvc.GetBoolean(RuntimeConstants.SKIP_INVALID_ITERATOR, false);
+            }
+
+            /*
+            *  this is really the only thing we can do here as everything
+            *  else is context sensitive
+            */
+            SimpleNode sn = (SimpleNode)node.GetChild(0);
+
+            if (sn is ASTReference)
+            {
+                elementKey = ((ASTReference)sn).RootString;
+            }
+            else
+            {
+                /*
+                * the default, error-prone way which we'll remove
+                *  TODO : remove if all goes well
+                */
+                elementKey = sn.FirstToken.Image.Substring(1);
+            }
+
+            /*
+            * make an uberinfo - saves new's later on
+            */
+
+            uberInfo = new Info(this.TemplateName, Line, Column);
+        }
+
+        /// <summary> Extension hook to allow subclasses to control whether loop vars
+        /// are set locally or not. So, those in favor of VELOCITY-285, can
+        /// make that happen easily by overriding this and having it use
+        /// context.localPut(k,v). See VELOCITY-630 for more on this.
+        /// </summary>
+        protected internal virtual void Put(IInternalContextAdapter context, string key, object value)
+        {
+            context.Put(key, value);
+        }
+
+        /// <summary>  renders the #foreach() block</summary>
+        /// <param name="context">
+        /// </param>
+        /// <param name="writer">
+        /// </param>
+        /// <param name="node">
+        /// </param>
+        /// <returns> True if the directive rendered successfully.
+        /// </returns>
+        /// <throws>  IOException </throws>
+        /// <throws>  MethodInvocationException </throws>
+        /// <throws>  ResourceNotFoundException </throws>
+        /// <throws>  ParseErrorException </throws>
+        public override bool Render(IInternalContextAdapter context, TextWriter writer, INode node)
+        {
+            /*
+            *  do our introspection to see what our collection is
+            */
+
+            object listObject = node.GetChild(2).Value(context);
+
+            if (listObject == null)
+                return false;
+
+            IEnumerator i = null;
+
+            try
+            {
+                i = rsvc.Uberspect.GetIterator(listObject, uberInfo);
+            }
+            /**
+            * pass through application level runtime exceptions
+            */
+            catch (SystemException e)
+            {
+                throw e;
+            }
+            catch (Exception ee)
+            {
+                string msg = "Error getting iterator for #foreach at " + uberInfo;
+                rsvc.Log.Error(msg, ee);
+                throw new VelocityException(msg, ee);
+            }
+
+            if (i == null)
+            {
+                if (skipInvalidIterator)
+                {
+                    return false;
+                }
+                else
+                {
+                    INode pnode = node.GetChild(2);
+
+                    System.String msg = "#foreach parameter " + pnode.Literal + " at " + Log.FormatFileString(pnode) + " is of type " + listObject.GetType().FullName + " and is either of wrong type or cannot be iterated.";
+                    rsvc.Log.Error(msg);
+                    throw new VelocityException(msg);
+                }
+            }
+
+            int counter = counterInitialValue;
+            bool maxNbrLoopsExceeded = false;
+
+            /*
+            *  save the element key if there is one, and the loop counter
+            */
+            object o = context.Get(elementKey);
+            object savedCounter = context.Get(counterName);
+
+            /*
+            * Instantiate the null holder context if a null value
+            * is returned by the foreach iterator.  Only one instance is
+            * created - it's reused for every null value.
+            */
+            NullHolderContext nullHolderContext = null;
+
+
+            while (!maxNbrLoopsExceeded && i.MoveNext())
+            {
+                // TODO: JDK 1.5+ -> Integer.valueOf()
+                Put(context, counterName, (object)counter);
+
+                object value = i.Current;
+
+                Put(context, elementKey, value);
+
+                try
+                {
+                    /*
+                    * If the value is null, use the special null holder context
+                    */
+                    if (value == null)
+                    {
+                        if (nullHolderContext == null)
+                        {
+                            // lazy instantiation
+                            nullHolderContext = new NullHolderContext(elementKey, context);
+                        }
+                        node.GetChild(3).Render(nullHolderContext, writer);
+                    }
+                    else
+                    {
+                        node.GetChild(3).Render(context, writer);
+                    }
+                }
+                catch (Break.BreakException ex)
+                {
+                    // encountered #break directive inside #foreach loop
+                    break;
+                }
+
+                counter++;
+
+                // Determine whether we're allowed to continue looping.
+                // ASSUMPTION: counterInitialValue is not negative!
+                maxNbrLoopsExceeded = (counter - counterInitialValue) >= maxNbrLoops;
+            }
+
+            /*
+            * restores the loop counter (if we were nested)
+            * if we have one, else just removes
+            */
+
+            if (savedCounter != null)
+            {
+                context.Put(counterName, savedCounter);
+            }
+            else
+            {
+                context.Remove(counterName);
+            }
+
+
+            /*
+            *  restores element key if exists
+            *  otherwise just removes
+            */
+
+            if (o != null)
+            {
+                context.Put(elementKey, o);
+            }
+            else
+            {
+                context.Remove(elementKey);
+            }
+
+            return true;
+        }
     }
 }
