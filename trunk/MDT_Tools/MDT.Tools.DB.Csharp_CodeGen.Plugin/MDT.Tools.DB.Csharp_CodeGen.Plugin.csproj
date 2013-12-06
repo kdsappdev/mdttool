@@ -68,7 +68,19 @@
     <Compile Include="Gen\GenCsharpBLLAndGUI.cs" />
     <Compile Include="Model\CsharpCodeGenConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Templates\model.cs.vm">
+    <None Include="templates\model.cs.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\idal.cs.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\dal.cs.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\ibll.cs.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\bll.cs.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="UI\Csharp_CodeGenConfigUI.cs">
@@ -123,6 +135,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MDT.Tools.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="templates\object.xml.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

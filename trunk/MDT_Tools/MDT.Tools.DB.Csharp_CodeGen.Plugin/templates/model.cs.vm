@@ -1,5 +1,5 @@
 using System;
-namespace ${nameSpace}
+namespace ${modelNameSpace}
 {
 	/// <summary>
 #if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
@@ -15,17 +15,17 @@ namespace ${nameSpace}
 	public class ${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)}
 	{
 		#set($region="#")${region}region 字段
-		
+
 #foreach($column in $tableInfo.Columns)
-#set($netType=${dataTypeMappingHelper.GetCSharpDataTypeByDbType(${dbType},${column.DataType},${column.DataScale},${column.DataLength},${column.DataNullAble})})		
-		private $netType $codeGenHelper.StrFieldWith_(${column.Name})#if(!$column.DataNullAble || !$codeGenHelper.IsNullOrEmpty(${column.DataDefault}))=${codeGenHelper.GetDefaultValueByDataType(${netType}, ${column.DataDefault})}#end;#if(${column.Comments})//${column.Comments}; #end
-		
+#set($netType=${dataTypeMappingHelper.GetCSharpDataTypeByDbType(${dbType},${column.DataType},${column.DataScale},${column.DataLength},${column.DataNullAble})})
+		private $netType $codeGenHelper.StrFieldWith_(${column.Name})#if(!$column.DataNullAble || !$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) = ${codeGenHelper.GetDefaultValueByDataType(${netType}, ${column.DataDefault})}#end;#if(${column.Comments})//${column.Comments}#end
+
 #end
 
 		${region}endregion
 
 		${region}region 属性
-		
+
 #foreach($column in $tableInfo.Columns)
 		/// <summary>
 #if(${column.Comments})
@@ -40,7 +40,7 @@ namespace ${nameSpace}
 			get { return $codeGenHelper.StrFieldWith_(${column.Name}); }
 			set { $codeGenHelper.StrFieldWith_(${column.Name}) = value; }
 		}
-		
+
 #end
 
 		${region}endregion

@@ -1,0 +1,21 @@
+## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+#set($region="#")
+	<!-- I${model}DALServer DAL-->
+	<object id="I${model}DALServer" class="${dalNameSpace}.${model}DALServer">
+	</object>
+
+
+	<!-- I${guiPluginName}BLLService BLL-->
+	<object id="I${guiPluginName}BLLService" class="${bllNameSpace}.${guiPluginName}BLLService">
+		<property name="I${model}DALServer" ref="I${model}DALServer"/>
+	</object>
+
+
+	<!-- ${guiPluginName} UI-->
+	<object id="${guiPluginName}" class="${bllNameSpace}.${guiPluginName}GUI">
+		<property name="I${guiPluginName}BLLService" ref="I${guiPluginName}BLLService"/>
+	</object>
+
