@@ -45,17 +45,33 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\client\plugin\MDT.Tools.DB.TriggerGen.Plugin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MDT.ThirdParty.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75b68e79cca37728, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\client\bin\MDT.ThirdParty.Controls.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MDT.Tools.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75b68e79cca37728, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\client\bin\MDT.Tools.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MDT.Tools.DB.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75b68e79cca37728, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\client\bin\MDT.Tools.DB.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -66,8 +82,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Gen\GenMQTrigger.cs" />
+    <Compile Include="Gen\GenNone.cs" />
+    <Compile Include="Gen\GenYukonTrigger.cs" />
+    <Compile Include="Gen\IGenTrigger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Trigger_GenPlugin.cs" />
+    <Compile Include="Utils\TriggerInfo.cs" />
+    <Compile Include="Utils\TriggerParams.cs" />
+    <Compile Include="Utils\TriggerType.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

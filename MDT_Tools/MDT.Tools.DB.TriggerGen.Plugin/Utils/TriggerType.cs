@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MDT.Tools.DB.Trigger.Plugin
+namespace MDT.Tools.DB.TriggerGen.Plugin.Utils
 {
-    public class Class1
+    public enum TriggerType
     {
+        None,YuKon,MQ
     }
 }
