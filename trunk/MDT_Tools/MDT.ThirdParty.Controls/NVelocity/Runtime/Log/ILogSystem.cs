@@ -17,28 +17,49 @@
 * under the License.    
 */
 
-
 namespace NVelocity.Runtime.Log
 {
-    /// <summary>  Logger used in case of failure. Does nothing.
+    /// <summary> Old base interface that old logging systems needed to implement.
     /// 
     /// </summary>
+    /// <author>  <a href="mailto:jon@latchkey.com">Jon S. Stevens</a>
+    /// </author>
     /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
     /// </author>
-    /// <deprecated> Use NullLogChute.
+    /// <deprecated> Use LogChute instead!
     /// </deprecated>
-    /// <version>  $Id: NullLogSystem.java 463298 2006-10-12 16:10:32Z henning $
+    /// <version>  $Id: LogSystem.java 463298 2006-10-12 16:10:32Z henning $
     /// </version>
-    public class NullLogSystem : NullLogChute, ILogSystem
+
+    public struct LogSystem_Fields
     {
+        /// <deprecated> This is unused and meaningless
+        /// </deprecated>
+        public readonly static bool DEBUG_ON = true;
+        /// <summary> ID for Debug messages.</summary>
+        public readonly static int DEBUG_ID = 0;
+        /// <summary> ID for Info messages.</summary>
+        public readonly static int INFO_ID = 1;
+        /// <summary> ID for warning messages.</summary>
+        public readonly static int WARN_ID = 2;
+        /// <summary> ID for Error messages.</summary>
+        public readonly static int ERROR_ID = 3;
+    }
+
+    public interface ILogSystem
+    {
+        /// <summary> Initializes this LogSystem.</summary>
+        /// <param name="rs">
+        /// </param>
+        /// <throws>  Exception </throws>
+        void Init(IRuntimeServices rs);
+
         /// <param name="level">
         /// </param>
         /// <param name="message">
         /// </param>
         /// <deprecated> Use Log(level, message).
         /// </deprecated>
-        public virtual void LogVelocityMessage(int level, System.String message)
-        {
-        }
+        void LogVelocityMessage(int level, System.String message);
     }
 }
