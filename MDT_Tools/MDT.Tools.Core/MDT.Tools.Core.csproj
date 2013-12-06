@@ -92,21 +92,25 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UI\Code.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Code.Designer.cs">
       <DependentUpon>Code.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Explorer.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Explorer.Designer.cs">
       <DependentUpon>Explorer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Doc.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Doc.designer.cs">
       <DependentUpon>Doc.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ToolWindow.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\ToolWindow.Designer.cs">
       <DependentUpon>ToolWindow.cs</DependentUpon>
@@ -135,6 +139,7 @@
     <EmbeddedResource Include="Resources\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Code.resx">
       <DependentUpon>Code.cs</DependentUpon>
