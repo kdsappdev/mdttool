@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -20,31 +20,21 @@
 namespace NVelocity.Exception
 {
     using System;
-    using System.Runtime.Serialization;
 
-    /// <summary>  
-    /// Application-level exception thrown when a resource of any type
-    /// isn't found by the Velocity engine.
-    /// <br/>
-    /// When this exception is thrown, a best effort will be made to have
-    /// useful information in the exception's message.  For complete
-    /// information, consult the runtime Log.
+    /// <summary> Separate exception class to distinguish math problems.   
+    /// 
     /// </summary>
+    /// <author>  Nathan Bubna
+    /// </author>
+    /// <since> 1.6
+    /// </since>
+    /// <version>  $Id: MathException.java 685685 2008-08-13 21:43:27Z nbubna $
+    /// </version>
     [Serializable]
-    public class ResourceNotFoundException : VelocityException
+    public class MathException : VelocityException
     {
-        public ResourceNotFoundException(String exceptionMessage)
+        public MathException(string exceptionMessage)
             : base(exceptionMessage)
-        {
-        }
-
-        public ResourceNotFoundException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
-
-        public ResourceNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }
