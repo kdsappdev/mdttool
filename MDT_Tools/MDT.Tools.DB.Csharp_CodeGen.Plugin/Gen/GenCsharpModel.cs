@@ -33,14 +33,12 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                 OutPut = cmc.OutPut;
                 setEnable(false);
                 setStatusBar("");
-                string[] strs = null;
                 if (drTables != null && dsTableColumns != null)
                 {
                     if (cmc.CodeRule == CodeGenRuleHelper.Ibatis)
                     {
                         CodeGenHelper.ReadConfig(cmc.Ibatis);
                     }
-                    strs = new string[drTables.Length];
                     if (!cmc.IsShowGenCode)
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
@@ -76,7 +74,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                         if (!flag)
                         {
                             
-                            strs[i] = GenCode(tableInfos[i]);
+                           GenCode(tableInfos[i]);
                         }
                     }
 
@@ -105,14 +103,18 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
 
 
         private readonly NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
-        public string GenCode(TableInfo tableInfo)
+        public void GenCode(TableInfo tableInfo)
         {
             string tableName = tableInfo.TableName;
             string className = CodeGenHelper.GetClassName(tableName, cmc.CodeRule);
             string path = string.Format(@"{0}", "model.cs.vm");
             var dic = GetNVelocityVars();
             dic.Add("tableInfo",tableInfo);
-            dic.Add("nameSpace", cmc.ModelNameSpace);
+            dic.Add("modelNameSpace", cmc.ModelNameSpace);
+            dic.Add("idalNameSpace", cmc.IDALNameSpace);
+            dic.Add("dalNameSpace", cmc.DALNameSpace);
+            dic.Add("bllNameSpace", cmc.BLLNameSpace);
+            dic.Add("guiPluginName", cmc.PluginName);
             dic.Add("codeRule",cmc.CodeRule);
             string str = nVelocityHelper.GenByTemplate(path, dic);
           
@@ -127,130 +129,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             {
                 FileHelper.Write(cmc.OutPut + title, new[] { str });
             }
-
-            return str;
         }
-
-        public string GenCode(DataRow drTable, DataRow[] drTableColumns)
-        {
-            var sb = new StringBuilder();
-
-
-
-            #region 引入命名空间
-            sb.AppendFormat("using System;").AppendFormat("\r\n");
-            //sb.AppendFormat("using System.Collections.Generic;").AppendFormat("\r\n");
-            //sb.AppendFormat("using System.Text;").AppendFormat("\r\n");
-            //sb.AppendFormat("using System.Xml.Serialization;").AppendFormat("\r\n");
-            #endregion
-
-            #region 命名空间
-            sb.AppendFormat("namespace {0}", cmc.ModelNameSpace).AppendFormat("\r\n");
-            sb.Append("{").AppendFormat("\r\n");
-
-            #region 类名
-            string className = drTable["name"] as string;
-            className = CodeGenHelper.GetClassName(className,cmc.CodeRule);
-            var tablecomments = drTable["comments"] as string;
-
-            sb.AppendFormat("\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// ").Append(string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments)).
-                AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-
-            sb.AppendFormat("\t").AppendFormat("/// <remarks>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// ").AppendFormat("{0:0000}.{1:00}.{2:00}: 创建. {3} <br/>", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, PluginName).
-                AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// </remarks>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("[Serializable]").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("public class {0}", className).AppendFormat("\r\n");
-            sb.Append("\t{").AppendFormat("\r\n");
-
-            #region 字段
-            sb.AppendFormat("\t\t").AppendFormat("#region 字段").AppendFormat("\r\n").AppendFormat("\r\n");
-            foreach (DataRow dr in drTableColumns)
-            {
-                string dataType = "string";
-                string nullAble = dr["NULLABLE"] + "";
-                dataType = DataTypeMappingHelper.GetCSharpDataTypeByDbType(dbType, dr["DATA_TYPE"] + "", dr["DATA_SCALE"] + "", dr["DATA_LENGTH"] + "", "Y".Equals(nullAble));
-                string columnName = dr["COLUMN_NAME"] as string;
-                string fieldName = CodeGenHelper.StrFieldWith_(columnName);
-                string defaultValue = dr["DATA_DEFAULT"] as string;
-
-
-                string comments = dr["COMMENTS"] as string;
-                sb.AppendFormat("\t\t").AppendFormat("private {0} {1}", dataType, fieldName);
-                if (nullAble.Equals("N") || !string.IsNullOrEmpty(defaultValue))
-                {
-                    defaultValue = CodeGenHelper.GetDefaultValueByDataType(dataType, defaultValue);
-                    sb.AppendFormat(" = {0}", defaultValue);
-                }
-                sb.AppendFormat(";");
-                if (!string.IsNullOrEmpty(comments))
-                {
-                    sb.AppendFormat("//{0}", EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding, comments));
-                }
-                sb.AppendFormat("\r\n");
-            }
-            sb.AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            #endregion
-            sb.AppendFormat("\r\n");
-
-            #region 属性
-            sb.AppendFormat("\t\t").AppendFormat("#region 属性").AppendFormat("\r\n").AppendFormat("\r\n");
-            foreach (DataRow dr in drTableColumns)
-            {
-                var dataType = "string";
-                string nullAble = dr["NULLABLE"] as string;
-                dataType = DataTypeMappingHelper.GetCSharpDataTypeByDbType(dbType, dr["DATA_TYPE"] + "", dr["DATA_SCALE"] + "", dr["DATA_LENGTH"] + "", "Y".Equals(nullAble));
-                string comments = dr["COMMENTS"] as string;
-                string columnName = dr["COLUMN_NAME"] as string;
-                string fieldName = CodeGenHelper.StrFieldWith_(columnName);
-                string propertyName = CodeGenHelper.StrProperty(columnName);
-                if (!string.IsNullOrEmpty(comments))
-                {
-                    sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-                    sb.AppendFormat("\t\t").AppendFormat("/// ").Append(EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                                      TargetEncoding,
-                                                                                                      comments)).
-                        AppendFormat("\r\n");
-                    sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-                }
-                sb.AppendFormat("\t\t").AppendFormat("public {0} {1}", dataType, propertyName).AppendFormat("\r\n");
-                sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
-                sb.AppendFormat("\t\t\t").AppendFormat("get ").Append("{ ").AppendFormat("return {0};", fieldName).Append(" }").AppendFormat("\r\n");
-
-                sb.AppendFormat("\t\t\t").AppendFormat("set ").Append("{ ").AppendFormat("{0} = value;", fieldName).Append(" }").AppendFormat("\r\n");
-                sb.AppendFormat("\t\t").Append("}").AppendFormat("\r\n");
-                sb.AppendFormat("\r\n");
-            }
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            sb.Append("\t}").AppendFormat("\r\n");
-            #endregion
-
-            sb.Append("}");
-            #endregion
-
-            string title = className + ".cs";
-
-            if (cmc.IsShowGenCode)
-            {
-                CodeShow(title, sb.ToString());
-            }
-            else
-            {
-                FileHelper.Write(cmc.OutPut + title, new[] { sb.ToString() });
-            }
-
-            return sb.ToString();
-        }
-
         
         public GenCsharpModel()
         {

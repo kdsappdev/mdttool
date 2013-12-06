@@ -20,10 +20,6 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
     {
        
         public CsharpCodeGenConfig cmc;
-       
-        private IbatisConfigHelper ibatisConfigHelper = new IbatisConfigHelper();
-       
-
         public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
             try
@@ -31,15 +27,14 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                 base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
                 OutPut = cmc.OutPut;
                 setEnable(false);
-                string[] strs = null;
                 setStatusBar("");
                 if (drTables != null && dsTableColumns != null)
                 {
                     if (cmc.CodeRule == CodeGenRuleHelper.Ibatis)
                     {
-                        ibatisConfigHelper.ReadConfig(cmc.Ibatis);
+                        CodeGenHelper.ReadConfig(cmc.Ibatis);
                     }
-                    strs = new string[drTables.Length];
+                    
                     if (!cmc.IsShowGenCode)
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
@@ -49,15 +44,14 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                         setProgressMax(drTables.Length);
                     }
                     int j = 0;
-                    for (int i = 0; i < drTables.Length; i++)
-                    {
-                        DataRow drTable = drTables[i];
-                        string className = drTable["name"] + "";
+                     for (int i = 0; i <tableInfos.Count; i++)
+                     {
+                         string tableName = tableInfos[i].TableName;
                         string[] temp = cmc.TableFilter.Split(new[] { ";", "," }, StringSplitOptions.RemoveEmptyEntries);
                         bool flag = false;
                         foreach (var str in temp)
                         {
-                            if (className.StartsWith(str))//过滤
+                            if (tableName.StartsWith(str))//过滤
                             {
                                 flag = true;
                                 j++;
@@ -68,15 +62,14 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                         if (!cmc.IsShowGenCode)
                         {
                             setStatusBar(string.Format("正在生成{0}命名空间中{1}代码,共{2}个代码，已生成了{3}个代码,过滤了{4}个代码", cmc.DALNameSpace,
-                                                       cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(className) : CodeGenHelper.StrFirstToUpperRemoveUnderline(className),
+                                                       CodeGenHelper.GetClassName(tableName, cmc.CodeRule)+CodeGenRuleHelper.DALServer,
                                                        drTables.Length, i - j, j));
                             setProgress(1);
                         }
                         if (!flag)
-                        {
-                            DataRow[] drTableColumns = dsTableColumns.Tables[dbName + DBtablesColumns].Select("TABLE_NAME = '" + drTable["name"].ToString() + "'", "COLUMN_ID ASC");
-                            strs[i] = GenCodeInterface(drTable, drTableColumns);
-                            strs[i] = GenCode(drTable, drTableColumns);
+                        {   
+                            GenCodeInterface(tableInfos[i]);
+                            GenCode(tableInfos[i]);
                         }
                     }
 
@@ -100,307 +93,62 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
 
         }
 
- 
+        private readonly NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
 
-        public string GenCodeInterface(DataRow drTable, DataRow[] drTableColumns)
+        public void GenCodeInterface(TableInfo tableInfo)
         {
-            var sb = new StringBuilder();
+            string tableName = tableInfo.TableName;
+            string className = "I" + CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.DALServer; ;
+            string path = string.Format(@"{0}", "idal.cs.vm");
+            var dic = GetNVelocityVars();
+            dic.Add("tableInfo", tableInfo);
+            dic.Add("modelNameSpace", cmc.ModelNameSpace);
+            dic.Add("idalNameSpace", cmc.IDALNameSpace);
+            dic.Add("dalNameSpace", cmc.DALNameSpace);
+            dic.Add("bllNameSpace", cmc.BLLNameSpace);
+            dic.Add("guiPluginName", cmc.PluginName);
+            dic.Add("codeRule", cmc.CodeRule);
+            string str = nVelocityHelper.GenByTemplate(path, dic);
 
-
-            #region 引入命名空间
-            sb.AppendFormat("using System;").AppendFormat("\r\n");
-            sb.AppendFormat("using System.Collections.Generic;").AppendFormat("\r\n");
-            sb.AppendFormat("using System.Text;").AppendFormat("\r\n");
-            sb.AppendFormat("using Ats.Foundation.Message;").AppendFormat("\r\n");
-            sb.AppendFormat("using Ats.YuKon.DAL.Interface;").AppendFormat("\r\n");
-            sb.AppendFormat("using {0};", cmc.ModelNameSpace).AppendFormat("\r\n");
-            #endregion
-
-            #region 命名空间
-            sb.AppendFormat("namespace {0}", cmc.IDALNameSpace).AppendFormat("\r\n");
-            sb.Append("{").AppendFormat("\r\n");
-
-            #region 类名
-            string tableName = drTable["name"] as string;
-            string className = "I" + (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName)) + CodeGenRuleHelper.DALServer;
-            var tablecomments = drTable["comments"] as string;
-
-            sb.AppendFormat("\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// ").Append(string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments) + CodeGenRuleHelper.IDALServerSummary).
-                AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-
-            sb.AppendFormat("\t").AppendFormat("/// <remarks>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// ").AppendFormat("{0:0000}.{1:00}.{2:00}: 创建. {3} <br/>", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, PluginName).
-                AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// </remarks>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("public interface {0}", className).AppendFormat(": IBaseDALServer").AppendFormat("\r\n");
-            sb.Append("\t{").AppendFormat("\r\n");
-
-            #region 接口
-
-            string modelClass = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName));
-
-            #region Select
-            sb.AppendFormat("\t\t").AppendFormat("#region Select").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("根据location 查询出{0}集合对象", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"location\">实体</param>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("AtsMsg<List<{0}>> Select(string location);", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            #region SelectByShortName
-            sb.AppendFormat("\t\t").AppendFormat("#region SelectByShortName").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("根据shortName,location 查询出{0}对象", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"shortName\">短名称</param>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"location\">实体</param>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("AtsMsg<{0}> SelectByShortName(string shortName, string location);", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            #region Insert
-            sb.AppendFormat("\t\t").AppendFormat("#region Insert").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("增加{0}方法", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"{0}\">{1}</param>", CodeGenHelper.StrFirstToLower(modelClass), string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("AtsMsg<{0}> Insert({0} {1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            #region Delete
-            sb.AppendFormat("\t\t").AppendFormat("#region Delete").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("删除{0}方法", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"{0}\">{1}</param>", CodeGenHelper.StrFirstToLower(modelClass), string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("AtsMsg<{0}> Delete({0} {1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            #region Update
-            sb.AppendFormat("\t\t").AppendFormat("#region Update").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("更新{0}方法", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"{0}\">{1}</param>", CodeGenHelper.StrFirstToLower(modelClass), string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("AtsMsg<{0}> Update({0} {1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            #endregion
-
-            #endregion
-
-            sb.Append("\t}").AppendFormat("\r\n");
-            #endregion
-
-            sb.Append("}");
-            #endregion
 
             string title = className + ".cs";
 
             if (cmc.IsShowGenCode)
             {
-                CodeShow(title, sb.ToString());
+                CodeShow(title, str);
             }
             else
             {
-                FileHelper.Write(cmc.OutPut + title, new[] { sb.ToString() });
+                FileHelper.Write(cmc.OutPut + title, new[] { str });
             }
-
-            return sb.ToString();
         }
-
-        public string GenCode(DataRow drTable, DataRow[] drTableColumns)
+        public void GenCode(TableInfo tableInfo)
         {
-            var sb = new StringBuilder();
+            string tableName = tableInfo.TableName;
+            string className =  CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.DALServer; ;
+            string path = string.Format(@"{0}", "dal.cs.vm");
+            var dic = GetNVelocityVars();
+            dic.Add("tableInfo", tableInfo);
+            dic.Add("modelNameSpace", cmc.ModelNameSpace);
+            dic.Add("idalNameSpace", cmc.IDALNameSpace);
+            dic.Add("dalNameSpace", cmc.DALNameSpace);
+            dic.Add("bllNameSpace", cmc.BLLNameSpace);
+            dic.Add("guiPluginName", cmc.PluginName);
+            dic.Add("codeRule", cmc.CodeRule);
+            string str = nVelocityHelper.GenByTemplate(path, dic);
 
-
-            #region 引入命名空间
-            sb.AppendFormat("using System;").AppendFormat("\r\n");
-            sb.AppendFormat("using System.Collections.Generic;").AppendFormat("\r\n");
-            sb.AppendFormat("using System.Text;").AppendFormat("\r\n");
-            sb.AppendFormat("using Ats.Foundation.Message;").AppendFormat("\r\n");
-            sb.AppendFormat("using Ats.Foundation.Utils.Communication.WebService;").AppendFormat("\r\n");
-            sb.AppendFormat("using {0};",cmc.IDALNameSpace).AppendFormat("\r\n");
-            sb.AppendFormat("using {0};", cmc.ModelNameSpace).AppendFormat("\r\n");
-            #endregion
-
-            #region 命名空间
-            sb.AppendFormat("namespace {0}", cmc.DALNameSpace).AppendFormat("\r\n");
-            sb.Append("{").AppendFormat("\r\n");
-
-            #region 类名
-            string tableName = drTable["name"] as string;
-            string className = (cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName)) + CodeGenRuleHelper.DALServer;
-            var tablecomments = drTable["comments"] as string;
-
-            sb.AppendFormat("\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// ").Append(string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments) + CodeGenRuleHelper.DALServerSummary).
-                AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-
-            sb.AppendFormat("\t").AppendFormat("/// <remarks>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// ").AppendFormat("{0:0000}.{1:00}.{2:00}: 创建. {3} <br/>", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, PluginName).
-                AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("/// </remarks>").AppendFormat("\r\n");
-            sb.AppendFormat("\t").AppendFormat("public class {0}", className).AppendFormat(": BaseDALServer,I{0}", className).AppendFormat("\r\n");
-            sb.Append("\t{").AppendFormat("\r\n");
-
-            #region 方法
-
-            string modelClass = cmc.CodeRule == CodeGenRuleHelper.Ibatis ? ibatisConfigHelper.GetClassName(tableName) : CodeGenHelper.StrFirstToUpperRemoveUnderline(tableName);
-
-
-            #region select
-            sb.AppendFormat("\t\t").AppendFormat("#region Select").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("根据location 查询出{0}集合对象", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"location\">实体</param>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("public AtsMsg<List<{0}>> Select(string location)", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").Append("string[] args=new []{ location };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"select\";").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<List<{0}>>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("}").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            #region selectByShortName
-            sb.AppendFormat("\t\t").AppendFormat("#region SelectByShortName").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("根据shortName,location 查询出{0}对象", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"shortName\">短名称</param>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"location\">实体</param>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("public AtsMsg<{0}> SelectByShortName(string shortName, string location)", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").Append("string[] args=new []{ shortName,location };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"selectByShortName\";").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<{0}>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("}").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            #region Insert
-            sb.AppendFormat("\t\t").AppendFormat("#region Insert").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("增加{0}方法", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"{0}\">{1}</param>", CodeGenHelper.StrFirstToLower(modelClass), string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("public AtsMsg<{0}> Insert({0} {1})", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string str = MsgHelper.Serializer<{0}>({1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").Append("string[] args=new []{ str };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"insert\";").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<{0}>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("}").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            #region Delete
-            sb.AppendFormat("\t\t").AppendFormat("#region Delete").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("删除{0}方法", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"{0}\">{1}</param>", CodeGenHelper.StrFirstToLower(modelClass), string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("public AtsMsg<{0}> Delete({0} {1})", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string str = MsgHelper.Serializer<{0}>({1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").Append("string[] args=new []{ str };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"delete\";").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<{0}>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("}").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            sb.AppendFormat("\r\n");
-            #endregion
-
-            #region Update
-            sb.AppendFormat("\t\t").AppendFormat("#region Update").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// ").AppendFormat("更新{0}方法", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// </summary>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <param name=\"{0}\">{1}</param>", CodeGenHelper.StrFirstToLower(modelClass), string.IsNullOrEmpty(tablecomments) ? className : EncodingHelper.ConvertEncoder(OriginalEncoding,
-                                                                                              TargetEncoding,
-                                                                                              tablecomments)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("/// <returns>AtsMsg对象</returns>").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("public AtsMsg<{0}> Update({0} {1})", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("{").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string str = MsgHelper.Serializer<{0}>({1});", modelClass, CodeGenHelper.StrFirstToLower(modelClass)).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").Append("string[] args=new []{ str };").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strURL = \"/ats/services/I{0}Service?wsdl\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strClassName = \"I{0}Service\";", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("string strMonthedName = \"update\";").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t\t").AppendFormat("return ServersHelper.GetResultMSG<{0}>(strURL, strClassName, strMonthedName,args);", modelClass).AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").Append("}").AppendFormat("\r\n");
-            sb.AppendFormat("\t\t").AppendFormat("#endregion").AppendFormat("\r\n");
-            #endregion
-
-            #endregion
-
-            sb.Append("\t}").AppendFormat("\r\n");
-            #endregion
-
-
-            sb.Append("}");
-            #endregion
 
             string title = className + ".cs";
 
             if (cmc.IsShowGenCode)
             {
-                CodeShow(title, sb.ToString());
+                CodeShow(title, str);
             }
             else
             {
-                FileHelper.Write(cmc.OutPut + title, new[] { sb.ToString() });
+                FileHelper.Write(cmc.OutPut + title, new[] { str });
             }
-
-            return sb.ToString();
         }
- 
         public GenCsharpDALWebService()
         {
             AddContextMenu();

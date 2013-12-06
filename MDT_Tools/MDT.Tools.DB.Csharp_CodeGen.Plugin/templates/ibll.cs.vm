@@ -1,0 +1,24 @@
+## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+#set($region="#")
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Ats.Foundation.Message;
+using Ats.YuKon.Common.Core;
+using ${idalNameSpace};
+using ${modelNameSpace};
+namespace ${bllNameSpace}
+{
+	/// <summary>
+	/// ${guiPluginName}业务接口
+	/// </summary>
+	/// <remarks>
+	/// $date: 创建. ${pluginName} <br/>
+	/// </remarks>
+	public interface I${guiPluginName}BLLService: IBaseBLLService
+	{
+	}
+}
