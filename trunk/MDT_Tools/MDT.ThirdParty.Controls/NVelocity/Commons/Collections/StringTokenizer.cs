@@ -1,68 +1,118 @@
-using System;
-using System.Collections;
+// Copyright 2004-2008 Castle Project - http://www.castleproject.org/
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-namespace Commons.Collections {
+namespace Commons.Collections
+{
+	using System;
+	using System.Collections.Generic;
 
-    public class StringTokenizer {
-	private System.Collections.ArrayList elements;
-	private string source;
-	//The tokenizer uses the default delimiter set: the space character, the tab character, the newline character, and the carriage-return character
-	private string delimiters = " \t\n\r";		
+    /// <summary>
+    /// 
+    /// </summary>
+	public class StringTokenizer
+	{
+		private List<string> elements;
+		private string source;
+		//The tokenizer uses the default delimiter set: the space character, the tab character, the newline character, and the carriage-return character
+		private string delimiters = " \t\n\r";
 
-	public StringTokenizer(string source) {			
-	    this.elements = new ArrayList();
-	    this.elements.AddRange(source.Split(this.delimiters.ToCharArray()));
-	    this.RemoveEmptyStrings();
-	    this.source = source;
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+		public StringTokenizer(string source)
+		{
+			elements = new List<string>();
+			elements.AddRange(source.Split(delimiters.ToCharArray()));
+			RemoveEmptyStrings();
+			this.source = source;
+		}
 
-	public StringTokenizer(string source, string delimiters) {
-	    this.elements = new ArrayList();
-	    this.delimiters = delimiters;
-	    this.elements.AddRange(source.Split(this.delimiters.ToCharArray()));
-	    this.RemoveEmptyStrings();
-	    this.source = source;
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="delimiters"></param>
+		public StringTokenizer(string source, string delimiters)
+		{
+			elements = new List<string>();
+			this.delimiters = delimiters;
+			elements.AddRange(source.Split(this.delimiters.ToCharArray()));
+			RemoveEmptyStrings();
+			this.source = source;
+		}
 
-	public int Count {
-	    get {
-		return (this.elements.Count);
-	    }
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+		public int Count
+		{
+			get { return (elements.Count); }
+		}
 
-	public bool HasMoreTokens() {
-	    return (this.elements.Count > 0);			
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+		public virtual bool HasMoreTokens()
+		{
+			return (elements.Count > 0);
+		}
 
-	public string NextToken() {			
-	    string result;
-	    if (source == "") {
-		throw new System.Exception();
-	    } else {
-		this.elements = new ArrayList();
-		this.elements.AddRange(this.source.Split(delimiters.ToCharArray()));
-		RemoveEmptyStrings();		
-		result = (string) this.elements[0];
-		this.elements.RemoveAt(0);				
-		this.source = this.source.Replace(result,"");
-		this.source = this.source.TrimStart(this.delimiters.ToCharArray());
-		return result;					
-	    }			
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+		public virtual string NextToken()
+		{
+			if (source == string.Empty)
+			{
+				throw new Exception();
+			}
+			else
+			{
+				elements = new List<string>();
+				elements.AddRange(source.Split(delimiters.ToCharArray()));
+				RemoveEmptyStrings();
+				string result = elements[0];
+				elements.RemoveAt(0);
+				source = source.Replace(result, string.Empty);
+				source = source.TrimStart(delimiters.ToCharArray());
+				return result;
+			}
+		}
 
-	public string NextToken(string delimiters) {
-	    this.delimiters = delimiters;
-	    return NextToken();
-	}
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="delimiters"></param>
+        /// <returns></returns>
+		public string NextToken(string delimiters)
+		{
+			this.delimiters = delimiters;
+			return NextToken();
+		}
 
-	private void RemoveEmptyStrings() {
-	    //VJ++ does not treat empty strings as tokens
-	    for (int index=0; index < this.elements.Count; index++)
-		if ((string)this.elements[index]== "") {
-		    this.elements.RemoveAt(index);
-		    index--;
+		private void RemoveEmptyStrings()
+		{
+			//VJ++ does not treat empty strings as tokens
+			for(int index = 0; index < elements.Count; index++)
+				if (elements[index] == string.Empty)
+				{
+					elements.RemoveAt(index);
+					index--;
+				}
 		}
 	}
-
-    }
 }
