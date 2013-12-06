@@ -15,8 +15,6 @@ namespace MDT.Tools.Core.Utils
         public NVelocityHelper(string path)
         {
             ExtendedProperties extendedProperties=new ExtendedProperties();
-            extendedProperties.AddProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
-            extendedProperties.AddProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
             extendedProperties.AddProperty(RuntimeConstants.RESOURCE_LOADER, "file"); ;
             extendedProperties.AddProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, path);
             Velocity.Init(extendedProperties);
