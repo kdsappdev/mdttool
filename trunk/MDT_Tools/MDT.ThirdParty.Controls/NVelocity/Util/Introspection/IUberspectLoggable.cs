@@ -19,25 +19,33 @@
 
 namespace NVelocity.Util.Introspection
 {
-    /// <summary>  Holds information for node-local context data introspection
-    /// information.
+    using Runtime;
+    using Runtime.Log;
+
+    /// <summary>  Marker interface to let an uberspector indicate it can and wants to
+    /// Log
+    /// 
+    /// Thanks to Paulo for the suggestion
     /// 
     /// </summary>
-    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// <author>  <a href="mailto:nbubna@apache.org">Nathan Bubna</a>
     /// </author>
-    /// <version>  $Id: IntrospectionCacheData.java 463298 2006-10-12 16:10:32Z henning $
+    /// <author>  <a href="mailto:geirm@apache.org">Geir Magnusson Jr.</a>
+    /// </author>
+    /// <version>  $Id: UberspectLoggable.java 463298 2006-10-12 16:10:32Z henning $
+    /// 
     /// </version>
-    public class IntrospectionCacheData
+    public interface IUberspectLoggable
     {
-        /// <summary>  Object to pair with class - currently either a Method or
-        /// AbstractExecutor. It can be used in any way the using node
-        /// wishes.
+        /// <summary> Sets the logger.  This will be called before any calls to the
+        /// uberspector
         /// </summary>
-        public object Thingy;
+        /// <param name="Log">
+        /// </param>
+        Log Log
+        {
+            set;
 
-        /// <summary>  Class of context data object associated with the introspection
-        /// information
-        /// </summary>
-        public System.Type ContextData;
+        }
     }
 }

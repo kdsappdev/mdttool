@@ -1,602 +1,322 @@
-using System;
-using System.Collections;
-using System.Reflection;
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
 
-namespace NVelocity.Util.Introspection {
-	
+namespace NVelocity.Util.Introspection
+{
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using System.Text;
+    using System.Linq;
+
+    using Runtime.Log;
+
     /// <summary> A cache of introspection information for a specific class instance.
-    /// Keys {@link java.lang.Method} objects by a concatenation of the
+    /// Keys {@link java.lang.reflect.Method} objects by a concatenation of the
     /// method name and the names of classes that make up the parameters.
+    /// 
     /// </summary>
-    public class ClassMap {
+    /// <author>  <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+    /// </author>
+    /// <author>  <a href="mailto:bob@werken.com">Bob McWhirter</a>
+    /// </author>
+    /// <author>  <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
+    /// </author>
+    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// </author>
+    /// <author>  <a href="mailto:henning@apache.org">Henning P. Schmiedehausen</a>
+    /// </author>
+    /// <author>  Nathan Bubna
+    /// </author>
+    /// <version>  $Id: ClassMap.java 698376 2008-09-23 22:15:49Z nbubna $
+    /// </version>
+    public class ClassMap
+    {
+        private static readonly string NULL_ARGS = "NULL_ARGS";
 
-	internal virtual System.Type CachedClass {
-	    get {
-		return clazz;
-	    }
-			
-	}
+        /// <summary> Returns the class object whose methods are cached by this map.
+        /// 
+        /// </summary>
+        /// <returns> The class object whose methods are cached by this map.
+        /// </returns>
+        public  System.Type CachedClass
+        {
+            get
+            {
+                return clazz;
+            }
 
-	private sealed class CacheMiss {
-	}
+        }
 
-	//UPGRADE_NOTE: Final was removed from the declaration of 'CACHE_MISS '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
-	private static CacheMiss CACHE_MISS = new CacheMiss();
-	//UPGRADE_NOTE: Final was removed from the declaration of 'OBJECT '. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1003"'
-	private static System.Object OBJECT = new System.Object();
-		
-	/// 
-	/// <summary> Class passed into the constructor used to as
-	/// the basis for the Method map.
-	/// </summary>
-	private System.Type clazz;
-		
-	/// <summary> Cache of Methods, or CACHE_MISS, keyed by method
-	/// name and actual arguments used to find it.
-	/// </summary>
-	private Hashtable methodCache = new System.Collections.Hashtable();
-	private Hashtable propertyCache = new System.Collections.Hashtable();
-	private MethodMap methodMap = new MethodMap();
-		
-	/// <summary> Standard constructor
-	/// </summary>
-	public ClassMap(System.Type clazz) {
-	    this.clazz = clazz;
-	    populateMethodCache();
-	    populatePropertyCache();
-	}
-		
-	public ClassMap() {
-	}
-		
-	/// <returns>the class object whose methods are cached by this map.
-	/// </returns>
-		
-	/// <summary> Find a Method using the methodKey
-	/// provided.
-	/// 
-	/// Look in the methodMap for an entry.  If found,
-	/// it'll either be a CACHE_MISS, in which case we
-	/// simply give up, or it'll be a Method, in which
-	/// case, we return it.
-	/// 
-	/// If nothing is found, then we must actually go
-	/// and introspect the method from the MethodMap.
-	/// </summary>
-	public virtual System.Reflection.MethodInfo findMethod(System.String name, System.Object[] params_Renamed) {
-	    System.String methodKey = makeMethodKey(name, params_Renamed);
-	    System.Object cacheEntry = methodCache[methodKey];
-			
-	    if (cacheEntry == CACHE_MISS) {
-		return null;
-	    }
-			
-	    if (cacheEntry == null) {
-		try {
-		    cacheEntry = methodMap.find(name, params_Renamed);
-		}
-		catch (AmbiguousException ae) {
-		    /*
-					*  that's a miss :)
-					*/
-					
-		    methodCache[methodKey] = CACHE_MISS;
-					
-		    throw ae;
-		}
-				
-		if (cacheEntry == null) {
-		    methodCache[methodKey] = CACHE_MISS;
-		}
-		else {
-		    methodCache[methodKey] = cacheEntry;
-		}
-	    }
-			
-	    // Yes, this might just be null.
-			
-	    return (System.Reflection.MethodInfo) cacheEntry;
-	}
+        /// <summary>Class logger </summary>
+        private Log log;
 
-	/// <summary> Find a Method using the methodKey
-	/// provided.
-	/// 
-	/// Look in the methodMap for an entry.  If found,
-	/// it'll either be a CACHE_MISS, in which case we
-	/// simply give up, or it'll be a Method, in which
-	/// case, we return it.
-	/// 
-	/// If nothing is found, then we must actually go
-	/// and introspect the method from the MethodMap.
-	/// </summary>
-	public virtual System.Reflection.PropertyInfo findProperty(System.String name) {
-	    System.Object cacheEntry = propertyCache[name];
-			
-	    if (cacheEntry == CACHE_MISS) {
-		return null;
-	    }
-			
-	    // Yes, this might just be null.
-	    return (System.Reflection.PropertyInfo) cacheEntry;
-	}
+        /// <summary> Class passed into the constructor used to as
+        /// the basis for the Method map.
+        /// </summary>
+        private System.Type clazz;
 
-		
-	/// <summary> Populate the Map of direct hits. These
-	/// are taken from all the public methods
-	/// that our class provides.
-	/// </summary>
-	private void  populateMethodCache() {
-	    System.Text.StringBuilder methodKey;
+        //private MethodCache methodCache;
 
-	    /*
-	    *  get all publicly accessible methods
-	    */
-	    System.Reflection.MethodInfo[] methods = getAccessibleMethods(clazz);
-			
-	    /*
-	    * map and cache them
-	    */
-	    for (int i = 0; i < methods.Length; i++) {
-		System.Reflection.MethodInfo method = methods[i];
-				
-		/*
-		*  now get the 'public method', the method declared by a 
-		*  public interface or class. (because the actual implementing
-		*  class may be a facade...
-		*/
-		System.Reflection.MethodInfo publicMethod = getPublicMethod(method);
-				
-		/*
-		*  it is entirely possible that there is no public method for
-		*  the methods of this class (i.e. in the facade, a method
-		*  that isn't on any of the interfaces or superclass
-		*  in which case, ignore it.  Otherwise, map and cache
-		*/
-		if (publicMethod != null) {
-		    methodMap.add(publicMethod);
-		    methodCache[makeMethodKey(publicMethod)] = publicMethod;
-		}
-	    }
-	}
+        private readonly Dictionary<string, PropertyEntry> propertyCache =
+            new Dictionary<string, PropertyEntry>(StringComparer.OrdinalIgnoreCase);
 
-	private void  populatePropertyCache() {
-	    System.Text.StringBuilder methodKey;
+        private readonly Dictionary<string, Dictionary<string, MethodEntry>> methodCache = new Dictionary<string, Dictionary<string, MethodEntry>>(StringComparer.OrdinalIgnoreCase);
 
-	    /*
-	    *  get all publicly accessible methods
-	    */
-	    System.Reflection.PropertyInfo[] properties = getAccessibleProperties(clazz);
-			
-	    /*
-	    * map and cache them
-	    */
-	    for (int i = 0; i < properties.Length; i++) {
-		System.Reflection.PropertyInfo property = properties[i];
-				
-		/*
-		*  now get the 'public method', the method declared by a 
-		*  public interface or class. (because the actual implementing
-		*  class may be a facade...
-		*/
-		System.Reflection.PropertyInfo publicProperty = getPublicProperty(property);
-				
-		/*
-		*  it is entirely possible that there is no public method for
-		*  the methods of this class (i.e. in the facade, a method
-		*  that isn't on any of the interfaces or superclass
-		*  in which case, ignore it.  Otherwise, map and cache
-		*/
-		if (publicProperty != null) {
-		    //propertyMap.add(publicProperty);
-		    propertyCache[publicProperty.Name] = publicProperty;
-		}
-	    }
-	}
+        /// <summary> Standard constructor</summary>
+        /// <param name="clazz">The class for which this ClassMap gets constructed.
+        /// </param>
+        public ClassMap(System.Type clazz, Log log)
+        {
+            this.clazz = clazz;
+            this.log = log;
 
-		
-	/// <summary> Make a methodKey for the given method using
-	/// the concatenation of the name and the
-	/// types of the method parameters.
-	/// </summary>
-	private System.String makeMethodKey(System.Reflection.MethodInfo method) {
-	    //UPGRADE_TODO: The equivalent in .NET for method 'java.lang.reflect.Method.getParameterTypes' may return a different value. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1043"'
-	    ParameterInfo[] parameterTypes = method.GetParameters();
-			
-	    System.Text.StringBuilder methodKey = new System.Text.StringBuilder(method.Name);
-			
-	    for (int j = 0; j < parameterTypes.Length; j++) {
-		/*
-		* If the argument type is primitive then we want
-		* to convert our primitive type signature to the 
-		* corresponding Object type so introspection for
-		* methods with primitive types will work correctly.
-		*/
+            CreatePropertyCache();
+            CreateMethodCache();
+        }
 
-// TODO:  I don't think that this is needed in .Net - boxing will happen and the types will still be available.		
+        private void CreatePropertyCache()
+        {
+            // Get all publicly accessible methods
+            IList<PropertyInfo> properties = GetAccessibleProperties(clazz);
 
-//		if (parameterTypes[j].GetType().IsPrimitive) {
-//		    if (parameterTypes[j].Equals(System.Type.GetType("System.Boolean")))
-//			methodKey.Append("java.lang.Boolean");
-//		    else if (parameterTypes[j].Equals(System.Type.GetType("System.Byte")))
-//			methodKey.Append("java.lang.Byte");
-//		    else if (parameterTypes[j].Equals(System.Type.GetType("System.Char")))
-//			methodKey.Append("java.lang.Character");
-//		    else if (parameterTypes[j].Equals(System.Type.GetType("System.Double")))
-//			methodKey.Append("java.lang.Double");
-//		    else if (parameterTypes[j].Equals(System.Type.GetType("System.Single")))
-//			methodKey.Append("java.lang.Float");
-//		    else {
-//			//UPGRADE_TODO: Field java.lang.Integer.TYPE was not converted. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1095"'
-//			if (parameterTypes[j].Equals(typeof(Int32)))
-//			    methodKey.Append("System.Int32");
-//			else {
-//			    //UPGRADE_TODO: Field java.lang.Long.TYPE was not converted. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1095"'
-//			    if (parameterTypes[j].Equals(typeof(Int64)))
-//				methodKey.Append("System.Int64");
-//			    else if (parameterTypes[j].Equals(System.Type.GetType("System.Int16")))
-//				methodKey.Append("System.Int16");
-//			}
-//		    }
-//		}
-//		else {
-//		    methodKey.Append(parameterTypes[j].FullName);
-//		}
-		methodKey.Append(parameterTypes[j].ParameterType.FullName);
-	    }
-			
-	    return methodKey.ToString();
-	}
-		
-	private static System.String makeMethodKey(System.String method, System.Object[] params_Renamed) {
-	    System.Text.StringBuilder methodKey = new System.Text.StringBuilder().Append(method);
-	
-	    if (params_Renamed != null) {
-		for (int j = 0; j < params_Renamed.Length; j++) {
-		    System.Object arg = params_Renamed[j];
-				
-		    if (arg == null) {
-			arg = OBJECT;
-		    }
-				
-		    methodKey.Append(arg.GetType().FullName);
-		}
-	    }
-			
-	    return methodKey.ToString();
-	}
-		
-	/// <summary> Retrieves public methods for a class. In case the class is not
-	/// public, retrieves methods with same signature as its public methods
-	/// from public superclasses and interfaces (if they exist). Basically
-	/// upcasts every method to the nearest acccessible method.
-	/// </summary>
-	private static System.Reflection.MethodInfo[] getAccessibleMethods(System.Type clazz) {
-	    System.Reflection.MethodInfo[] methods = clazz.GetMethods();
+            // map and cache them
+            foreach (PropertyInfo property in properties)
+            {
+                try
+                {
+                    propertyCache[property.Name] = new PropertyEntry(property);
+                }
+                catch
+                {
 
+                }
+            }
+        }
 
-	    // TODO:  the rest of this method is trying to determine what is supposed to be callable - I think .Net just returns what is callable
-	    return methods;
-			
-	    /*
-	    *  Short circuit for the (hopefully) majority of cases where the
-	    *  clazz is public
-	    */
-			
-	    //UPGRADE_TODO: Method java.lang.reflect.Modifier.isPublic was not converted. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1095"'
-	    //UPGRADE_ISSUE: Method 'java.lang.Class.getModifiers' was not converted. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1000_javalangClassgetModifiers"'
-	    if (clazz.IsPublic) {
-		return methods;
-	    }
-			
-	    /*
-	    *  No luck - the class is not public, so we're going the longer way.
-	    */
-			
-	    MethodInfo[] methodInfos = new MethodInfo[methods.Length];
-			
-	    for (int i = methods.Length; i-- > 0; ) {
-		methodInfos[i] = new MethodInfo(methods[i]);
-	    }
-			
-	    int upcastCount = getAccessibleMethods(clazz, methodInfos, 0);
-			
-	    /*
-	    *  Reallocate array in case some method had no accessible counterpart.
-	    */
-			
-	    if (upcastCount < methods.Length) {
-		methods = new System.Reflection.MethodInfo[upcastCount];
-	    }
-			
-	    int j = 0;
-	    for (int i = 0; i < methodInfos.Length; ++i) {
-		MethodInfo methodInfo = methodInfos[i];
-		if (methodInfo.upcast) {
-		    methods[j++] = methodInfo.method;
-		}
-	    }
-	    return methods;
-	}
+        private void CreateMethodCache()
+        {
+            // Get all publicly accessible methods
+            IList<MethodInfo> methods = GetAccessibleMethods(clazz);
 
-	private static System.Reflection.PropertyInfo[] getAccessibleProperties(System.Type clazz) {
-	    System.Reflection.PropertyInfo[] properties = clazz.GetProperties();
+            // map and cache them
+            foreach (MethodInfo method in methods)
+            {
+                if (!method.IsGenericMethod)
+                {
+                    string methodName = method.Name;
 
-	    //TODO
-	    return properties;
-			
-	    /*
-	    *  Short circuit for the (hopefully) majority of cases where the
-	    *  clazz is public
-	    */
-	    if (clazz.IsPublic) {
-		return properties;
-	    }
-			
-	    /*
-	    *  No luck - the class is not public, so we're going the longer way.
-	    */
+                    if (methodCache.ContainsKey(methodName))
+                    {
+                        Dictionary<string, MethodEntry> methodInofs = methodCache[methodName];
 
-properties = new System.Reflection.PropertyInfo[0];
-return properties;
+                        if (methodInofs == null)
+                        {
+                            methodInofs = new Dictionary<string, MethodEntry>();
+                        }
 
-// TODO			
-//	    MethodInfo[] methodInfos = new MethodInfo[methods.Length];
-//			
-//	    for (int i = methods.Length; i-- > 0; ) {
-//		methodInfos[i] = new MethodInfo(methods[i]);
-//	    }
-//			
-//	    int upcastCount = getAccessibleMethods(clazz, methodInfos, 0);
-//			
-//	    /*
-//	    *  Reallocate array in case some method had no accessible counterpart.
-//	    */
-//			
-//	    if (upcastCount < methods.Length) {
-//		methods = new System.Reflection.MethodInfo[upcastCount];
-//	    }
-//			
-//	    int j = 0;
-//	    for (int i = 0; i < methodInfos.Length; ++i) {
-//		MethodInfo methodInfo = methodInfos[i];
-//		if (methodInfo.upcast) {
-//		    methods[j++] = methodInfo.method;
-//		}
-//	    }
-//	    return methods;
-	}
+                        try
+                        {
+                            methodInofs[MakeMethodKey(method)] = new MethodEntry(method);
+                        }
+                        catch
+                        {
 
-		
-	/// <summary>
-	/// Recursively finds a match for each method, starting with the class, and then
-	/// searching the superclass and interfaces.
-	/// </summary>
-	/// <param name="clazz">Class to check</param>
-	/// <param name="methodInfos">array of methods we are searching to match</param>
-	/// <param name="upcastCount">current number of methods we have matched</param>
-	/// <returns>count of matched methods</returns>
-	private static int getAccessibleMethods(System.Type clazz, MethodInfo[] methodInfos, int upcastCount) {
-	    int l = methodInfos.Length;
-			
-	    /*
-	    *  if this class is public, then check each of the currently
-	    *  'non-upcasted' methods to see if we have a match
-	    */
-			
-	    //UPGRADE_TODO: Method java.lang.reflect.Modifier.isPublic was not converted. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1095"'
-	    //UPGRADE_ISSUE: Method 'java.lang.Class.getModifiers' was not converted. 'ms-help://MS.VSCC/commoner/redir/redirect.htm?keyword="jlca1000_javalangClassgetModifiers"'
-	    if (clazz.IsPublic) {
-		for (int i = 0; i < l && upcastCount < l; ++i) {
-		    try {
-			MethodInfo methodInfo = methodInfos[i];
-						
-			if (!methodInfo.upcast) {
-			    methodInfo.tryUpcasting(clazz);
-			    upcastCount++;
-			}
-		    }
-		    catch (System.MethodAccessException e) {
-			/*
-			*  Intentionally ignored - it means
-			*  it wasn't found in the current class
-			*/
-		    }
-		}
-				
-		/*
-		*  Short circuit if all methods were upcast
-		*/
-				
-		if (upcastCount == l) {
-		    return upcastCount;
-		}
-	    }
-			
-	    /*
-	    *   Examine superclass
-	    */
-			
-	    System.Type superclazz = clazz.BaseType;
-			
-	    if (superclazz != null) {
-		upcastCount = getAccessibleMethods(superclazz, methodInfos, upcastCount);
-				
-		/*
-		*  Short circuit if all methods were upcast
-		*/
-				
-		if (upcastCount == l) {
-		    return upcastCount;
-		}
-	    }
-			
-	    /*
-	    *  Examine interfaces. Note we do it even if superclazz == null.
-	    *  This is redundant as currently java.lang.Object does not implement
-	    *  any interfaces, however nothing guarantees it will not in future.
-	    */
-			
-	    System.Type[] interfaces = clazz.GetInterfaces();
-			
-	    for (int i = interfaces.Length; i-- > 0; ) {
-		upcastCount = getAccessibleMethods(interfaces[i], methodInfos, upcastCount);
-				
-		/*
-		*  Short circuit if all methods were upcast
-		*/
-				
-		if (upcastCount == l) {
-		    return upcastCount;
-		}
-	    }
-			
-	    return upcastCount;
-	}
-		
-	/// <summary>  For a given method, retrieves its publicly accessible counterpart. 
-	/// This method will look for a method with same name
-	/// and signature declared in a public superclass or implemented interface of this 
-	/// method's declaring class. This counterpart method is publicly callable.
-	/// </summary>
-	/// <param name="method">a method whose publicly callable counterpart is requested.
-	/// </param>
-	/// <returns>the publicly callable counterpart method. Note that if the parameter
-	/// method is itself declared by a public class, this method is an identity
-	/// function.
-	/// </returns>
-	public static System.Reflection.MethodInfo getPublicMethod(System.Reflection.MethodInfo method) {
-	    System.Type clazz = method.DeclaringType;
-	    
-	    //TODO see other todo messages in this class
-	    return method;
-			
-	    /*
-	    *   Short circuit for (hopefully the majority of) cases where the declaring
-	    *   class is public.
-	    */
-			
-	    if (clazz.IsPublic) {
-		return method;
-	    }
-			
-	    return getPublicMethod(clazz, method.Name, GetMethodParameterTypes(method));
-	}
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            Dictionary<string, MethodEntry> methodInofs = new Dictionary<string, MethodEntry>(StringComparer.OrdinalIgnoreCase);
+                            methodInofs[MakeMethodKey(method)] = new MethodEntry(method);
+                            methodCache[methodName] = methodInofs;
+                        }
+                        catch
+                        {
 
-	public static System.Reflection.PropertyInfo getPublicProperty(System.Reflection.PropertyInfo property) {
-	    System.Type clazz = property.DeclaringType;
+                        }
+                    }
+                }
+            }
+        }
 
-	    // TODO:
-	    return property;
-			
-	    /*
-	    *   Short circuit for (hopefully the majority of) cases where the declaring
-	    *   class is public.
-	    */
-	    if (clazz.IsPublic) {
-		return property;
-	    }
-	
+        private static IList<PropertyInfo> GetAccessibleProperties(Type type)
+        {
+            List<PropertyInfo> props = new List<PropertyInfo>();
 
-//TODO
-return null;
-//	    return getPublicMethod(clazz, method.Name, GetMethodParameterTypes(method));
-	}
+            foreach (Type interfaceType in type.GetInterfaces())
+            {
+                props.AddRange(interfaceType.GetProperties());
+            }
 
-		
-	/// <summary>  Looks up the method with specified name and signature in the first public
-	/// superclass or implemented interface of the class. 
-	/// </summary>
-	/// <param name="class">the class whose method is sought
-	/// </param>
-	/// <param name="name">the name of the method
-	/// </param>
-	/// <param name="paramTypes">the classes of method parameters
-	/// </param>
-	private static System.Reflection.MethodInfo getPublicMethod(System.Type clazz, System.String name, System.Type[] paramTypes) {
-	    /*
-	    *  if this class is public, then try to get it
-	    */
-			
-	    if (clazz.IsPublic) {
-		try {
-		    return clazz.GetMethod(name, (System.Type[]) paramTypes);
-		}
-		catch (System.MethodAccessException e) {
-		    /*
-		    *  If the class does not have the method, then neither its
-		    *  superclass nor any of its interfaces has it so quickly return
-		    *  null.
-		    */
-		    return null;
-		}
-	    }
-			
-	    /*
-	    *  try the superclass
-	    */
-			
-			
-	    System.Type superclazz = clazz.BaseType;
-			
-	    if (superclazz != null) {
-		System.Reflection.MethodInfo superclazzMethod = getPublicMethod(superclazz, name, paramTypes);
-				
-		if (superclazzMethod != null) {
-		    return superclazzMethod;
-		}
-	    }
-			
-	    /*
-	    *  and interfaces
-	    */
-			
-	    System.Type[] interfaces = clazz.GetInterfaces();
-			
-	    for (int i = 0; i < interfaces.Length; ++i) {
-		System.Reflection.MethodInfo interfaceMethod = getPublicMethod(interfaces[i], name, paramTypes);
-				
-		if (interfaceMethod != null) {
-		    return interfaceMethod;
-		}
-	    }
-			
-	    return null;
-	}
-		
-	/// <summary>  Used for the iterative discovery process for public methods.
-	/// </summary>
-	private sealed class MethodInfo {
-	    internal System.Reflection.MethodInfo method;
-	    internal System.String name;
-	    internal System.Type[] parameterTypes;
-	    internal bool upcast;
-			
-	    internal MethodInfo(System.Reflection.MethodInfo method) {
-		this.method = null;
-		name = method.Name;
-		parameterTypes = GetMethodParameterTypes(method);
-		upcast = false;
-	    }
-			
-	    internal void  tryUpcasting(System.Type clazz) {
-		method = clazz.GetMethod(name, (System.Type[]) parameterTypes);
-		name = null;
-		parameterTypes = null;
-		upcast = true;
-	    }
-	}
+            props.AddRange(type.GetProperties());
 
-	private static System.Type[] GetMethodParameterTypes(System.Reflection.MethodInfo method) {
-	    ParameterInfo[] parms = method.GetParameters();
-	    Type[] types  = new Type[parms.Length];
+            return props;
+        }
 
-	    for (Int32 i = 0; i<parms.Length; i++) {
-		types[i] = parms[i].ParameterType;
-	    }
+        private static IList<MethodInfo> GetAccessibleMethods(Type type)
+        {
+            List<MethodInfo> methods = new List<MethodInfo>();
 
-	    return types;
-	}
+            foreach (Type interfaceType in type.GetInterfaces())
+            {
+                methods.AddRange(interfaceType.GetMethods());
+            }
 
+            methods.AddRange(type.GetMethods());
 
+            return methods;
+        }
+
+        private static string MakeMethodKey(MethodInfo method)
+        {
+            StringBuilder methodKey = new StringBuilder();
+
+            ParameterInfo[] parameters = method.GetParameters();
+
+            if (parameters == null || parameters.Length == 0)
+            {
+                methodKey.Append(NULL_ARGS);
+            }
+            else
+            {
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    methodKey.Append(parameters[i].ParameterType.FullName);
+
+                    if (i < parameters.Length - 1)
+                    {
+                        methodKey.Append(",");
+                    }
+                }
+            }
+
+            return methodKey.ToString();
+        }
+
+        private static string MakeMethodKey(object[] parameters)
+        {
+            StringBuilder methodKey = new StringBuilder();
+
+            if (parameters == null || parameters.Length == 0)
+            {
+                methodKey.Append(NULL_ARGS);
+            }
+            else
+            {
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    methodKey.Append(parameters[i].GetType().FullName);
+
+                    if (i < parameters.Length - 1)
+                    {
+                        methodKey.Append(",");
+                    }
+                }
+            }
+
+            return methodKey.ToString();
+        }
+
+        private static bool IsMatchType(string src, string dest)
+        {
+            if (src.Equals(dest, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            else if (dest.Equals("System.Object", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary> Find a Method using the method name and parameter objects.
+        /// 
+        /// </summary>
+        /// <param name="name">The method name to look up.
+        /// </param>
+        /// <param name="params">An array of parameters for the method.
+        /// </param>
+        /// <returns> A Method object representing the method to invoke or null.
+        /// </returns>
+        /// <throws>  MethodMap.AmbiguousException When more than one method is a match for the parameters. </throws>
+        public  MethodEntry FindMethod(string name, object[] parameters)
+        {
+            Dictionary<string, MethodEntry> methodEntry = null;
+            methodCache.TryGetValue(name, out methodEntry);
+
+            if (methodEntry == null || methodEntry.Count == 0)
+            {
+                return null;
+            }
+
+            if (methodEntry.Count == 1)
+            {
+                return methodEntry.Values.ToArray()[0];
+            }
+
+            string methodKey = MakeMethodKey(parameters);
+
+            if (methodEntry.ContainsKey(methodKey))
+            {
+                return methodEntry[methodKey];
+            }
+
+            foreach (string key in methodEntry.Keys)
+            {
+                string[] srcArgs = methodKey.Split(',');
+                string[] targetArgs = key.Split(',');
+
+                if (srcArgs.Length == targetArgs.Length)
+                {
+                    bool isMatch = true;
+
+                    for (int i = 0; i < srcArgs.Length; i++)
+                    {
+                        isMatch &= IsMatchType(srcArgs[i], targetArgs[i]);
+                    }
+
+                    if (isMatch)
+                    {
+                        return methodEntry[key];
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public  PropertyEntry FindProperty(string name)
+        {
+            PropertyEntry entry = null;
+
+            propertyCache.TryGetValue(name, out entry);
+
+            return entry;
+        }
     }
 }
