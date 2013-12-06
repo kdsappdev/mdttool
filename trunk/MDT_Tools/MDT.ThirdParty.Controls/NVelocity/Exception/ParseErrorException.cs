@@ -1,78 +1,235 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
+
 namespace NVelocity.Exception
 {
-	using System;
-	
-	/*
-	* The Apache Software License, Version 1.1
-	*
-	* Copyright (c) 2001 The Apache Software Foundation.  All rights
-	* reserved.
-	*
-	* Redistribution and use in source and binary forms, with or without
-	* modification, are permitted provided that the following conditions
-	* are met:
-	*
-	* 1. Redistributions of source code must retain the above copyright
-	*    notice, this list of conditions and the following disclaimer.
-	*
-	* 2. Redistributions in binary form must reproduce the above copyright
-	*    notice, this list of conditions and the following disclaimer in
-	*    the documentation and/or other materials provided with the
-	*    distribution.
-	*
-	* 3. The end-user documentation included with the redistribution, if
-	*    any, must include the following acknowlegement:
-	*       "This product includes software developed by the
-	*        Apache Software Foundation (http://www.apache.org/)."
-	*    Alternately, this acknowlegement may appear in the software itself,
-	*    if and wherever such third-party acknowlegements normally appear.
-	*
-	* 4. The names "The Jakarta Project", "Velocity", and "Apache Software
-	*    Foundation" must not be used to endorse or promote products derived
-	*    from this software without prior written permission. For written
-	*    permission, please contact apache@apache.org.
-	*
-	* 5. Products derived from this software may not be called "Apache"
-	*    nor may "Apache" appear in their names without prior written
-	*    permission of the Apache Group.
-	*
-	* THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
-	* WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
-	* OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	* DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
-	* ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-	* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-	* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
-	* USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-	* ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-	* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
-	* OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-	* SUCH DAMAGE.
-	* ====================================================================
-	*
-	* This software consists of voluntary contributions made by many
-	* individuals on behalf of the Apache Software Foundation.  For more
-	* information on the Apache Software Foundation, please see
-	* <http://www.apache.org/>.
-	*/
-	
-	/// <summary>  Application-level exception thrown when a resource of any type
-	/// has a syntax or other error which prevents it from being parsed.
-	/// <br>
-	/// When this resource is thrown, a best effort will be made to have
-	/// useful information in the exception's message.  For complete 
-	/// information, consult the runtime log.
-	/// *
-	/// </summary>
-	/// <author> <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-	/// </author>
-	/// <version> $Id: ParseErrorException.cs,v 1.2 2002/07/30 07:26:49 corts Exp $
-	/// 
-	/// </version>
-	public class ParseErrorException:VelocityException
-	{
-		public ParseErrorException(System.String exceptionMessage):base(exceptionMessage)
-		{
-		}
-	}
+    using System;
+
+    using Runtime.Parser;
+    using Util.Introspection;
+
+    /// <summary>  Application-level exception thrown when a resource of any type
+    /// has a syntax or other Error which prevents it from being parsed.
+    /// <br>
+    /// When this resource is thrown, a best effort will be made to have
+    /// useful information in the exception's message.  For complete
+    /// information, consult the runtime Log.
+    /// 
+    /// </summary>
+    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// </author>
+    /// <author>  <a href="hps@intermeta.de">Henning P. Schmiedehausen</a>
+    /// </author>
+    /// <version>  $Id: ParseErrorException.java 685685 2008-08-13 21:43:27Z nbubna $
+    /// </version>
+    [Serializable]
+    public class ParseErrorException : VelocityException
+    {
+        /// <summary> Return the column number of the parsing Error, or -1 if not defined.
+        /// 
+        /// </summary>
+        /// <returns> column number of the parsing Error, or -1 if not defined
+        /// </returns>
+        /// <since> 1.5
+        /// </since>
+        virtual public int ColumnNumber
+        {
+            get
+            {
+                return columnNumber;
+            }
+
+        }
+        /// <summary> Return the line number of the parsing Error, or -1 if not defined.
+        /// 
+        /// </summary>
+        /// <returns> line number of the parsing Error, or -1 if not defined
+        /// </returns>
+        /// <since> 1.5
+        /// </since>
+        virtual public int LineNumber
+        {
+            get
+            {
+                return lineNumber;
+            }
+
+        }
+        /// <summary> Return the name of the template containing the Error, or null if not
+        /// defined.
+        /// 
+        /// </summary>
+        /// <returns> the name of the template containing the parsing Error, or null
+        /// if not defined
+        /// </returns>
+        /// <since> 1.5
+        /// </since>
+        virtual public string TemplateName
+        {
+            get
+            {
+                return templateName;
+            }
+
+        }
+        /// <summary> Return the invalid syntax or reference that triggered this Error, or null
+        /// if not defined.
+        /// 
+        /// </summary>
+        /// <returns> Return the invalid syntax or reference that triggered this Error, or null
+        /// if not defined
+        /// </returns>
+        /// <since> 1.5
+        /// </since>
+        virtual public string InvalidSyntax
+        {
+            get
+            {
+                return invalidSyntax;
+            }
+
+        }
+
+        /// <summary> The column number of the parsing Error, or -1 if not defined.</summary>
+        private int columnNumber = -1;
+
+        /// <summary> The line number of the parsing Error, or -1 if not defined.</summary>
+        private int lineNumber = -1;
+
+        /// <summary> The name of the template containing the Error, or null if not defined.</summary>
+        private string templateName = "*unset*";
+
+        /// <summary> If applicable, contains the invalid syntax or reference that triggered this exception</summary>
+        private string invalidSyntax;
+
+        /// <summary> Create a ParseErrorException with the given message.
+        /// 
+        /// </summary>
+        /// <param name="exceptionMessage">the Error exception message
+        /// </param>
+        public ParseErrorException(string exceptionMessage)
+            : base(exceptionMessage)
+        {
+        }
+
+        /// <summary> Create a ParseErrorException with the given ParseException.
+        /// 
+        /// </summary>
+        /// <param name="pex">the parsing exception
+        /// </param>
+        /// <since> 1.5
+        /// </since>
+        public ParseErrorException(ParseException pex)
+            : base(pex.Message)
+        {
+
+            // Don't use a second C'tor, TemplateParseException is a subclass of
+            // ParseException...
+            if (pex is IExtendedParseException)
+            {
+                IExtendedParseException xpex = (IExtendedParseException)pex;
+
+                columnNumber = xpex.ColumnNumber;
+                lineNumber = xpex.LineNumber;
+                templateName = xpex.TemplateName;
+            }
+            else
+            {
+                //  ugly, ugly, ugly...
+
+                if (pex.currentToken != null && pex.currentToken.Next != null)
+                {
+                    columnNumber = pex.currentToken.Next.BeginColumn;
+                    lineNumber = pex.currentToken.Next.BeginLine;
+                }
+            }
+        }
+
+        /// <summary> Create a ParseErrorException with the given ParseException.
+        /// 
+        /// </summary>
+        /// <param name="pex">the parsing exception
+        /// </param>
+        /// <since> 1.5
+        /// </since>
+        public ParseErrorException(VelocityException pex)
+            : base(pex.Message)
+        {
+
+            // Don't use a second C'tor, TemplateParseException is a subclass of
+            // ParseException...
+            if (pex is IExtendedParseException)
+            {
+                IExtendedParseException xpex = (IExtendedParseException)pex;
+
+                columnNumber = xpex.ColumnNumber;
+                lineNumber = xpex.LineNumber;
+                templateName = xpex.TemplateName;
+            }
+            else if (pex.GetType().Equals(typeof(ParseException)))
+            {
+                ParseException pex2 = (ParseException)pex.InnerException;
+
+                if (pex2.currentToken != null && pex2.currentToken.Next != null)
+                {
+                    columnNumber = pex2.currentToken.Next.BeginColumn;
+                    lineNumber = pex2.currentToken.Next.BeginLine;
+                }
+            }
+        }
+
+
+        /// <summary> Create a ParseErrorRuntimeException with the given message and Info
+        /// 
+        /// </summary>
+        /// <param name="exceptionMessage">the Error exception message
+        /// </param>
+        /// <param name="Info">an Info object with the current template Info
+        /// </param>
+        /// <since> 1.5
+        /// </since>
+        public ParseErrorException(string exceptionMessage, Info info)
+            : base(exceptionMessage)
+        {
+            columnNumber = info.Column;
+            lineNumber = info.Line;
+            templateName = info.TemplateName;
+        }
+
+        /// <summary> Create a ParseErrorRuntimeException with the given message and Info
+        /// 
+        /// </summary>
+        /// <param name="exceptionMessage">the Error exception message
+        /// </param>
+        /// <param name="Info">an Info object with the current template Info
+        /// </param>
+        /// <param name="invalidSyntax">the invalid syntax or reference triggering this exception
+        /// </param>
+        /// <since> 1.5
+        /// </since>
+        public ParseErrorException(string exceptionMessage, Info info, string invalidSyntax)
+            : base(exceptionMessage)
+        {
+            columnNumber = info.Column;
+            lineNumber = info.Line;
+            templateName = info.TemplateName;
+            this.invalidSyntax = invalidSyntax;
+        }
+    }
 }
