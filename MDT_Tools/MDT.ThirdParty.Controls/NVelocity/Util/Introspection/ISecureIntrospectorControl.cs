@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -19,25 +19,30 @@
 
 namespace NVelocity.Util.Introspection
 {
-    /// <summary>  Holds information for node-local context data introspection
-    /// information.
+    using System;
+
+    /// <summary> Interface used to determine which methods are allowed to be executed.
     /// 
     /// </summary>
-    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// <author>  <a href="Will Glass-Husain">wglass@forio.com</a>
     /// </author>
-    /// <version>  $Id: IntrospectionCacheData.java 463298 2006-10-12 16:10:32Z henning $
+    /// <version>  $Id: SecureIntrospectorControl.java 685685 2008-08-13 21:43:27Z nbubna $
     /// </version>
-    public class IntrospectionCacheData
+    /// <since> 1.5
+    /// </since>
+    public interface ISecureIntrospectorControl
     {
-        /// <summary>  Object to pair with class - currently either a Method or
-        /// AbstractExecutor. It can be used in any way the using node
-        /// wishes.
-        /// </summary>
-        public object Thingy;
 
-        /// <summary>  Class of context data object associated with the introspection
-        /// information
+        /// <summary> Determine which methods and classes to prevent from executing.  
+        /// 
         /// </summary>
-        public System.Type ContextData;
+        /// <param name="clazz">Class for which method is being called
+        /// </param>
+        /// <param name="method">method being called.  This may be null in the case of a call to iterator, Get, or set method
+        /// 
+        /// </param>
+        /// <returns> true if method may be called on object
+        /// </returns>
+        bool CheckObjectExecutePermission(Type clazz, string method);
     }
 }

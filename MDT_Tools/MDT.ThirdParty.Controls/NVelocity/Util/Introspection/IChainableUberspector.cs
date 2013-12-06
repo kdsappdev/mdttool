@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -19,25 +19,21 @@
 
 namespace NVelocity.Util.Introspection
 {
-    /// <summary>  Holds information for node-local context data introspection
-    /// information.
+    /// <summary> Interface that marks uberspectors as chainable, meaning that multiple uberspectors can be
+    /// combined in a chain (using the Decorator pattern).
     /// 
     /// </summary>
-    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
-    /// </author>
-    /// <version>  $Id: IntrospectionCacheData.java 463298 2006-10-12 16:10:32Z henning $
+    /// <version>  $Id: $
     /// </version>
-    public class IntrospectionCacheData
+    /// <since> 1.6
+    /// </since>
+    public interface IChainableUberspector : IUberspect
     {
-        /// <summary>  Object to pair with class - currently either a Method or
-        /// AbstractExecutor. It can be used in any way the using node
-        /// wishes.
+        /// <summary> Specify the decorated Uberspector
+        /// 
         /// </summary>
-        public object Thingy;
-
-        /// <summary>  Class of context data object associated with the introspection
-        /// information
-        /// </summary>
-        public System.Type ContextData;
+        /// <param name="inner">The decorated uberspector.
+        /// </param>
+        void Wrap(IUberspect inner);
     }
 }

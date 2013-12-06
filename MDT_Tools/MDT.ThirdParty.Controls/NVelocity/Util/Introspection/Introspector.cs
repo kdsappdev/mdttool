@@ -1,13 +1,34 @@
-using System;
-using NVelocity.Runtime;
+/*
+* Licensed to the Apache Software Foundation (ASF) under one
+* or more contributor license agreements.  See the NOTICE file
+* distributed with this work for additional information
+* regarding copyright ownership.  The ASF licenses this file
+* to you under the Apache License, Version 2.0 (the
+* "License"); you may not use this file except in compliance
+* with the License.  You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing,
+* software distributed under the License is distributed on an
+* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+* KIND, either express or implied.  See the License for the
+* specific language governing permissions and limitations
+* under the License.    
+*/
 
-namespace NVelocity.Util.Introspection {
-	
+namespace NVelocity.Util.Introspection
+{
+    using System.Reflection;
+
+    using Runtime;
+    using Runtime.Log;
+
     /// <summary> This basic function of this class is to return a Method
     /// object for a particular class given the name of a method
     /// and the parameters to the method in the form of an Object[]
     /// 
-    /// The first time the Introspector sees a 
+    /// The first time the Introspector sees a
     /// class it creates a class method map for the
     /// class in question. Basically the class method map
     /// is a Hastable where Method objects are keyed by a
@@ -23,104 +44,83 @@ namespace NVelocity.Util.Introspection {
     /// "method" + "java.lang.String" + "java.lang.StringBuffer"
     /// 
     /// This mapping is performed for all the methods in a class
-    /// and stored for 
+    /// and stored for
     /// </summary>
-    public class Introspector:IntrospectorBase {
-	/// <summary>  define a public string so that it can be looked for
-	/// if interested
-	/// </summary>
-		
-	public const System.String CACHEDUMP_MSG = "Introspector : detected classloader change. Dumping cache.";
-		
-	/// <summary>  our engine runtime services
-	/// </summary>
-	private RuntimeServices rsvc = null;
-			
-	/// <summary>  Recieves our RuntimeServices object
-	/// </summary>
-	public Introspector(RuntimeServices r) {
-	    this.rsvc = r;
-	}
-		
-	/// <summary> Gets the method defined by <code>name</code> and
-	/// <code>params</code> for the Class <code>c</code>.
-	/// </summary>
-	/// <param name="c">Class in which the method search is taking place
-	/// </param>
-	/// <param name="name">Name of the method being searched for
-	/// </param>
-	/// <param name="params">An array of Objects (not Classes) that describe the
-	/// the parameters
-	/// </param>
-	/// <returns>The desired Method object.
-	/// </returns>
-	public override System.Reflection.MethodInfo getMethod(System.Type c, System.String name, System.Object[] params_Renamed) {
-	    /*
-	    *  just delegate to the base class
-	    */
-			
-	    try {
-		return base.getMethod(c, name, params_Renamed);
-	    } catch (AmbiguousException ae) {
-		/*
-		*  whoops.  Ambiguous.  Make a nice log message and return null...
-		*/
-				
-		System.String msg = "Introspection Error : Ambiguous method invocation " + name + "( ";
-				
-		for (int i = 0; i < params_Renamed.Length; i++) {
-		    if (i > 0)
-			msg = msg + ", ";
-					
-		    msg = msg + params_Renamed[i].GetType().FullName;
-		}
-				
-		msg = msg + ") for class " + c;
-				
-		rsvc.error(msg);
-	    }
-			
-	    return null;
-	}
+    /// <author>  <a href="mailto:jvanzyl@apache.org">Jason van Zyl</a>
+    /// </author>
+    /// <author>  <a href="mailto:bob@werken.com">Bob McWhirter</a>
+    /// </author>
+    /// <author>  <a href="mailto:szegedia@freemail.hu">Attila Szegedi</a>
+    /// </author>
+    /// <author>  <a href="mailto:paulo.gaspar@krankikom.de">Paulo Gaspar</a>
+    /// </author>
+    /// <author>  <a href="mailto:henning@apache.org">Henning P. Schmiedehausen</a>
+    /// </author>
+    /// <version>  $Id: Introspector.java 687177 2008-08-19 22:00:32Z nbubna $
+    /// </version>
+    public class Introspector : IntrospectorBase
+    {
+        /// <param name="Log">A LogMessage object to use for the introspector.
+        /// </param>
+        /// <since> 1.5
+        /// </since>
+        public Introspector(Log log)
+            : base(log)
+        {
+        }
 
-	/// <summary> Gets the method defined by <code>name</code> and
-	/// <code>params</code> for the Class <code>c</code>.
-	/// </summary>
-	/// <param name="c">Class in which the method search is taking place
-	/// </param>
-	/// <param name="name">Name of the method being searched for
-	/// </param>
-	/// <param name="params">An array of Objects (not Classes) that describe the
-	/// the parameters
-	/// </param>
-	/// <returns>The desired Method object.
-	/// </returns>
-	public override System.Reflection.PropertyInfo getProperty(System.Type c, System.String name) {
-	    /*
-	    *  just delegate to the base class
-	    */
-			
-	    try {
-		return base.getProperty(c, name);
-	    } catch (AmbiguousException ae) {
-		/*
-		*  whoops.  Ambiguous.  Make a nice log message and return null...
-		*/
-				
-		System.String msg = "Introspection Error : Ambiguous property invocation " + name + " ";
-		msg = msg + " for class " + c;
-		rsvc.error(msg);
-	    }
-	    return null;
-	}
+        /// <summary> Gets the method defined by <code>name</code> and
+        /// <code>params</code> for the Class <code>c</code>.
+        /// 
+        /// </summary>
+        /// <param name="c">Class in which the method search is taking place
+        /// </param>
+        /// <param name="name">Name of the method being searched for
+        /// </param>
+        /// <param name="params">An array of Objects (not Classes) that describe the
+        /// the parameters
+        /// 
+        /// </param>
+        /// <returns> The desired Method object.
+        /// </returns>
+        /// <throws>  IllegalArgumentException When the parameters passed in can not be used for introspection. </throws>
+        public override MethodEntry GetMethod(System.Type c, string name, object[] params_Renamed)
+        {
+            try
+            {
+                return base.GetMethod(c, name, params_Renamed);
+            }
+            catch (MethodMap.AmbiguousException)
+            {
+                /*
+                *  whoops.  Ambiguous.  Make a nice Log message and return null...
+                */
 
-		
-	/// <summary> Clears the classmap and classname
-	/// caches, and logs that we did so
-	/// </summary>
-	protected internal override void  clearCache() {
-	    base.clearCache();
-	    rsvc.info(CACHEDUMP_MSG);
-	}
+                System.Text.StringBuilder msg = new System.Text.StringBuilder("Introspection Error : Ambiguous method invocation ").Append(name).Append("(");
+
+                for (int i = 0; i < params_Renamed.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        msg.Append(", ");
+                    }
+
+                    if (params_Renamed[i] == null)
+                    {
+                        msg.Append("null");
+                    }
+                    else
+                    {
+                        msg.Append(params_Renamed[i].GetType().FullName);
+                    }
+                }
+
+                msg.Append(") for class ").Append(c);
+
+                log.Debug(msg.ToString());
+            }
+
+            return null;
+        }
     }
 }

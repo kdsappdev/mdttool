@@ -1,4 +1,4 @@
-/*
+﻿/*
 * Licensed to the Apache Software Foundation (ASF) under one
 * or more contributor license agreements.  See the NOTICE file
 * distributed with this work for additional information
@@ -17,27 +17,27 @@
 * under the License.    
 */
 
-namespace NVelocity.Util.Introspection
+namespace NVelocity.Util
 {
-    /// <summary>  Holds information for node-local context data introspection
-    /// information.
+    using System;
+
+    /// <summary> Any object in the context which implements TemplateNumber will be treated
+    /// as a number for the purposes of arithmetic operations and comparison.
     /// 
     /// </summary>
-    /// <author>  <a href="mailto:geirm@optonline.net">Geir Magnusson Jr.</a>
+    /// <author>  <a href="mailto:wglass@forio.com">Will Glass-Husain</a>
     /// </author>
-    /// <version>  $Id: IntrospectionCacheData.java 463298 2006-10-12 16:10:32Z henning $
-    /// </version>
-    public class IntrospectionCacheData
+    /// <since> 1.5
+    /// </since>
+    public interface ITemplateNumber
     {
-        /// <summary>  Object to pair with class - currently either a Method or
-        /// AbstractExecutor. It can be used in any way the using node
-        /// wishes.
-        /// </summary>
-        public object Thingy;
+        /// <summary> Returns a Number that can be used in a template.</summary>
+        /// <returns> A Number that can be used in a template.
+        /// </returns>
+        ValueType AsNumber
+        {
+            get;
 
-        /// <summary>  Class of context data object associated with the introspection
-        /// information
-        /// </summary>
-        public System.Type ContextData;
+        }
     }
 }
