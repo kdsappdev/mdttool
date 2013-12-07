@@ -1,0 +1,11 @@
+﻿## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+
+	<!-- ${model}DAO -->
+	<bean id="${model}DAO" class="ats.common.model.dao.${model}DAOImpl">
+		<property name="sqlMapClientTemplate">
+			<ref bean="sqlMapClientTemplate" />
+		</property>
+	</bean>

@@ -1,0 +1,11 @@
+﻿
+
+#if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
+	comment on table ${tableInfo.TableName} is '${tableInfo.TableComments}';
+#end
+
+#foreach($column in $tableInfo.Columns)
+#if(!$codeGenHelper.IsNullOrEmpty(${column.Comments}))
+	comment on column ${tableInfo.TableName}.${column.Name} is '${column.Comments}';
+#end
+#end

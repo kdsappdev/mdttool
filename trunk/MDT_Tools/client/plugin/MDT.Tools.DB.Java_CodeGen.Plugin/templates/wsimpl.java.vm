@@ -1,0 +1,94 @@
+﻿## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+package ${wsPackage}.impl;
+
+import java.util.List;
+import org.apache.log4j.Logger;
+
+import ats.common.model.po.YuKonAFilters;
+import ats.message2.Exception.SerializerException;
+import ats.message2.MsgHelper;
+import ats.message2.CharsetConvertType;
+import ats.pingo.integration.endpoint.ws.basewebservice.BaseWebService;
+import ${bsPackage}.I${model}Server;
+import ${wsPackage}.I${model}Service;
+import ats.foundation.utils.util.ZipUtils;
+import ats.foundation.utils.util.CharsetConvert;
+import ats.foundation.utils.exception.CodeException;
+
+/**
+#if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
+ *${tableInfo.TableComments} WS实现
+#else
+ *${tableInfo.TableName}
+#end
+ *
+ *$date: 创建. ${pluginName} <br/>
+ */
+public class ${model}Service extends BaseWebService implements I${model} {
+	private Logger logger = Logger.getLogger(this.getClass().getName());
+	private I${model}Server i${lmodel}Server;
+
+	public void setI${lmodel}Server(I${model}Server i${lmodel}) {
+		this.i${lmodel} = i${lmodel};
+	}
+
+	/**
+	 *根据location 查询出${model}集合对象
+	 *
+	 * @param location实体[字符串压缩字节码]
+	 * @return ${model}[AtsMsg字符串压缩字节码]
+	 */
+	@Override
+	public byte[] select(byte[] location) {
+		return null;
+	}
+
+	/**
+	 *根据shortName,location 查询出${model}对象
+	 *
+	 * @param shortName短名称[字符串压缩字节码]
+	 * @param location实体[字符串压缩字节码]
+	 * @return ${model}[AtsMsg字符串压缩字节码]
+	 */
+	@Override
+	public byte[] selectByShortName(byte[] shortName, byte[] location) {
+		return null;
+	}
+
+	/**
+	 *增加${model}方法
+	 *
+	 * @param ${lmodel}交易日志权限详细表(子表)[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${model}[AtsMsg字符串压缩字节码]
+	 */
+	@Override
+	public byte[] insert(byte[] ${lmodel}) {
+		return null;
+	}
+
+	/**
+	 *删除${model}方法
+	 *
+	 * @param ${lmodel}交易日志权限详细表(子表)[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${model}[AtsMsg字符串压缩字节码]
+	 */
+	@Override
+	public byte[] delete(byte[] ${lmodel})  {
+		return null;
+	}
+
+	/**
+	 *更新${model}方法
+	 *
+	 * @param ${lmodel}交易日志权限详细表(子表)[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${model}[AtsMsg字符串压缩字节码]
+	 */
+	@Override
+	public byte[] update(byte[] ${lmodel}) {
+		return null;
+	}
+
+}
