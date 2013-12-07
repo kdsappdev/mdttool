@@ -14,6 +14,6 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
         { }
         public static readonly string SystemConfig = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Csharp_CodeGen.Plugin\\config.ini";
         public static readonly string ExportCsharpModelPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Csharp_CodeGen.Plugin\\data\\";
-        public static readonly string TemplatesPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Csharp_CodeGen.Plugin\\Templates\\";
+        public static readonly string TemplatesPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Csharp_CodeGen.Plugin\\templates\\";
     }
 }
