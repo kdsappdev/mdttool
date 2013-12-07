@@ -61,7 +61,7 @@ namespace ${dalNameSpace}
 		/// <summary>
 		/// 增加${model}方法
 		/// </summary>
-		/// <param name="${lmodel}">${tableInfo.TableComments}</param>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
 		/// <returns>AtsMsg对象</returns>
 		public AtsMsg<${model}> Insert(${model} ${lmodel})
 		{
@@ -78,7 +78,7 @@ namespace ${dalNameSpace}
 		/// <summary>
 		/// 删除${model}方法
 		/// </summary>
-		/// <param name="${lmodel}">${tableInfo.TableComments}</param>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
 		/// <returns>AtsMsg对象</returns>
 		public AtsMsg<${model}> Delete(${model} ${lmodel})
 		{
@@ -95,7 +95,7 @@ namespace ${dalNameSpace}
 		/// <summary>
 		/// 更新${model}方法
 		/// </summary>
-		/// <param name="${lmodel}">${tableInfo.TableComments}</param>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
 		/// <returns>AtsMsg对象</returns>
 		public AtsMsg<${model}> Update(${model} ${lmodel})
 		{

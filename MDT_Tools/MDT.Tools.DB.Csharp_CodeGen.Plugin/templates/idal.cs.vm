@@ -46,7 +46,7 @@ namespace ${idalNameSpace}
 		/// <summary>
 		/// 增加${model}方法
 		/// </summary>
-		/// <param name="${lmodel}">${tableInfo.TableComments}</param>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
 		/// <returns>AtsMsg对象</returns>
 		AtsMsg<${model}> Insert(${model} ${lmodel});
 		${region}endregion
@@ -55,7 +55,7 @@ namespace ${idalNameSpace}
 		/// <summary>
 		/// 删除${model}方法
 		/// </summary>
-		/// <param name="${lmodel}">${tableInfo.TableComments}</param>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
 		/// <returns>AtsMsg对象</returns>
 		AtsMsg<${model}> Delete(YuKonAFilters ${lmodel});
 		${region}endregion
@@ -64,7 +64,7 @@ namespace ${idalNameSpace}
 		/// <summary>
 		/// 更新${model}方法
 		/// </summary>
-		/// <param name="${lmodel}">${tableInfo.TableComments}</param>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
 		/// <returns>AtsMsg对象</returns>
 		AtsMsg<${model}> Update(${model} ${lmodel});
 		${region}endregion
