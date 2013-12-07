@@ -1,0 +1,111 @@
+## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+#set($region="#")
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Ats.Foundation.Message;
+using Ats.Foundation.Utils.Communication.WebService;
+using ${idalNameSpace};
+using ${modelNameSpace};
+namespace ${dalNameSpace}
+{
+	/// <summary>
+#if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
+	/// ${tableInfo.TableComments} 数据访问服务
+#else
+	/// ${tableInfo.TableName}
+#end
+	/// </summary>
+	/// <remarks>
+	/// $date: 创建. ${pluginName} <br/>
+	/// </remarks>
+	public class ${model}DALServer: BaseDALServer,I${model}DALServer
+	{
+		${region}region Select
+		/// <summary>
+		/// 根据location 查询出${model}集合对象
+		/// </summary>
+		/// <param name="location">实体</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<List<${model}>> Select(string location)
+		{
+			string[] args=new []{ location };
+			string strURL = "/ats/services/I${model}Service?wsdl";
+			string strClassName = "I${model}Service";
+			string strMonthedName = "select";
+			return ServersHelper.GetResultMSG<List<${model}>>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+
+		${region}region SelectByShortName
+		/// <summary>
+		/// 根据shortName,location 查询出${model}对象
+		/// </summary>
+		/// <param name="shortName">短名称</param>
+		/// <param name="location">实体</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<${model}> SelectByShortName(string shortName, string location)
+		{
+			string[] args=new []{ shortName,location };
+			string strURL = "/ats/services/I${model}Service?wsdl";
+			string strClassName = "I${model}Service";
+			string strMonthedName = "selectByShortName";
+			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+
+		${region}region Insert
+		/// <summary>
+		/// 增加${model}方法
+		/// </summary>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<${model}> Insert(${model} ${lmodel})
+		{
+			string str = MsgHelper.Serializer<${model}>(yuKonAFilters);
+			string[] args=new []{ str };
+			string strURL = "/ats/services/I${model}Service?wsdl";
+			string strClassName = "I${model}Service";
+			string strMonthedName = "insert";
+			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+
+		${region}region Delete
+		/// <summary>
+		/// 删除${model}方法
+		/// </summary>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<${model}> Delete(${model} ${lmodel})
+		{
+			string str = MsgHelper.Serializer<${model}>(${lmodel});
+			string[] args=new []{ str };
+			string strURL = "/ats/services/I${model}Service?wsdl";
+			string strClassName = "I${model}Service";
+			string strMonthedName = "delete";
+			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+
+		${region}region Update
+		/// <summary>
+		/// 更新${model}方法
+		/// </summary>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<${model}> Update(${model} ${lmodel})
+		{
+			string str = MsgHelper.Serializer<${model}>(${lmodel});
+			string[] args=new []{ str };
+			string strURL = "/ats/services/I${model}Service?wsdl";
+			string strClassName = "I${model}Service";
+			string strMonthedName = "update";
+			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+	}
+}

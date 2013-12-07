@@ -1,0 +1,94 @@
+﻿## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+package ${bsPackage}.impl;
+
+import java.util.List;
+import org.apache.log4j.Logger;
+
+import ats.common.model.po.${model};
+import ats.common.model.po.${model}Example;
+import ats.common.model.dao.${model}DAO;
+import ats.pingo.common.datacheck.bs.IDataCheckServer;
+import ${bsPackage}.I${model}Server;
+import ats.foundation.utils.exception.CodeException;
+
+/**
+#if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
+ *${tableInfo.TableComments} BS实现
+#else
+ *${tableInfo.TableName}
+#end
+ *
+ *$date: 创建. ${pluginName} <br/>
+ */
+public class ${model}Server implements I${model}Server {
+	private Logger logger = Logger.getLogger(this.getClass().getName());
+	private IDataCheckServer dataCheckServer;
+	private ${model}DAO ${lmodel}DAO;
+
+	public void setDataCheckServer(IDataCheckServer dataCheckServer) {
+		this.dataCheckServer =dataCheckServer;
+	}
+	public void set${model}DAO(${model}DAO ${lmodel}DAO) {
+		this.${lmodel}DAO = ${lmodel}DAO;
+	}
+
+	/**
+	 *根据location 查询${model}集合对象
+	 *
+	 * @param location实体
+	 * @return ${model}集合
+	 */
+	@Override
+	public List<${model}> select(String location) throws CodeException {
+		return null;
+	}
+
+	/**
+	 *根据shortName,location 查询出${model}对象
+	 *
+	 * @param shortName短名称
+	 * @param location实体
+	 * @return ${model}对象
+	 */
+	@Override
+	public ${model} selectByShortName(String shortName, String location) throws CodeException {
+		return null;
+	}
+
+	/**
+	 *增加${model}方法
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @return ${model}对象
+	 */
+	@Override
+	public ${model} insert(${model} ${lmodel}) throws CodeException {
+		return null;
+	}
+
+	/**
+	 *删除${model}对象
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @return ${model}对象
+	 */
+	@Override
+	public ${model} delete(${model} ${lmodel}) throws CodeException {
+		return null;
+	}
+
+	/**
+	 *更新${model}对象
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @return ${model}对象
+	 */
+	@Override
+	public ${model} update(${model} ${lmodel}) throws CodeException  {
+		return null;
+	}
+
+}

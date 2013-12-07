@@ -1,0 +1,1 @@
+﻿<sqlMap resource="ats/common/model/dao/${tableInfo.TableName}_SqlMap.xml" />
