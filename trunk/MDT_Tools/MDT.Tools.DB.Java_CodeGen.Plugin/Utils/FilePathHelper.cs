@@ -13,6 +13,8 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
         private FilePathHelper()
         { }
         public static readonly string SystemConfig = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Java_CodeGen.Plugin\\config.ini";
-        public static readonly string ExportCsharpModelPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Java_CodeGen.Plugin\\data\\";   
+        public static readonly string ExportCsharpModelPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Java_CodeGen.Plugin\\data\\";
+        public static readonly string TemplatesPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.Java_CodeGen.Plugin\\templates\\";
+    
     }
 }

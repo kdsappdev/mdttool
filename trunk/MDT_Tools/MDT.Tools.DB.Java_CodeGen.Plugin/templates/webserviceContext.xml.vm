@@ -1,0 +1,29 @@
+﻿## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+
+	<!-- ${model}Server bs-->
+	<bean id="I${model}Server_bs" class="${bsPackage}.impl.${model}Server">
+		<property name="${lmodel}DAO">
+			<ref bean="${model}DAO" />
+		</property>
+		<property name="dataCheckServer">
+			<ref bean="DataCheckServer" />
+		</property>
+	</bean>
+
+	<!-- ${model}Service ws-->
+	<bean id="I${model}Service_ws" class="${wsPackage}.impl.${model}Service">
+		<property name="i${lmodel}Server">
+			<ref bean="I${model}Server_bs" />
+		</property>
+	</bean>
+
+	<!-- I${model}Service jaxws-->
+	<jaxws:server id="I${model}Service" serviceClass="${wsPackage}.I${model}" address="/I${model}Service">
+		<jaxws:serviceBean>
+			<ref bean="I${model}Service_ws" />
+		</jaxws:serviceBean>
+	</jaxws:server>
+	
