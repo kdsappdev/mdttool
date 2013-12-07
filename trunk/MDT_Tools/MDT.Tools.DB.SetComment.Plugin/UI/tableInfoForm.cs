@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Data;
 using System.Text;
 using System.Windows.Forms;
+using MDT.Tools.Core.Utils;
 using WeifenLuo.WinFormsUI.Docking;
 using MDT.Tools.Core.Resources;
 using ICSharpCode.TextEditor;
@@ -28,40 +29,26 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
             tbScript.ShowTabs = false;
             tbScript.ShowVRuler = false;
             tbScript.Document.HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategy("TSQL");
-
+            dgvTableInfo.AutoGenerateColumns = false;
         }
-        public DataRow drTable;
-        public DataRow[] drTableColumns;
-        public setComment sc;
-        private DataTable dataTable;
-        public DataTable DataTable
+
+        public TableInfo tableInfo;
+        public TableInfo TableInfo
         {
             set
             {
-                dataTable = value;
-                dgvTableInfo.DataSource = dataTable;
+                tableInfo = value;
+                tbComment.Text = tableInfo.TableComments;
+                Text = tableInfo.TableName + "表基本信息";
+                dgvTableInfo.DataSource = tableInfo.Columns;
                 dgvTableInfo.Refresh();
                 bindSql();
             }
         }
-        private string tableNameComment;
-        public string TableNameComment
-        {
-            set
-            {
-                tbComment.Text = value;
-                tableNameComment = value;
-            }
-        }
-        private string tableName;
-        public string TableName
-        {
-            set
-            {
-                tableName = value;
-                Text = tableName + "表基本信息";
-            }
-        }
+
+        public setComment sc;
+
+        private readonly NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
 
         private void bindSql()
         {
@@ -70,73 +57,29 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
         }
         private string createTableSql()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("\r\n");
-            if (dataTable != null)
-            {
-                sb.AppendFormat("\t").AppendFormat("CREATE OR REPLACE TABLE {0}", tableName).Append(" {").AppendFormat("\r\n");
-                foreach (DataRow dr in dataTable.Rows)
-                {
-                    sb.AppendFormat("\t\t").AppendFormat("{0} {1} {2} {3}", dr["列名"], dr["数据类型"], (dr["是否NULL"] + "").Equals("N") ? "NULL" : "NOT NULL", string.IsNullOrEmpty(dr["默认值"] + "") ? "" : " default " + dr["默认值"]).Append(" ,").AppendFormat("\r\n");
-                }
-                string str = sb.ToString().Trim(new[] { ',' });
-                sb = new StringBuilder();
-                sb.Append(str);
-                sb.AppendFormat("\t").Append("}").AppendFormat("\r\n");
-            }
-            return sb.ToString();
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("tableInfo", tableInfo);
+            dic.Add("codeGenHelper", new CodeGenHelper());
+            return nVelocityHelper.GenByTemplate("createtable.sql.vm", dic);
         }
 
         private string createCommentSql()
         {
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("\r\n");
-            if (dataTable != null)
-            {
-                if (!string.IsNullOrEmpty(tbComment.Text.Trim()))
-                {
-                    sb.AppendFormat("\t").AppendFormat("comment on table {0} is '{1}';", tableName, tbComment.Text.Trim()).AppendFormat("\r\n");
-                }
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("tableInfo", tableInfo);
+            dic.Add("codeGenHelper", new CodeGenHelper());
+            return nVelocityHelper.GenByTemplate("comment.sql.vm", dic);
 
-                foreach (DataRow dr in dataTable.Rows)
-                {
-                    if (!string.IsNullOrEmpty(dr["备注"] + ""))
-                    {
-                        sb.AppendFormat("\t").AppendFormat("comment on column {0}.{1} is '{2}';", tableName, dr["列名"], dr["备注"]).AppendFormat("\r\n");
-                    }
-                }
-                string str = sb.ToString().Trim(new[] { ';' });
-                sb = new StringBuilder();
-                sb.Append(str).AppendFormat("\r\n");
-            }
-            return sb.ToString();
-
-        }
-
-
-        private void dgvTableInfo_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (dgvTableInfo.Columns[e.ColumnIndex].Name.Equals("备注"))
-            {
-                dgvTableInfo.ReadOnly = false;
-            }
-        }
-
-        private void dgvTableInfo_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
-        {
-            dgvTableInfo.ReadOnly = true;
         }
 
         private void dgvTableInfo_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            if (dgvTableInfo.Columns[e.ColumnIndex].Name.Equals("备注"))
-            {
-                bindSql();
-            }
+            bindSql();
         }
 
         private void tbComment_TextChanged(object sender, EventArgs e)
         {
+            tableInfo.TableComments = tbComment.Text;
             bindSql();
         }
 
@@ -156,37 +99,36 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                     if (sc.OriginalEncoding != null &&
                         sc.OriginalEncoding != null)
                     {
-                        temp =
-                            MDT.Tools.Core.Utils.EncodingHelper.
+                        temp = EncodingHelper.
                                 ConvertEncoder(sc.TargetEncoding,
                                                sc.OriginalEncoding,
                                                temp);
                     }
-                    drTable["comments"] = temp;
-                    flag = true;
-                    DBFileHelper.WriteXml(sc.dsTable);
-                }
-                foreach (DataRow dr in drTableColumns)
-                {
-                    DataRow[] drs =
-                        dataTable.Select("列名 = '" +
-                                         dr["COLUMN_NAME"].
-                                             ToString() + "'");
 
-                    if (drs != null &&
-                        !string.IsNullOrEmpty(drs[0]["备注"] + ""))
+                    DataRow[] drs = sc.dsTable.Tables[sc.dbName + sc.DBtable].Select("name = '" + tableInfo.TableName + "'");
+
+                    if (drs != null && drs.Length > 0)
                     {
-                        temp = drs[0]["备注"] + "";
-                        if (sc.OriginalEncoding != null &&
+                        drs[0]["comments"] = temp;
+                        flag = true;
+                        DBFileHelper.WriteXml(sc.dsTable);
+                    }
+                }
+                foreach (ColumnInfo column in tableInfo.Columns)
+                {
+                    if (!string.IsNullOrEmpty(column.Comments))
+                    {
+                        temp = column.Comments;
+                        DataRow[] drs = sc.dsTableColumn.Tables[sc.dbName + sc.DBtablesColumns].Select("TABLE_NAME = '" + tableInfo.TableName + "' and COLUMN_NAME = '" + column.Name + "'");
+
+                        if (drs != null && drs.Length > 0 && sc.OriginalEncoding != null &&
                             sc.OriginalEncoding != null)
                         {
-                            temp =
-                                MDT.Tools.Core.Utils.
-                                    EncodingHelper.ConvertEncoder(
+                            temp = EncodingHelper.ConvertEncoder(
                                         sc.TargetEncoding,
                                         sc.OriginalEncoding, temp);
                         }
-                        dr["COMMENTS"] = temp;
+                        drs[0]["COMMENTS"] = temp;
                         flag = true;
                         DBFileHelper.WriteXml(sc.dsTableColumn);
                     }
@@ -198,7 +140,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                             sc.dbConnectionString.Trim(new[] { '"' }),
                             DBType.GetDbProviderString(sc.dbType))
                             .IDbHelper;
-                    string[] sql = createCommentSql().Split(new string[]{";"},StringSplitOptions.RemoveEmptyEntries);
+                    string[] sql = createCommentSql().Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
                     if (sc.OriginalEncoding != null &&
                         sc.OriginalEncoding != null)
                     {
@@ -206,8 +148,8 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                         {
                             if (!string.IsNullOrEmpty(s))
                             {
-                                string t = s.Trim(new[] {'\t', '\r', '\n', ' ', ';'});
-                                t = MDT.Tools.Core.Utils.EncodingHelper.
+                                string t = s.Trim(new[] { '\t', '\r', '\n', ' ', ';' });
+                                t = EncodingHelper.
                                     ConvertEncoder(sc.TargetEncoding,
                                                    sc.OriginalEncoding,
                                                    t);

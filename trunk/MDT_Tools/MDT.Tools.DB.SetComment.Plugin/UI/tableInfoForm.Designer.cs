@@ -28,7 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tableInfoForm));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgvTableInfo = new System.Windows.Forms.DataGridView();
@@ -37,6 +39,16 @@
             this.tbComment = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tbScript = new ICSharpCode.TextEditor.TextEditorControl();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataPrecision = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataScale = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataNullAble = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colDataDefault = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colIsPrimaryKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colIsForeginKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -83,19 +95,35 @@
             // 
             this.dgvTableInfo.AllowUserToAddRows = false;
             this.dgvTableInfo.AllowUserToDeleteRows = false;
+            this.dgvTableInfo.AllowUserToOrderColumns = true;
             this.dgvTableInfo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvTableInfo.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
-            this.dgvTableInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvTableInfo.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvTableInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colName,
+            this.colDataType,
+            this.colDataLength,
+            this.colDataPrecision,
+            this.colDataScale,
+            this.colDataNullAble,
+            this.colDataDefault,
+            this.colIsPrimaryKey,
+            this.colIsForeginKey,
+            this.colComment});
             this.dgvTableInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvTableInfo.Location = new System.Drawing.Point(3, 38);
             this.dgvTableInfo.Name = "dgvTableInfo";
-            this.dgvTableInfo.ReadOnly = true;
             this.dgvTableInfo.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dgvTableInfo.RowTemplate.Height = 23;
             this.dgvTableInfo.Size = new System.Drawing.Size(526, 136);
             this.dgvTableInfo.TabIndex = 0;
-            this.dgvTableInfo.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvTableInfo_CellMouseClick);
-            this.dgvTableInfo.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTableInfo_CellMouseLeave);
             this.dgvTableInfo.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTableInfo_CellValueChanged);
             // 
             // tableLayoutPanel2
@@ -160,13 +188,94 @@
             this.tbScript.Size = new System.Drawing.Size(532, 251);
             this.tbScript.TabIndex = 3;
             // 
+            // colName
+            // 
+            this.colName.DataPropertyName = "Name";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.colName.DefaultCellStyle = dataGridViewCellStyle2;
+            this.colName.HeaderText = "列名";
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
+            this.colName.Width = 54;
+            // 
+            // colDataType
+            // 
+            this.colDataType.DataPropertyName = "DataType";
+            this.colDataType.HeaderText = "数据类型";
+            this.colDataType.Name = "colDataType";
+            this.colDataType.ReadOnly = true;
+            this.colDataType.Width = 78;
+            // 
+            // colDataLength
+            // 
+            this.colDataLength.DataPropertyName = "DataLength";
+            this.colDataLength.HeaderText = "长度";
+            this.colDataLength.Name = "colDataLength";
+            this.colDataLength.ReadOnly = true;
+            this.colDataLength.Width = 54;
+            // 
+            // colDataPrecision
+            // 
+            this.colDataPrecision.DataPropertyName = "DataPrecision";
+            this.colDataPrecision.HeaderText = "精度";
+            this.colDataPrecision.Name = "colDataPrecision";
+            this.colDataPrecision.ReadOnly = true;
+            this.colDataPrecision.Width = 54;
+            // 
+            // colDataScale
+            // 
+            this.colDataScale.DataPropertyName = "DataScale";
+            this.colDataScale.HeaderText = "小数位数";
+            this.colDataScale.Name = "colDataScale";
+            this.colDataScale.ReadOnly = true;
+            this.colDataScale.Width = 78;
+            // 
+            // colDataNullAble
+            // 
+            this.colDataNullAble.DataPropertyName = "DataNullAble";
+            this.colDataNullAble.HeaderText = "是否Null";
+            this.colDataNullAble.Name = "colDataNullAble";
+            this.colDataNullAble.ReadOnly = true;
+            this.colDataNullAble.Width = 78;
+            // 
+            // colDataDefault
+            // 
+            this.colDataDefault.DataPropertyName = "DataDefault";
+            this.colDataDefault.HeaderText = "默认值";
+            this.colDataDefault.Name = "colDataDefault";
+            this.colDataDefault.ReadOnly = true;
+            this.colDataDefault.Width = 66;
+            // 
+            // colIsPrimaryKey
+            // 
+            this.colIsPrimaryKey.DataPropertyName = "IsPrimaryKeys";
+            this.colIsPrimaryKey.HeaderText = "主键";
+            this.colIsPrimaryKey.Name = "colIsPrimaryKey";
+            this.colIsPrimaryKey.ReadOnly = true;
+            this.colIsPrimaryKey.Width = 54;
+            // 
+            // colIsForeginKey
+            // 
+            this.colIsForeginKey.DataPropertyName = "isForeignkey";
+            this.colIsForeginKey.HeaderText = "外键";
+            this.colIsForeginKey.Name = "colIsForeginKey";
+            this.colIsForeginKey.ReadOnly = true;
+            this.colIsForeginKey.Width = 54;
+            // 
+            // colComment
+            // 
+            this.colComment.DataPropertyName = "Comments";
+            this.colComment.HeaderText = "备注";
+            this.colComment.Name = "colComment";
+            this.colComment.Width = 54;
+            // 
             // tableInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(532, 432);
             this.Controls.Add(this.splitContainer1);
-            this.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.Name = "tableInfoForm";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -189,5 +298,15 @@
         private System.Windows.Forms.TextBox tbComment;
         private System.Windows.Forms.Label label1;
         private ICSharpCode.TextEditor.TextEditorControl tbScript;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataLength;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataPrecision;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataScale;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataNullAble;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDataDefault;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colIsPrimaryKey;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colIsForeginKey;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colComment;
     }
 }

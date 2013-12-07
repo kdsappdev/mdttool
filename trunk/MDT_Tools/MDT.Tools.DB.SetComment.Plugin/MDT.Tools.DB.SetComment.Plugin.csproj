@@ -53,6 +53,7 @@
     <Compile Include="UI\tableInfoForm.Designer.cs">
       <DependentUpon>tableInfoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\FilePathHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
@@ -78,9 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MDT.Tools.pfx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
+    <None Include="templates\createtable.sql.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="templates\comment.sql.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
