@@ -12,7 +12,7 @@ namespace MDT.Tools.DB.SetComment.Plugin
     {
         private FilePathHelper()
         { }
-        public static readonly string TemplatesPath = Application.StartupPath + "\\plugin\\MDT.Tools.DB.SetComment.Plugin\\templates\\";
+        public static readonly string TemplatesPath = Application.StartupPath + "\\templates\\";
     
     }
 }
