@@ -14,8 +14,8 @@
 	</object>
 
 
-	<!-- ${guiPluginName} UI-->
-	<object id="${guiPluginName}" class="${bllNameSpace}.${guiPluginName}GUI">
+	<!-- ${guiPluginName} GUI-->
+	<object id="${guiPluginName}GUI" class="${bllNameSpace}.${guiPluginName}GUI">
 		<property name="I${guiPluginName}BLLService" ref="I${guiPluginName}BLLService"/>
 	</object>
 

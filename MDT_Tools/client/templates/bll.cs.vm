@@ -22,11 +22,11 @@ namespace ${bllNameSpace}
 	public class ${guiPluginName}BLLService: BaseBLLService,I${guiPluginName}BLLService
 	{
 		${region}region 属性
-		private I${model}DALServer ${lmodel}DALServer;
+		private I${model}DALServer i${lmodel}DALServer;
 		public I${model}DALServer I${model}DALServer
 		{
-			get { return ${lmodel}DALServer;}
-			set { ${lmodel}DALServer = value;}
+			get { return i${lmodel}DALServer;}
+			set { i${lmodel}DALServer = value;}
 		}
 		${region}endregion
 	}
