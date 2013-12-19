@@ -135,8 +135,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MDT.Tools.pfx" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="templates\object.xml.vm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

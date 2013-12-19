@@ -18,7 +18,7 @@
     <UpgradeBackupLocation />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>MDT.Tools.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>lib\MDT.Tools.pfx</AssemblyOriginatorKeyFile>
     <ApplicationIcon>Image\db.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -90,7 +90,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="App.config" />
-    <None Include="MDT.Tools.pfx" />
+    <None Include="lib\MDT.Tools.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
