@@ -7,23 +7,49 @@ using System.Data;
 using System.Windows.Forms;
 using MDT.Tools.DB.TriggerGen.Plugin.Utils;
 using MDT.Tools.Core.Utils;
+using MDT.Tools.DB.TriggerGen.Plugin.UI;
 
 namespace MDT.Tools.DB.TriggerGen.Plugin.Gen
 {
     public class GenYukonTrigger: IGenTrigger
     {
+        private readonly NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
 
         public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
-        {
-            foreach (DataRow drTable in drTables)
+        { 
+            base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
+            foreach (TableInfo t in tableInfos)
             {
-                DataRow[] drTableColumns = dsTableColumns.Tables[dbName + DBtablesColumns].Select("TABLE_NAME = '" + drTable["name"].ToString() + "'", "COLUMN_ID ASC");
-
-                string tableName = (drTable["name"] as string).Trim().ToUpper();
-                this.TriggerName = TriggerInfo.YukonTriggerName.Replace("$TABLENAME", tableName);
-                string temp = GenCode(drTable, drTableColumns, tableName, this.TriggerName);
-                display(temp);
+                TriggerName = "TG_" + t.TableName;
+                display(GenTriger(t),TriggerName);
             }
+        }
+
+        private string GenTriger(TableInfo tableInfo)
+        {           
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("tableInfo", tableInfo);
+            dic.Add("tgGenHelper", new TgGenHelper());
+
+            bool isExistAuditAction = false;
+            foreach (ColumnInfo c in tableInfo.Columns)
+            {
+                if ("AUDIT_ACTION".Equals(c.Name.ToUpper()))
+                {
+                    isExistAuditAction = true;
+                    break;
+                }
+            }
+            string temp = "";
+            if (isExistAuditAction)
+            {
+                temp = nVelocityHelper.GenByTemplate("tg.bbox.aq.withaudit.sql.vm", dic);
+            }
+            else
+            {
+                temp = nVelocityHelper.GenByTemplate("tg.bbox.aq.withoutaudit.sql.vm", dic);
+            }
+            return temp;
         }
 
         private  string GenCode(DataRow drTable, DataRow[] drTableColumns,string tableName,string triggerName)
