@@ -155,13 +155,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
-      <Project>{C3DDB32F-3E50-484A-9142-F93472A14323}</Project>
-      <Name>MDT.ThirdParty.Controls</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -180,6 +173,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MDT.Tools.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
+      <Project>{C3DDB32F-3E50-484A-9142-F93472A14323}</Project>
+      <Name>MDT.ThirdParty.Controls</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
