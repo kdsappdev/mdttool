@@ -76,7 +76,8 @@ namespace MDT.Tools.DB.TriggerGen.Plugin
             TriggerParams tp = new TriggerParams();
             tp.DrTable = drTable;
             tp.Trigger = TriggerType.MQ;
-            ThreadPool.QueueUserWorkItem(o => GenTrigger(tp));
+            //ThreadPool.QueueUserWorkItem(o => GenTrigger(tp));
+            GenTrigger(tp);
         }
 
         void _tsiYukonTriggerGen_Click(object sender, EventArgs e)
@@ -86,7 +87,8 @@ namespace MDT.Tools.DB.TriggerGen.Plugin
             TriggerParams tp = new TriggerParams();
             tp.DrTable = drTable;
             tp.Trigger = TriggerType.YuKon;
-            ThreadPool.QueueUserWorkItem(o => GenTrigger(tp));
+            //ThreadPool.QueueUserWorkItem(o => GenTrigger(tp));
+            GenTrigger(tp);
         }
 
         private void GenTrigger(TriggerParams triggerParams)
@@ -105,7 +107,7 @@ namespace MDT.Tools.DB.TriggerGen.Plugin
                     genTrigger = new GenNone();
                     break;
             }
-
+          
             process(triggerParams.DrTable, genTrigger);
         }
     }  

@@ -1,0 +1,43 @@
+﻿##With Audit Info
+--BBox Aq Trigger
+CREATE OR REPLACE TRIGGER TG_${tableInfo.TableName}
+	AFTER INSERT
+	ON ${tableInfo.TableName}
+	REFERENCING NEW AS NEW OLD AS OLD
+	FOR EACH ROW
+DECLARE
+	v_action   VARCHAR (1)    := '';
+	v_msg      VARCHAR (2000) := '';
+BEGIN
+	/*
+	* Function : This trigger will create bbox Aq automatic and call a procedure which send this message .
+	* Create Date : ${tgGenHelper.getCurrentTime()}
+	* Create By : MDT_Tools .
+	*/
+	IF :NEW.AUDIT_ACTION = 'INSERT'
+	THEN
+		v_action := 'I';
+	ELSIF :NEW.AUDIT_ACTION = 'UPDATE'
+	THEN
+		v_action := 'U';
+	ELSIF :NEW.AUDIT_ACTION = 'DELETE'
+	THEN
+		v_action := 'D';
+	END IF;
+		v_msg :=
+			'ACTION:'
+			|| v_action
+			|| CHR (10)
+#foreach($column in $tableInfo.Columns)
+#if($velocityCount == ${tableInfo.Columns.Count})
+			|| '${column.Name}:'
+			|| ${tgGenHelper.getColumnType(${column},":NEW.")};
+#else
+			|| '${column.Name}:'
+			|| ${tgGenHelper.getColumnType(${column},":NEW.")}
+			|| CHR (10)
+#end
+#end
+			
+	enqueue_bbox_trigger ('${tableInfo.TableName}', 'BBOX_USE', v_msg);
+END ;

@@ -20,7 +20,7 @@ namespace MDT.Tools.DB.TriggerGen.Plugin.Gen
                 this.TriggerName = TriggerInfo.YukonTriggerName.Replace("$TABLENAME", tableName);
 
                 string temp = GenCode(drTable, drTableColumns);
-                display(temp);
+                display(temp,TriggerName);
             }     
         }
 
