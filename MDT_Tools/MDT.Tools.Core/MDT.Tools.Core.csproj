@@ -92,25 +92,21 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UI\Code.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Code.Designer.cs">
       <DependentUpon>Code.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Explorer.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Explorer.Designer.cs">
       <DependentUpon>Explorer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Doc.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Doc.designer.cs">
       <DependentUpon>Doc.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ToolWindow.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\ToolWindow.Designer.cs">
       <DependentUpon>ToolWindow.cs</DependentUpon>
@@ -159,9 +155,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MDT.Tools.pfx" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
       <Project>{C3DDB32F-3E50-484A-9142-F93472A14323}</Project>
       <Name>MDT.ThirdParty.Controls</Name>
@@ -184,6 +177,9 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MDT.Tools.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

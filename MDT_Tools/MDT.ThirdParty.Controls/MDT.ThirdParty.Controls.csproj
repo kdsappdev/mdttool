@@ -33,6 +33,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -563,9 +564,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Docking\Resources\Thumbs.db" />
+    <None Include="MDT.Tools.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MDT.Tools.pfx" />
     <EmbeddedResource Include="NVelocity\Runtime\Defaults\directive.properties" />
     <EmbeddedResource Include="NVelocity\Runtime\Defaults\nvelocity.properties" />
   </ItemGroup>
