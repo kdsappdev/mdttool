@@ -3,4 +3,8 @@
     <StartAction>Program</StartAction>
     <StartProgram>D:\xyb\svn\mdttool\MDT_Tools\client\MDT.Tools.exe</StartProgram>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <StartProgram>D:\xyb\svn\mdttool\MDT_Tools\client\MDT.Tools.exe</StartProgram>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
 </Project>

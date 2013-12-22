@@ -32,9 +32,12 @@ namespace MDT.Tools
         }
 
         #region Initialize
+
+        private bool _userClosing = false;
         private void Initialize()
         {
             Text = System.Configuration.ConfigurationSettings.AppSettings["App"];
+            _userClosing =bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"],out _userClosing);
             _pluginUtils = new PluginUtils();
             _pluginManager = new PluginManager(this);
             _pluginManager.LoadDefault(PluginHelper.PluginSign1);
@@ -119,9 +122,6 @@ namespace MDT.Tools
         }
         #endregion
 
- 
-        
-
         #region 退出
         
         private void TsmiExitClick(object sender, EventArgs e)
@@ -133,14 +133,17 @@ namespace MDT.Tools
         #region notifyIcon
         private void MainFormFormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this.WindowState != FormWindowState.Minimized&&e.CloseReason==CloseReason.UserClosing)
+            if (_userClosing)
             {
-                e.Cancel = true;
-                this.Hide();
-                this.WindowState = FormWindowState.Minimized;
-                notifyIcon1.ShowBalloonTip(3000, "程序最小化提示",
-                     "图标已经缩小到托盘，打开窗口请双击图标即可。",
-                     ToolTipIcon.Info);
+                if (this.WindowState != FormWindowState.Minimized && e.CloseReason == CloseReason.UserClosing)
+                {
+                    e.Cancel = true;
+                    this.Hide();
+                    this.WindowState = FormWindowState.Minimized;
+                    notifyIcon1.ShowBalloonTip(3000, "程序最小化提示",
+                                               "图标已经缩小到托盘，打开窗口请双击图标即可。",
+                                               ToolTipIcon.Info);
+                }
             }
         }
         private void MainForm_Move(object sender, EventArgs e)

@@ -14,18 +14,21 @@ namespace MDT.Tools.DB.Plugin.Utils
 
         private static void CreateFile()
         {
-            FileHelper. CreateDirectory(FilePathHelper.SystemConfig);
+            FileHelper.CreateDirectory(FilePathHelper.SystemConfig);
             if (!File.Exists(FilePathHelper.SystemConfig))
             {
                 FileStream fs = File.Create(FilePathHelper.SystemConfig);
                 fs.Close();
             }
-            else
-            {
-                File.Delete(FilePathHelper.SystemConfig);
-            }
+
         }
-      
+        public static void DeleteFile()
+        {
+
+            File.Delete(FilePathHelper.SystemConfig);
+
+        }
+
         public static bool WriteDBInfo(DbConfigInfo dbConfigInfo, ref string message)
         {
             bool status = false;
@@ -51,7 +54,7 @@ namespace MDT.Tools.DB.Plugin.Utils
             IList<DbConfigInfo> dbConfigList = new List<DbConfigInfo>();
             try
             {
-                 
+
                 var fi = new FileInfo(FilePathHelper.SystemConfig);
                 StreamReader sr = fi.OpenText();
                 string content = sr.ReadToEnd();
@@ -70,7 +73,7 @@ namespace MDT.Tools.DB.Plugin.Utils
                     {
                         try
                         {
-                            var dbConfigInfo = new DbConfigInfo {DbType = dbType};
+                            var dbConfigInfo = new DbConfigInfo { DbType = dbType };
 
                             string dbConfigName = str.Substring(0, index);
                             string connectionString = str.Substring(index + 1, str.Length - index - 1).Trim(new[] { '"' });

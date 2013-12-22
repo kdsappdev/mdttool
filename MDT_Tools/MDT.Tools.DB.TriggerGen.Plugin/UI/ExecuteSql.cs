@@ -22,7 +22,7 @@ namespace MDT.Tools.DB.TriggerGen.Plugin.UI
         public ExecuteSql()
         {
             InitializeComponent();
-
+            btnExecute.Image = Resources.start;
             tbScript.AllowCaretBeyondEOL = false;
             tbScript.ShowEOLMarkers = false;
             tbScript.ShowHRuler = false;
@@ -80,12 +80,12 @@ namespace MDT.Tools.DB.TriggerGen.Plugin.UI
                     }
                 }             
                 
-                MessageBox.Show("执行成功", "提示", MessageBoxButtons.OK,
+                MessageBox.Show(this,"执行成功", "提示", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("执行失败[" + ex.Message + "]", "提示",
+                MessageBox.Show(this,"执行失败[" + ex.Message + "]", "提示",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }

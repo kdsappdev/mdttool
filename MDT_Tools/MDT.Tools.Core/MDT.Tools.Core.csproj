@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MDT.Tools.Core</RootNamespace>
     <AssemblyName>MDT.Tools.Core</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MDT.Tools.pfx</AssemblyOriginatorKeyFile>
@@ -53,9 +53,28 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>..\client\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Data.SQLite, Version=1.0.66.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
@@ -92,21 +111,25 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UI\Code.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Code.Designer.cs">
       <DependentUpon>Code.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Explorer.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Explorer.Designer.cs">
       <DependentUpon>Explorer.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Doc.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Doc.designer.cs">
       <DependentUpon>Doc.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ToolWindow.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\ToolWindow.Designer.cs">
       <DependentUpon>ToolWindow.cs</DependentUpon>

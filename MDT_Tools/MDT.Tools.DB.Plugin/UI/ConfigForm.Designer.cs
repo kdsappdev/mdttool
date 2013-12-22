@@ -30,24 +30,18 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("oracle");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Oracle", new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("sqlserver", 1, 1);
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Sql Server", 1, 1, new System.Windows.Forms.TreeNode[] {
-            treeNode3});
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tcConfig = new System.Windows.Forms.TabControl();
+            this.tgDBConfig = new System.Windows.Forms.TabPage();
+            this.tvDBConfig = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.tgDBConfig = new System.Windows.Forms.TabPage();
-            this.tvDBConfig = new System.Windows.Forms.TreeView();
-            this.tcConfig = new System.Windows.Forms.TabControl();
             this.tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            this.tgDBConfig.SuspendLayout();
             this.tcConfig.SuspendLayout();
+            this.tgDBConfig.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -66,12 +60,47 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(544, 455);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
+            // tcConfig
+            // 
+            this.tcConfig.Controls.Add(this.tgDBConfig);
+            this.tcConfig.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tcConfig.Location = new System.Drawing.Point(3, 3);
+            this.tcConfig.Name = "tcConfig";
+            this.tcConfig.SelectedIndex = 0;
+            this.tcConfig.Size = new System.Drawing.Size(538, 360);
+            this.tcConfig.TabIndex = 0;
+            // 
+            // tgDBConfig
+            // 
+            this.tgDBConfig.Controls.Add(this.tvDBConfig);
+            this.tgDBConfig.Location = new System.Drawing.Point(4, 22);
+            this.tgDBConfig.Name = "tgDBConfig";
+            this.tgDBConfig.Padding = new System.Windows.Forms.Padding(3);
+            this.tgDBConfig.Size = new System.Drawing.Size(530, 334);
+            this.tgDBConfig.TabIndex = 0;
+            this.tgDBConfig.Text = "数据库配置";
+            this.tgDBConfig.UseVisualStyleBackColor = true;
+            // 
+            // tvDBConfig
+            // 
+            this.tvDBConfig.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvDBConfig.ImageIndex = 0;
+            this.tvDBConfig.ImageList = this.imageList1;
+            this.tvDBConfig.Location = new System.Drawing.Point(3, 3);
+            this.tvDBConfig.Name = "tvDBConfig";
+            this.tvDBConfig.SelectedImageIndex = 0;
+            this.tvDBConfig.Size = new System.Drawing.Size(524, 328);
+            this.tvDBConfig.TabIndex = 0;
+            this.tvDBConfig.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tvDBConfig_MouseDoubleClick);
+            this.tvDBConfig.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.tvDBConfig_BeforeCollapse);
+            // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Database.gif");
             this.imageList1.Images.SetKeyName(1, "New database.png");
+            this.imageList1.Images.SetKeyName(2, "dbNode.png");
             // 
             // tableLayoutPanel2
             // 
@@ -95,6 +124,7 @@
             // 
             // btnExit
             // 
+            this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnExit.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnExit.Location = new System.Drawing.Point(284, 35);
             this.btnExit.Name = "btnExit";
@@ -114,53 +144,6 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // tgDBConfig
-            // 
-            this.tgDBConfig.Controls.Add(this.tvDBConfig);
-            this.tgDBConfig.Location = new System.Drawing.Point(4, 22);
-            this.tgDBConfig.Name = "tgDBConfig";
-            this.tgDBConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tgDBConfig.Size = new System.Drawing.Size(530, 334);
-            this.tgDBConfig.TabIndex = 0;
-            this.tgDBConfig.Text = "数据库配置";
-            this.tgDBConfig.UseVisualStyleBackColor = true;
-            // 
-            // tvDBConfig
-            // 
-            this.tvDBConfig.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tvDBConfig.ImageIndex = 0;
-            this.tvDBConfig.ImageList = this.imageList1;
-            this.tvDBConfig.Location = new System.Drawing.Point(3, 3);
-            this.tvDBConfig.Name = "tvDBConfig";
-            treeNode1.Name = "tnoracle";
-            treeNode1.Text = "oracle";
-            treeNode2.Name = "tnOracle";
-            treeNode2.Text = "Oracle";
-            treeNode3.ImageIndex = 1;
-            treeNode3.Name = "tnsqlserver";
-            treeNode3.SelectedImageIndex = 1;
-            treeNode3.Text = "sqlserver";
-            treeNode4.ImageIndex = 1;
-            treeNode4.Name = "tnSqlServer";
-            treeNode4.SelectedImageIndex = 1;
-            treeNode4.Text = "Sql Server";
-            this.tvDBConfig.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode4});
-            this.tvDBConfig.SelectedImageIndex = 0;
-            this.tvDBConfig.Size = new System.Drawing.Size(524, 328);
-            this.tvDBConfig.TabIndex = 0;
-            // 
-            // tcConfig
-            // 
-            this.tcConfig.Controls.Add(this.tgDBConfig);
-            this.tcConfig.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tcConfig.Location = new System.Drawing.Point(3, 3);
-            this.tcConfig.Name = "tcConfig";
-            this.tcConfig.SelectedIndex = 0;
-            this.tcConfig.Size = new System.Drawing.Size(538, 360);
-            this.tcConfig.TabIndex = 0;
-            // 
             // ConfigForm
             // 
             this.AcceptButton = this.btnSave;
@@ -175,9 +158,9 @@
             this.Text = "参数配置";
             this.Load += new System.EventHandler(this.ConfigForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tgDBConfig.ResumeLayout(false);
             this.tcConfig.ResumeLayout(false);
+            this.tgDBConfig.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
