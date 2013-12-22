@@ -37,7 +37,7 @@ namespace MDT.Tools
         private void Initialize()
         {
             Text = System.Configuration.ConfigurationSettings.AppSettings["App"];
-            _userClosing =bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"],out _userClosing);
+            bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"],out _userClosing);
             _pluginUtils = new PluginUtils();
             _pluginManager = new PluginManager(this);
             _pluginManager.LoadDefault(PluginHelper.PluginSign1);
