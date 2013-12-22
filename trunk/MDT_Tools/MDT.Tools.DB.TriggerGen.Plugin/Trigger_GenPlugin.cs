@@ -59,8 +59,8 @@ namespace MDT.Tools.DB.TriggerGen.Plugin
             {
                 base.AddContextMenu();
                 this._tsiGen.Text = "Trigger生成";
-                this._tsiYukonTriggerGen.Text = "Yukon触发器生成";
-                this._tsiMQTriggerGen.Text = "MQ触发器和存储过程生成";
+                this._tsiYukonTriggerGen.Text = "Java Aq触发器生成";
+                this._tsiMQTriggerGen.Text = "Atf 触发器生成";
                 this._tsiGen.Enabled = false;
 
                 this._tsiGen.DropDownItems.AddRange(new[] {this._tsiYukonTriggerGen ,this._tsiMQTriggerGen});

@@ -29,16 +29,11 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tableInfoForm));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(tableInfoForm));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgvTableInfo = new System.Windows.Forms.DataGridView();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.btnExecute = new System.Windows.Forms.Button();
-            this.tbComment = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbScript = new ICSharpCode.TextEditor.TextEditorControl();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDataType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDataLength = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,6 +44,12 @@
             this.colIsPrimaryKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colIsForeginKey = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colComment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnExecute = new System.Windows.Forms.Button();
+            this.tbComment = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbExecuteDB = new System.Windows.Forms.CheckBox();
+            this.tbScript = new ICSharpCode.TextEditor.TextEditorControl();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -125,68 +126,6 @@
             this.dgvTableInfo.Size = new System.Drawing.Size(526, 136);
             this.dgvTableInfo.TabIndex = 0;
             this.dgvTableInfo.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTableInfo_CellValueChanged);
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 4;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 84F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 261F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 76F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.btnExecute, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.tbComment, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.label1, 2, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(526, 29);
-            this.tableLayoutPanel2.TabIndex = 3;
-            // 
-            // btnExecute
-            // 
-            this.btnExecute.Location = new System.Drawing.Point(3, 3);
-            this.btnExecute.Name = "btnExecute";
-            this.btnExecute.Size = new System.Drawing.Size(75, 23);
-            this.btnExecute.TabIndex = 4;
-            this.btnExecute.Text = "执行";
-            this.btnExecute.UseVisualStyleBackColor = true;
-            this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
-            // 
-            // tbComment
-            // 
-            this.tbComment.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbComment.Location = new System.Drawing.Point(424, 3);
-            this.tbComment.Name = "tbComment";
-            this.tbComment.Size = new System.Drawing.Size(99, 21);
-            this.tbComment.TabIndex = 5;
-            this.tbComment.TextChanged += new System.EventHandler(this.tbComment_TextChanged);
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(348, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 29);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "表名备注:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // tbScript
-            // 
-            this.tbScript.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbScript.Encoding = ((System.Text.Encoding)(resources.GetObject("tbScript.Encoding")));
-            this.tbScript.LineViewerStyle = ICSharpCode.TextEditor.Document.LineViewerStyle.FullRow;
-            this.tbScript.Location = new System.Drawing.Point(0, 0);
-            this.tbScript.Name = "tbScript";
-            this.tbScript.ShowEOLMarkers = true;
-            this.tbScript.ShowInvalidLines = false;
-            this.tbScript.ShowSpaces = true;
-            this.tbScript.ShowTabs = true;
-            this.tbScript.ShowVRuler = true;
-            this.tbScript.Size = new System.Drawing.Size(532, 251);
-            this.tbScript.TabIndex = 3;
             // 
             // colName
             // 
@@ -269,6 +208,84 @@
             this.colComment.Name = "colComment";
             this.colComment.Width = 54;
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 84F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 114F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 173F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 76F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Controls.Add(this.btnExecute, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tbComment, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.label1, 4, 0);
+            this.tableLayoutPanel2.Controls.Add(this.cbExecuteDB, 2, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(526, 29);
+            this.tableLayoutPanel2.TabIndex = 3;
+            // 
+            // btnExecute
+            // 
+            this.btnExecute.Location = new System.Drawing.Point(3, 3);
+            this.btnExecute.Name = "btnExecute";
+            this.btnExecute.Size = new System.Drawing.Size(75, 23);
+            this.btnExecute.TabIndex = 4;
+            this.btnExecute.Text = "执行";
+            this.btnExecute.UseVisualStyleBackColor = true;
+            this.btnExecute.Click += new System.EventHandler(this.btnExecute_Click);
+            // 
+            // tbComment
+            // 
+            this.tbComment.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbComment.Location = new System.Drawing.Point(464, 3);
+            this.tbComment.Name = "tbComment";
+            this.tbComment.Size = new System.Drawing.Size(59, 21);
+            this.tbComment.TabIndex = 5;
+            this.tbComment.TextChanged += new System.EventHandler(this.tbComment_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Location = new System.Drawing.Point(388, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 29);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "表名备注:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // cbExecuteDB
+            // 
+            this.cbExecuteDB.Checked = true;
+            this.cbExecuteDB.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbExecuteDB.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbExecuteDB.Location = new System.Drawing.Point(101, 6);
+            this.cbExecuteDB.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.cbExecuteDB.Name = "cbExecuteDB";
+            this.cbExecuteDB.Size = new System.Drawing.Size(108, 20);
+            this.cbExecuteDB.TabIndex = 7;
+            this.cbExecuteDB.Text = "是否执行到数据库";
+            this.cbExecuteDB.UseVisualStyleBackColor = true;
+            // 
+            // tbScript
+            // 
+            this.tbScript.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbScript.Encoding = ((System.Text.Encoding)(resources.GetObject("tbScript.Encoding")));
+            this.tbScript.LineViewerStyle = ICSharpCode.TextEditor.Document.LineViewerStyle.FullRow;
+            this.tbScript.Location = new System.Drawing.Point(0, 0);
+            this.tbScript.Name = "tbScript";
+            this.tbScript.ShowEOLMarkers = true;
+            this.tbScript.ShowInvalidLines = false;
+            this.tbScript.ShowSpaces = true;
+            this.tbScript.ShowTabs = true;
+            this.tbScript.ShowVRuler = true;
+            this.tbScript.Size = new System.Drawing.Size(532, 251);
+            this.tbScript.TabIndex = 3;
+            // 
             // tableInfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -308,5 +325,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colIsPrimaryKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn colIsForeginKey;
         private System.Windows.Forms.DataGridViewTextBoxColumn colComment;
+        private System.Windows.Forms.CheckBox cbExecuteDB;
     }
 }

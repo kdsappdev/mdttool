@@ -133,7 +133,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                         DBFileHelper.WriteXml(sc.dsTableColumn);
                     }
                 }
-                if (flag)
+                if (flag&&cbExecuteDB.Checked)
                 {
                     DNCCFrameWork.DataAccess.IDbHelper db =
                         new DNCCFrameWork.DataAccess.DbFactory(
@@ -163,12 +163,12 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                     }
 
                 }
-                MessageBox.Show("执行成功", "提示", MessageBoxButtons.OK,
+                MessageBox.Show(this, "执行成功", "提示", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("执行失败[" + ex.Message + "]", "提示",
+                MessageBox.Show(this, "执行失败[" + ex.Message + "]", "提示",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
             }

@@ -183,6 +183,15 @@ namespace MDT.Tools.DB.Plugin
         {
             Run(false);
         }
+        public DbPlugin()
+        {
+            _configForm.DBConfigInfoChanged += new ConfigForm.dbConfigInfoChanged(_configForm_DBConfigInfoChanged);
+        }
+
+        void _configForm_DBConfigInfoChanged()
+        {
+            GetDbConfigList();
+        }
 
         ConfigForm _configForm = new ConfigForm();
         void tsbDBSet_Click(object sender, EventArgs e)
@@ -555,7 +564,7 @@ namespace MDT.Tools.DB.Plugin
         {
             _dbConfigList.Clear();
             _tscbDbConfig.Items.Clear();
-
+            _dbConfigDic.Clear();
             _dbConfigList = IniConfigHelper.ReadDBInfo();
             BindDbConfig();
 
@@ -933,7 +942,7 @@ namespace MDT.Tools.DB.Plugin
                 }
                 catch (System.Data.Common.DbException ex)
                 {
-                    SetStatusBar("加载数据失败[" + ex.Message + "]");
+                    SetStatusBar(string.Format("加载数据失败[{0}]",ex.Message));
 
                 }
             }
