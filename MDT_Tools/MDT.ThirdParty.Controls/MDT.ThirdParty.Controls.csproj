@@ -82,6 +82,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoUpdater\AutoUpdateHelper\AutoUpdater.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\CommonUnitity.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\Config.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\ConstFile.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\DownloadFileInfo.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\IAutoUpdater.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\LocalFile.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\RemoteFile.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\UpdateFileList.cs" />
+    <Compile Include="AutoUpdater\DownloadConfirm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoUpdater\DownloadConfirm.designer.cs">
+      <DependentUpon>DownloadConfirm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoUpdater\DownloadProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoUpdater\DownloadProgress.designer.cs">
+      <DependentUpon>DownloadProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="NVelocity\App\Event\EventCartridge.cs" />
     <Compile Include="NVelocity\App\Event\EventHandlerUtil.cs" />
     <Compile Include="NVelocity\App\Event\IEventHandler.cs" />
@@ -579,6 +600,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="AutoUpdater\Autoupdater.config" />
     <None Include="Docking\Resources\Thumbs.db" />
     <None Include="MDT.Tools.pfx" />
   </ItemGroup>
@@ -604,6 +626,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AutoUpdater\DownloadConfirm.resx">
+      <DependentUpon>DownloadConfirm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutoUpdater\DownloadProgress.resx">
+      <DependentUpon>DownloadProgress.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="TextEditor\Resources\RightArrow.cur" />
     <EmbeddedResource Include="TextEditor\Resources\SyntaxModes.xml" />
     <EmbeddedResource Include="TextEditor\Resources\TextEditorControl.bmp" />
