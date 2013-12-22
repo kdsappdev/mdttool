@@ -99,10 +99,8 @@
   <ItemGroup>
     <None Include="MDT.Tools.pfx" />
     <None Include="templates\createtable.sql.vm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="templates\comment.sql.vm">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
