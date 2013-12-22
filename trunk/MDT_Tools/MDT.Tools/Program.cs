@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Windows.Forms;
+using System.Xml;
+using KnightsWarriorAutoupdater;
 
 namespace MDT.Tools
 {
@@ -12,9 +15,37 @@ namespace MDT.Tools
         [STAThread]
         static void Main()
         {
+            #region
+            bool bHasError = false;
+            IAutoUpdater autoUpdater = new AutoUpdater();
+            try
+            {
+                autoUpdater.Update();
+            }
+
+            catch (Exception e)
+            {
+                bHasError = true;
+            }
+            finally
+            {
+                if (bHasError == true)
+                {
+                    try
+                    {
+                        autoUpdater.RollBack();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
+            #endregion
+
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            bool flag= MDT.Tools.Core.Utils.MachineHelper.CheckProcessIsMultiple("MDT.Tools");
+            bool flag = MDT.Tools.Core.Utils.MachineHelper.CheckProcessIsMultiple("MDT.Tools");
             if (flag)
             {
                 MessageBox.Show("另一个窗口已在运行，不能重复运行", "提示");
