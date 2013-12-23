@@ -117,9 +117,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.Location = new System.Drawing.Point(11, 8);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(145, 13);
+            this.label3.Size = new System.Drawing.Size(124, 13);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Updating KnightsWarrior";
+            this.label3.Text = "Updating MDT.Tools";
             // 
             // panel2
             // 
@@ -184,9 +184,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(32, 9);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(155, 12);
+            this.label7.Size = new System.Drawing.Size(125, 12);
             this.label7.TabIndex = 0;
-            this.label7.Text = "Name:  KnightsWarrior.exe";
+            this.label7.Text = "Name:  MDT.Tools.exe";
             // 
             // label6
             // 
