@@ -37,11 +37,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -72,9 +72,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(21, 13);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(131, 12);
+            this.label3.Size = new System.Drawing.Size(101, 12);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Name:  KnightsWarrior";
+            this.label3.Text = "Name:  MDT.Tools";
             // 
             // btnCancel
             // 
@@ -100,9 +100,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(36, 32);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(365, 12);
+            this.label2.Size = new System.Drawing.Size(335, 12);
             this.label2.TabIndex = 3;
-            this.label2.Text = "A new version of KnightsWarrior is available.Do you want to ";
+            this.label2.Text = "A new version of MDT.Tools is available.Do you want to ";
             // 
             // label1
             // 
@@ -126,6 +126,15 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(498, 77);
             this.panel1.TabIndex = 4;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(37, 49);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(101, 12);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "download it now?";
             // 
             // panel2
             // 
@@ -165,15 +174,6 @@
             this.splitter2.Size = new System.Drawing.Size(498, 2);
             this.splitter2.TabIndex = 8;
             this.splitter2.TabStop = false;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(37, 49);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(101, 12);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "download it now?";
             // 
             // DownloadConfirm
             // 
