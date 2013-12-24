@@ -100,7 +100,10 @@ namespace KnightsWarriorAutoupdater
                 {
                     if (this.downloadFileList.Count == 0)
                         break;
-
+                    this.SetProcessBar(0,
+                                                                                              (int)
+                                                                                              (nDownloadedTotal * 100 /
+                                                                                               total));
                     DownloadFileInfo file = this.downloadFileList[0];
 
 
@@ -109,44 +112,55 @@ namespace KnightsWarriorAutoupdater
                     this.ShowCurrentDownloadFileName(file.FileName);
 
                     //Download
-                    clientDownload = new WebClient();
-
-                    //Added the function to support proxy
-                    clientDownload.Proxy = System.Net.WebProxy.GetDefaultProxy();
-                    clientDownload.Proxy.Credentials = CredentialCache.DefaultCredentials;
-                    clientDownload.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                    //End added
-
-                    clientDownload.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
+                    if (clientDownload == null)
                     {
-                        try
-                        {
-                            this.SetProcessBar(e.ProgressPercentage, (int)((nDownloadedTotal + e.BytesReceived) * 100 / total));
-                        }
-                        catch
-                        {
-                            //log the error message,you can use the application's log code
-                        }
+                        clientDownload = new WebClient();
 
-                    };
+                        //Added the function to support proxy
+                        clientDownload.Proxy = System.Net.WebProxy.GetDefaultProxy();
+                        clientDownload.Proxy.Credentials = CredentialCache.DefaultCredentials;
+                        clientDownload.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                        //End added
 
-                    clientDownload.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
-                    {
-                        try
-                        {
-                            DealWithDownloadErrors();
-                            DownloadFileInfo dfile = e.UserState as DownloadFileInfo;
-                            nDownloadedTotal += dfile.Size;
-                            this.SetProcessBar(0, (int)(nDownloadedTotal * 100 / total));
-                            evtPerDonwload.Set();
-                        }
-                        catch (Exception)
-                        {
-                            //log the error message,you can use the application's log code
-                        }
+                        clientDownload.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
+                                                                      {
+                                                                          try
+                                                                          {
+                                                                              this.SetProcessBar(e.ProgressPercentage,
+                                                                                                 (int)
+                                                                                                 ((nDownloadedTotal +
+                                                                                                   e.BytesReceived) * 100 /
+                                                                                                  total));
+                                                                          }
+                                                                          catch
+                                                                          {
+                                                                              //log the error message,you can use the application's log code
+                                                                          }
 
-                    };
+                                                                      };
 
+                        clientDownload.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
+                                                                    {
+                                                                        try
+                                                                        {
+                                                                            DealWithDownloadErrors();
+                                                                            DownloadFileInfo dfile =
+                                                                                e.UserState as DownloadFileInfo;
+                                                                            nDownloadedTotal += dfile.Size;
+                                                                            this.SetProcessBar(100,
+                                                                                              (int)
+                                                                                              (nDownloadedTotal * 100 /
+                                                                                               total));
+
+                                                                            evtPerDonwload.Set();
+                                                                        }
+                                                                        catch (Exception)
+                                                                        {
+                                                                            //log the error message,you can use the application's log code
+                                                                        }
+
+                                                                    };
+                    }
                     evtPerDonwload.Reset();
 
                     //Download the folder file
@@ -166,12 +180,13 @@ namespace KnightsWarriorAutoupdater
                     //Wait for the download complete
                     evtPerDonwload.WaitOne();
 
-                    clientDownload.Dispose();
-                    clientDownload = null;
+
 
                     //Remove the downloaded files
                     this.downloadFileList.Remove(file);
                 }
+                clientDownload.Dispose();
+                clientDownload = null;
 
             }
             catch (Exception)
@@ -365,7 +380,7 @@ namespace KnightsWarriorAutoupdater
 
         private void ShowErrorAndRestartApplication()
         {
-            MessageBox.Show(ConstFile.NOTNETWORK,ConstFile.MESSAGETITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(ConstFile.NOTNETWORK, ConstFile.MESSAGETITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
             CommonUnitity.RestartApplication();
         }
 

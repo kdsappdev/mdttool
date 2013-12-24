@@ -213,8 +213,8 @@
             this.tableLayoutPanel2.ColumnCount = 6;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 84F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 14F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 114F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 173F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 76F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.btnExecute, 0, 0);
@@ -266,7 +266,7 @@
             this.cbExecuteDB.Location = new System.Drawing.Point(101, 6);
             this.cbExecuteDB.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.cbExecuteDB.Name = "cbExecuteDB";
-            this.cbExecuteDB.Size = new System.Drawing.Size(108, 20);
+            this.cbExecuteDB.Size = new System.Drawing.Size(125, 20);
             this.cbExecuteDB.TabIndex = 7;
             this.cbExecuteDB.Text = "是否执行到数据库";
             this.cbExecuteDB.UseVisualStyleBackColor = true;
