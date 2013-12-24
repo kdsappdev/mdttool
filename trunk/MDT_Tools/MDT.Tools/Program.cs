@@ -15,36 +15,11 @@ namespace MDT.Tools
         [STAThread]
         static void Main()
         {
-            #region
-            bool bHasError = false;
-            IAutoUpdater autoUpdater = new AutoUpdater();
-            try
-            {
-                autoUpdater.Update();
-            }
-
-            catch (Exception e)
-            {
-                bHasError = true;
-            }
-            finally
-            {
-                if (bHasError == true)
-                {
-                    try
-                    {
-                        autoUpdater.RollBack();
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-            }
-            #endregion
-
             Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+          
             bool flag = MDT.Tools.Core.Utils.MachineHelper.CheckProcessIsMultiple("MDT.Tools");
             if (flag)
             {
@@ -52,8 +27,35 @@ namespace MDT.Tools
             }
             else
             {
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
+                #region
+                bool bHasError = false;
+                IAutoUpdater autoUpdater = new AutoUpdater();
+                try
+                {
+                    autoUpdater.Update();
+                }
+
+                catch (Exception e)
+                {
+                    bHasError = true;
+                }
+                finally
+                {
+                    if (bHasError == true)
+                    {
+                        try
+                        {
+                            autoUpdater.RollBack();
+                        }
+                        catch (Exception)
+                        {
+
+                        }
+                    }
+                }
+                #endregion
+
+               
                 Application.Run(new MainForm());
             }
         }
