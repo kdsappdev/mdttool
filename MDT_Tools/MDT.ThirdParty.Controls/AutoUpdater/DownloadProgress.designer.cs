@@ -184,9 +184,9 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(32, 9);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(125, 12);
+            this.label7.Size = new System.Drawing.Size(101, 12);
             this.label7.TabIndex = 0;
-            this.label7.Text = "Name:  MDT.Tools.exe";
+            this.label7.Text = "Name:  MDT.Tools";
             // 
             // label6
             // 
@@ -232,18 +232,18 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(498, 242);
             this.ControlBox = false;
+            this.Controls.Add(this.labelCurrentItem);
             this.Controls.Add(this.splitter2);
             this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.labelCurrentItem);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DownloadProgress";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Updating KnightsWarrior";
+            this.Text = "Updating MDT.Tools";
             this.Load += new System.EventHandler(this.OnFormLoad);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.panel1.ResumeLayout(false);
