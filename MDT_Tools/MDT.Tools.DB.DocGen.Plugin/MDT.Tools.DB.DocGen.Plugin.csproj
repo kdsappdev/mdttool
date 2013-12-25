@@ -128,6 +128,7 @@
     <ProjectReference Include="..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj">
       <Project>{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}</Project>
       <Name>MDT.Tools.DB.Common</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
