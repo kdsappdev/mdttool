@@ -203,7 +203,27 @@ namespace KnightsWarriorAutoupdater
 
             //Test network and deal with errors if there have 
             DealWithDownloadErrors();
-
+            foreach (DownloadFileInfo file in this.allFileList)
+            {
+                string tempUrlPath = CommonUnitity.GetFolderUrl(file);
+                string oldPath = string.Empty;
+                string newPath = string.Empty;
+                if (!string.IsNullOrEmpty(tempUrlPath))
+                {
+                    oldPath = Path.Combine(CommonUnitity.SystemBinUrl + tempUrlPath.Substring(1), file.FileName);
+                    newPath = Path.Combine(CommonUnitity.SystemBinUrl + ConstFile.TEMPFOLDERNAME + tempUrlPath, file.FileName);
+                }
+                else
+                {
+                    oldPath = Path.Combine(CommonUnitity.SystemBinUrl, file.FileName);
+                    newPath = Path.Combine(CommonUnitity.SystemBinUrl + ConstFile.TEMPFOLDERNAME, file.FileName);
+                }
+                System.IO.FileInfo f = new FileInfo(newPath);
+                if (!file.Size.ToString().Equals(f.Length.ToString()) && !file.FileName.ToString().EndsWith(".xml"))
+                {
+                    ShowErrorAndRestartApplication();
+                }
+            }
             //Debug.WriteLine("All Downloaded");
             foreach (DownloadFileInfo file in this.allFileList)
             {
@@ -222,15 +242,6 @@ namespace KnightsWarriorAutoupdater
                         oldPath = Path.Combine(CommonUnitity.SystemBinUrl, file.FileName);
                         newPath = Path.Combine(CommonUnitity.SystemBinUrl + ConstFile.TEMPFOLDERNAME, file.FileName);
                     }
-
-                    //just deal with the problem which the files EndsWith xml can not download
-                    System.IO.FileInfo f = new FileInfo(newPath);
-                    if (!file.Size.ToString().Equals(f.Length.ToString()) && !file.FileName.ToString().EndsWith(".xml"))
-                    {
-                        ShowErrorAndRestartApplication();
-                    }
-
-
                     //Added for dealing with the config file download errors
                     string newfilepath = string.Empty;
                     if (newPath.Substring(newPath.LastIndexOf(".") + 1).Equals(ConstFile.CONFIGFILEKEY))
