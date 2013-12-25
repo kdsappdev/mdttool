@@ -100,10 +100,7 @@ namespace KnightsWarriorAutoupdater
                 {
                     if (this.downloadFileList.Count == 0)
                         break;
-                    this.SetProcessBar(0,
-                                                                                              (int)
-                                                                                              (nDownloadedTotal * 100 /
-                                                                                               total));
+                    this.SetProcessBar(100,(int)(nDownloadedTotal * 100 /total));
                     DownloadFileInfo file = this.downloadFileList[0];
 
 
@@ -185,11 +182,14 @@ namespace KnightsWarriorAutoupdater
                     //Remove the downloaded files
                     this.downloadFileList.Remove(file);
                 }
-                clientDownload.Dispose();
-                clientDownload = null;
+                if (clientDownload != null)
+                {
+                    clientDownload.Dispose();
+                    clientDownload = null;
+                }
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 ShowErrorAndRestartApplication();
                 //throw;
@@ -380,6 +380,7 @@ namespace KnightsWarriorAutoupdater
 
         private void ShowErrorAndRestartApplication()
         {
+            Directory.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstFile.TEMPFOLDERNAME), true);
             MessageBox.Show(ConstFile.NOTNETWORK, ConstFile.MESSAGETITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
             CommonUnitity.RestartApplication();
         }
