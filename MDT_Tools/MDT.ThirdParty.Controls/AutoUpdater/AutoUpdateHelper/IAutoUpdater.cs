@@ -20,6 +20,7 @@ namespace KnightsWarriorAutoupdater
 {
     public interface IAutoUpdater
     {
+        bool IsUpdate();
         void Update();
 
         void RollBack();
