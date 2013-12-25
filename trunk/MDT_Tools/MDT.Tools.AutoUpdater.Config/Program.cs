@@ -44,14 +44,14 @@ namespace MDT.Tools.AutoUpdater.Config
             {
                 //排除当前目录中生成xml文件的工具文件
                 List<string> lt = new List<string>();
-                lt.Add("ConsoleApplication1.exe");
-                lt.Add("AutoupdateService.xml");
-                lt.Add("AutoUpdater.config");
-                lt.Add("MDT.Tools.AutoUpdater.exe");
-                lt.Add("MDT.Tools.AutoUpdater.exe.config");
-                lt.Add("MDT.Tools.AutoUpdater.Config.exe");
-                lt.Add("MDT.Tools.AutoUpdater.Config.exe.config");
-                if (!lt.Contains(f.Name) && !f.Name.EndsWith("pdb"))
+                lt.Add("ConsoleApplication1.exe".ToLower());
+                lt.Add("AutoupdateService.xml".ToLower());
+                lt.Add("AutoUpdater.config".ToLower());
+                lt.Add("MDT.Tools.AutoUpdater.exe".ToLower());
+                lt.Add("MDT.Tools.AutoUpdater.exe.config".ToLower());
+                lt.Add("MDT.Tools.AutoUpdater.Config.exe".ToLower());
+                lt.Add("MDT.Tools.AutoUpdater.Config.exe.config".ToLower());
+                if (!lt.Contains(f.Name.ToLower()) && !f.Name.EndsWith("pdb"))
                 {
                     string path = dicInfo.FullName.Replace(currentDirectory, "").Replace("\\", "/");
                     string str = url + path + "/" + f.Name;
