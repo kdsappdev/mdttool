@@ -20,7 +20,7 @@ namespace KnightsWarriorAutoupdater
 {
     public class ConstFile
     {
-        public const string TEMPFOLDERNAME = "TempFolder";
+        public const string TEMPFOLDERNAME = "temp";
         public const string CONFIGFILEKEY = "config_";
         public const string FILENAME = "control\\AutoUpdater.config";
         public const string ROOLBACKFILE = "MDT.Tools.exe";
