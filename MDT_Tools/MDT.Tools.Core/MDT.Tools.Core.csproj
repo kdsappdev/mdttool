@@ -201,6 +201,7 @@
     <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
       <Project>{C3DDB32F-3E50-484A-9142-F93472A14323}</Project>
       <Name>MDT.ThirdParty.Controls</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
