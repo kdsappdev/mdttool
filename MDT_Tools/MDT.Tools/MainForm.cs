@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
+using KnightsWarriorAutoupdater;
 using MDT.Tools.Core.Plugin;
 using MDT.Tools.Core.Plugin.WindowsPlugin;
 using MDT.Tools.Core.UI;
@@ -23,6 +25,45 @@ namespace MDT.Tools
         private void MainFormLoad(object sender, EventArgs e)
         {
             _explorer.Show(DockPanelWeifenLuo, DockState.DockLeft);
+            System.Threading.ThreadPool.QueueUserWorkItem(o =>
+                                                              {
+                                                                  #region
+
+                                                                  bool bHasError = false;
+                                                                  IAutoUpdater autoUpdater = new AutoUpdater();
+                                                                  bool isUpdate = false;
+                                                                  try
+                                                                  {
+                                                                      isUpdate = autoUpdater.IsUpdate();
+                                                                  }
+
+                                                                  catch (Exception ex)
+                                                                  {
+                                                                      bHasError = true;
+                                                                  }
+
+                                                                  #endregion
+
+                                                                  if (isUpdate && !bHasError)
+                                                                  {
+                                                                      DialogResult dr = MessageBox.Show(this,
+                                                                                                        "检查到有新版，是否升级?",
+                                                                                                        "提示",
+                                                                                                        MessageBoxButtons
+                                                                                                            .YesNo,
+                                                                                                        MessageBoxIcon.
+                                                                                                            Information);
+                                                                      if (dr == DialogResult.Yes)
+                                                                      {
+                                                                          Process.Start(
+                                                                              System.Configuration.ConfigurationSettings
+                                                                                  .
+                                                                                  AppSettings["AutoUpdate"], "true");
+                                                                          TsmiExitClick(null, null);
+                                                                      }
+                                                                  }
+                                                              });
+
         }
 
         private void TsmiAboutClick(object sender, EventArgs e)
@@ -37,7 +78,7 @@ namespace MDT.Tools
         private void Initialize()
         {
             Text = System.Configuration.ConfigurationSettings.AppSettings["App"];
-            bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"],out _userClosing);
+            bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"], out _userClosing);
             _pluginUtils = new PluginUtils();
             _pluginManager = new PluginManager(this);
             _pluginManager.LoadDefault(PluginHelper.PluginSign1);
@@ -48,7 +89,7 @@ namespace MDT.Tools
             notifyIcon1.Text = Text;
             notifyIcon1.Icon = Icon;
             tsbExit.Image = Resources.exit;
-            tsbCloseAllDocment.Image= tsmiCloseAllDocument.Image = Resources.closeAllDocment;
+            tsbCloseAllDocment.Image = tsmiCloseAllDocument.Image = Resources.closeAllDocment;
         }
 
         #endregion
@@ -123,7 +164,7 @@ namespace MDT.Tools
         #endregion
 
         #region 退出
-        
+
         private void TsmiExitClick(object sender, EventArgs e)
         {
             Application.Exit();
@@ -207,6 +248,6 @@ namespace MDT.Tools
         }
         #endregion
 
-       
+
     }
 }
