@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Windows.Forms;
 using System.Xml;
@@ -19,7 +20,7 @@ namespace MDT.Tools
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-          
+
             bool flag = MDT.Tools.Core.Utils.MachineHelper.CheckProcessIsMultiple("MDT.Tools");
             if (flag)
             {
@@ -27,35 +28,6 @@ namespace MDT.Tools
             }
             else
             {
-                #region
-                bool bHasError = false;
-                IAutoUpdater autoUpdater = new AutoUpdater();
-                try
-                {
-                    autoUpdater.Update();
-                }
-
-                catch (Exception e)
-                {
-                    bHasError = true;
-                }
-                finally
-                {
-                    if (bHasError == true)
-                    {
-                        try
-                        {
-                            autoUpdater.RollBack();
-                        }
-                        catch (Exception)
-                        {
-
-                        }
-                    }
-                }
-                #endregion
-
-               
                 Application.Run(new MainForm());
             }
         }
