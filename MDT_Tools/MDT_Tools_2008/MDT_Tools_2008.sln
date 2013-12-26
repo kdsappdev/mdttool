@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.AutoUpdater", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.AutoUpdater.Config", "..\MDT.Tools.AutoUpdater.Config\MDT.Tools.AutoUpdater.Config.csproj", "{6D023D06-B6F4-43DE-8168-06AC7A288A36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.Template.Plugin", "..\MDT.Tools.Template.Plugin\MDT.Tools.Template.Plugin.csproj", "{50A616E6-5F73-4E51-90CC-D002A5B33624}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,12 @@ Global
 		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Release|x86.ActiveCfg = Release|Any CPU
+		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
