@@ -7,8 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Ats.Foundation.Message;
-using Ats.YuKon.Common;
-using Ats.YuKon.Common.Core;
+using Atf.Common.Core;
 using ${idalNameSpace};
 using ${modelNameSpace};
 namespace ${bllNameSpace}
