@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    This section defines project-level properties.
+
+    AssemblyName
+      Name of the output assembly.
+    Configuration
+      Specifies a default value for debug.
+    OutputType
+      Must be "Library" for VSTO.
+    Platform
+      Specifies what CPU the output of this project can run on.
+    NoStandardLibraries
+      Set to "false" for VSTO.
+    RootNamespace
+      In C#, this specifies the namespace given to new files. In VB, all objects are
+      wrapped in this namespace at runtime.
+  -->
+  <PropertyGroup>
+    <ProjectTypeGuids>{BAA0C2D2-18E2-41B9-852F-F413020CAA33};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{83FFF76F-C068-4B98-832B-04CF82ADE2C3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <RootNamespace>MDT.Tools.ExcelAddin</RootNamespace>
+    <AssemblyName>MDT.Tools.ExcelAddin</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <DefineConstants>VSTO40</DefineConstants>
+    <IsWebBootstrapper>False</IsWebBootstrapper>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <PublishUrl>publish\</PublishUrl>
+    <InstallUrl />
+    <TargetCulture>zh-chs</TargetCulture>
+    <ApplicationVersion>1.0.0.7</ApplicationVersion>
+    <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>days</UpdateIntervalUnits>
+    <ProductName>MDT.Tools.ExcelAddin</ProductName>
+    <PublisherName />
+    <SupportUrl />
+    <FriendlyName>MDT.Tools.ExcelAddin</FriendlyName>
+    <OfficeApplicationDescription />
+    <LoadBehavior>3</LoadBehavior>
+  </PropertyGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <PropertyGroup>
+    <!--
+      OfficeApplication
+        Add-in host application
+    -->
+    <OfficeApplication>Excel</OfficeApplication>
+  </PropertyGroup>
+  <!--
+    This section defines properties that are set when the "Debug" configuration is selected.
+
+    DebugSymbols
+      If "true", create symbols (.pdb). If "false", do not create symbols.
+    DefineConstants
+      Constants defined for the preprocessor.
+    EnableUnmanagedDebugging
+      If "true", starting the debugger will attach both managed and unmanaged debuggers.
+    Optimize
+      If "true", optimize the build output. If "false", do not optimize.
+    OutputPath
+      Output path of project relative to the project file.
+    WarningLevel
+      Warning level for the compiler.
+  -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>TRACE;DEBUG;VSTO40;NET_40</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <!--
+    This section defines properties that are set when the "Release" configuration is selected.
+
+    DebugSymbols
+      If "true", create symbols (.pdb). If "false", do not create symbols.
+    DefineConstants
+      Constants defined for the preprocessor.
+    EnableUnmanagedDebugging
+      If "true", starting the debugger will attach both managed and unmanaged debuggers.
+    Optimize
+      If "true", optimize the build output. If "false", do not optimize.
+    OutputPath
+      Output path of project relative to the project file.
+    WarningLevel
+      Warning level for the compiler.
+  -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!--
+    This section enables pre- and post-build steps. However, in VSTO use
+    MSBuild tasks instead of these properties.       
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>
+    </ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>DB820A73EF2217006976660F834ABB0EA758D227</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <!--
+    This section specifies references for the project.
+  -->
+  <ItemGroup>
+    <Reference Include="Accessibility" />
+    <Reference Include="C5">
+      <HintPath>..\lib\2.0\C5.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging">
+      <HintPath>..\lib\2.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net">
+      <HintPath>..\lib\2.0\Common.Logging.Log4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Tools.Applications.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Office, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>False</Private>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>False</Private>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <!--
+    This section defines the user source files that are part of the project.
+     
+    A "Compile" element specifies a source file to compile.
+    An "EmbeddedResource" element specifies an .resx file for embedded resources.
+    A "None" element specifies a file that is not to be passed to the compiler (for instance, 
+    a text file or XML file).
+    The "AppDesigner" element specifies the directory where the application properties files
+    can be found.
+  -->
+  <ItemGroup>
+    <Compile Include="ConfigInfo.cs" />
+    <Compile Include="Consts.cs" />
+    <Compile Include="IniConfigHelper.cs" />
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="QuartService.cs" />
+    <Compile Include="Quartz\CalendarIntervalScheduleBuilder.cs" />
+    <Compile Include="Quartz\Collection\HashSet.cs" />
+    <Compile Include="Quartz\Collection\ISet.cs" />
+    <Compile Include="Quartz\Collection\ISortedSet.cs" />
+    <Compile Include="Quartz\Collection\TreeSet.cs" />
+    <Compile Include="Quartz\Core\IJobRunShellFactory.cs" />
+    <Compile Include="Quartz\Core\JobRunShell.cs" />
+    <Compile Include="Quartz\Core\ListenerManagerImpl.cs" />
+    <Compile Include="Quartz\Core\QuartzScheduler.cs" />
+    <Compile Include="Quartz\Core\QuartzSchedulerResources.cs" />
+    <Compile Include="Quartz\Core\QuartzSchedulerThread.cs" />
+    <Compile Include="Quartz\Core\SchedulerSignalerImpl.cs" />
+    <Compile Include="Quartz\CronExpression.cs" />
+    <Compile Include="Quartz\CronScheduleBuilder.cs" />
+    <Compile Include="Quartz\DailyTimeIntervalScheduleBuilder.cs" />
+    <Compile Include="Quartz\DateBuilder.cs" />
+    <Compile Include="Quartz\DisallowConcurrentExecutionAttribute.cs" />
+    <Compile Include="Quartz\ICalendar.cs" />
+    <Compile Include="Quartz\ICalendarIntervalTrigger.cs" />
+    <Compile Include="Quartz\ICronTrigger.cs" />
+    <Compile Include="Quartz\IDailyTimeIntervalTrigger.cs" />
+    <Compile Include="Quartz\IInterruptableJob.cs" />
+    <Compile Include="Quartz\IJob.cs" />
+    <Compile Include="Quartz\IJobDetail.cs" />
+    <Compile Include="Quartz\IJobExecutionContext.cs" />
+    <Compile Include="Quartz\IJobListener.cs" />
+    <Compile Include="Quartz\IListenerManager.cs" />
+    <Compile Include="Quartz\IMatcher.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\AdoConstants.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\AdoJobStoreUtil.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\AdoUtil.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\CalendarIntervalTriggerPersistenceDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\Common\DbMetadata.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\Common\DbProvider.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\Common\IDbProvider.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\ConnectionAndTransactionHolder.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\CronTriggerPersistenceDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\DailyTimeIntervalTriggerPersistenceDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\DBSemaphore.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\DelegateInitializationArgs.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\FiredTriggerRecord.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\IDbAccessor.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\IDriverDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\InvalidConfigurationException.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\ISemaphore.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\ITablePrefixAware.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\ITriggerPersistenceDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\JobStoreCMT.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\JobStoreSupport.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\JobStoreTX.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\LockException.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\MySQLDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\NoSuchDelegateException.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\OracleDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\SchedulerStateRecord.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\SimplePropertiesTriggerPersistenceDelegateSupport.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\SimplePropertiesTriggerProperties.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\SimpleSemaphore.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\SimpleTriggerPersistenceDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\SQLiteDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\SqlServerDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\StdAdoConstants.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\StdAdoDelegate.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\StdRowLockSemaphore.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\TriggerPropertyBundle.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\TriggerStatus.cs" />
+    <Compile Include="Quartz\Impl\AdoJobStore\UpdateRowLockSemaphore.cs" />
+    <Compile Include="Quartz\Impl\Calendar\AnnualCalendar.cs" />
+    <Compile Include="Quartz\Impl\Calendar\BaseCalendar.cs" />
+    <Compile Include="Quartz\Impl\Calendar\CronCalendar.cs" />
+    <Compile Include="Quartz\Impl\Calendar\DailyCalendar.cs" />
+    <Compile Include="Quartz\Impl\Calendar\HolidayCalendar.cs" />
+    <Compile Include="Quartz\Impl\Calendar\MonthlyCalendar.cs" />
+    <Compile Include="Quartz\Impl\Calendar\WeeklyCalendar.cs" />
+    <Compile Include="Quartz\Impl\DefaultThreadExecutor.cs" />
+    <Compile Include="Quartz\Impl\DirectSchedulerFactory.cs" />
+    <Compile Include="Quartz\Impl\JobDetailImpl.cs" />
+    <Compile Include="Quartz\Impl\JobExecutionContextImpl.cs" />
+    <Compile Include="Quartz\Impl\Matchers\AndMatcher.cs" />
+    <Compile Include="Quartz\Impl\Matchers\EverythingMatcher.cs" />
+    <Compile Include="Quartz\Impl\Matchers\GroupMatcher.cs" />
+    <Compile Include="Quartz\Impl\Matchers\KeyMatcher.cs" />
+    <Compile Include="Quartz\Impl\Matchers\NameMatcher.cs" />
+    <Compile Include="Quartz\Impl\Matchers\NotMatcher.cs" />
+    <Compile Include="Quartz\Impl\Matchers\OrMatcher.cs" />
+    <Compile Include="Quartz\Impl\Matchers\StringMatcher.cs" />
+    <Compile Include="Quartz\Impl\Matchers\StringOperator.cs" />
+    <Compile Include="Quartz\Impl\RemoteScheduler.cs" />
+    <Compile Include="Quartz\Impl\SchedulerDetailsSetter.cs" />
+    <Compile Include="Quartz\Impl\SchedulerRepository.cs" />
+    <Compile Include="Quartz\Impl\StdJobRunShellFactory.cs" />
+    <Compile Include="Quartz\Impl\StdScheduler.cs" />
+    <Compile Include="Quartz\Impl\StdSchedulerFactory.cs" />
+    <Compile Include="Quartz\Impl\Triggers\AbstractTrigger.cs" />
+    <Compile Include="Quartz\Impl\Triggers\CalendarIntervalTriggerImpl.cs" />
+    <Compile Include="Quartz\Impl\Triggers\CronTriggerImpl.cs" />
+    <Compile Include="Quartz\Impl\Triggers\DailyTimeIntervalTriggerImpl.cs" />
+    <Compile Include="Quartz\Impl\Triggers\SimpleTriggerImpl.cs" />
+    <Compile Include="Quartz\IntervalUnit.cs" />
+    <Compile Include="Quartz\IScheduleBuilder.cs" />
+    <Compile Include="Quartz\IScheduler.cs" />
+    <Compile Include="Quartz\ISchedulerFactory.cs" />
+    <Compile Include="Quartz\ISchedulerListener.cs" />
+    <Compile Include="Quartz\ISimpleTrigger.cs" />
+    <Compile Include="Quartz\IStatefulJob.cs" />
+    <Compile Include="Quartz\ITrigger.cs" />
+    <Compile Include="Quartz\ITriggerListener.cs" />
+    <Compile Include="Quartz\JobBuilder.cs" />
+    <Compile Include="Quartz\JobDataMap.cs" />
+    <Compile Include="Quartz\JobExecutionException.cs" />
+    <Compile Include="Quartz\JobKey.cs" />
+    <Compile Include="Quartz\JobPersistenceException.cs" />
+    <Compile Include="Quartz\Job\DirectoryScanJob.cs" />
+    <Compile Include="Quartz\Job\FileScanJob.cs" />
+    <Compile Include="Quartz\Job\IDirectoryScanListener.cs" />
+    <Compile Include="Quartz\Job\IFileScanListener.cs" />
+    <Compile Include="Quartz\Job\NativeJob.cs" />
+    <Compile Include="Quartz\Job\NoOpJob.cs" />
+    <Compile Include="Quartz\Job\SendMailJob.cs" />
+    <Compile Include="Quartz\Listener\BroadcastJobListener.cs" />
+    <Compile Include="Quartz\Listener\BroadcastSchedulerListener.cs" />
+    <Compile Include="Quartz\Listener\BroadcastTriggerListener.cs" />
+    <Compile Include="Quartz\Listener\JobChainingJobListener.cs" />
+    <Compile Include="Quartz\Listener\JobListenerSupport.cs" />
+    <Compile Include="Quartz\Listener\SchedulerListenerSupport.cs" />
+    <Compile Include="Quartz\Listener\TriggerListenerSupport.cs" />
+    <Compile Include="Quartz\MisfireInstruction.cs" />
+    <Compile Include="Quartz\NthIncludedDayTrigger.cs" />
+    <Compile Include="Quartz\ObjectAlreadyExistsException.cs" />
+    <Compile Include="Quartz\PersistJobDataAfterExecutionAttribute.cs" />
+    <Compile Include="Quartz\Plugin\History\LoggingJobHistoryPlugin.cs" />
+    <Compile Include="Quartz\Plugin\History\LoggingTriggerHistoryPlugin.cs" />
+    <Compile Include="Quartz\Plugin\Management\ShutdownHookPlugin.cs" />
+    <Compile Include="Quartz\Plugin\Xml\XMLSchedulingDataProcessorPlugin.cs" />
+    <Compile Include="Quartz\QuartzThread.cs" />
+    <Compile Include="Quartz\ScheduleBuilder.cs" />
+    <Compile Include="Quartz\SchedulerConfigException.cs" />
+    <Compile Include="Quartz\SchedulerConstants.cs" />
+    <Compile Include="Quartz\SchedulerContext.cs" />
+    <Compile Include="Quartz\SchedulerException.cs" />
+    <Compile Include="Quartz\SchedulerInstruction.cs" />
+    <Compile Include="Quartz\SchedulerMetaData.cs" />
+    <Compile Include="Quartz\SimpleScheduleBuilder.cs" />
+    <Compile Include="Quartz\Simpl\DefaultObjectSerializer.cs" />
+    <Compile Include="Quartz\Simpl\HostnameInstanceIdGenerator.cs" />
+    <Compile Include="Quartz\Simpl\IRemotableQuartzScheduler.cs" />
+    <Compile Include="Quartz\Simpl\PropertySettingJobFactory.cs" />
+    <Compile Include="Quartz\Simpl\RAMJobStore.cs" />
+    <Compile Include="Quartz\Simpl\RemotingSchedulerExporter.cs" />
+    <Compile Include="Quartz\Simpl\RemotingSchedulerProxyFactory.cs" />
+    <Compile Include="Quartz\Simpl\SimpleInstanceIdGenerator.cs" />
+    <Compile Include="Quartz\Simpl\SimpleJobFactory.cs" />
+    <Compile Include="Quartz\Simpl\SimpleThreadPool.cs" />
+    <Compile Include="Quartz\Simpl\SimpleTypeLoadHelper.cs" />
+    <Compile Include="Quartz\Simpl\SystemPropertyInstanceIdGenerator.cs" />
+    <Compile Include="Quartz\Simpl\ZeroSizeThreadPool.cs" />
+    <Compile Include="Quartz\SPI\IInstanceIdGenerator.cs" />
+    <Compile Include="Quartz\SPI\IJobFactory.cs" />
+    <Compile Include="Quartz\SPI\IJobStore.cs" />
+    <Compile Include="Quartz\SPI\IMutableTrigger.cs" />
+    <Compile Include="Quartz\SPI\IObjectSerializer.cs" />
+    <Compile Include="Quartz\SPI\IOperableTrigger.cs" />
+    <Compile Include="Quartz\SPI\IRemotableSchedulerProxyFactory.cs" />
+    <Compile Include="Quartz\SPI\ISchedulerExporter.cs" />
+    <Compile Include="Quartz\SPI\ISchedulerPlugin.cs" />
+    <Compile Include="Quartz\SPI\ISchedulerSignaler.cs" />
+    <Compile Include="Quartz\SPI\IThreadExecutor.cs" />
+    <Compile Include="Quartz\SPI\IThreadPool.cs" />
+    <Compile Include="Quartz\SPI\ITypeLoadHelper.cs" />
+    <Compile Include="Quartz\SPI\TriggerFiredBundle.cs" />
+    <Compile Include="Quartz\SPI\TriggerFiredResult.cs" />
+    <Compile Include="Quartz\SystemTime.cs" />
+    <Compile Include="Quartz\TimeOfDay.cs" />
+    <Compile Include="Quartz\TimeSpanParseRuleAttribute.cs" />
+    <Compile Include="Quartz\TriggerBuilder.cs" />
+    <Compile Include="Quartz\TriggerConstants.cs" />
+    <Compile Include="Quartz\TriggerKey.cs" />
+    <Compile Include="Quartz\TriggerState.cs" />
+    <Compile Include="Quartz\TriggerTimeComparator.cs" />
+    <Compile Include="Quartz\TriggerUtils.cs" />
+    <Compile Include="Quartz\UnableToInterruptJobException.cs" />
+    <Compile Include="Quartz\Util\CollectionExtensions.cs" />
+    <Compile Include="Quartz\Util\DataReaderExtensions.cs" />
+    <Compile Include="Quartz\Util\DBConnectionManager.cs" />
+    <Compile Include="Quartz\Util\DirtyFlagMap.cs" />
+    <Compile Include="Quartz\Util\FileUtil.cs" />
+    <Compile Include="Quartz\Util\Key.cs" />
+    <Compile Include="Quartz\Util\LogicalThreadContext.cs" />
+    <Compile Include="Quartz\Util\ObjectExtensions.cs" />
+    <Compile Include="Quartz\Util\ObjectUtils.cs" />
+    <Compile Include="Quartz\Util\PropertiesParser.cs" />
+    <Compile Include="Quartz\Util\StringExtensions.cs" />
+    <Compile Include="Quartz\Util\StringKeyDirtyFlagMap.cs" />
+    <Compile Include="Quartz\Xml\job_scheduling_data_2_0.cs">
+      <DependentUpon>job_scheduling_data_2_0.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="Quartz\Xml\ValidationException.cs" />
+    <Compile Include="Quartz\Xml\XMLSchedulingDataProcessor.cs" />
+    <Compile Include="Utils\FileHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Utils\ProcessExcelHelper.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="config.ini" />
+    <None Include="MDT.Tools.ExcelAddin_TemporaryKey.pfx" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ThisAddIn.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Quartz\Impl\AdoJobStore\Common\dbproviders.properties" />
+    <EmbeddedResource Include="Quartz\quartz.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Quartz\quartz.properties" />
+    <EmbeddedResource Include="Quartz\Xml\job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="ThisAddIn.Designer.xml">
+      <DependentUpon>ThisAddIn.cs</DependentUpon>
+    </None>
+    <Compile Include="ThisAddIn.Designer.cs">
+      <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
+    </Compile>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <!-- Include the build rules for a C# project. -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- Include additional build rules for an Office application add-in. -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" />
+  <!-- This section defines VSTO properties that describe the host-changeable project properties. -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
+        <ProjectProperties HostName="Excel" HostPackage="{20A848B8-E01F-4801-962E-25DB0FF57389}" OfficeVersion="14.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="" DebugInfoExeName="#Software\Microsoft\Office\14.0\Excel\InstallRoot\Path#excel.exe" AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
+        <Host Name="Excel" GeneratedCodeNamespace="MDT.Tools.ExcelAddin" PublishedHash="69C324AB27932AA2FBF2B7EA72250886FF164DE6" IconIndex="0">
+          <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" PublishedHash="86E36F7941CA136A0D930E62FAE669FC4E9693AC" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
+        </Host>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
