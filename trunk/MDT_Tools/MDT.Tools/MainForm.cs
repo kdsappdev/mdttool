@@ -9,6 +9,8 @@ using MDT.Tools.UI;
 using WeifenLuo.WinFormsUI.Docking;
 using MDT.Tools.Core.Utils;
 using MDT.Tools.Core.Resources;
+using System.IO;
+using System.Reflection;
 namespace MDT.Tools
 {
     public partial class MainForm : Form, IForm
@@ -79,6 +81,7 @@ namespace MDT.Tools
         {
             Text = System.Configuration.ConfigurationSettings.AppSettings["App"];
             bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"], out _userClosing);
+            reStoreWorkSpace();
             _pluginUtils = new PluginUtils();
             _pluginManager = new PluginManager(this);
             _pluginManager.LoadDefault(PluginHelper.PluginSign1);
@@ -90,6 +93,7 @@ namespace MDT.Tools
             notifyIcon1.Icon = Icon;
             tsbExit.Image = Resources.exit;
             tsbCloseAllDocment.Image = tsmiCloseAllDocument.Image = Resources.closeAllDocment;
+            
         }
 
         #endregion
@@ -164,6 +168,7 @@ namespace MDT.Tools
 
         private void TsmiExitClick(object sender, EventArgs e)
         {
+            saveWorkSpace();
             Application.Exit();
         }
         #endregion
@@ -182,6 +187,10 @@ namespace MDT.Tools
                                                "图标已经缩小到托盘，打开窗口请双击图标即可。",
                                                ToolTipIcon.Info);
                 }
+            }
+            else
+            {
+                saveWorkSpace();
             }
         }
         private void MainForm_Move(object sender, EventArgs e)
@@ -242,6 +251,44 @@ namespace MDT.Tools
             {
                 v.DockHandler.Close();
             }
+        }
+        #endregion
+
+        #region 工作区
+        private void saveWorkSpace()
+        {
+            try
+            {
+                string configFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "./control/workspace.config");
+
+                Panel.SaveAsXml(configFile);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex);
+            }
+        }
+        private void reStoreWorkSpace()
+        {
+            try
+            {
+                DeserializeDockContent ddc = new DeserializeDockContent(GetContentFromPersistString);
+                string configFile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "./control/workspace.config");
+                if (File.Exists(configFile))
+                {
+                    Panel.LoadFromXml(configFile, ddc);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex);
+            }
+        }
+        private IDockContent GetContentFromPersistString(string str)
+        {          
+            string[] strs = str.Split(new char[] { ','});
+            IDockContent dc = Assembly.Load(strs[1]).CreateInstance(strs[0]) as IDockContent;
+            return dc;             
         }
         #endregion
 

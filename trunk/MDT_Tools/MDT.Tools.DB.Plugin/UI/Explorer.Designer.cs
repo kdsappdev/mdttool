@@ -1,4 +1,4 @@
-﻿namespace MDT.Tools.Core.UI
+﻿namespace MDT.Tools.DB.Plugin.UI
 {
     partial class Explorer
     {

@@ -263,7 +263,7 @@ namespace WeifenLuo.WinFormsUI.Docking
                 {
                     xmlOut.WriteStartElement("Content");
                     xmlOut.WriteAttributeString("ID", dockPanel.Contents.IndexOf(content).ToString(CultureInfo.InvariantCulture));
-                    xmlOut.WriteAttributeString("PersistString", content.DockHandler.PersistString);
+                    xmlOut.WriteAttributeString("PersistString", string.Format("{0},{1}",content.DockHandler.PersistString,content.GetType().Assembly.GetName().Name));
                     xmlOut.WriteAttributeString("AutoHidePortion", content.DockHandler.AutoHidePortion.ToString(CultureInfo.InvariantCulture));
                     xmlOut.WriteAttributeString("IsHidden", content.DockHandler.IsHidden.ToString(CultureInfo.InvariantCulture));
                     xmlOut.WriteAttributeString("IsFloat", content.DockHandler.IsFloat.ToString(CultureInfo.InvariantCulture));
