@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
+using MDT.ThirdParty.Controls.Docking;
 
 // To simplify the process of finding the toolbox bitmap resource:
 // #1 Create an internal class called "resfinder" outside of the root namespace.

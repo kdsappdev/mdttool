@@ -13,8 +13,7 @@ namespace MDT.Tools
 {
     public partial class MainForm : Form, IForm
     {
-        readonly Explorer _explorer = new Explorer();
-
+        
         public MainForm()
         {
             InitializeComponent();
@@ -24,44 +23,45 @@ namespace MDT.Tools
 
         private void MainFormLoad(object sender, EventArgs e)
         {
-            _explorer.Show(DockPanelWeifenLuo, DockState.DockLeft);
+            
             System.Threading.ThreadPool.QueueUserWorkItem(o =>
                                                               {
                                                                   #region
 
-                                                                  bool bHasError = false;
+                                                                   
                                                                   IAutoUpdater autoUpdater = new AutoUpdater();
                                                                   bool isUpdate = false;
                                                                   try
                                                                   {
                                                                       isUpdate = autoUpdater.IsUpdate();
+                                                                      if (isUpdate)
+                                                                      {
+                                                                          DialogResult dr = MessageBox.Show(this,
+                                                                                                            "检查到有新版，是否升级?",
+                                                                                                            "提示",
+                                                                                                            MessageBoxButtons
+                                                                                                                .YesNo,
+                                                                                                            MessageBoxIcon.
+                                                                                                                Information);
+                                                                          if (dr == DialogResult.Yes)
+                                                                          {
+                                                                              Process.Start(
+                                                                                  System.Configuration.ConfigurationSettings
+                                                                                      .
+                                                                                      AppSettings["AutoUpdate"], "true");
+                                                                              TsmiExitClick(null, null);
+                                                                          }
+                                                                      }
                                                                   }
-
-                                                                  catch (Exception ex)
+                                                                  catch
                                                                   {
-                                                                      bHasError = true;
+                                                                       
                                                                   }
 
                                                                   #endregion
 
-                                                                  if (isUpdate && !bHasError)
-                                                                  {
-                                                                      DialogResult dr = MessageBox.Show(this,
-                                                                                                        "检查到有新版，是否升级?",
-                                                                                                        "提示",
-                                                                                                        MessageBoxButtons
-                                                                                                            .YesNo,
-                                                                                                        MessageBoxIcon.
-                                                                                                            Information);
-                                                                      if (dr == DialogResult.Yes)
-                                                                      {
-                                                                          Process.Start(
-                                                                              System.Configuration.ConfigurationSettings
-                                                                                  .
-                                                                                  AppSettings["AutoUpdate"], "true");
-                                                                          TsmiExitClick(null, null);
-                                                                      }
-                                                                  }
+                                                                  
+                                                                 
                                                               });
 
         }
@@ -123,10 +123,7 @@ namespace MDT.Tools
             get { return DockPanelWeifenLuo; }
         }
 
-        public Explorer Explorer
-        {
-            get { return _explorer; }
-        }
+        
 
         public ContextMenuStrip MainContextMenu
         {
@@ -247,6 +244,56 @@ namespace MDT.Tools
             }
         }
         #endregion
+
+        private void tsmiCheckUpdate_Click(object sender, EventArgs e)
+        {
+            System.Threading.ThreadPool.QueueUserWorkItem(o =>
+            {
+                #region
+
+                
+                IAutoUpdater autoUpdater = new AutoUpdater();
+                bool isUpdate = false;
+                try
+                {
+                    isUpdate = autoUpdater.IsUpdate();
+                    if (isUpdate)
+                    {
+                        DialogResult dr = MessageBox.Show(this,
+                                                          "检查到有新版，是否升级?",
+                                                          "提示",
+                                                          MessageBoxButtons
+                                                              .YesNo,
+                                                          MessageBoxIcon.
+                                                              Information);
+                        if (dr == DialogResult.Yes)
+                        {
+                            Process.Start(
+                                System.Configuration.ConfigurationSettings
+                                    .
+                                    AppSettings["AutoUpdate"], "true");
+                            TsmiExitClick(null, null);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show(this, string.Format("已经是最新版本"), "提示", MessageBoxButtons.OK, MessageBoxIcon.
+                                                              Information);
+                    }
+              
+                }
+
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, "检查失败[" + ex.Message + "]", "提示", MessageBoxButtons.OK, MessageBoxIcon.
+                                                              Information);
+                }
+
+                #endregion
+
+               
+            });
+        }
 
 
     }

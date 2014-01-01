@@ -10,6 +10,7 @@ using MDT.Tools.Core.Resources;
 using MDT.Tools.DB.Plugin.Model;
 using MDT.Tools.DB.Plugin.UI;
 using MDT.Tools.DB.Plugin.Utils;
+using WeifenLuo.WinFormsUI.Docking;
 
 namespace MDT.Tools.DB.Plugin
 {
@@ -58,7 +59,7 @@ namespace MDT.Tools.DB.Plugin
         #endregion
 
         private readonly TreeView _tvDb = new TreeView();
-        private Explorer _explorer;
+        private Explorer _explorer = new Explorer();
 
 
         protected override void unload()
@@ -69,7 +70,7 @@ namespace MDT.Tools.DB.Plugin
             _dsTablePrimaryKey.Clear();
             ClearTree();
             RemoveShareData();
-            _explorer.Text = "Explorer";
+             
             RemoveTool();
             RemoveStatus();
             RemoveTreeControl();
@@ -109,19 +110,19 @@ namespace MDT.Tools.DB.Plugin
         readonly ToolStripMenuItem _tsmiDbConfig = new ToolStripMenuItem();
         readonly ToolStripSeparator _tsmiSeparator = new ToolStripSeparator();
         readonly ToolStripMenuItem _tsmiExit = new ToolStripMenuItem();
+        private MenuStrip _mainTool = null;
         private void AddTool()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple(AddTool);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
             }
             else
             {
+
+                _explorer.Show(Application.Panel, DockState.DockLeftAutoHide);
                 _tsmiSystem.Text = "系统(&S)";
-
-
-
                 _tsmiDbSet.Text=_tsbDbSet.Text = "数据库配置";
                 _tsmiDbConfig.DisplayStyle = _tsbDbSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                 _tsbDbSet.Click += tsbDBSet_Click;
@@ -159,10 +160,10 @@ namespace MDT.Tools.DB.Plugin
         }
         private void RemoveTool()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple(RemoveTool);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
             }
             else
             {
@@ -207,10 +208,10 @@ namespace MDT.Tools.DB.Plugin
         readonly ToolStripProgressBar _tspbLoadDbProgress = new ToolStripProgressBar();
         private void AddStatus()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple(AddStatus);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
             }
             else
             {
@@ -231,10 +232,10 @@ namespace MDT.Tools.DB.Plugin
 
         private void RemoveStatus()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple(RemoveStatus);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
 
             }
             else
@@ -258,10 +259,10 @@ namespace MDT.Tools.DB.Plugin
         #region 增加树形控件
         private void AddTreeControl()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple(AddTreeControl);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
             }
             else
             {
@@ -269,7 +270,7 @@ namespace MDT.Tools.DB.Plugin
                 _tvDb.CheckBoxes = true;
                 _tvDb.AfterCheck += TvDbAfterCheck;
                 _tvDb.MouseClick += TvDbMouseClick;
-                Application.Explorer.Controls.Add(_tvDb);
+                _explorer.Controls.Add(_tvDb);
             }
         }
 
@@ -302,14 +303,14 @@ namespace MDT.Tools.DB.Plugin
         }
         private void RemoveTreeControl()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple(RemoveTreeControl);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
             }
             else
             {
-                Application.Explorer.Controls.Remove(_tvDb);
+                _explorer.Controls.Remove(_tvDb);
             }
 
         }
@@ -319,10 +320,10 @@ namespace MDT.Tools.DB.Plugin
 
         private void ClearTree()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple(ClearTree);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
             }
             else
             {
@@ -334,10 +335,10 @@ namespace MDT.Tools.DB.Plugin
         private delegate void SimpleBool(bool flag);
         private void SetEnable(bool flag)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new SimpleBool(SetEnable);
-                _explorer.Invoke(s, new object[] { flag });
+                _mainTool.Invoke(s, new object[] { flag });
             }
             else
             {
@@ -361,10 +362,10 @@ namespace MDT.Tools.DB.Plugin
         }
         private void ExandAllTreeNode()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple(ExandAllTreeNode);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
 
             }
             else
@@ -375,10 +376,10 @@ namespace MDT.Tools.DB.Plugin
         }
         private void AddNodes(TreeNodeCollection collection)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new CreateRootNodeDel(AddNodes);
-                _explorer.Invoke(s, new object[] { collection });
+                _mainTool.Invoke(s, new object[] { collection });
 
             }
             else
@@ -405,10 +406,10 @@ namespace MDT.Tools.DB.Plugin
         private delegate void CreateRootNodeDel(TreeNodeCollection collection);
         private void CreateRootNode(TreeNodeCollection collection)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new CreateRootNodeDel(CreateRootNode);
-                _explorer.Invoke(s, new object[] { collection });
+                _mainTool.Invoke(s, new object[] { collection });
 
             }
             else
@@ -425,10 +426,10 @@ namespace MDT.Tools.DB.Plugin
         private delegate void AddNodesDel(TreeNodeCollection collection, DataTable treeDataTable);
         private void AddNodes(TreeNodeCollection collection, DataTable treeDataTable)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new AddNodesDel(AddNodes);
-                _explorer.Invoke(s, new object[] { collection, treeDataTable });
+                _mainTool.Invoke(s, new object[] { collection, treeDataTable });
 
             }
             else
@@ -453,10 +454,10 @@ namespace MDT.Tools.DB.Plugin
         private delegate TreeNode CreateTreeNodeDel(DataRow row);
         private TreeNode CreateTreeNode(DataRow row)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new CreateTreeNodeDel(CreateTreeNode);
-                return _explorer.Invoke(s, new object[] { row }) as TreeNode;
+                return _mainTool.Invoke(s, new object[] { row }) as TreeNode;
 
             }
             else
@@ -481,10 +482,10 @@ namespace MDT.Tools.DB.Plugin
         private delegate void AddTreeNodeDel(TreeNodeCollection collection, TreeNode node);
         private void AddTreeNode(TreeNodeCollection collection, TreeNode node)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new AddTreeNodeDel(AddTreeNode);
-                _explorer.Invoke(s, new object[] { collection, node });
+                _mainTool.Invoke(s, new object[] { collection, node });
             }
             else
             {
@@ -496,10 +497,10 @@ namespace MDT.Tools.DB.Plugin
         private delegate void TreeNodeimageIndexDel(TreeNode node, bool selected);
         private void TreeNodeimageIndex(TreeNode node, bool selected)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new TreeNodeimageIndexDel(TreeNodeimageIndex);
-                _explorer.Invoke(s, new object[] { node, selected });
+                _mainTool.Invoke(s, new object[] { node, selected });
             }
             else
             {
@@ -599,7 +600,8 @@ namespace MDT.Tools.DB.Plugin
             registerObject(PluginShareHelper.DBtablesColumns, TablesColumns);
             registerObject(PluginShareHelper.DBviews, Views);
             registerObject(PluginShareHelper.DBtablesPrimaryKeys, TablesPrimaryKeys);
-            _explorer = Application.Explorer;
+            
+            _mainTool = Application.MainMenu;
             _explorer.Text = "数据库信息";
             registerObject(PluginShareHelper.TapControl, _configForm.tcConfig);
             registerObject(PluginShareHelper.BtnSave, _configForm.btnSave);
@@ -670,10 +672,10 @@ namespace MDT.Tools.DB.Plugin
         }
         private void SetTbDbEnable(bool flag)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new SimpleBool(SetTbDbEnable);
-                _explorer.Invoke(s, new object[] { flag });
+                _mainTool.Invoke(s, new object[] { flag });
             }
             else
             {
@@ -703,10 +705,10 @@ namespace MDT.Tools.DB.Plugin
 
         public void SetProgreesEditValue(int i)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new SimpleInt(SetProgreesEditValue);
-                _explorer.Invoke(s, new object[] { i });
+                _mainTool.Invoke(s, new object[] { i });
             }
             else
             {
@@ -718,10 +720,10 @@ namespace MDT.Tools.DB.Plugin
         delegate void SimpleStr(string str);
         public void SetProgressMax(int i)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new SimpleInt(SetProgressMax);
-                _explorer.Invoke(s, new object[] { i });
+                _mainTool.Invoke(s, new object[] { i });
 
             }
             else
@@ -732,10 +734,10 @@ namespace MDT.Tools.DB.Plugin
         }
         public void SetProgress(int i)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new SimpleInt(SetProgress);
-                _explorer.Invoke(s, new object[] { i });
+                _mainTool.Invoke(s, new object[] { i });
 
             }
             else
@@ -753,10 +755,10 @@ namespace MDT.Tools.DB.Plugin
         }
         public void SetStatusBar(string str)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new SimpleStr(SetStatusBar);
-                _explorer.Invoke(s, new object[] { str });
+                _mainTool.Invoke(s, new object[] { str });
 
             }
             else
@@ -768,10 +770,10 @@ namespace MDT.Tools.DB.Plugin
         private delegate string Simple2();
         public string GetCurrentDBName()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new Simple2(GetCurrentDBName);
-                return _explorer.Invoke(s, null) as string;
+                return _mainTool.Invoke(s, null) as string;
             }
             return _tscbDbConfig.Text;
         }
@@ -959,10 +961,10 @@ namespace MDT.Tools.DB.Plugin
         private delegate DataRow[] GetCheckTableDel();
         private DataRow[] GetCheckTable()
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new GetCheckTableDel(GetCheckTable);
-                return _explorer.Invoke(s, null) as DataRow[];
+                return _mainTool.Invoke(s, null) as DataRow[];
             }
             var tnCheckList = new List<TreeNode>();
             GetTnCheck(_tvDb.Nodes, tnCheckList);
@@ -982,10 +984,10 @@ namespace MDT.Tools.DB.Plugin
 
         private void GetTnCheck(TreeNodeCollection collection, IList<TreeNode> tnCheckList)
         {
-            if (_explorer.InvokeRequired)
+            if (_mainTool.InvokeRequired)
             {
                 var s = new GetTnCheckDel(GetTnCheck);
-                _explorer.Invoke(s, null);
+                _mainTool.Invoke(s, null);
             }
             else
             {

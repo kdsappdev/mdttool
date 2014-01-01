@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.Core", "MDT.Tools
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.ThirdParty.Controls", "MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj", "{C3DDB32F-3E50-484A-9142-F93472A14323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.Console", "MDT.Tools.Console\MDT.Tools.Console.csproj", "{02C20067-4947-4BD8-85CE-C13F5CCC7480}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Plugin", "MDT.Tools.DB.Plugin\MDT.Tools.DB.Plugin.csproj", "{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.DocGen.Plugin", "MDT.Tools.DB.DocGen.Plugin\MDT.Tools.DB.DocGen.Plugin.csproj", "{093DCCC0-573A-4E93-A2B2-94697F676D6B}"
@@ -41,10 +39,6 @@ Global
 		{C3DDB32F-3E50-484A-9142-F93472A14323}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3DDB32F-3E50-484A-9142-F93472A14323}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3DDB32F-3E50-484A-9142-F93472A14323}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02C20067-4947-4BD8-85CE-C13F5CCC7480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02C20067-4947-4BD8-85CE-C13F5CCC7480}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02C20067-4947-4BD8-85CE-C13F5CCC7480}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02C20067-4947-4BD8-85CE-C13F5CCC7480}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE39F6B3-F540-4E28-B9DC-FD5190C67AAF}.Release|Any CPU.ActiveCfg = Release|Any CPU

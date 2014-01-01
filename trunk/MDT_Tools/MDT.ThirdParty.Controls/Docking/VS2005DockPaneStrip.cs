@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
+using MDT.ThirdParty.Controls.Docking;
 
 namespace WeifenLuo.WinFormsUI.Docking
 {

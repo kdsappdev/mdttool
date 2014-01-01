@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WeifenLuo.WinFormsUI.Docking
-{
+namespace MDT.ThirdParty.Controls.Docking {
     using System;
     
     

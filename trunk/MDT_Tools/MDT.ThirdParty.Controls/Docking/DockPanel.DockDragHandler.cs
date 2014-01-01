@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.ComponentModel;
+using MDT.ThirdParty.Controls.Docking;
 
 namespace WeifenLuo.WinFormsUI.Docking
 {

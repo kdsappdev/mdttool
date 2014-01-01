@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using MDT.ThirdParty.Controls.Docking;
 
 namespace WeifenLuo.WinFormsUI.Docking
 {	

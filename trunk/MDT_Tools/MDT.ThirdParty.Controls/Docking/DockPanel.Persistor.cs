@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Globalization;
+using MDT.ThirdParty.Controls.Docking;
 
 namespace WeifenLuo.WinFormsUI.Docking
 {

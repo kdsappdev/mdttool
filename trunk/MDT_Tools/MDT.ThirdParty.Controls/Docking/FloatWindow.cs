@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Diagnostics.CodeAnalysis;
+using MDT.ThirdParty.Controls.Docking;
 
 namespace WeifenLuo.WinFormsUI.Docking
 {
