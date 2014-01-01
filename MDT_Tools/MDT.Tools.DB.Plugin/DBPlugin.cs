@@ -59,7 +59,7 @@ namespace MDT.Tools.DB.Plugin
         #endregion
 
         private readonly TreeView _tvDb = new TreeView();
-        private Explorer _explorer = new Explorer();
+        private Explorer _explorer = null;
 
 
         protected override void unload()
@@ -121,7 +121,7 @@ namespace MDT.Tools.DB.Plugin
             else
             {
 
-                _explorer.Show(Application.Panel, DockState.DockLeftAutoHide);
+               
                 _tsmiSystem.Text = "系统(&S)";
                 _tsmiDbSet.Text=_tsbDbSet.Text = "数据库配置";
                 _tsmiDbConfig.DisplayStyle = _tsbDbSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
@@ -602,6 +602,15 @@ namespace MDT.Tools.DB.Plugin
             registerObject(PluginShareHelper.DBtablesPrimaryKeys, TablesPrimaryKeys);
             
             _mainTool = Application.MainMenu;
+            foreach (IDockContent content in Application.Panel.Contents)
+            {
+                _explorer = content as Explorer;
+            }
+            if (_explorer == null)
+            {
+                _explorer = new Explorer();
+                _explorer.Show(Application.Panel, DockState.DockLeftAutoHide);
+            }
             _explorer.Text = "数据库信息";
             registerObject(PluginShareHelper.TapControl, _configForm.tcConfig);
             registerObject(PluginShareHelper.BtnSave, _configForm.btnSave);

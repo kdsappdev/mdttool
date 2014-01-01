@@ -91,6 +91,12 @@
     <Compile Include="UI\ConfigForm.Designer.cs">
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Explorer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Explorer.Designer.cs">
+      <DependentUpon>Explorer.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\OracleDBConfigForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +124,10 @@
   <ItemGroup>
     <EmbeddedResource Include="UI\ConfigForm.resx">
       <DependentUpon>ConfigForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Explorer.resx">
+      <DependentUpon>Explorer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\OracleDBConfigForm.resx">

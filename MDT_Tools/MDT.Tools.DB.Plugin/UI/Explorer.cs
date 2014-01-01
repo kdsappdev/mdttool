@@ -5,7 +5,9 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-namespace MDT.Tools.Core.UI
+using MDT.Tools.Core.UI;
+
+namespace MDT.Tools.DB.Plugin.UI
 {
     public partial class Explorer : ToolWindow
     {

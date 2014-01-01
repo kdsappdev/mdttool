@@ -26,7 +26,7 @@ namespace MDT.Tools.Core.Plugin
         #region  Ù–‘
 
         private readonly IDictionary<int, IPlugin> _dicPlugin = new Dictionary<int, IPlugin>();
-        private bool _copyToMemory = true;
+        private bool _copyToMemory = false;
         public IForm Application { get; set; }
 
         public bool CopyToMemory
