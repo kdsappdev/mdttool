@@ -33,8 +33,7 @@ namespace MDT.Tools.Core.Plugin.WindowsPlugin
         IPluginManager PluginManager { get;}
         MenuStrip MainMenu { get;}
         StatusStrip StatusBar { get;}
-        DockPanel Panel { get; }
-        Explorer Explorer { get; }
+        DockPanel Panel { get; }         
         ContextMenuStrip MainContextMenu { get; }
 
         
