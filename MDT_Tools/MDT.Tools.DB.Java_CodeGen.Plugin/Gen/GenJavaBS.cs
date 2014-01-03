@@ -26,6 +26,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             try
             {
                 base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
+                SaveFileEncoding = Encoding.GetEncoding("GBK");
                 CodeLanguage = "Java";
                 OutPut = cmc.OutPut;
                 setEnable(false);
@@ -121,7 +122,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             else
             {
 
-                FileHelper.Write(cmc.OutPut + title, new[] { str }, Encoding.GetEncoding("GBK"));
+                FileHelper.Write(cmc.OutPut + title, new[] { str }, SaveFileEncoding);
             }
         }
 
@@ -147,7 +148,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             else
             {
 
-                FileHelper.Write(cmc.OutPut + title, new[] { str }, Encoding.GetEncoding("GBK"));
+                FileHelper.Write(cmc.OutPut + title, new[] { str }, SaveFileEncoding);
             }
         }
 

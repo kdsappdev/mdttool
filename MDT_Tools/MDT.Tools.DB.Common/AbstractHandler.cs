@@ -159,6 +159,7 @@ namespace MDT.Tools.DB.Common
             cms.Items.Add(_tsiSaveAll);
         }
 
+        protected Encoding SaveFileEncoding = Encoding.UTF8;
         void _tsiSaveAll_Click(object sender, EventArgs e)
         {
             IDockContent[] documents = Panel.DocumentsToArray();
@@ -168,11 +169,12 @@ namespace MDT.Tools.DB.Common
                 Code code = v as Code;
                 if (v != null)
                 {
-                    FileHelper.Write(OutPut + code.Text, new string[] { code.CodeContent });
+                    FileHelper.Write(OutPut + code.Text, new string[] { code.CodeContent }, SaveFileEncoding);
                 }
             }
             openDialog();
         }
+        
 
         void _tsiSave_Click(object sender, EventArgs e)
         {
