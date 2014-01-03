@@ -81,7 +81,7 @@ namespace MDT.Tools
         {
             Text = System.Configuration.ConfigurationSettings.AppSettings["App"];
             bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"], out _userClosing);
-            reStoreWorkSpace();
+            //reStoreWorkSpace();
             _pluginUtils = new PluginUtils();
             _pluginManager = new PluginManager(this);
             _pluginManager.LoadDefault(PluginHelper.PluginSign1);
