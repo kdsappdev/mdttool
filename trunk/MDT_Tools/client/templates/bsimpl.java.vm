@@ -13,7 +13,7 @@ import ats.common.model.dao.${model}DAO;
 import ats.pingo.common.datacheck.bs.IDataCheckServer;
 import ${bsPackage}.I${model}Server;
 import ats.foundation.utils.exception.CodeException;
-
+import ats.foundation.condition.Condition;
 /**
 #if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
  *${tableInfo.TableComments} BS实现
@@ -41,21 +41,25 @@ public class ${model}Server implements I${model}Server {
 	 * @param location实体
 	 * @return ${model}集合
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<${model}> select(String location) throws CodeException {
-		return null;
-	}
-
-	/**
-	 *根据shortName,location 查询出${model}对象
-	 *
-	 * @param shortName短名称
-	 * @param location实体
-	 * @return ${model}对象
-	 */
-	@Override
-	public ${model} selectByShortName(String shortName, String location) throws CodeException {
-		return null;
+		logger.debug(this.getClass().getName()+".select("+location+")");
+		${model}Example example = new ${model}Example();
+		${model}Example.Criteria critria = example.createCriteria();
+		critria.andLocationEqualTo(location);
+		if(${lmodel}DAO == null){
+			logger.error("Dao is null![${lmodel}Dao]");
+			throw new CodeException("4100","Dao is null![${lmodel}Dao]");
+		}
+		List<${model}> list;
+		try {
+			list = ${lmodel}DAO.selectByExample(example);
+		} catch (Exception e) {
+			throw new CodeException("4102",e.getMessage());
+		}
+		logger.info("the List<${model}> size is :"+list.size());
+		return list;
 	}
 
 	/**
@@ -66,18 +70,61 @@ public class ${model}Server implements I${model}Server {
 	 */
 	@Override
 	public ${model} insert(${model} ${lmodel}) throws CodeException {
-		return null;
+		logger.debug(this.getClass().getName()+".insert("+${lmodel}+")");
+		if(${lmodel} == null){
+			logger.error("${lmodel} is null");
+			throw new CodeException("4002","${lmodel} is null");
+		}
+		if(${lmodel}DAO == null){
+			logger.error("Dao is null![${lmodel}Dao]");
+			throw new CodeException("4100","Dao is null![${lmodel}Dao] ");
+		}
+		try {
+			${lmodel}DAO.insert(${lmodel});
+		} catch (Exception e) {
+			 throw new CodeException("4102",e.getMessage());
+		}	
+		return ${lmodel};
 	}
 
 	/**
 	 *删除${model}对象
 	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
-	 * @return ${model}对象
+	 * @param Condition对象
 	 */
 	@Override
-	public ${model} delete(${model} ${lmodel}) throws CodeException {
-		return null;
+	public void delete(Condition deleteCondition) throws CodeException {
+		 ${model}Example example=null;
+		 try
+		 {
+			example = (${model}Example)deleteCondition.BuildCondition();
+		 }
+		 catch(Exception e)
+		 {
+			throw new CodeException("4200",e.getMessage());
+		 }
+		if(${lmodel}DAO == null){
+			logger.error("Dao is null![${lmodel}DAO]");
+			throw new CodeException("4100","Dao is null![${lmodel}DAO] ");
+		}
+		//删除前检查
+		String code = "9900";  
+	    try {
+			if(dataCheckServer != null){
+				//code = dataCheckServer.Check_Delete("YUKON_AFILTERSGROUP", "", ${lmodel}.getShortname());
+			}
+			if("9900".equals(code)){
+				${lmodel}DAO.deleteByExample(example);
+			}else{
+				throw new CodeException(code,"the ${model} can't delete");
+			}
+		} 
+	    catch(CodeException e){
+	    	throw e;
+	    }
+	    catch (Exception e) {
+			 throw new CodeException("4102",e.getMessage());
+		}
 	}
 
 	/**
@@ -87,8 +134,75 @@ public class ${model}Server implements I${model}Server {
 	 * @return ${model}对象
 	 */
 	@Override
-	public ${model} update(${model} ${lmodel}) throws CodeException  {
-		return null;
+	public void update(${model} ${lmodel},Condition updateCondition) throws CodeException  {
+		if(${lmodel} == null){
+			logger.error("${lmodel} is null");
+			throw new CodeException("4002","${lmodel} is null");
+		}
+		${model}Example example=null;
+		 try
+		 {
+			example = (${model}Example)updateCondition.BuildCondition();
+		 }
+		 catch(Exception e)
+		 {
+			throw new CodeException("4200",e.getMessage());
+		 }
+		if(${lmodel}DAO == null){
+			logger.error("Dao is null![${lmodel}DAO]");
+			throw new CodeException("4100","Dao is null![${lmodel}DAO] ");
+		}
+	    try {
+			${lmodel}DAO.updateByExample(${lmodel}, example);
+		} catch (Exception e) {
+			throw new CodeException("4102",e.getMessage());
+		}
+	}
+	
+		/**
+	 *批量更新${model}方法
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 */
+	public void updateBatch(List<${model}> ${lmodel}s,Condition deleteCondition) throws CodeException
+	{
+		delete(deleteCondition);
+		for(${model} ${lmodel}:${lmodel}s)
+		{
+			insert(${lmodel});
+		}
+	}
+	
+	/**
+	 *根据QueryCondition对象 查询出${model}对象
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @return ${model}对象
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<${model}> select(Condition queryCondition) throws CodeException  {
+		 ${model}Example example=null;
+		 try
+		 {
+			example = (${model}Example)queryCondition.BuildCondition();
+		 }
+		 catch(Exception e)
+		 {
+			throw new CodeException("4200",e.getMessage());
+		 }
+		if(${lmodel}DAO == null){
+			logger.error("Dao is null![${lmodel}Dao]");
+			throw new CodeException("4100","Dao is null![${model}Dao]");
+		}	
+		List<${model}> list;
+		try {
+			list = ${lmodel}DAO.selectByExample(example);
+		} catch (Exception e) {
+			throw new CodeException("4102",e.getMessage());
+		}
+		logger.info("the List<${model}> size is:"+list.size());
+		return list;	 
 	}
 
 }

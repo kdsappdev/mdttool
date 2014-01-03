@@ -8,7 +8,7 @@ import java.util.List;
 
 import ats.common.model.po.${model};
 import ats.foundation.utils.exception.CodeException;
-
+import ats.foundation.condition.Condition;
 /**
 #if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
  *${tableInfo.TableComments} BS接口
@@ -27,15 +27,7 @@ public interface I${model}Server {
 	 */
 	public List<${model}> select(String location) throws CodeException;
 
-	/**
-	 *根据shortName,location 查询出${model}对象
-	 *
-	 * @param shortName短名称
-	 * @param location实体
-	 * @return ${model}对象
-	 */
-	public ${model} selectByShortName(String shortName, String location) throws CodeException;
-
+ 
 	/**
 	 *增加${model}方法
 	 *
@@ -48,15 +40,28 @@ public interface I${model}Server {
 	 *删除${model}方法
 	 *
 	 * @param ${lmodel}$!{tableInfo.TableComments}
-	 * @return ${model}对象
 	 */
-	public ${model} delete(${model} ${lmodel}) throws CodeException;
+	public void delete(Condition deleteCondition) throws CodeException;
 
 	/**
 	 *更新${model}方法
 	 *
 	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 */
+	public void update(${model} ${lmodel},Condition updateCondition) throws CodeException;
+	
+	/**
+	 *批量更新${model}方法
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 */
+	public void updateBatch(List<${model}> ${lmodel}s,Condition updateCondition) throws CodeException;
+	
+	/**
+	 *根据QueryCondition对象 查询出${model}对象
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}
 	 * @return ${model}对象
 	 */
-	public ${model} update(${model} ${lmodel}) throws CodeException;
+	public List<${model}> select(Condition queryCondition) throws CodeException;
 }
