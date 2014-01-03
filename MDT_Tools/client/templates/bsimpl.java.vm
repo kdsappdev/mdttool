@@ -14,6 +14,7 @@ import ats.pingo.common.datacheck.bs.IDataCheckServer;
 import ${bsPackage}.I${model}Server;
 import ats.foundation.utils.exception.CodeException;
 import ats.foundation.condition.Condition;
+import ats.foundation.condition.ConditionInfo;
 /**
 #if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
  *${tableInfo.TableComments} BS实现
@@ -111,7 +112,12 @@ public class ${model}Server implements I${model}Server {
 		String code = "9900";  
 	    try {
 			if(dataCheckServer != null){
-				//code = dataCheckServer.Check_Delete("YUKON_AFILTERSGROUP", "", ${lmodel}.getShortname());
+				String paras="";
+				for(ConditionInfo conditionInfo:deleteCondition.getConditionInfos())
+				{
+					paras+=conditionInfo.getFieldValue()+"\n";
+				}
+				code = dataCheckServer.Check_Delete("${tableInfo.tableName}", "", paras);
 			}
 			if("9900".equals(code)){
 				${lmodel}DAO.deleteByExample(example);
