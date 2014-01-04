@@ -52,6 +52,7 @@
     <Compile Include="Model\Field.cs" />
     <Compile Include="Model\FieldDic.cs" />
     <Compile Include="Model\Fix.cs" />
+    <Compile Include="Model\Group.cs" />
     <Compile Include="Model\Header.cs" />
     <Compile Include="Model\Message.cs" />
     <Compile Include="Model\Trailer.cs" />

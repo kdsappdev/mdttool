@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
+ 
 
 namespace MDT.Tools.Fix.Common.Model
 {
     public class Message
     {
         public string Name { get; set; }
-        public bool Required { get; set; }
-
+        public string MsgType { get; set; }
+        public string MsgCat { get; set; }
         private List<Field> _fields = new List<Field>();
         public List<Field> Fields
         {
@@ -27,13 +27,6 @@ namespace MDT.Tools.Fix.Common.Model
         {
             get { return _groups; }
             set { _groups = value; }
-        }
-
-        private List<Message> _messages = new List<Message>();
-        public List<Message> Messages
-        {
-            get { return _messages; }
-            set { _messages = value; }
         }
     }
 }
