@@ -57,6 +57,8 @@
     <Compile Include="UI\FixExplorer.Designer.cs">
       <DependentUpon>FixExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\FilePathHelper.cs" />
+    <Compile Include="Utils\PluginShareHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">

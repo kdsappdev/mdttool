@@ -12,5 +12,11 @@ namespace MDT.Tools.Fix.Common.Model
             get { return _fields; }
             set { _fields = value; }
         }
+        private List<Group> _groups = new List<Group>();
+        public List<Group> Groups
+        {
+            get { return _groups; }
+            set { _groups = value; }
+        }
     }
 }

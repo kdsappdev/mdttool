@@ -6,7 +6,7 @@ namespace MDT.Tools.Fix.Common.Model
 {
    public class Value
     {
-       public int Enum { get; set; }
+       public string Enum { get; set; }
        public string Description { get; set; }
     }
 }
