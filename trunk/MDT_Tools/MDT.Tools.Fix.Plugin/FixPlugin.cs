@@ -65,7 +65,7 @@ namespace MDT.Tools.Fix.Plugin
             }
             _mainTool = Application.MainMenu;
             _explorer.Text = "Fix协议信息";
-
+            registerObject(PluginShareHelper.CmsSubPlugin,cmsSubPlugin);
             AddTreeControl();
 
             loadFix();
@@ -91,7 +91,57 @@ namespace MDT.Tools.Fix.Plugin
             }
         }
 
+        #region 获取选择项
 
+        private delegate object[] GetCheckTableDel();
+        private object[] GetCheckTable()
+        {
+            if (_mainTool.InvokeRequired)
+            {
+                var s = new GetCheckTableDel(GetCheckTable);
+                return _mainTool.Invoke(s, null) as DataRow[];
+            }
+
+            var tnCheckList = new List<TreeNode>();
+            GetTnCheck(_tvFix.Nodes, tnCheckList);
+            var drTable = new object[0];
+            if (tnCheckList.Count > 0)
+            {
+                drTable = new object[tnCheckList.Count];
+                for (int i = 0; i < drTable.Length; i++)
+                {
+                    drTable[i] = ((NodeTag)tnCheckList[i].Tag).O;
+                }
+            }
+            return drTable;
+        }
+
+        private delegate void GetTnCheckDel(TreeNodeCollection collection, IList<TreeNode> tnCheckList);
+
+        private void GetTnCheck(TreeNodeCollection collection, IList<TreeNode> tnCheckList)
+        {
+            if (_mainTool.InvokeRequired)
+            {
+                var s = new GetTnCheckDel(GetTnCheck);
+                _mainTool.Invoke(s, null);
+            }
+            else
+            {
+                foreach (TreeNode tn in collection)
+                {
+                    if (tn.Checked && tn.Tag is NodeTag)
+                    {
+                        tnCheckList.Add(tn);
+                    }
+                    if (tn.Nodes.Count > 0)
+                    {
+                        GetTnCheck(tn.Nodes, tnCheckList);
+                    }
+                }
+            }
+        }
+
+        #endregion
         void TvDbAfterCheck(object sender, TreeViewEventArgs e)
         {
             bool check = e.Node.Checked;
@@ -100,14 +150,14 @@ namespace MDT.Tools.Fix.Plugin
                 node.Checked = check;
             }
 
-            //DataRow[] dr = GetCheckTable();
-
-            //bool flag = false;
-            //if (dr != null && dr.Length > 0)
-            //{
-            //    flag = true;
-            //}
-            //broadcast(PluginShareHelper.BroadCastCheckFixNumberIsGreaterThan0, flag);
+            object[] o = GetCheckTable();
+            registerObject(PluginShareHelper.FixCurrentCheck, o);
+            bool flag = false;
+            if (o != null && o.Length > 0)
+            {
+                flag = true;
+            }
+            broadcast(PluginShareHelper.BroadCastCheckFixNumberIsGreaterThan0, flag);
         }
 
         void TvDbMouseClick(object sender, MouseEventArgs e)
@@ -178,9 +228,11 @@ namespace MDT.Tools.Fix.Plugin
             else
             {
                 var fixNode = new TreeNode { Text = TagType.Fix.ToString()+fix.Major+"."+fix.Minor, Tag = TagType.Header };
+                
                 AddTreeNode(collection, fixNode);
 
                 var headerNode = new TreeNode { Text = TagType.Header.ToString(), Tag = TagType.Header };
+                headerNode.Tag = new NodeTag(TagType.Header, fix.Header);
                 AddTreeNode(fixNode.Nodes, headerNode);
 
                 
@@ -223,7 +275,7 @@ namespace MDT.Tools.Fix.Plugin
 
                 var trailerNode = new TreeNode { Text = TagType.Trailer.ToString(), Tag = TagType.Trailer };
                 AddTreeNode(fixNode.Nodes, trailerNode);
-
+                trailerNode.Tag = new NodeTag(TagType.Trailer, fix.Trailer);
                 fixNode.Expand();
             }
 
