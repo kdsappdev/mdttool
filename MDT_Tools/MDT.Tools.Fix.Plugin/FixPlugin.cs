@@ -496,7 +496,7 @@ namespace MDT.Tools.Fix.Plugin
                 {
                     Field f = new Field();
                     f.Name = xn.Attributes["name"].Value;
-                    f.Required = xn.Attributes["required"].Value == "Y" ? true : false;
+                    f.Required = xn.Attributes["required"].Value == "Y";
                     m.Fields.Add(f);
                 }
                 else if (xn.Name == "group")
@@ -524,7 +524,7 @@ namespace MDT.Tools.Fix.Plugin
 
             if (node.Attributes.Count == 2)
             {
-                c.Required = node.Attributes["required"].Value == "Y" ? true : false;
+                c.Required = node.Attributes["required"].Value == "Y";
             }
             foreach (XmlNode xn in node.ChildNodes)
             {
@@ -532,7 +532,7 @@ namespace MDT.Tools.Fix.Plugin
                 {
                     Field f = new Field();
                     f.Name = xn.Attributes["name"].Value;
-                    f.Required = xn.Attributes["required"].Value == "Y" ? true : false;
+                    f.Required = xn.Attributes["required"].Value == "Y";
                     c.Fields.Add(f);
                 }
                 else if (xn.Name == "group")
