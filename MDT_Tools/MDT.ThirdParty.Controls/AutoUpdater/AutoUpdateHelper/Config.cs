@@ -49,12 +49,23 @@ namespace KnightsWarriorAutoupdater
         #region The public method
         public static Config LoadConfig(string file)
         {
-            XmlSerializer xs = new XmlSerializer(typeof(Config));
-            StreamReader sr = new StreamReader(file);
-            Config config = xs.Deserialize(sr) as Config;
-            sr.Close();
+            Config config = new Config();
+            try
+            {
+                XmlSerializer xs = new XmlSerializer(typeof(Config));
+                StreamReader sr = new StreamReader(file);
+                config = xs.Deserialize(sr) as Config;
+                sr.Close();
+
+            }
+            catch
+            {
+
+
+            }
 
             return config;
+
         }
 
         public void SaveConfig(string file)
