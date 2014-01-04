@@ -37,6 +37,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -47,16 +48,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gen\GenTemplate.cs" />
+    <Compile Include="Model\TemplateConfig.cs" />
     <Compile Include="TemplatePlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\FilePathHelper.cs" />
+    <Compile Include="Utils\IniConfigHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MDT.Tools.pfx" />
+    <None Include="templateconfig.ini" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MDT.Tools.Core\MDT.Tools.Core.csproj">
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj">
+      <Project>{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}</Project>
+      <Name>MDT.Tools.DB.Common</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
