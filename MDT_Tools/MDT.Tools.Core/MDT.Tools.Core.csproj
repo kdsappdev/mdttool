@@ -113,16 +113,19 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UI\Code.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Code.Designer.cs">
       <DependentUpon>Code.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Doc.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Doc.designer.cs">
       <DependentUpon>Doc.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ToolWindow.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\ToolWindow.Designer.cs">
       <DependentUpon>ToolWindow.cs</DependentUpon>
