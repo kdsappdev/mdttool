@@ -80,11 +80,6 @@
       <HintPath>..\client\bin\MDT.Tools.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MDT.Tools.DB.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75b68e79cca37728, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\client\bin\MDT.Tools.DB.Common.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -145,6 +140,13 @@
       <DependentUpon>ExecuteSql.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj">
+      <Project>{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}</Project>
+      <Name>MDT.Tools.DB.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
