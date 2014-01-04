@@ -177,82 +177,62 @@ namespace MDT.Tools.Fix.Plugin
             }
             else
             {
-                var fixNode = new TreeNode { Text = TagType.Fix.ToString(), Tag = TagType.Header };
+                var fixNode = new TreeNode { Text = TagType.Fix.ToString()+fix.Major+"."+fix.Minor, Tag = TagType.Header };
                 AddTreeNode(collection, fixNode);
 
                 var headerNode = new TreeNode { Text = TagType.Header.ToString(), Tag = TagType.Header };
                 AddTreeNode(fixNode.Nodes, headerNode);
 
+                
+
                 var messagesNode = new TreeNode { Text = TagType.Messages.ToString(), Tag = TagType.Messages };
                 AddTreeNode(fixNode.Nodes, messagesNode);
 
+                foreach (Fix.Common.Model.Message message in fix.Messages)
+                {
+                    //新建一个结点 =                 
+                    TreeNode node = new TreeNode { Text = message.Name};
+                        node.Tag = new NodeTag(TagType.Message, message);
+                    TreeNodeimageIndex(node, _isSelected);
+                    AddTreeNode(messagesNode.Nodes, node); //加入到结点集合中              
+
+                }
+
                 var componentNode = new TreeNode { Text = TagType.Components.ToString(), Tag = TagType.Components };
                 AddTreeNode(fixNode.Nodes, componentNode);
-
+                foreach (Fix.Common.Model.Component component in fix.Components)
+                {
+                    //新建一个结点 =                 
+                    TreeNode node = new TreeNode { Text = component.Name };
+                    node.Tag = new NodeTag(TagType.Component, component);
+                    TreeNodeimageIndex(node, _isSelected);
+                    AddTreeNode(componentNode.Nodes, node); //加入到结点集合中
+                }
                 var fieldsNode = new TreeNode { Text = TagType.Fields.ToString(), Tag = TagType.Fields };
                 AddTreeNode(fixNode.Nodes, fieldsNode);
 
-                var trailerNode = new TreeNode { Text = TagType.Trailer.ToString(), Tag = TagType.Trailer };
-                AddTreeNode(fixNode.Nodes, trailerNode);
-            }
-
-        }
-
-        private delegate void AddNodesDel(TreeNodeCollection collection, DataTable treeDataTable);
-        private void AddNodes(TreeNodeCollection collection, DataTable treeDataTable)
-        {
-            if (_mainTool.InvokeRequired)
-            {
-                var s = new AddNodesDel(AddNodes);
-                _mainTool.Invoke(s, new object[] { collection, treeDataTable });
-
-            }
-            else
-            {
-                DataRowCollection rows = treeDataTable.Rows;
-
-                foreach (DataRow row in rows)
+                foreach (Fix.Common.Model.FieldDic fieldDic in fix.Fields)
                 {
                     //新建一个结点 =                 
-                    TreeNode node = CreateTreeNode(row);
-
+                    TreeNode node = new TreeNode { Text = fieldDic.Name };
+                    node.Tag = new NodeTag(TagType.Field, fieldDic);
                     TreeNodeimageIndex(node, _isSelected);
-
-                    AddTreeNode(collection, node); //加入到结点集合中              
+                    AddTreeNode(fieldsNode.Nodes, node); //加入到结点集合中              
 
                 }
-                return;
+
+                var trailerNode = new TreeNode { Text = TagType.Trailer.ToString(), Tag = TagType.Trailer };
+                AddTreeNode(fixNode.Nodes, trailerNode);
+
+                fixNode.Expand();
             }
+
         }
+
+        
 
         private bool _isSelected = false;
-        private delegate TreeNode CreateTreeNodeDel(DataRow row);
-        private TreeNode CreateTreeNode(DataRow row)
-        {
-            if (_mainTool.InvokeRequired)
-            {
-                var s = new CreateTreeNodeDel(CreateTreeNode);
-                return _mainTool.Invoke(s, new object[] { row }) as TreeNode;
-
-            }
-            else
-            {
-                if (row != null)
-                {
-                    var node = new TreeNode { Text = row["name"] as string };
-
-
-                    string strTag = row["type"].ToString();
-                    if (!string.IsNullOrEmpty(strTag))
-                    {
-                        var tag = (TagType)Enum.Parse(typeof(TagType), strTag, true);
-                        node.Tag = new NodeTag(tag, row);
-                    }
-                    return node;
-                }
-            }
-            return null;
-        }
+        
 
         private delegate void AddTreeNodeDel(TreeNodeCollection collection, TreeNode node);
         private void AddTreeNode(TreeNodeCollection collection, TreeNode node)
@@ -350,9 +330,9 @@ namespace MDT.Tools.Fix.Plugin
         {
             SetTbDbEnable(false);
             ClearTree();
-            CreateRootNode(_tvFix.Nodes);
             parseFix();
-            ExandAllTreeNode();
+            CreateRootNode(_tvFix.Nodes);
+            //ExandAllTreeNode();
             SetTbDbEnable(true);
         }
 
@@ -631,8 +611,11 @@ namespace MDT.Tools.Fix.Plugin
         Header,
         Trailer,
         Messages,
+        Message,
         Components,
+        Component,
         Fields,
+        Field,
         None
 
     }
