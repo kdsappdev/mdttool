@@ -298,7 +298,7 @@ namespace MDT.Tools.DB.Plugin
 
             if (e.Button == MouseButtons.Right)
             {
-                Application.MainContextMenu.Show(_tvDb, e.Location);
+                contextMenuStrip.Show(_tvDb, e.Location);
             }
         }
         private void RemoveTreeControl()
@@ -593,6 +593,7 @@ namespace MDT.Tools.DB.Plugin
 
         #region 初始化
         private readonly BackgroundWorker _backgroundWorkerLoadDb = new BackgroundWorker();
+       ContextMenuStrip contextMenuStrip=new ContextMenuStrip();
         protected override void load()
         {
          
@@ -614,6 +615,7 @@ namespace MDT.Tools.DB.Plugin
             _explorer.Text = "数据库信息";
             registerObject(PluginShareHelper.TapControl, _configForm.tcConfig);
             registerObject(PluginShareHelper.BtnSave, _configForm.btnSave);
+            registerObject(PluginShareHelper.CmcSubPlugin, contextMenuStrip);
             AddTool();
             AddStatus();
             AddTreeControl();

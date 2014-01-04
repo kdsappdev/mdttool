@@ -16,7 +16,7 @@ namespace MDT.Tools.Template.Plugin
     {
         #region 插件信息
 
-        private int _tag = 7;
+        private int _tag = 100;
 
         public override int Tag
         {
@@ -46,10 +46,52 @@ namespace MDT.Tools.Template.Plugin
 
         #endregion
 
+        protected override void load()
+        {
+            subscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
+            subscribe(MDT.Tools.Fix.Common.Utils.PluginShareHelper.BroadCastCheckFixNumberIsGreaterThan0, this);
+            _dbContextMenuStrip = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.CmcSubPlugin) as ContextMenuStrip;
+            fixCmcSubPlugin = getObject(MDT.Tools.Fix.Common.Utils.PluginShareHelper.FixPluginKey, MDT.Tools.Fix.Common.Utils.PluginShareHelper.CmsSubPlugin) as ContextMenuStrip;
+            AddContextMenu();
+        }
+        protected override void unload()
+        {
+            unsubscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
+            unsubscribe(MDT.Tools.Fix.Common.Utils.PluginShareHelper.BroadCastCheckFixNumberIsGreaterThan0, this);
+
+        }
+        public override void onNotify(string name, object o)
+        {
+           base.onNotify(name,o);
+           if (MDT.Tools.Fix.Common.Utils.PluginShareHelper.BroadCastCheckFixNumberIsGreaterThan0.Equals(name) && o.GetType().IsValueType)
+            {
+                var flag = (bool)o;
+                if(fixCmcSubPlugin!=null)
+                {
+                    SetFixCmcEnable(flag);
+                }
+            } 
+        }
+
+        protected void SetFixCmcEnable(bool flag)
+        {
+            if (Application.MainMenu.InvokeRequired)
+            {
+                var s = new SimpleBool(SetEnable);
+                Application.MainMenu.Invoke(s, new object[] { flag });
+            }
+            else
+            {
+                fixCmcSubPlugin.Enabled = flag;
+            }
+        }
+
         #region 增加上下文菜单
 
         
         private delegate void Simple();
+
+        private ContextMenuStrip fixCmcSubPlugin;
         protected override void AddContextMenu()
         {
             if (Application.MainContextMenu.InvokeRequired)
@@ -59,19 +101,34 @@ namespace MDT.Tools.Template.Plugin
             }
             else
             {
+                
                 TemplateConfig templateConfig = IniConfigHelper.ReadTemplateConfig();
                 if (templateConfig.TemplateNum > 0)
                 {
-                    base.AddContextMenu();
-                    _tsiGen.Text = "自定义模板";
-                    _tsiGen.Enabled = false;
+                    bool flag = false;
                     foreach (var template in templateConfig.TemplateParas)
                     {
-                        var tsmiTemplate = new ToolStripMenuItem();
-                        tsmiTemplate.Text = template.MenuName;
-                        tsmiTemplate.Tag = template;
-                        _tsiGen.DropDownItems.AddRange(new[] {tsmiTemplate});
-                        tsmiTemplate.Click += new EventHandler(tsmiTemplate_Click);
+                        if (template.DataTye == "DB")
+                        {
+                            var tsmiTemplate = new ToolStripMenuItem();
+                            tsmiTemplate.Text = template.MenuName;
+                            tsmiTemplate.Tag = template;
+                            _dbContextMenuStrip.Items.AddRange(new[] { tsmiTemplate });
+                            tsmiTemplate.Click += new EventHandler(tsmiTemplate_Click);
+                        }
+                        else if (template.DataTye == "Fix")
+                        {
+                              
+                              if (fixCmcSubPlugin != null)
+                              {
+                                  SetFixCmcEnable(false);
+                                  var tsmiTemplate = new ToolStripMenuItem();
+                                  tsmiTemplate.Text = template.MenuName;
+                                  tsmiTemplate.Tag = template;
+                                  fixCmcSubPlugin.Items.AddRange(new[] {tsmiTemplate});
+                                  tsmiTemplate.Click += new EventHandler(tsmiTemplate_Click);
+                              }
+                        }
                     }
                 }
 
@@ -86,15 +143,35 @@ namespace MDT.Tools.Template.Plugin
                 TemplateParas templateParas = tsmiTemplate.Tag as TemplateParas;
                 if(templateParas!=null)
                 {
-                    var drTable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentCheckTable) as DataRow[];
-
-                    ThreadPool.QueueUserWorkItem(o =>
+                    if (templateParas.DataTye == "DB")
                     {
-                        var gen = new GenTemplate();
-                        gen.TemplateParas = templateParas;
-                        process(drTable, gen);
-                    });
+                        var drTable =
+                            getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentCheckTable) as
+                            DataRow[];
+
+                        ThreadPool.QueueUserWorkItem(o =>
+                                                         {
+                                                             var gen = new GenTemplate();
+                                                             gen.TemplateParas = templateParas;
+                                                             process(drTable, gen);
+                                                         });
+                    }
+                    else if (templateParas.DataTye == "Fix")
+                    {
+                        var os =
+                            getObject(MDT.Tools.Fix.Common.Utils.PluginShareHelper.FixPluginKey, MDT.Tools.Fix.Common.Utils.PluginShareHelper.FixCurrentCheck) as
+                            object[];
+
+                        ThreadPool.QueueUserWorkItem(o =>
+                        {
+                            var gen = new GenTemplate();
+                            gen.TemplateParas = templateParas;
+                            
+                            gen.process(os);
+                        });
+                    }
                 }
+
             }
         }
         #endregion

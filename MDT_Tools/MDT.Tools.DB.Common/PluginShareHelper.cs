@@ -28,7 +28,7 @@ namespace MDT.Tools.DB.Common
 
         //共享控件
         public const string DBPlugin_tsslMessage = "tsslMessage";//状态栏label
-
+        public const string CmcSubPlugin = "CmcSubPlugin";// 上下文菜单
         public const string DBPlugin_tspbLoadDBProgress = "tspbLoadDBProgress";// 状态栏进度条
 
        

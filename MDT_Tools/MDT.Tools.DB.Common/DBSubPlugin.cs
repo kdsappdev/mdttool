@@ -14,12 +14,13 @@ namespace MDT.Tools.DB.Common
         protected override void load()
         {
             subscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
+            _dbContextMenuStrip = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.CmcSubPlugin) as ContextMenuStrip;
             AddContextMenu();
         }
         public override void BeforeTerminating()
         {
             unsubscribe(PluginShareHelper.DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0, this);
-            Application.MainContextMenu.Items.Remove(_tsiGen);
+             
         }
         #endregion
 
@@ -36,10 +37,10 @@ namespace MDT.Tools.DB.Common
         protected delegate void SimpleBool(bool flag);
         protected void SetEnable(bool flag)
         {
-            if (Application.MainContextMenu.InvokeRequired)
+            if (Application.MainMenu.InvokeRequired)
             {
                 var s = new SimpleBool(SetEnable);
-                Application.MainContextMenu.Invoke(s, new object[] { flag });
+                Application.MainMenu.Invoke(s, new object[] { flag });
             }
             else
             {
@@ -52,20 +53,23 @@ namespace MDT.Tools.DB.Common
 
         #region 增加上下文菜单
         protected readonly ToolStripMenuItem _tsiGen = new ToolStripMenuItem();
-
+        protected ContextMenuStrip _dbContextMenuStrip=null;
         protected delegate void Simple();
         protected virtual void AddContextMenu()
         {
-            if (Application.MainContextMenu.InvokeRequired)
+            if (Application.MainMenu.InvokeRequired)
             {
                 var s = new Simple(AddContextMenu);
-                Application.MainContextMenu.Invoke(s, null);
+                Application.MainMenu.Invoke(s, null);
             }
             else
             {
-                _tsiGen.Enabled = false;
-                _tsiGen.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                Application.MainContextMenu.Items.Add(_tsiGen);
+                 if (_dbContextMenuStrip != null)
+                 {
+                     _tsiGen.Enabled = false;
+                     _tsiGen.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                     _dbContextMenuStrip.Items.Add(_tsiGen);
+                 }
             }
         }
         #endregion
@@ -100,7 +104,7 @@ namespace MDT.Tools.DB.Common
             handler.dbConnectionString = dbConnectionString;
             handler.tsslMessage = tsslMessage;
             handler.tspbLoadDBProgress = tspbLoadDBProgress;
-            handler.MainContextMenu = Application.MainContextMenu;
+            handler.MainContextMenu = _dbContextMenuStrip;
             handler.Panel = Application.Panel;
             handler.dsTable = dsTable;
             handler.dsTableColumn = dsTableColumn;

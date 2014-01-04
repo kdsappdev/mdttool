@@ -27,6 +27,7 @@
         public const string TspbLoadDBProgress = "tspbLoadDBProgress";// 状态栏进度条
         public const string TapControl = "TapControl";// 配置界面
         public const string BtnSave = "BtnSave";// 保存按钮
+        public const string CmcSubPlugin = "CmcSubPlugin";// 上下文菜单
 
         //数据库编码
 
