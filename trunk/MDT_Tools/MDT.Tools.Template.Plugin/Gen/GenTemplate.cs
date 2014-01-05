@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Common;
 using MDT.Tools.Fix.Common.Model;
+using MDT.Tools.Fix.Common.Utils;
 using MDT.Tools.Template.Plugin.Model;
 using MDT.Tools.Template.Plugin.Utils;
 using Message = MDT.Tools.Fix.Common.Model.Message;
@@ -16,6 +17,7 @@ namespace MDT.Tools.Template.Plugin.Gen
     public class GenTemplate : AbstractHandler
     {
         public TemplateParas TemplateParas { get; set; }
+        public List<FieldDic> FieldDics { get; set; }
 
         public void process(object[] o)
         {
@@ -185,8 +187,9 @@ namespace MDT.Tools.Template.Plugin.Gen
                 tableName = field.Name;
                 dic.Add("field", field);
             }
-
-           
+            
+            FixHelper.FieldDics = FieldDics;
+            dic.Add("FixHelper",new FixHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
 
 
@@ -247,6 +250,8 @@ namespace MDT.Tools.Template.Plugin.Gen
                 tableName = field.Name;
                 dic.Add("fields", o);
             }
+            FixHelper.FieldDics = FieldDics;
+            dic.Add("FixHelper", new FixHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
             string title = tableName + "." + TemplateParas.CodeLanguage;
 

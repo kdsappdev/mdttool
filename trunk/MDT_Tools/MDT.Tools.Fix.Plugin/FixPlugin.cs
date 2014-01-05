@@ -312,7 +312,7 @@ namespace MDT.Tools.Fix.Plugin
                     AddTreeNode(fieldsNode.Nodes, node); //加入到结点集合中              
 
                 }
-
+                registerObject(PluginShareHelper.FixFieldDic,fix.Fields);
                 var trailerNode = new TreeNode { Text = TagType.Trailer.ToString(), Tag = TagType.Trailer };
                 AddTreeNode(fixNode.Nodes, trailerNode);
                 trailerNode.Tag = new NodeTag(TagType.Trailer, fix.Trailer);

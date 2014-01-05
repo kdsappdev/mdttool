@@ -161,11 +161,15 @@ namespace MDT.Tools.Template.Plugin
                         var os =
                             getObject(MDT.Tools.Fix.Common.Utils.PluginShareHelper.FixPluginKey, MDT.Tools.Fix.Common.Utils.PluginShareHelper.FixCurrentCheck) as
                             object[];
+                        var fieldDics =
+                            getObject(MDT.Tools.Fix.Common.Utils.PluginShareHelper.FixPluginKey, MDT.Tools.Fix.Common.Utils.PluginShareHelper.FixFieldDic) as
+                            List<Fix.Common.Model.FieldDic>;
 
                         ThreadPool.QueueUserWorkItem(o =>
                         {
                             var gen = new GenTemplate();
                             gen.TemplateParas = templateParas;
+                            gen.FieldDics = fieldDics;
                             getDBShare(gen);
                             gen.process(os);
                         });
