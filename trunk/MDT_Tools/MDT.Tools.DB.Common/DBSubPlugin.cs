@@ -76,7 +76,12 @@ namespace MDT.Tools.DB.Common
 
         protected virtual void process(DataRow[] drTable, AbstractHandler handler)
         {
-             
+            getDBShare(handler);
+            handler.process(drTable, handler.dsTableColumn, handler.dsTablePrimaryKey);
+        }
+
+        protected virtual void getDBShare(AbstractHandler handler)
+        {
             var dbName = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBName) as string;
             var dbType = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBType) as string;
             var dbConnectionString = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentDBConnectionString) as string;
@@ -116,8 +121,6 @@ namespace MDT.Tools.DB.Common
                 handler.TargetEncoding = Encoding.GetEncoding(targetEncoding);
             }
           
-
-            handler.process(drTable, dsTableColumn, dsTablePrimaryKey);
         }
     }
 }

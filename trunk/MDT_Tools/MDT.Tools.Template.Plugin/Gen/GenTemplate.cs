@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Common;
 using MDT.Tools.Fix.Common.Model;
 using MDT.Tools.Template.Plugin.Model;
 using MDT.Tools.Template.Plugin.Utils;
+using Message = MDT.Tools.Fix.Common.Model.Message;
 
 namespace MDT.Tools.Template.Plugin.Gen
 {
@@ -19,54 +21,59 @@ namespace MDT.Tools.Template.Plugin.Gen
         {
             try
             {
-
+               
                 SaveFileEncoding = Encoding.GetEncoding(TemplateParas.SaveFileEncoding);
                 CodeLanguage = TemplateParas.CodeLanguage;
                 OutPut = TemplateParas.SaveFilePath;
-                //setEnable(false);
-                //setStatusBar("");
+                setEnable(false);
+                setStatusBar("");
                 string[] strs = null;
                 if (!TemplateParas.IsShowGenCode)
                 {
                     FileHelper.DeleteDirectory(OutPut);
-                    //setStatusBar(string.Format("正在生成{0}模板代码", TemplateParas.TemplateName));
-                    //setProgreesEditValue(0);
-                    //setProgress(0);
-                    //setProgressMax(o.Length);
+                    setStatusBar(string.Format("正在生成{0}模板代码", TemplateParas.TemplateName));
+                    setProgreesEditValue(0);
+                    setProgress(0);
+                    setProgressMax(o.Length);
                 }
-
-                for (int i = 0; i < o.Length; i++)
+                if (TemplateParas.IsAutoGenSaveFileName)
                 {
-
+                    for (int i = 0; i < o.Length; i++)
+                    {
+                        if (!TemplateParas.IsShowGenCode)
+                        {
+                            setStatusBar(string.Format("正在生成{0}模板,共{1}个代码，已生成了{2}个代码", TemplateParas.TemplateName,
+                                                       o.Length, i));
+                            setProgress(1);
+                        }
+                        GenCode(o[i]);
+                    }
+                }
+                else
+                {
                     if (!TemplateParas.IsShowGenCode)
                     {
-                        //setStatusBar(string.Format("正在生成{0}模板{1}的代码,共{2}个代码，已生成了{3}个代码", TemplateParas.TemplateName,
-                        //                           tableInfos[i].TableName,
-                        //                           o.Length, i));
-                        //setProgress(1);
+                        setProgress(100);
                     }
-
-
-                    GenCode(o[i]);
-
+                     GenCode(o);   
                 }
 
 
 
                 if (!TemplateParas.IsShowGenCode)
                 {
-                    //setStatusBar(string.Format("{0}模板代码生成成功", TemplateParas.TemplateName));
+                    setStatusBar(string.Format("{0}模板代码生成成功", TemplateParas.TemplateName));
                     openDialog();
                 }
             }
             catch (Exception ex)
             {
-                //setStatusBar(string.Format("{0}模板代码生成失败[{1}]", TemplateParas.TemplateName, ex.Message));
+                setStatusBar(string.Format("{0}模板代码生成失败[{1}]", TemplateParas.TemplateName, ex.Message));
 
             }
             finally
             {
-                //setEnable(true);
+                setEnable(true);
             }
         }
 
@@ -94,21 +101,29 @@ namespace MDT.Tools.Template.Plugin.Gen
                         setProgress(0);
                         setProgressMax(drTables.Length);
                     }
-
-                    for (int i = 0; i < tableInfos.Count; i++)
+                    if (TemplateParas.IsAutoGenSaveFileName)
                     {
+                        for (int i = 0; i < tableInfos.Count; i++)
+                        {
+                            if (!TemplateParas.IsShowGenCode)
+                            {
+                                setStatusBar(string.Format("正在生成{0}模板{1}的代码,共{2}个代码，已生成了{3}个代码",
+                                                           TemplateParas.TemplateName,
+                                                           tableInfos[i].TableName,
+                                                           drTables.Length, i));
+                                setProgress(1);
+                            }
+                            GenCode(tableInfos[i]);
 
+                        }
+                    }
+                    else
+                    {
                         if (!TemplateParas.IsShowGenCode)
                         {
-                            setStatusBar(string.Format("正在生成{0}模板{1}的代码,共{2}个代码，已生成了{3}个代码", TemplateParas.TemplateName,
-                                                       tableInfos[i].TableName,
-                                                       drTables.Length, i));
-                            setProgress(1);
+                            setProgress(100);
                         }
-
-
-                        GenCode(tableInfos[i]);
-
+                        GenCode();
                     }
 
                 }
@@ -130,7 +145,10 @@ namespace MDT.Tools.Template.Plugin.Gen
             }
         }
 
-
+        /// <summary>
+        /// 逐个生成文件
+        /// </summary>
+        /// <param name="o"></param>
         public void GenCode(object o)
         {
             Header header = o as Header;
@@ -168,11 +186,16 @@ namespace MDT.Tools.Template.Plugin.Gen
                 dic.Add("field", field);
             }
 
-
+           
             string str = nVelocityHelper.GenByTemplate(path, dic);
 
 
             string title = tableName + "." + TemplateParas.CodeLanguage;
+
+            if (!TemplateParas.IsAutoGenSaveFileName)
+            {
+                title = TemplateParas.SaveFileName;
+            }
 
             if (TemplateParas.IsShowGenCode)
             {
@@ -181,6 +204,63 @@ namespace MDT.Tools.Template.Plugin.Gen
             else
             {
 
+                FileHelper.Write(TemplateParas.SaveFilePath + title, new[] { str }, SaveFileEncoding);
+            }
+        }
+        /// <summary>
+        /// 生成指定单一文件
+        /// </summary>
+        /// <param name="o"></param>
+        public void GenCode(object[] o)
+        {
+            Header header = o[0] as Header;
+            Trailer trailer = o[0] as Trailer;
+            Message message = o[0] as Message;
+            Component component = o[0] as Component;
+            FieldDic field = o[0] as FieldDic;
+            string tableName = "";
+
+            string path = string.Format(@"{0}", TemplateParas.TemplateName);
+            var dic = new Dictionary<string, object>();
+            if (header != null)
+            {
+                tableName = "header";
+                dic.Add("headers", o);
+            }
+            if (trailer != null)
+            {
+                tableName = "trailer";
+                dic.Add("trailers", o);
+            }
+            if (message != null)
+            {
+                tableName = message.Name;
+                dic.Add("messages", o);
+            }
+            if (component != null)
+            {
+                tableName = component.Name;
+                dic.Add("components", o);
+            }
+            if (field != null)
+            {
+                tableName = field.Name;
+                dic.Add("fields", o);
+            }
+            string str = nVelocityHelper.GenByTemplate(path, dic);
+            string title = tableName + "." + TemplateParas.CodeLanguage;
+
+            if (!TemplateParas.IsAutoGenSaveFileName)
+            {
+                title = TemplateParas.SaveFileName;
+            }
+
+            if (TemplateParas.IsShowGenCode)
+            {
+                CodeShow(title, str);
+            }
+            else
+            {
                 FileHelper.Write(TemplateParas.SaveFilePath + title, new[] { str }, SaveFileEncoding);
             }
         }
@@ -199,7 +279,10 @@ namespace MDT.Tools.Template.Plugin.Gen
 
 
             string title = tableName + "." + TemplateParas.CodeLanguage;
-
+            if (!TemplateParas.IsAutoGenSaveFileName)
+            {
+                title = TemplateParas.SaveFileName;
+            }
             if (TemplateParas.IsShowGenCode)
             {
                 CodeShow(title, str);
@@ -210,6 +293,28 @@ namespace MDT.Tools.Template.Plugin.Gen
                 FileHelper.Write(TemplateParas.SaveFilePath + title, new[] { str }, SaveFileEncoding);
             }
         }
+
+
+        public void GenCode()
+        {
+            string path = string.Format(@"{0}", TemplateParas.TemplateName);
+            var dic = GetNVelocityVars();
+            string str = nVelocityHelper.GenByTemplate(path, dic);
+            string title = "";
+            if (!TemplateParas.IsAutoGenSaveFileName)
+            {
+                title = TemplateParas.SaveFileName;
+            }
+            if (TemplateParas.IsShowGenCode)
+            {
+                CodeShow(title, str);
+            }
+            else
+            {
+                FileHelper.Write(TemplateParas.SaveFilePath + title, new[] { str }, SaveFileEncoding);
+            }
+        }
+
 
         public GenTemplate()
         {

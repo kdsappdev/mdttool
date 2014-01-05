@@ -65,7 +65,7 @@ namespace MDT.Tools.Fix.Plugin
             }
             _mainTool = Application.MainMenu;
             _explorer.Text = "Fix协议信息";
-            registerObject(PluginShareHelper.CmsSubPlugin,cmsSubPlugin);
+            registerObject(PluginShareHelper.CmsSubPlugin, cmsSubPlugin);
             AddTreeControl();
 
             loadFix();
@@ -142,22 +142,62 @@ namespace MDT.Tools.Fix.Plugin
         }
 
         #endregion
+
+        private bool checkFlag = true;
         void TvDbAfterCheck(object sender, TreeViewEventArgs e)
         {
-            bool check = e.Node.Checked;
-            foreach (TreeNode node in e.Node.Nodes)
+            if (checkFlag)
             {
-                node.Checked = check;
-            }
+                checkFlag = false;
+                bool check = e.Node.Checked;
+                foreach (TreeNode node in e.Node.Nodes)
+                {
+                    node.Checked = check;
+                }
 
-            object[] o = GetCheckTable();
-            registerObject(PluginShareHelper.FixCurrentCheck, o);
-            bool flag = false;
-            if (o != null && o.Length > 0)
-            {
-                flag = true;
+                object[] o = GetCheckTable();
+                if (o != null)
+                {
+                    Type type = null;
+                    bool isContinue = true;
+                    foreach (var o1 in o)
+                    {
+                        if (type == null)
+                        {
+                            type = o1.GetType();
+                        }
+                        else
+                        {
+                            if (!type.Equals(o1.GetType()))
+                            {
+                                isContinue = false;
+                                break;
+
+                            }
+                        }
+                    }
+
+                    if (!isContinue)
+                    {
+                        MessageBox.Show(_tvFix,"不能选择不同节点,请选则同一类节点", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        e.Node.Checked = !e.Node.Checked;
+                        foreach (TreeNode node in e.Node.Nodes)
+                        {
+                            node.Checked = e.Node.Checked;
+                        }
+                        checkFlag = true;
+                        return;
+                    }
+                }
+                registerObject(PluginShareHelper.FixCurrentCheck, o);
+                bool flag = false;
+                if (o != null && o.Length > 0)
+                {
+                    flag = true;
+                }
+                broadcast(PluginShareHelper.BroadCastCheckFixNumberIsGreaterThan0, flag);
+                checkFlag = true;
             }
-            broadcast(PluginShareHelper.BroadCastCheckFixNumberIsGreaterThan0, flag);
         }
 
         void TvDbMouseClick(object sender, MouseEventArgs e)
@@ -227,15 +267,15 @@ namespace MDT.Tools.Fix.Plugin
             }
             else
             {
-                var fixNode = new TreeNode { Text = TagType.Fix.ToString()+fix.Major+"."+fix.Minor, Tag = TagType.Header };
-                
+                var fixNode = new TreeNode { Text = TagType.Fix.ToString() + fix.Major + "." + fix.Minor, Tag = TagType.Header };
+
                 AddTreeNode(collection, fixNode);
 
                 var headerNode = new TreeNode { Text = TagType.Header.ToString(), Tag = TagType.Header };
                 headerNode.Tag = new NodeTag(TagType.Header, fix.Header);
                 AddTreeNode(fixNode.Nodes, headerNode);
 
-                
+
 
                 var messagesNode = new TreeNode { Text = TagType.Messages.ToString(), Tag = TagType.Messages };
                 AddTreeNode(fixNode.Nodes, messagesNode);
@@ -243,8 +283,8 @@ namespace MDT.Tools.Fix.Plugin
                 foreach (Fix.Common.Model.Message message in fix.Messages)
                 {
                     //新建一个结点 =                 
-                    TreeNode node = new TreeNode { Text = message.Name};
-                        node.Tag = new NodeTag(TagType.Message, message);
+                    TreeNode node = new TreeNode { Text = message.Name };
+                    node.Tag = new NodeTag(TagType.Message, message);
                     TreeNodeimageIndex(node, _isSelected);
                     AddTreeNode(messagesNode.Nodes, node); //加入到结点集合中              
 
@@ -281,10 +321,10 @@ namespace MDT.Tools.Fix.Plugin
 
         }
 
-        
+
 
         private bool _isSelected = false;
-        
+
 
         private delegate void AddTreeNodeDel(TreeNodeCollection collection, TreeNode node);
         private void AddTreeNode(TreeNodeCollection collection, TreeNode node)
@@ -544,14 +584,14 @@ namespace MDT.Tools.Fix.Plugin
                     m.Components.Add(ct);
 
                 }
-                
+
 
             }
         }
 
         private void parseComponent(Component c, XmlNode node)
         {
-            
+
             c.Name = node.Attributes["name"].Value;
 
             if (node.Attributes.Count == 2)
