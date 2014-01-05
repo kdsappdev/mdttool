@@ -10,6 +10,10 @@ namespace MDT.Tools.Core.Log
        {
            Console.WriteLine(str);
        }
+       public void Warn(string str)
+       {
+           Console.WriteLine(str);
+       }
        public void Error(Exception ex)
        {
            Console.WriteLine(ex.Message);
