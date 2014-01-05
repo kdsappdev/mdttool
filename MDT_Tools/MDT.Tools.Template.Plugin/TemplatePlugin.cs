@@ -166,7 +166,7 @@ namespace MDT.Tools.Template.Plugin
                         {
                             var gen = new GenTemplate();
                             gen.TemplateParas = templateParas;
-                            
+                            getDBShare(gen);
                             gen.process(os);
                         });
                     }

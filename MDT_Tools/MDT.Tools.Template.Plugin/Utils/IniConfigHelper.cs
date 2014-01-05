@@ -36,6 +36,7 @@ namespace MDT.Tools.Template.Plugin.Utils
         private const string TemplateName = "TemplateName";
         private const string SaveFileEncoding = "SaveFileEncoding";
         private const string SaveFilePath = "SaveFilePath";
+        private const string IsAutoGenSaveFileName = "IsAutoGenSaveFileName";
         private const string SaveFileName = "SaveFileName";
         private const string IsShowGenCode = "IsShowGenCode";
         private const string CodeLanguage = "CodeLanguage";
@@ -97,6 +98,17 @@ namespace MDT.Tools.Template.Plugin.Utils
                     }
                     GetPrivateProfileString(Group2, SaveFileName + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                     templateParas.SaveFileName = sb.ToString();
+                    
+
+                    GetPrivateProfileString(Group2, IsAutoGenSaveFileName + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+                    
+                    bool isAutoGenSaveFileName = true;
+                    if (bool.TryParse(sb.ToString(), out isAutoGenSaveFileName))
+                    {
+                        templateParas.IsAutoGenSaveFileName = isAutoGenSaveFileName;
+                    }
+
+
 
                     GetPrivateProfileString(Group2, IsShowGenCode + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                    

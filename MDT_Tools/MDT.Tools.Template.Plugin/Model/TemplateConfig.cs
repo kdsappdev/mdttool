@@ -24,6 +24,7 @@ namespace MDT.Tools.Template.Plugin.Model
         public string SaveFileEncoding { get; set; }
         public string SaveFilePath { get; set; }
         public string SaveFileName { get; set; }
+        public bool IsAutoGenSaveFileName { get; set; }
         public bool IsShowGenCode { get; set; }
         public string CodeLanguage { get; set; }
     }
