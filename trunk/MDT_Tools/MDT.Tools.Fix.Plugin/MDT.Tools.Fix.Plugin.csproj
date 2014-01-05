@@ -58,7 +58,7 @@
       <DependentUpon>FixExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\FilePathHelper.cs" />
-    <Compile Include="Utils\FixHelper.cs" />
+
     <Compile Include="Utils\PluginShareHelper.cs" />
   </ItemGroup>
   <ItemGroup>
