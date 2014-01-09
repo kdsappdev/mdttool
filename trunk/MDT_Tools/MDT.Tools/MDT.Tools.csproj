@@ -17,7 +17,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>lib\MDT.Tools.pfx</AssemblyOriginatorKeyFile>
     <ApplicationIcon>Image\db.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
@@ -136,6 +136,7 @@
     <Content Include="Image\Open.ico" />
     <Content Include="Image\ToolboxWindow.ico" />
     <Content Include="lib\DevComponents.DotNetBar2.dll" />
+    <Content Include="lib\NVelocity.dll" />
     <Content Include="lib\WeifenLuo.WinFormsUI.Docking.dll" />
   </ItemGroup>
   <ItemGroup>
