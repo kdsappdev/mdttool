@@ -12,7 +12,7 @@
     <AssemblyName>MDT.Tools.Fix.Plugin</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>MDT.Tools.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -52,13 +52,11 @@
     <Compile Include="FixPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\FixExplorer.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\FixExplorer.Designer.cs">
       <DependentUpon>FixExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\FilePathHelper.cs" />
-
     <Compile Include="Utils\PluginShareHelper.cs" />
   </ItemGroup>
   <ItemGroup>
