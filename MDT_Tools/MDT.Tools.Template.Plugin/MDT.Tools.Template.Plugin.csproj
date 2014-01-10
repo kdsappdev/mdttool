@@ -73,6 +73,7 @@
     <ProjectReference Include="..\MDT.Tools.Fix.Common\MDT.Tools.Fix.Common.csproj">
       <Project>{E541B17C-8C68-4C50-8B2E-D9FF72C249F6}</Project>
       <Name>MDT.Tools.Fix.Common</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

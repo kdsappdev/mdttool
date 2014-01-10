@@ -19,5 +19,11 @@ namespace MDT.Tools.Fix.Common.Model
            get { return _groups; }
            set { _groups = value; }
        }
+       private List<Component> _components = new List<Component>();
+       public List<Component> Components
+       {
+           get { return _components; }
+           set { _components = value; }
+       }
     }
 }
