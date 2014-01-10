@@ -90,6 +90,7 @@ namespace MDT.Tools.ExcelAddin
             try
             {
                 ConfigInfo configInfo = IniConfigHelper.ReadConfigInfo();
+                QuartService.StartJob(configInfo.VkInterval);
                 ProcessExcelHelper.processExcel(Application);
                 LogHelper.Info("手动点击保存");
                 MessageBox.Show("保存成功", "提示");

@@ -15,13 +15,20 @@ namespace MDT.Tools.ExcelAddin
         {
             try
             {
+
+                Random r = new Random();
+                string a = r.Next().ToString();
+                string b = r.Next().ToString();
+
                 ISchedulerFactory sf = new StdSchedulerFactory();
                 IScheduler sched = sf.GetScheduler();
                 IJobDetail job = JobBuilder.Create<processExcelJob>()
-                    .WithIdentity("job1", "group1")
+                    .WithIdentity(a, b)
                     .Build();
+
+
                 ICronTrigger trigger = (ICronTrigger)TriggerBuilder.Create()
-                                                        .WithIdentity("trigger1", "group1")
+                                                        .WithIdentity(a, b)
                                                         .WithCronSchedule(interval)
                                                         .Build();
 
@@ -50,5 +57,6 @@ namespace MDT.Tools.ExcelAddin
                 //LogFileName.Write("Tullett Start at " + DateTime.Now);
             }
         }
+
     }
 }

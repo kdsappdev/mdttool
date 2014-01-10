@@ -22,6 +22,7 @@ namespace MDT.Tools.ExcelAddin.Utils
             }
             FileHelper.Delete(path, fileName);
             FileHelper.Write(path, fileName, configInfo.Header, true);
+            List<string> list = new List<string>(configInfo.RowsCount);
             for (int i = 0; i < configInfo.RowsCount; i++)
             {
                 string row = configInfo.Rows[i];
@@ -35,6 +36,7 @@ namespace MDT.Tools.ExcelAddin.Utils
                         Excel.Worksheet sheet = (Excel.Worksheet)book.Sheets[int.Parse(str1s[0])];
                         Excel.Range source = sheet.get_Range(str1s[1], str1s[1]);
                         string value = source.Value + "";
+                        list.Add(value);
                         if (str1s.Length >= 3 && !string.IsNullOrEmpty(value))
                         {
                             int dataScale = 0;
@@ -51,6 +53,26 @@ namespace MDT.Tools.ExcelAddin.Utils
                 FileHelper.Write(path, fileName, row, true);
 
             }
+            //发邮件
+            if (templist(list) == true)
+            {
+                Mail.sends();
+                LogHelper.Info("邮件发送成功");
+            }
+
+        }
+        public static bool templist(List<string> list)
+        {
+            string a = list[0];
+            foreach (var item in list)
+            {
+                if (a != item)
+                {
+
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
