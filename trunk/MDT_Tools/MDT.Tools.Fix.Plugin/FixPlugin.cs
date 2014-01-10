@@ -480,6 +480,12 @@ namespace MDT.Tools.Fix.Plugin
                     parseGroup(g, xn);
                     fix.Header.Groups.Add(g);
 
+                } if (xn.Name == "component")
+                {
+                    Component c = new Component();
+                    parseComponent(c, xn);
+                    fix.Header.Components.Add(c);
+
                 }
             }
         }
@@ -500,9 +506,18 @@ namespace MDT.Tools.Fix.Plugin
                     Group g = new Group();
                     parseGroup(g, xn);
                     fix.Trailer.Groups.Add(g);
-
                 }
-            }
+
+                else
+                    if (xn.Name == "component")
+                    {
+                        Component c = new Component();
+                        parseComponent(c, xn);
+                        fix.Trailer.Components.Add(c);
+
+                    }
+                }
+             
         }
 
         private void parseGroup(Group g, XmlNode node)

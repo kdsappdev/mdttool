@@ -338,6 +338,7 @@
     <Compile Include="TextEditor\Util\TipSpacer.cs" />
     <Compile Include="TextEditor\Util\TipSplitter.cs" />
     <Compile Include="TextEditor\Util\TipText.cs" />
+    <Compile Include="TextEditor\Util\XmlFoldingStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Docking\DockPanel.bmp" />
