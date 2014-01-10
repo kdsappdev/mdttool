@@ -18,7 +18,6 @@ namespace MDT.Tools.ExcelAddin
         private static log4net.ILog _log = null;
         static LogHelper()
         {
-
             _log = log4net.LogManager.GetLogger(_currentType);
             log4net.Config.XmlConfigurator.Configure(FileHelper.CreateFileInfo(Consts.path().Replace(@"\config.ini", "\\"), "log4netConfig.xml"));
         }

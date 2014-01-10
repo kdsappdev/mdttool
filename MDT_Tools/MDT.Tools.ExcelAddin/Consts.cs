@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace MDT.Tools.ExcelAddin.Utils
+namespace MDT.Tools.ExcelAddin
 {
     public class Consts
     {
@@ -12,6 +12,9 @@ namespace MDT.Tools.ExcelAddin.Utils
         //public static readonly string Author = "deshuai.kong";
         //public static readonly string AppPath = System.Windows.Forms.Application.StartupPath;
         //public static readonly string ConfigPath = @"E:\\config.ini";
+
+        public static readonly string ErrorImagePath = @"E:\\Tullett\\";
+
 
         public static readonly string ConfigPath = Consts.path();
         public static string path()
