@@ -655,6 +655,7 @@ namespace MDT.Tools.Fix.Plugin
             fd.Name = node.Attributes["name"].Value;
             fd.Number = int.Parse(node.Attributes["number"].Value);
             fd.Type = node.Attributes["type"].Value;
+
             foreach (XmlNode xn in node.ChildNodes)
             {
                 if (xn.Name == "value")

@@ -12,7 +12,7 @@
     <AssemblyName>MDT.Tools.AutoUpdater.Config</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>MDT.Tools.pfx</AssemblyOriginatorKeyFile>
     <ApplicationIcon>config.ico</ApplicationIcon>
   </PropertyGroup>

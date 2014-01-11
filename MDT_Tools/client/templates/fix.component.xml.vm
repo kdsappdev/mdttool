@@ -4,17 +4,21 @@
 #paraeAFix($p)
 </component>
 #end
-#macro(paraeAFix $p)
+
+#macro(paraeAFix $p)  
 #foreach($field in $p.Fields)
 <field name="${field.Name}" required="#convertBoolean(${field.Required})"/>
 #end
+
 #foreach($group in $p.Groups)
 #parseAGroup($group)
 #end
+
 #foreach($component in $p.Components)
 #parseAComponent($component)
 #end
 #end
+
 #macro(parseAGroup $p)
 <group name="${p.Name}" required="#convertBoolean(${p.Required})">
 #paraeAFix($p)
