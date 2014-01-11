@@ -15,6 +15,6 @@ namespace MDT.Tools.Template.Plugin.Utils
         public static readonly string SystemConfig = Application.StartupPath + "\\control\\templateconfig.ini";
         public static readonly string ExportTemplatePath = Application.StartupPath + "\\data\\Template\\";
         public static readonly string TemplatesPath = Application.StartupPath + "\\templates\\";
-    
+        public static readonly string RicConfigPath = Application.StartupPath + "\\control\\fieldstype.ini";
     }
 }

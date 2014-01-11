@@ -11,7 +11,6 @@ using MDT.Tools.Fix.Common.Utils;
 using MDT.Tools.Template.Plugin.Model;
 using MDT.Tools.Template.Plugin.Utils;
 using Message = MDT.Tools.Fix.Common.Model.Message;
-
 namespace MDT.Tools.Template.Plugin.Gen
 {
     public class GenTemplate : AbstractHandler
@@ -190,6 +189,7 @@ namespace MDT.Tools.Template.Plugin.Gen
             
             FixHelper.FieldDics = FieldDics;
             dic.Add("FixHelper",new FixHelper());
+            dic.Add("codeGenHelper", new CodeGenHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
 
 
@@ -252,6 +252,7 @@ namespace MDT.Tools.Template.Plugin.Gen
             }
             FixHelper.FieldDics = FieldDics;
             dic.Add("FixHelper", new FixHelper());
+            dic.Add("codeGenHelper", new CodeGenHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
             string title = tableName + "." + TemplateParas.CodeLanguage;
 
