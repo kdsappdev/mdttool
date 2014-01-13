@@ -51,14 +51,14 @@ public interface I${model}Server {
 	public void update(${model} ${lmodel},Condition updateCondition) throws CodeException;
 	
 	/**
-	 *批量更新${model}方法
+	 *批量更新${model}方法,先删除，后插入
 	 *
 	 * @param ${lmodel}$!{tableInfo.TableComments}
 	 */
-	public void updateBatch(List<${model}> ${lmodel}s,Condition updateCondition) throws CodeException;
+	public void updateBatch(List<${model}> ${lmodel}s,Condition deleteCondition) throws CodeException;
 	
 	/**
-	 *根据QueryCondition对象 查询出${model}对象
+	 *根据Condition对象 查询出${model}对象
 	 *
 	 * @param ${lmodel}$!{tableInfo.TableComments}
 	 * @return ${model}对象
