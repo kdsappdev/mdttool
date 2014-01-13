@@ -6,8 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Ats.Foundation.Condition;
 using Ats.Foundation.Message;
-using Ats.Foundation.Utils.Communication.WebService;
+using Ats.DAL.WebService;
+using ${dalNameSpace};
 using ${idalNameSpace};
 using ${modelNameSpace};
 namespace ${dalNameSpace}
@@ -25,37 +27,17 @@ namespace ${dalNameSpace}
 	public class ${model}DALServer: BaseDALServer,I${model}DALServer
 	{
 		${region}region Select
-		/// <summary>
-		/// 根据location 查询出${model}集合对象
-		/// </summary>
-		/// <param name="location">实体</param>
-		/// <returns>AtsMsg对象</returns>
-		public AtsMsg<List<${model}>> Select(string location)
+		 
+		public AtsMsg<List<${model}>> Select()
 		{
-			string[] args=new []{ location };
-			string strURL = "/ats/services/I${model}Service?wsdl";
-			string strClassName = "I${model}Service";
-			string strMonthedName = "select";
+			var args =new string[0];
+			const string strURL = "/ats/services/I${model}Service?wsdl";
+			const string strClassName = "I${model}Service";
+			const string strMonthedName = "select";
 			return ServersHelper.GetResultMSG<List<${model}>>(strURL, strClassName, strMonthedName,args);
 		}
 		${region}endregion
 
-		${region}region SelectByShortName
-		/// <summary>
-		/// 根据shortName,location 查询出${model}对象
-		/// </summary>
-		/// <param name="shortName">短名称</param>
-		/// <param name="location">实体</param>
-		/// <returns>AtsMsg对象</returns>
-		public AtsMsg<${model}> SelectByShortName(string shortName, string location)
-		{
-			string[] args=new []{ shortName,location };
-			string strURL = "/ats/services/I${model}Service?wsdl";
-			string strClassName = "I${model}Service";
-			string strMonthedName = "selectByShortName";
-			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
-		}
-		${region}endregion
 
 		${region}region Insert
 		/// <summary>
@@ -65,45 +47,51 @@ namespace ${dalNameSpace}
 		/// <returns>AtsMsg对象</returns>
 		public AtsMsg<${model}> Insert(${model} ${lmodel})
 		{
-			string str = MsgHelper.Serializer<${model}>(yuKonAFilters);
-			string[] args=new []{ str };
-			string strURL = "/ats/services/I${model}Service?wsdl";
-			string strClassName = "I${model}Service";
-			string strMonthedName = "insert";
+			string str = MsgHelper.Serializer(${lmodel});
+			var args=new []{ str };
+			const string strURL = "/ats/services/I${model}Service?wsdl";
+			const string strClassName = "I${model}Service";
+			const string strMonthedName = "insert";
 			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
 		}
 		${region}endregion
 
 		${region}region Delete
-		/// <summary>
-		/// 删除${model}方法
-		/// </summary>
-		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
-		/// <returns>AtsMsg对象</returns>
-		public AtsMsg<${model}> Delete(${model} ${lmodel})
+		 
+		public AtsMsg<${model}> Delete(Condition deleteCondition)
 		{
-			string str = MsgHelper.Serializer<${model}>(${lmodel});
-			string[] args=new []{ str };
-			string strURL = "/ats/services/I${model}Service?wsdl";
-			string strClassName = "I${model}Service";
-			string strMonthedName = "delete";
+			string str = MsgHelper.Serializer(deleteCondition);
+			var args=new []{ str };
+			const string strURL = "/ats/services/I${model}Service?wsdl";
+			const string strClassName = "I${model}Service";
+			const string strMonthedName = "delete";
 			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
 		}
 		${region}endregion
 
 		${region}region Update
-		/// <summary>
-		/// 更新${model}方法
-		/// </summary>
-		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
-		/// <returns>AtsMsg对象</returns>
-		public AtsMsg<${model}> Update(${model} ${lmodel})
+		 
+		public AtsMsg<${model}> Update(${model} ${lmodel},Condition updateCondition)
 		{
-			string str = MsgHelper.Serializer<${model}>(${lmodel});
-			string[] args=new []{ str };
-			string strURL = "/ats/services/I${model}Service?wsdl";
-			string strClassName = "I${model}Service";
-			string strMonthedName = "update";
+			string str1 = MsgHelper.Serializer(${lmodel});
+			string str2 = MsgHelper.Serializer(updateCondition);
+			var args = new[]{ str1,str2 };
+			const string strURL = "/ats/services/I${model}Service?wsdl";
+			const string strClassName = "I${model}Service";
+			const string strMonthedName = "update";
+			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+		
+		${region}region Update
+		 
+		public AtsMsg<${model}> Select(Condition queryCondition)
+		{			 
+			string str = MsgHelper.Serializer(queryCondition);
+			var args = new[]{ str };
+			const string strURL = "/ats/services/I${model}Service?wsdl";
+			const string strClassName = "I${model}Service";
+			const string strMonthedName = "select";
 			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
 		}
 		${region}endregion

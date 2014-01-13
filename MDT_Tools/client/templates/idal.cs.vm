@@ -6,8 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Ats.Foundation.Condition;
 using Ats.Foundation.Message;
-using Ats.YuKon.DAL.Interface;
+using ${idalNameSpace};
 using ${modelNameSpace};
 namespace ${idalNameSpace}
 {
@@ -29,18 +30,8 @@ namespace ${idalNameSpace}
 		/// </summary>
 		/// <param name="location">实体</param>
 		/// <returns>AtsMsg对象</returns>
-		AtsMsg<List<${model}>> Select(string location);
-		${region}endregion
-
-		${region}region SelectByShortName
-		/// <summary>
-		/// 根据shortName,location 查询出${model}对象
-		/// </summary>
-		/// <param name="shortName">短名称</param>
-		/// <param name="location">实体</param>
-		/// <returns>AtsMsg对象</returns>
-		AtsMsg<${model}> SelectByShortName(string shortName, string location);
-		${region}endregion
+		AtsMsg<List<${model}>> Select();
+		${region}endregion		
 
 		${region}region Insert
 		/// <summary>
@@ -52,21 +43,18 @@ namespace ${idalNameSpace}
 		${region}endregion
 
 		${region}region Delete
-		/// <summary>
-		/// 删除${model}方法
-		/// </summary>
-		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
-		/// <returns>AtsMsg对象</returns>
-		AtsMsg<${model}> Delete(YuKonAFilters ${lmodel});
+		
+		AtsMsg<${model}> Delete(Condition deleteCondition);
 		${region}endregion
 
 		${region}region Update
-		/// <summary>
-		/// 更新${model}方法
-		/// </summary>
-		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
-		/// <returns>AtsMsg对象</returns>
-		AtsMsg<${model}> Update(${model} ${lmodel});
+		 
+		AtsMsg<${model}> Update(${model} ${lmodel},Condition updateCondition);
+		${region}endregion
+		
+		${region}region Select
+		 
+		AtsMsg<${model}> Select(Condition queryCondition);
 		${region}endregion
 	}
 }
