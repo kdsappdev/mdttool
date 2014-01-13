@@ -18,44 +18,14 @@ import javax.jws.WebService;
  */
 @WebService
 public interface I${model} {
-	/**
-	 *根据location 查询出${model}集合对象
-	 *
-	 * @param location实体[字符串压缩字节码]
-	 * @return ${model}[AtsMsg字符串压缩字节码]
-	 */
-	public byte[] select(byte[] location);
-
-	/**
-	 *根据shortName,location 查询出${model}对象
-	 *
-	 * @param shortName短名称[字符串压缩字节码]
-	 * @param location实体[字符串压缩字节码]
-	 * @return ${model}[AtsMsg字符串压缩字节码]
-	 */
-	public byte[] selectByShortName(byte[] shortName, byte[] location);
-
-	/**
-	 *增加${model}方法
-	 *
-	 * @param ${lmodel}交易日志权限详细表(子表)[MsgHelper.Serialize序列化字符串压缩字节码]
-	 * @return ${model}[AtsMsg字符串压缩字节码]
-	 */
+	
+	public byte[] select();
+	
 	public byte[] insert(byte[] ${lmodel});
-
-	/**
-	 *删除${model}方法
-	 *
-	 * @param ${lmodel}交易日志权限详细表(子表)[MsgHelper.Serialize序列化字符串压缩字节码]
-	 * @return ${model}[AtsMsg字符串压缩字节码]
-	 */
-	public byte[] delete(byte[] ${lmodel});
-
-	/**
-	 *更新${model}方法
-	 *
-	 * @param ${lmodel}交易日志权限详细表(子表)[MsgHelper.Serialize序列化字符串压缩字节码]
-	 * @return ${model}[AtsMsg字符串压缩字节码]
-	 */
-	public byte[] update(byte[] ${lmodel});
+	
+	public byte[] delete(byte[] deleteCondition);
+	
+	public byte[] update(byte[] ${lmodel},byte[] updateCondition);
+	
+	public byte[] select(byte[] queryCondition);
 }
