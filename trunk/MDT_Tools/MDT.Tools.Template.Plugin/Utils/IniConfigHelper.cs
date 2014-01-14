@@ -40,7 +40,7 @@ namespace MDT.Tools.Template.Plugin.Utils
         private const string SaveFileName = "SaveFileName";
         private const string IsShowGenCode = "IsShowGenCode";
         private const string CodeLanguage = "CodeLanguage";
-
+        
         public static string ReadIniCN(string lpApplicationName, string lpKeyName,string iniPath)
         {
             string str = "";
