@@ -1,0 +1,28 @@
+#set($codeLanguage ='Java')
+public class FixMessage {
+
+	public static class FieldsEnum{
+#foreach($field in $fields)
+	#if($field.Values.Count > 0 )
+	
+public static class ${field.Name}{
+		#foreach($Value in $field.Values)
+
+		    public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${Value.Description} =${Value.Enum} ;
+		#end
+	}
+	#end
+#end
+	}
+ 
+
+	public static class Fields{
+	#foreach($field in $fields)
+			public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${field.Name} = "${field.Name}";
+	#end
+	}
+	
+}
+
+
+
