@@ -2,8 +2,16 @@
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
 
 #macro(parseAComponent $p)
-public class ${p.Name} extends BaseMessage{
 
+	public class ${p.Name} extends BaseMessage{
+
+	public $FixHelper.GetFieldOrGroupType($codeLanguage,${p.Name}) get${p.Name}(){
+			return DataTypeConverter.Utils.to$FixHelper.GetFieldOrGroupType($codeLanguage,${p.Name})(this.get(FixMessage.Fields.${p.Name}));
+		}
+		public void set${p.Name}($FixHelper.GetFieldOrGroupType($codeLanguage,${p.Name}) ${codeGenHelper.StrFirstToLower(${p.Name})}){
+			this.put(FixMessage.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})});
+		}
+		
 #paraeAFix($p)
 }
 #end
