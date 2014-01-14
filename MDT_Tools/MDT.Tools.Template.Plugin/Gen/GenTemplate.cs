@@ -204,6 +204,7 @@ namespace MDT.Tools.Template.Plugin.Gen
             {
                 CodeShow(title, str);
             }
+
             else
             {
 
@@ -250,6 +251,7 @@ namespace MDT.Tools.Template.Plugin.Gen
                 tableName = field.Name;
                 dic.Add("fields", o);
             }
+            
             FixHelper.FieldDics = FieldDics;
             dic.Add("FixHelper", new FixHelper());
             dic.Add("codeGenHelper", new CodeGenHelper());

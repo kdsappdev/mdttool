@@ -179,7 +179,7 @@ namespace MDT.Tools.Fix.Plugin
 
                     if (!isContinue)
                     {
-                        MessageBox.Show(_tvFix,"不能选择不同节点,请选则同一类节点", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(_tvFix, "不能选择不同节点,请选则同一类节点", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         e.Node.Checked = !e.Node.Checked;
                         foreach (TreeNode node in e.Node.Nodes)
                         {
@@ -312,7 +312,7 @@ namespace MDT.Tools.Fix.Plugin
                     AddTreeNode(fieldsNode.Nodes, node); //加入到结点集合中              
 
                 }
-                registerObject(PluginShareHelper.FixFieldDic,fix.Fields);
+                registerObject(PluginShareHelper.FixFieldDic, fix.Fields);
                 var trailerNode = new TreeNode { Text = TagType.Trailer.ToString(), Tag = TagType.Trailer };
                 AddTreeNode(fixNode.Nodes, trailerNode);
                 trailerNode.Tag = new NodeTag(TagType.Trailer, fix.Trailer);
@@ -434,6 +434,7 @@ namespace MDT.Tools.Fix.Plugin
             document.Load(FilePathHelper.FixXml);
             XmlNodeList fixNodes = document.GetElementsByTagName("fix");
             XmlNode fixNode = fixNodes[0];
+
             fix.Major = int.Parse(fixNode.Attributes["major"].Value);
             fix.Minor = int.Parse(fixNode.Attributes["minor"].Value);
             foreach (XmlNode node in fixNode.ChildNodes)
@@ -516,8 +517,8 @@ namespace MDT.Tools.Fix.Plugin
                         fix.Trailer.Components.Add(c);
 
                     }
-                }
-             
+            }
+
         }
 
         private void parseGroup(Group g, XmlNode node)
@@ -640,6 +641,8 @@ namespace MDT.Tools.Fix.Plugin
         }
         private void parseFields(XmlNode node)
         {
+
+
             foreach (XmlNode xn in node.ChildNodes)
             {
                 if (xn.Name == "field")
@@ -652,9 +655,23 @@ namespace MDT.Tools.Fix.Plugin
         }
         private void parseFieldDic(FieldDic fd, XmlNode node)
         {
+
+            //新加的
+
+            //fd.Num.Add(int.Parse(node.Attributes["number"].Value));
+            //fd.Types.Add(node.Attributes["type"].Value);
+
+
+
+
             fd.Name = node.Attributes["name"].Value;
             fd.Number = int.Parse(node.Attributes["number"].Value);
             fd.Type = node.Attributes["type"].Value;
+
+            //if (node.FirstChild != null)
+            //{
+
+            //fd.Names.Add(node.Attributes["name"].Value);
 
             foreach (XmlNode xn in node.ChildNodes)
             {
@@ -666,6 +683,8 @@ namespace MDT.Tools.Fix.Plugin
                     fd.Values.Add(v);
                 }
             }
+            //}
+
         }
 
         #endregion
