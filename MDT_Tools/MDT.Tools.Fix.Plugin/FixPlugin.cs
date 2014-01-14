@@ -656,23 +656,9 @@ namespace MDT.Tools.Fix.Plugin
         private void parseFieldDic(FieldDic fd, XmlNode node)
         {
 
-            //新加的
-
-            //fd.Num.Add(int.Parse(node.Attributes["number"].Value));
-            //fd.Types.Add(node.Attributes["type"].Value);
-
-
-
-
             fd.Name = node.Attributes["name"].Value;
             fd.Number = int.Parse(node.Attributes["number"].Value);
             fd.Type = node.Attributes["type"].Value;
-
-            //if (node.FirstChild != null)
-            //{
-
-            //fd.Names.Add(node.Attributes["name"].Value);
-
             foreach (XmlNode xn in node.ChildNodes)
             {
                 if (xn.Name == "value")
@@ -683,8 +669,6 @@ namespace MDT.Tools.Fix.Plugin
                     fd.Values.Add(v);
                 }
             }
-            //}
-
         }
 
         #endregion
