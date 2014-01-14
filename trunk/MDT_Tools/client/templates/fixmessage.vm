@@ -7,8 +7,11 @@ public class FixMessage {
 	
 public static class ${field.Name}{
 		#foreach($Value in $field.Values)
-
-		    public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${Value.Description} =${Value.Enum} ;
+			#if($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) =="String")
+public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${Value.Description} ="${Value.Enum}";
+			#else
+public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${Value.Description} ='${Value.Enum}';
+			#end
 		#end
 	}
 	#end
@@ -18,7 +21,7 @@ public static class ${field.Name}{
 
 	public static class Fields{
 	#foreach($field in $fields)
-			public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${field.Name} = "${field.Name}";
+			public static final String ${field.Name} = "${field.Name}";
 	#end
 	}
 	
