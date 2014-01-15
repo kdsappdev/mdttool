@@ -229,12 +229,12 @@ namespace MDT.Tools.Template.Plugin.Gen
             if (header != null)
             {
                 tableName = "header";
-                dic.Add("headers", o);
+                dic.Add("header", o[0]);
             }
             if (trailer != null)
             {
                 tableName = "trailer";
-                dic.Add("trailers", o);
+                dic.Add("trailer", o[0]);
             }
             if (message != null)
             {

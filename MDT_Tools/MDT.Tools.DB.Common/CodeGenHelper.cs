@@ -99,6 +99,7 @@ namespace MDT.Tools.DB.Common
             }
             return str;
         }
+        
         public static string StrFirstToLower(string str)
         {
             if (!string.IsNullOrEmpty(str))
