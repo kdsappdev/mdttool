@@ -26,6 +26,7 @@
 #end
 #foreach($group in $p.Groups)
 #parseAGroup($group)
+
 #end
 #foreach($component in $p.Components)
 #parseAComponent($component)
@@ -40,9 +41,16 @@
 	}
 #end
 #macro(parseComponent $p)
-
-
-
+package ats.bbox.common.mo;
+#foreach($component in $p.Components)
+import ats.bbox.common.mo.component.${component.Name};
+#end
+#foreach($group in $p.Groups)
+#foreach($component in $group.Components)
+import ats.bbox.common.mo.component.${component.Name};
+#end
+#end
+import ats.bbox.framework.utils.DataTypeConverter;
 public class ${p.Name} extends BaseMessage{
 #paraeAFix($p)
 }
