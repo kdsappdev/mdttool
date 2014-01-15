@@ -1,4 +1,8 @@
 #set($codeLanguage ='Java')
+package ats.bbox.common.mo;
+
+
+
 public class FixMessage {
 
 	public static class FieldsEnum{
@@ -9,8 +13,12 @@ public static class ${field.Name}{
 		#foreach($Value in $field.Values)
 			#if($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) =="String")
 public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${Value.Description} ="${Value.Enum}";
-			#else
+			#end
+			#if($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) =="char")
 public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${Value.Description} ='${Value.Enum}';
+			#end
+			#if($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) =="int")
+public static final $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${Value.Description} =${Value.Enum};
 			#end
 		#end
 	}

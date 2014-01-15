@@ -1,3 +1,11 @@
+#set($codeLanguage ='Java')
+package ats.bbox.common.mo.component;
+
+import ats.bbox.common.mo.BaseMessage;
+import ats.bbox.common.mo.FixMessage;
+import ats.bbox.framework.utils.DataTypeConverter;
+
+
 public class StandardHeader extends BaseMessage{
 
 
@@ -7,10 +15,10 @@ public class StandardHeader extends BaseMessage{
 
 
 #foreach($Field in ${header.Fields})
-		public $FixHelper.GetFieldOrGroupType(${Field.Name}) get${Field.Name}(){
-		return DataTypeConverter.Utils.to$FixHelper.GetFieldOrGroupType(${Field.Name})(this.get(FixMessage.Fields.${Field.Name}));
+		public $FixHelper.GetFieldOrGroupType($codeLanguage,${Field.Name}) get${Field.Name}(){
+		return DataTypeConverter.Utils.to$FixHelper.GetFieldOrGroupType($codeLanguage,${Field.Name})(this.get(FixMessage.Fields.${Field.Name}));
 		}
-		public void set${Field.Name}($FixHelper.GetFieldOrGroupType(${Field.Name}) $FixHelper.StrFirstToLower(${Field.Name})){
+		public void set${Field.Name}($FixHelper.GetFieldOrGroupType($codeLanguage,${Field.Name}) $FixHelper.StrFirstToLower(${Field.Name})){
 		this.put(FixMessage.Fields.${Field.Name}, ${FixHelper.StrFirstToLower(${Field.Name})});
 		}		
 
@@ -21,14 +29,15 @@ public class StandardHeader extends BaseMessage{
 	
 	#foreach($Field in ${Group.Fields})
 	
-		public ${FixHelper.StrToLower($FixHelper.GetFieldOrGroupType(${Field.Name}))} get${Field.Name}(){
-		return DataTypeConverter.Utils.to$FixHelper.GetFieldOrGroupType(${Field.Name})(this.get(FixMessage.Fields.${Field.Name}));
+		public $FixHelper.GetFieldOrGroupType($codeLanguage,${Field.Name}) get${Field.Name}(){
+		return DataTypeConverter.Utils.to$FixHelper.GetFieldOrGroupType($codeLanguage,${Field.Name})(this.get(FixMessage.Fields.${Field.Name}));
 		}
-		public void set${Field.Name}($FixHelper.GetFieldOrGroupType(${Field.Name}) $FixHelper.StrFirstToLower(${Field.Name})){
+		public void set${Field.Name}($FixHelper.GetFieldOrGroupType($codeLanguage,${Field.Name}) $FixHelper.StrFirstToLower(${Field.Name})){
 		this.put(FixMessage.Fields.${Field.Name}, ${FixHelper.StrFirstToLower(${Field.Name})});
 		}
 
 	#end
 	}
 #end
+
 }
