@@ -18,6 +18,8 @@ namespace MDT.Tools.Core.Utils
             extendedProperties.AddProperty(RuntimeConstants.INPUT_ENCODING, "utf-8");
             extendedProperties.AddProperty(RuntimeConstants.OUTPUT_ENCODING, "utf-8");
             extendedProperties.AddProperty(RuntimeConstants.RESOURCE_LOADER, "file");
+            extendedProperties.AddProperty(RuntimeConstants.FILE_RESOURCE_LOADER_CACHE, false);
+            
             extendedProperties.AddProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, path);
             Velocity.Init(extendedProperties);
         }

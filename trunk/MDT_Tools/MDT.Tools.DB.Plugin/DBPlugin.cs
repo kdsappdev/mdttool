@@ -610,7 +610,7 @@ namespace MDT.Tools.DB.Plugin
             if (_explorer == null)
             {
                 _explorer = new Explorer();
-                _explorer.Show(Application.Panel, DockState.DockLeftAutoHide);
+                _explorer.Show(Application.Panel, DockState.DockLeft);
             }
             _explorer.Text = "数据库信息";
             registerObject(PluginShareHelper.TapControl, _configForm.tcConfig);
