@@ -152,6 +152,7 @@ namespace MDT.Tools.Template.Plugin.Gen
         /// <param name="o"></param>
         public void GenCode(object o)
         {
+            NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             Header header = o as Header;
             Trailer trailer = o as Trailer;
             Message message = o as Message;
@@ -217,6 +218,7 @@ namespace MDT.Tools.Template.Plugin.Gen
         /// <param name="o"></param>
         public void GenCode(object[] o)
         {
+            NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             Header header = o[0] as Header;
             Trailer trailer = o[0] as Trailer;
             Message message = o[0] as Message;
@@ -273,10 +275,10 @@ namespace MDT.Tools.Template.Plugin.Gen
             }
         }
 
-        private readonly NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
+      
         public void GenCode(TableInfo tableInfo)
         {
-
+            NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             string tableName = tableInfo.TableName;
 
             string path = string.Format(@"{0}", TemplateParas.TemplateName);
@@ -305,6 +307,7 @@ namespace MDT.Tools.Template.Plugin.Gen
 
         public void GenCode()
         {
+            NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             string path = string.Format(@"{0}", TemplateParas.TemplateName);
             var dic = GetNVelocityVars();
             string str = nVelocityHelper.GenByTemplate(path, dic);
