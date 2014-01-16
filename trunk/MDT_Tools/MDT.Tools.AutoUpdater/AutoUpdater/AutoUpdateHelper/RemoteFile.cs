@@ -26,6 +26,7 @@ namespace KnightsWarriorAutoupdater
         private string lastver = "";
         private int size = 0;
         private bool needRestart = false;
+        private string md5 = "";
         #endregion
 
         #region The public property
@@ -34,6 +35,11 @@ namespace KnightsWarriorAutoupdater
         public string LastVer { get { return lastver; } }
         public int Size { get { return size; } }
         public bool NeedRestart { get { return needRestart; } }
+        public string MD5
+        {
+            get { return md5; }
+        }
+
         #endregion
 
         #region The constructor of AutoUpdater
@@ -41,9 +47,24 @@ namespace KnightsWarriorAutoupdater
         {
             this.path = node.Attributes["path"].Value;
             this.url = node.Attributes["url"].Value;
-            this.lastver = node.Attributes["lastver"].Value;
-            this.size = Convert.ToInt32(node.Attributes["size"].Value);
             this.needRestart = Convert.ToBoolean(node.Attributes["needRestart"].Value);
+            try
+            {
+                this.lastver = node.Attributes["lastver"].Value;
+                this.size = Convert.ToInt32(node.Attributes["size"].Value);
+            }
+            catch
+            {
+            }
+            
+            try
+            {
+                this.md5 = node.Attributes["md5"].Value;
+            }
+            catch
+            {
+            }
+            
         }
         #endregion
     }

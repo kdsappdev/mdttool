@@ -25,6 +25,7 @@ namespace KnightsWarriorAutoupdater
         private string path = "";
         private string lastver = "";
         private int size = 0;
+        private string md5 = "";
         #endregion
 
         #region The public property
@@ -34,14 +35,17 @@ namespace KnightsWarriorAutoupdater
         public string LastVer { get { return lastver; } set { lastver = value; } }
         [XmlAttribute("size")]
         public int Size { get { return size; } set { size = value; } }
+        [XmlAttribute("md5")]
+        public string MD5 { get { return md5; } set { md5 = value; } }
         #endregion
 
         #region The constructor of LocalFile
-        public LocalFile(string path, string ver, int size)
+        public LocalFile(string path, string ver, int size,string md5)
         {
             this.path = path;
             this.lastver = ver;
             this.size = size;
+            this.md5 = md5;
         }
 
         public LocalFile()
