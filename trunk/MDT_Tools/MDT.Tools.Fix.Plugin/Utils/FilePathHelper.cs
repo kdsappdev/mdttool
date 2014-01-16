@@ -10,8 +10,8 @@ namespace MDT.Tools.Fix.Plugin.Utils
     {
         private FilePathHelper()
         { }
-        public static readonly string SystemConfig = Application.StartupPath + "\\control\\Fix44.xml";
-        public static readonly string FixXml = Application.StartupPath + "\\control\\Fix44.xml";
+        public static readonly string SystemConfig = Application.StartupPath + "\\control\\Fix.xml";
+        public static readonly string FixXml = Application.StartupPath + "\\control\\Fix.xml";
         public static readonly string SaveDBDataPath = Application.StartupPath + "\\data\\";
 
 
