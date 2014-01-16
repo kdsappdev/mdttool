@@ -61,7 +61,7 @@ namespace MDT.Tools.Fix.Plugin
             if (_explorer == null)
             {
                 _explorer = new FixExplorer();
-                _explorer.Show(Application.Panel, DockState.DockLeftAutoHide);
+                _explorer.Show(Application.Panel, DockState.DockLeft);
             }
             _mainTool = Application.MainMenu;
             _explorer.Text = "Fix协议信息";

@@ -134,7 +134,6 @@
       <DependentUpon>Code.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Doc.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Doc.designer.cs">
       <DependentUpon>Doc.cs</DependentUpon>
