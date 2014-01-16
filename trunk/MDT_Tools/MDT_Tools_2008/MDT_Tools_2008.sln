@@ -21,10 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Csharp_CodeGen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.DB.Common", "..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj", "{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.AutoUpdater", "..\MDT.Tools.AutoUpdater\MDT.Tools.AutoUpdater.csproj", "{255E1F40-5266-485B-8012-273DADDE657C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.AutoUpdater.Config", "..\MDT.Tools.AutoUpdater.Config\MDT.Tools.AutoUpdater.Config.csproj", "{6D023D06-B6F4-43DE-8168-06AC7A288A36}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.Template.Plugin", "..\MDT.Tools.Template.Plugin\MDT.Tools.Template.Plugin.csproj", "{50A616E6-5F73-4E51-90CC-D002A5B33624}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.Fix.Plugin", "..\MDT.Tools.Fix.Plugin\MDT.Tools.Fix.Plugin.csproj", "{ECC010EC-65CD-4B0E-8FB3-13B367F5A352}"
@@ -121,18 +117,6 @@ Global
 		{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}.Release|x86.ActiveCfg = Release|x86
 		{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}.Release|x86.Build.0 = Release|x86
-		{255E1F40-5266-485B-8012-273DADDE657C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{255E1F40-5266-485B-8012-273DADDE657C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{255E1F40-5266-485B-8012-273DADDE657C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{255E1F40-5266-485B-8012-273DADDE657C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{255E1F40-5266-485B-8012-273DADDE657C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{255E1F40-5266-485B-8012-273DADDE657C}.Release|x86.ActiveCfg = Release|Any CPU
-		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D023D06-B6F4-43DE-8168-06AC7A288A36}.Release|x86.ActiveCfg = Release|Any CPU
 		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50A616E6-5F73-4E51-90CC-D002A5B33624}.Debug|x86.ActiveCfg = Debug|Any CPU
