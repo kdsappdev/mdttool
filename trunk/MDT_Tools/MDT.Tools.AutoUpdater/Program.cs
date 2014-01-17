@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
-using KnightsWarriorAutoupdater;
 
 namespace MDT.Tools.AutoUpdater
 {
@@ -14,54 +15,105 @@ namespace MDT.Tools.AutoUpdater
         [STAThread]
         public static void Main(string[] args)
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-           
-            #region
-            IAutoUpdater autoUpdater = new KnightsWarriorAutoupdater.AutoUpdater();
-            bool bHasError = false;
-            bool isUpdate = true;
-            if (args != null && args.Length>=1)
+            try
             {
-                bool.TryParse(args[0], out isUpdate);
-            }
-            else
-            {
-               isUpdate= autoUpdater.IsUpdate();
-            }
-            if (isUpdate)
-            {
-                try
-                {
-                    autoUpdater.Update();
-                }
 
-                catch (Exception e)
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                #region 配置
+
+                string AutoUpdaterLib = System.Configuration.ConfigurationSettings.AppSettings["AutoUpdaterLib"];
+                string AutoUpdaterClass = System.Configuration.ConfigurationSettings.AppSettings["AutoUpdaterClass"];
+                string IsUpdate = "IsUpdate";
+                string Update = "Update";
+                string RollBack = "RollBack";
+                #endregion
+
+                #region 检测
+
+                Assembly assembly = readAssembly(AutoUpdaterLib);
+                object o = assembly.CreateInstance(AutoUpdaterClass);
+
+
+                bool bHasError = false;
+                bool isUpdate = true;
+                if (args != null && args.Length >= 1)
                 {
-                    bHasError = true;
+                    bool.TryParse(args[0], out isUpdate);
                 }
-                finally
+                else
                 {
-                    if (bHasError == true)
+                    isUpdate = (bool)o.GetType().GetMethod(IsUpdate).Invoke(o, null); ;
+                }
+                if (isUpdate)
+                {
+                    try
                     {
-                        try
-                        {
-                            autoUpdater.RollBack();
-                        }
-                        catch (Exception)
-                        {
+                        o.GetType().GetMethod(Update).Invoke(o, null); ;
+                    }
 
+                    catch (Exception e)
+                    {
+                        bHasError = true;
+                    }
+                    finally
+                    {
+                        if (bHasError == true)
+                        {
+                            try
+                            {
+                                o.GetType().GetMethod(RollBack).Invoke(o, null); ;
+                            }
+                            catch (Exception)
+                            {
+
+                            }
                         }
                     }
                 }
+                else
+                {
+                    MessageBox.Show(string.Format("{0}已经是最新版本", System.Configuration.ConfigurationSettings.AppSettings["exe"]), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+                #endregion
+
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show(string.Format("{0}已经是最新版本", System.Configuration.ConfigurationSettings.AppSettings["exe"]), "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(ex.Message, "失败", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            #endregion
+        }
 
+        private static Assembly readAssembly(string file)
+        {
+            Assembly asm = null;
+            byte[] stream = readFileReturnBytes(file);
+            if (stream != null)
+            {
+                asm = Assembly.Load(stream);
+            }
+            return asm;
+        }
+
+        private static byte[] readFileReturnBytes(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+            var br = new BinaryReader(fs);
+
+            byte[] buff = br.ReadBytes((int)fs.Length);
+
+            br.Close();
+            fs.Close();
+
+            return buff;
         }
     }
 }
