@@ -50,7 +50,7 @@ namespace MDT.Tools.AutoUpdater.Config
                 lt.Add("AutoupdateService.xml".ToLower());
                 lt.Add("AutoUpdater.config".ToLower());
                 lt.Add("MDT.Tools.AutoUpdater.exe".ToLower());
-                lt.Add("MDT.Tools.AutoUpdater.exe.config".ToLower());
+                //lt.Add("MDT.Tools.AutoUpdater.exe.config".ToLower());
                 lt.Add("MDT.Tools.AutoUpdater.Config.exe".ToLower());
                 lt.Add("MDT.Tools.AutoUpdater.Config.exe.config".ToLower());
                 if (!lt.Contains(f.Name.ToLower()) && !f.Name.EndsWith("pdb"))
