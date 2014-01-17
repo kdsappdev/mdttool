@@ -194,7 +194,7 @@ namespace MDT.Tools.Template.Plugin.Gen
             string str = nVelocityHelper.GenByTemplate(path, dic);
 
 
-            string title = tableName + "." + TemplateParas.CodeLanguage;
+            string title = tableName + "." + (TemplateParas.CodeLanguage+"").ToLower();
 
             if (!TemplateParas.IsAutoGenSaveFileName)
             {
@@ -258,7 +258,7 @@ namespace MDT.Tools.Template.Plugin.Gen
             dic.Add("FixHelper", new FixHelper());
             dic.Add("codeGenHelper", new CodeGenHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
-            string title = tableName + "." + (TemplateParas.CodeLanguage + "");
+            string title = tableName + "." + (TemplateParas.CodeLanguage + "").ToLower();
 
             if (!TemplateParas.IsAutoGenSaveFileName)
             {
