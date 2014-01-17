@@ -25,9 +25,32 @@ namespace KnightsWarriorAutoupdater
     {
         public static string SystemBinUrl = AppDomain.CurrentDomain.BaseDirectory;
 
+        private static void KillProcess(string processName)
+        {
+            System.Diagnostics.Process myproc = new System.Diagnostics.Process();
+            foreach (Process thisproc in Process.GetProcessesByName(processName))
+            {
+                if (!thisproc.CloseMainWindow())
+                {
+                    thisproc.Kill();
+                    GC.Collect();
+                }
+                Process[] prcs = Process.GetProcesses();
+                foreach (Process p in prcs)
+                {
+                    if (p.ProcessName.ToLower().Equals(processName.ToLower()))
+                    {
+                        p.Kill();
+                    }
+                }
+            }
+        }
+
         public static void RestartApplication()
         {
-            Process.Start(Application.ExecutablePath);
+            string exe = System.Configuration.ConfigurationSettings.AppSettings["exe"];
+            KillProcess(exe.Replace(".exe",""));
+            Process.Start(exe);
             Environment.Exit(0);
         }
 
