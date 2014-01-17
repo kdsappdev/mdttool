@@ -1,6 +1,5 @@
 #set($codeLanguage ='Java')
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
-
 #macro(parseAComponent $p)
 
 
@@ -43,6 +42,8 @@
 #end
 #macro(parseComponent $p)
 package ats.bbox.common.mo;
+
+
 #foreach($component in $p.Components)
 import ats.bbox.common.mo.component.${component.Name};
 #end
@@ -52,8 +53,7 @@ import ats.bbox.common.mo.component.${component.Name};
 #end
 #end
 import ats.bbox.framework.utils.DataTypeConverter;
-
-
+s
 public class ${p.Name} extends BaseMessage{
 #paraeAFix($p)
 }

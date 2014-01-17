@@ -1,6 +1,5 @@
 #set($codeLanguage ='Java')
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
-
 #macro(parseAComponent $p)
 
 
@@ -48,8 +47,6 @@ package ats.bbox.common.mo.component;
 import ats.bbox.common.mo.BaseMessage;
 
 public class StandardTrailer extends BaseMessage{
-
-
 
 #paraeAFix($p)
 }

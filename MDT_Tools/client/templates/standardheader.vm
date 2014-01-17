@@ -1,6 +1,5 @@
 #set($codeLanguage ='Java')
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
-
 #macro(parseAComponent $p)
 
 
@@ -50,7 +49,6 @@ import ats.bbox.framework.utils.DataTypeConverter;
 
 
 public class StandardHeader extends BaseMessage{
-
 
 #paraeAFix($p)
 }
