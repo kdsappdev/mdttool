@@ -22,7 +22,7 @@ namespace MDT.Tools.Template.Plugin.Gen
         {
             try
             {
-               
+
                 SaveFileEncoding = Encoding.GetEncoding(TemplateParas.SaveFileEncoding);
                 CodeLanguage = TemplateParas.CodeLanguage;
                 OutPut = TemplateParas.SaveFilePath;
@@ -47,7 +47,7 @@ namespace MDT.Tools.Template.Plugin.Gen
                                                        o.Length, i));
                             setProgress(1);
                         }
-                        GenCode(o[i]);
+                        GenCode(o[i], TemplateParas.Language);
                     }
                 }
                 else
@@ -56,7 +56,7 @@ namespace MDT.Tools.Template.Plugin.Gen
                     {
                         setProgress(100);
                     }
-                     GenCode(o);   
+                    GenCode(o, TemplateParas.Language);
                 }
 
 
@@ -150,7 +150,7 @@ namespace MDT.Tools.Template.Plugin.Gen
         /// 逐个生成文件
         /// </summary>
         /// <param name="o"></param>
-        public void GenCode(object o)
+        public void GenCode(object o, string language)
         {
             NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             Header header = o as Header;
@@ -187,14 +187,15 @@ namespace MDT.Tools.Template.Plugin.Gen
                 tableName = field.Name;
                 dic.Add("field", field);
             }
-            
+
             FixHelper.FieldDics = FieldDics;
-            dic.Add("FixHelper",new FixHelper());
+            dic.Add("FixHelper", new FixHelper());
             dic.Add("codeGenHelper", new CodeGenHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
 
 
-            string title = tableName + "." + (TemplateParas.CodeLanguage+"").ToLower();
+            string title = tableName + "." + (TemplateParas.Language + "").ToLower();
+
 
             if (!TemplateParas.IsAutoGenSaveFileName)
             {
@@ -216,7 +217,7 @@ namespace MDT.Tools.Template.Plugin.Gen
         /// 生成指定单一文件
         /// </summary>
         /// <param name="o"></param>
-        public void GenCode(object[] o)
+        public void GenCode(object[] o, string language)
         {
             NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             Header header = o[0] as Header;
@@ -253,12 +254,13 @@ namespace MDT.Tools.Template.Plugin.Gen
                 tableName = field.Name;
                 dic.Add("fields", o);
             }
-            
+
             FixHelper.FieldDics = FieldDics;
             dic.Add("FixHelper", new FixHelper());
             dic.Add("codeGenHelper", new CodeGenHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
             string title = tableName + "." + (TemplateParas.CodeLanguage + "").ToLower();
+
 
             if (!TemplateParas.IsAutoGenSaveFileName)
             {
@@ -275,7 +277,7 @@ namespace MDT.Tools.Template.Plugin.Gen
             }
         }
 
-      
+
         public void GenCode(TableInfo tableInfo)
         {
             NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
@@ -288,7 +290,7 @@ namespace MDT.Tools.Template.Plugin.Gen
             string str = nVelocityHelper.GenByTemplate(path, dic);
 
 
-            string title = tableName + "." + (TemplateParas.CodeLanguage+"").ToLower();
+            string title = tableName + "." + (TemplateParas.CodeLanguage + "").ToLower();
             if (!TemplateParas.IsAutoGenSaveFileName)
             {
                 title = TemplateParas.SaveFileName;

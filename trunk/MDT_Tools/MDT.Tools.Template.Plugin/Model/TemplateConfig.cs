@@ -8,7 +8,7 @@ namespace MDT.Tools.Template.Plugin.Model
     public class TemplateConfig
     {
         public int TemplateNum { get; set; }
-        private  List<TemplateParas> _templateParas=new List<TemplateParas>();
+        private List<TemplateParas> _templateParas = new List<TemplateParas>();
         public List<TemplateParas> TemplateParas
         {
             get { return _templateParas; }
@@ -27,5 +27,6 @@ namespace MDT.Tools.Template.Plugin.Model
         public bool IsAutoGenSaveFileName { get; set; }
         public bool IsShowGenCode { get; set; }
         public string CodeLanguage { get; set; }
+        public string Language { get; set; }
     }
 }
