@@ -47,6 +47,7 @@ namespace KnightsWarriorAutoupdater
         {
             this.path = node.Attributes["path"].Value;
             this.url = node.Attributes["url"].Value;
+            this.needRestart = Convert.ToBoolean(node.Attributes["needRestart"].Value);
             try
             {
                 this.lastver = node.Attributes["lastver"].Value;
@@ -55,7 +56,7 @@ namespace KnightsWarriorAutoupdater
             catch
             {
             }
-            this.needRestart = Convert.ToBoolean(node.Attributes["needRestart"].Value);
+            
             try
             {
                 this.md5 = node.Attributes["md5"].Value;
