@@ -26,7 +26,7 @@ namespace MDT.Tools.Template.Plugin.Utils
                 FileStream fs = File.Create(FilePathHelper.SystemConfig);
                 fs.Close();
             }
-            
+
         }
         private const string Group1 = "TemplateConfig";
         private const string Group2 = "TemplateParas";
@@ -40,8 +40,9 @@ namespace MDT.Tools.Template.Plugin.Utils
         private const string SaveFileName = "SaveFileName";
         private const string IsShowGenCode = "IsShowGenCode";
         private const string CodeLanguage = "CodeLanguage";
-        
-        public static string ReadIniCN(string lpApplicationName, string lpKeyName,string iniPath)
+        private const string Language = "Language";
+
+        public static string ReadIniCN(string lpApplicationName, string lpKeyName, string iniPath)
         {
             string str = "";
             int size = 260;
@@ -75,33 +76,41 @@ namespace MDT.Tools.Template.Plugin.Utils
                 }
                 for (int i = 1; i <= templateConfig.TemplateNum; i++)
                 {
-                    TemplateParas templateParas=new TemplateParas();
+                    TemplateParas templateParas = new TemplateParas();
                     templateConfig.TemplateParas.Add(templateParas);
-                    templateParas.MenuName=ReadIniCN(Group2, MenuName + i, FilePathHelper.SystemConfig);
-                     
+                    templateParas.MenuName = ReadIniCN(Group2, MenuName + i, FilePathHelper.SystemConfig);
+
                     GetPrivateProfileString(Group2, DataTye + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                     templateParas.DataTye = sb.ToString();
 
                     GetPrivateProfileString(Group2, TemplateName + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                     templateParas.TemplateName = sb.ToString();
 
-                   
+
 
                     GetPrivateProfileString(Group2, SaveFileEncoding + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                     templateParas.SaveFileEncoding = sb.ToString();
 
-                     
+
+
+                    GetPrivateProfileString(Group2, Language + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+                    templateParas.Language = sb.ToString();
+
+
+
+
+
                     templateParas.SaveFilePath = ReadIniCN(Group2, SaveFilePath, FilePathHelper.SystemConfig);
-                    if(string.IsNullOrEmpty(templateParas.SaveFilePath))
+                    if (string.IsNullOrEmpty(templateParas.SaveFilePath))
                     {
                         templateParas.SaveFilePath = FilePathHelper.ExportTemplatePath;
                     }
                     GetPrivateProfileString(Group2, SaveFileName + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                     templateParas.SaveFileName = sb.ToString();
-                    
+
 
                     GetPrivateProfileString(Group2, IsAutoGenSaveFileName + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                    
+
                     bool isAutoGenSaveFileName = true;
                     if (bool.TryParse(sb.ToString(), out isAutoGenSaveFileName))
                     {
@@ -111,7 +120,7 @@ namespace MDT.Tools.Template.Plugin.Utils
 
 
                     GetPrivateProfileString(Group2, IsShowGenCode + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                   
+
                     bool isShowGenCode = true;
                     if (bool.TryParse(sb.ToString(), out isShowGenCode))
                     {
