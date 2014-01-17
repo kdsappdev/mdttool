@@ -2,7 +2,6 @@
 package ats.bbox.common.mo;
 
 
-
 public class FixMessage {
 
 	public static class FieldsEnum{
