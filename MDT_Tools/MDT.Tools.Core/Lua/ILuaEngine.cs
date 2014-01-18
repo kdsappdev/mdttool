@@ -7,7 +7,6 @@ namespace MDT.Tools.Core.Lua
 {
     public interface ILuaEngine : IDisposable
     {
-        string ScriptDirectory { get; set; }
         void BindLuaFunctions(object luaAPIClass);
         object[] DoFile(string luaFileName);
         object[] DoString(string luaStr);

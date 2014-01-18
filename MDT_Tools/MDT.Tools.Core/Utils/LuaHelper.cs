@@ -8,15 +8,12 @@ namespace MDT.Tools.Core.Utils
 {
     public class LuaHelper
     {
-        private static ILuaEngine luaEngine=new LuaEngine();
-        public static void BindLuaFunctions(object luaAPIClass)
-        {
-            luaEngine.BindLuaFunctions(luaAPIClass);
-        }
 
-        public static ILuaEngine GetLuaEngine()
+        public static ILuaEngine CreateLuaEngine()
         {
+            ILuaEngine luaEngine = new LuaEngine();
             return luaEngine;
         }
+         
     }
 }
