@@ -17,8 +17,6 @@ namespace MDT.Tools.Core.Lua
             luavm.Dispose();
         }
 
-        public string ScriptDirectory { get; set; }
-
 
         public void BindLuaFunctions(object luaAPIClass)
         {
@@ -27,6 +25,7 @@ namespace MDT.Tools.Core.Lua
 
         public object[] DoFile(string luaFileName)
         {
+            
             return luavm.DoFile(luaFileName);
         }
 
@@ -37,8 +36,13 @@ namespace MDT.Tools.Core.Lua
 
         public object[] Invoke(string luaFunction, params object[] args)
         {
+            object[] os=null;
             LuaFunction fun = luavm.GetFunction(luaFunction);
-            return fun.Call(args);
+            if (fun != null)
+            {
+                os=fun.Call(args);
+            }
+            return os;
         }
 
         public Dictionary<string, LuaFuncDescriptor> pLuaFuncs = new Dictionary<string, LuaFuncDescriptor>();
@@ -65,9 +69,9 @@ namespace MDT.Tools.Core.Lua
                         Dictionary<string, string> pParams = new Dictionary<string, string>();
 
                         // Get the desired function name and doc string, along with parameter info
-                        String strFName = pAttr.getFuncName();
-                        String strFDoc = pAttr.getFuncDoc();
-                        String[] pPrmDocs = pAttr.getFuncParams();
+                        string strFName = pAttr.getFuncName();
+                        string strFDoc = pAttr.getFuncDoc();
+                        string[] pPrmDocs = pAttr.getFuncParams();
 
                         // Now get the expected parameters from the MethodInfo object
                         ParameterInfo[] pPrmInfo = mInfo.GetParameters();
