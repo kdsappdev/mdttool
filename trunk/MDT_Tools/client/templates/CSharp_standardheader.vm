@@ -1,6 +1,6 @@
 #set($codeLanguage ='CSharp')
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
-#macro(parseAComponent $p)
+#macro(Csh_parseAComponent $p)
 
 	public string ${p.Name}
 	{
@@ -8,11 +8,11 @@
 	set{ ${p.Name} = this.put(FixMessage.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})}); }
 	}
 	
-#paraeAFix($p)
+#Csh_paraeAFix($p)
 
 #end
 	
-#macro(paraeAFix $p)
+#macro(Csh_paraeAFix $p)
 #foreach($field in $p.Fields)
 	public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${field.Name}
 	{
@@ -21,24 +21,24 @@
 	}
 #end
 #foreach($group in $p.Groups)
-#parseAGroup($group)
+#Csh_parseAGroup($group)
 
 #end
 #foreach($component in $p.Components)
-#parseAComponent($component)
+#Csh_parseAComponent($component)
 #end
 #end
-#macro(parseAGroup $p)
+#macro(Csh_parseAGroup $p)
 
 	public static readonly string GROUP_${group.Name}=FixMessage.Fields.${group.Name};
 	
 	public class ${group.Name} : BaseMessage
 	{
-#paraeAFix($p)
+#Csh_paraeAFix($p)
 	}
 
 #end
-#macro(parseComponent $p)
+#macro(Csh_parseComponent $p)
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -49,8 +49,8 @@ namespace Ats.Model
 public class StandardHeader : BaseMessage
 {
 
-#paraeAFix($p)
+#Csh_paraeAFix($p)
 	}
 }
 #end
-#parseComponent($header)
+#Csh_parseComponent($header)
