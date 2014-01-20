@@ -43,6 +43,7 @@
 #macro(Jsh_parseComponent $p)
 package ats.bbox.common.mo.component;
 
+
 import ats.bbox.common.mo.BaseMessage;
 import ats.bbox.common.mo.FixMessage;
 import ats.bbox.framework.utils.DataTypeConverter;
