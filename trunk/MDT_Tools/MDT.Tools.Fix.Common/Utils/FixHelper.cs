@@ -49,6 +49,7 @@ namespace MDT.Tools.Fix.Common.Utils
             {
                 type = dic[key].Type;
             }
+           
 
             type = GetCodeLanageType(codeLanage, type);
 
@@ -69,6 +70,10 @@ namespace MDT.Tools.Fix.Common.Utils
         }
         public static string GetCodeLanageType(string codeLangage, string fixType)
         {
+            if (fixType == "BidForwardPoint")
+            {
+                Console.WriteLine(fixType);
+            }
             string type = fixType;
             string key = getkey(codeLangage, fixType);
             if (fieldsTypeDic.ContainsKey(key))
