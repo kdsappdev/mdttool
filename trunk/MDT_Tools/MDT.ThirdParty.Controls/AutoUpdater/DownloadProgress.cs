@@ -219,8 +219,9 @@ namespace KnightsWarriorAutoupdater
                     newPath = Path.Combine(CommonUnitity.SystemBinUrl + ConstFile.TEMPFOLDERNAME, file.FileName);
                 }
                 System.IO.FileInfo f = new FileInfo(newPath);
-                if (!file.Size.ToString().Equals(f.Length.ToString()) && !file.FileName.ToString().EndsWith(".xml"))
+                if (!file.Size.ToString().Equals(f.Length.ToString()))
                 {
+                    System.Console.WriteLine(f.Name);
                     ShowErrorAndRestartApplication();
                 }
             }
