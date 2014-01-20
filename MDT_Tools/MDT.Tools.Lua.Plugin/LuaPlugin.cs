@@ -201,7 +201,7 @@ namespace MDT.Tools.Lua.Plugin
         [AttrLuaFunc("getPluginShareKey", "获取插件共享的key", "信息key", "Lua插件的key")]
         public  string getPluginShareKey( string name,int pluginKey)
         {
-            return base.getPluginShareKey(pluginKey, name);
+            return getPluginShareKey(pluginKey, name);
         }
         #endregion
     }
