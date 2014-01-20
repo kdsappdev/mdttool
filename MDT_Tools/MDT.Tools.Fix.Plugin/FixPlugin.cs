@@ -459,9 +459,12 @@ namespace MDT.Tools.Fix.Plugin
 
                 }
             }
-
-
-
+            fix.Fields.Add(new FieldDic() { Name = "StandardHeader", Type = "STRING",Number = -1});
+            fix.Fields.Add(new FieldDic() { Name = "StandardTrailer", Type = "STRING", Number = -1 });
+            foreach (var component in fix.Components)
+            {
+                fix.Fields.Add(new FieldDic() { Name = component.Name, Type = "STRING", Number = -1 });
+            }
         }
 
         private void parseHeader(XmlNode node)
