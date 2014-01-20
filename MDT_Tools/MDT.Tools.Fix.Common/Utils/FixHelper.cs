@@ -43,7 +43,7 @@ namespace MDT.Tools.Fix.Common.Utils
 
         public static string GetFieldOrGroupType(string codeLanage, string name)
         {
-            string type = "";
+            string type = name;
             string key = (name + "").ToLower();
             if (dic.ContainsKey(key))
             {
