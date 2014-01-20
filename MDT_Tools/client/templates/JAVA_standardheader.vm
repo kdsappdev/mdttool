@@ -1,6 +1,6 @@
 #set($codeLanguage ='Java')
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
-#macro(parseAComponent $p)
+#macro(Jsh_parseAComponent $p)
 
 
 	public ${p.Name} get${p.Name}(){
@@ -10,11 +10,11 @@
 			this.put(FixMessage.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})});
 		}
 
-#paraeAFix($p)
+#Jsh_paraeAFix($p)
 
 #end
 	
-#macro(paraeAFix $p)
+#macro(Jsh_paraeAFix $p)
 #foreach($field in $p.Fields)
 		public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) get${field.Name}(){
 			return DataTypeConverter.Utils.to$FixHelper.StrFirstToUpper($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}))(this.get(FixMessage.Fields.${field.Name}));
@@ -24,23 +24,23 @@
 		}
 #end
 #foreach($group in $p.Groups)
-#parseAGroup($group)
+#Jsh_parseAGroup($group)
 
 #end
 #foreach($component in $p.Components)
-#parseAComponent($component)
+#Jsh_parseAComponent($component)
 #end
 #end
-#macro(parseAGroup $p)
+#macro(Jsh_parseAGroup $p)
 
 	public static final String GROUP_${group.Name}=FixMessage.Fields.${group.Name};
 	
 	public static class ${group.Name} extends BaseMessage{
-#paraeAFix($p)
+#Jsh_paraeAFix($p)
 	}
 
 #end
-#macro(parseComponent $p)
+#macro(Jsh_parseComponent $p)
 package ats.bbox.common.mo.component;
 
 import ats.bbox.common.mo.BaseMessage;
@@ -50,7 +50,7 @@ import ats.bbox.framework.utils.DataTypeConverter;
 
 public class StandardHeader extends BaseMessage{
 
-#paraeAFix($p)
+#Jsh_paraeAFix($p)
 }
 #end
-#parseComponent($header)
+#Jsh_parseComponent($header)
