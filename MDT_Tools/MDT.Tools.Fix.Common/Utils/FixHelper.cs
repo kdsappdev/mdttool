@@ -86,6 +86,16 @@ namespace MDT.Tools.Fix.Common.Utils
             }
             return str;
         }
+
+        public static string StrFirstToUpper(string str)
+        {
+            if (!string.IsNullOrEmpty(str))
+            {
+                str = str[0].ToString().ToUpper() + str.Substring(1, str.Length - 1);
+            }
+            return str;
+        }
+
         private static Dictionary<string, string> initfieldsTypeDic()
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
