@@ -17,7 +17,7 @@
 #macro(paraeAFix $p)
 #foreach($field in $p.Fields)
 		public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) get${field.Name}(){
-			return DataTypeConverter.Utils.to$FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name})(this.get(FixMessage.Fields.${field.Name}));
+			return DataTypeConverter.Utils.to$FixHelper.StrFirstToUpper($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}))(this.get(FixMessage.Fields.${field.Name}));
 		}
 		public void set${field.Name}($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${codeGenHelper.StrFirstToLower(${field.Name})}){
 			this.put(FixMessage.Fields.${field.Name}, ${codeGenHelper.StrFirstToLower(${field.Name})});
@@ -41,7 +41,7 @@
 	
 #end
 #macro(parseComponent $p)
-package ats.bbox.common.mo;
+package ats.bbox.common.mo.message;
 
 
 #foreach($component in $p.Components)
@@ -52,9 +52,11 @@ import ats.bbox.common.mo.component.${component.Name};
 import ats.bbox.common.mo.component.${component.Name};
 #end
 #end
+import ats.bbox.common.mo.Message;
+import ats.bbox.common.mo.FixMessage;
 import ats.bbox.framework.utils.DataTypeConverter;
 
-public class ${p.Name} extends BaseMessage{
+public class ${p.Name} extends Message{
 #paraeAFix($p)
 }
 #end
