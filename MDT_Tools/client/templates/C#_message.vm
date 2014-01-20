@@ -1,0 +1,63 @@
+#set($codeLanguage ='CSharp')
+#macro(convertBoolean $p)#if($p)Y#else N#end#end
+#macro(parseAComponent $p)
+
+	public string ${p.Name}
+	{
+	get{ return DataTypeConverter.Utils.ToMap(this.get(FixMessage.Fields.${p.Name})); }
+	set{ ${p.Name} = this.put(FixMessage.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})}); }
+	}
+	
+#paraeAFix($p)
+
+#end
+	
+#macro(paraeAFix $p)
+#foreach($field in $p.Fields)
+	public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${field.Name}
+	{
+	get{ return DataTypeConverter.Utils.To$FixHelper.StrFirstToUpper($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}))(this.get(FixMessage.Fields.${field.Name})); }
+	set{ ${field.Name}= this.put(FixMessage.Fields.${field.Name}, ${codeGenHelper.StrFirstToLower(${field.Name})}); }
+	}
+#end
+#foreach($group in $p.Groups)
+#parseAGroup($group)
+
+#end
+#foreach($component in $p.Components)
+#parseAComponent($component)
+#end
+#end
+#macro(parseAGroup $p)
+
+	public static readonly string GROUP_${group.Name}=FixMessage.Fields.${group.Name};
+	
+	public class ${group.Name} : BaseMessage
+	{
+#paraeAFix($p)
+	}
+#end
+#macro(parseComponent $p)
+using System;
+using System.Collections.Generic;
+using System.Text;
+#foreach($component in $p.Components)
+using Ats.Model.${component.Name};
+#end
+#foreach($group in $p.Groups)
+#foreach($component in $group.Components)
+using Ats.Model.${component.Name};
+#end
+#end
+
+namespace Ats.Model
+{
+
+public class ${p.Name} : BaseMessage
+{
+
+#paraeAFix($p)
+	}
+}
+#end
+#parseComponent($message)
