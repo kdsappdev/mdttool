@@ -136,6 +136,8 @@
     <Content Include="Image\Open.ico" />
     <Content Include="Image\ToolboxWindow.ico" />
     <Content Include="lib\DevComponents.DotNetBar2.dll" />
+    <Content Include="lib\lua51.dll" />
+    <Content Include="lib\LuaInterface.dll" />
     <Content Include="lib\NVelocity.dll" />
     <Content Include="lib\WeifenLuo.WinFormsUI.Docking.dll" />
   </ItemGroup>
