@@ -615,7 +615,10 @@ namespace MDT.Tools.Fix.Plugin
 
             if (node.Attributes.Count == 2)
             {
-                c.Required = node.Attributes["required"].Value == "Y";
+                if (node.Attributes[1].Name == "required")
+                {
+                    c.Required = node.Attributes["required"].Value == "Y";
+                }
             }
             foreach (XmlNode xn in node.ChildNodes)
             {
