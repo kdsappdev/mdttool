@@ -17,7 +17,7 @@
 #macro(paraeAFix $p)
 #foreach($field in $p.Fields)
 		public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) get${field.Name}(){
-			return DataTypeConverter.Utils.to$FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name})(this.get(FixMessage.Fields.${field.Name}));
+			return DataTypeConverter.Utils.to$FixHelper.StrFirstToUpper($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}))(this.get(FixMessage.Fields.${field.Name}));
 		}
 		public void set${field.Name}($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${codeGenHelper.StrFirstToLower(${field.Name})}){
 			this.put(FixMessage.Fields.${field.Name}, ${codeGenHelper.StrFirstToLower(${field.Name})});
