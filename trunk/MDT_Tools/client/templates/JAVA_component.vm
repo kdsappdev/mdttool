@@ -52,7 +52,7 @@ import ats.bbox.common.mo.component.${component.Name};
 import ats.bbox.common.mo.component.${component.Name};
 #end
 #end
-import ats.bbox.common.mo.Message;
+import ats.bbox.common.mo.BaseMessage;
 import ats.bbox.common.mo.FixMessage;
 import ats.bbox.framework.utils.DataTypeConverter;
 
