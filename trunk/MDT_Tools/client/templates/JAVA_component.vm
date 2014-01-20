@@ -55,7 +55,7 @@ import ats.bbox.common.mo.component.${component.Name};
 import ats.bbox.common.mo.Message;
 import ats.bbox.common.mo.FixMessage;
 import ats.bbox.framework.utils.DataTypeConverter;
-s
+
 public class ${p.Name} extends BaseMessage{
 #paraeAFix($p)
 }
