@@ -100,6 +100,7 @@
     <ProjectReference Include="..\MDT.Tools.Core\MDT.Tools.Core.csproj">
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
