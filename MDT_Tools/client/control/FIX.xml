@@ -163,7 +163,6 @@
 	<field name="TimeInForce" required="Y"/>
 	<field name="PriceType" required="N"/>
 	<field name="Price" required="Y"/>
-	<field name="DiscretionInst" required="N"/>
 	<component name="Parties" required="Y"/>
 	<field name="DiscretionLimitType" required="N"/>
 	<field name="DiscretionOffsetValue" required="N"/>	
@@ -196,7 +195,7 @@
 	<field name="MsgType" required="Y"/>
 	<field name="UserRequestID" required="Y"/>
 	<field name="UserRequestType" required="Y"/>
-	<field name="UserName" required="Y"/>
+	<field name="Username" required="Y"/>
 	<field name="Password" required="N"/>
 	<field name="NewPassword" required="N"/>
 	<field name="RawDataLength" required="N"/>
@@ -262,7 +261,7 @@
 	 <group name="NoSides" required="Y">
 	    <field name="BidPx" required="N"/>
 		<field name="OfferPx" required="N"/>
-		<field name="MktBixPx" required="N"/>
+		<field name="MktBidPx" required="N"/>
 		<field name="MktOfferPx" required="N"/>
 		<field name="BidSpotRate" required="N"/>
 		<field name="OfferSpotRate" required="N"/>
@@ -335,69 +334,14 @@
 	<component name="OptionExercise">
       <group name="NoOptionExercise" required="N">
         <field name="DerivativeExerciseStyle" required="Y"/>
-        <field name="AccruedInterestRate" required="N"/>
-        <field name="AccumulatedExercisedAmt" required="N"/>
-        <field name="AdjustedCouponRate" required="N"/>
-        <field name="AdjustedCouponSpread" required="N"/>
-        <field name="ARReportType" required="N"/>
-        <field name="CCYSettlBank" required="N"/>
-        <field name="CollAsgnRespID" required="N"/>
-        <field name="DerivativeOptAttribute" required="N"/>
-        <field name="DrawCancelRequestID" required="N"/>
-        <field name="DrawReqRejReason" required="N"/>
-        <field name="ExpireTime" required="N"/>
-        <field name="ExpireTimeZone" required="N"/>
-        <field name="FundManager" required="N"/>
-        <field name="KCurveType" required="N"/>
-        <field name="LastSpotRate" required="N"/>
-        <field name="LeavesOptAmt" required="N"/>
-        <field name="LeavesOptQty" required="N"/>
-        <field name="LegInterestAccuralDaysAdjustment" required="N"/>
-        <field name="LegLastQty" required="N"/>
-        <field name="LegQuotetime" required="N"/>
-        <field name="LegSettlDate" required="N"/>
-        <field name="LegSettlType" required="N"/>
-        <field name="MarginMinTickSize" required="N"/>
-        <field name="MarginRequired" required="N"/>
-        <field name="MaturityDate" required="N"/>
-        <field name="NetGrossInd" required="N"/>
-        <field name="NoLiquidProvider" required="N"/>
-        <field name="NoSettlDetails" required="N"/>
-        <field name="OptionType" required="N"/>
-        <field name="OptPayoutAmount" required="N"/>
-        <field name="OptPayoutQty" required="N"/>
-        <field name="OptPayoutType" required="N"/>
-        <field name="OptSettlAmtType" required="N"/>
-        <field name="PageNumber" required="N"/>
-        <field name="PutOrCall" required="N"/>
-        <field name="QueryQuoteType" required="N"/>
-        <field name="QuoteRequestRejectReason" required="N"/>
-        <field name="ReceiveAmt" required="N"/>
-        <field name="ReceiverPartyReference" required="N"/>
-        <field name="ReissuePx" required="N"/>
-        <field name="RiskLastQty" required="N"/>
-        <field name="SecurityAttribute" required="N"/>
-        <field name="SecurityDefinitionStatus" required="N"/>
-        <field name="SettlType" required="N"/>
-        <field name="StrikeDayPrice" required="N"/>
-        <field name="StrikeEndTime" required="N"/>
-        <field name="StrikePrice" required="N"/>
-        <field name="StrikeStartTime" required="N"/>
-        <field name="StrikeTime" required="N"/>
-        <field name="StrikeUser" required="N"/>
-        <field name="SwapRatio" required="N"/>
-        <field name="SWIFTType" required="N"/>
-        <field name="Symbol" required="N"/>
-        <field name="Text" required="N"/>
-        <field name="UnstrikeCouponRate" required="N"/>
-        <field name="UnstrikeCouponSpread" required="N"/>
-        <field name="UnstrikeQty" required="N"/>
-        <field name="Volatility" required="N"/>
-        <component name="CurrencyAmtGrp" required="N"/>
-        <component name="OptionExerciseDates" required="N"/>
-        <component name="OptionExerciseUnderlying" required="N"/>
-        <component name="OptsettlementAmtGrp" required="N"/>
-        <component name="Premium" required="N"/>
+		<component name="OptsettlementAmtGrp" required="N"/>
+      </group>
+    </component>
+	<component name="OptsettlementAmtGrp">
+      <group name="NoOptSettlAmt" required="N">
+        <field name="OptSettlAmtType" required="Y"/>
+        <field name="DeliveryDate" required="N"/>
+        <field name="StrikeCurrency" required="N"/>
       </group>
     </component>
 	<component name="QueryParamGrp">
@@ -733,6 +677,7 @@
       <value enum="H" description="TRADE_CANCEL"/>
       <value enum="I" description="ORDER_STATUS"/>
     </field>
+	<field number="158" name="AccruedInterestRate" description="Accrued Interest Rate" type="PERCENTAGE"/>
 	<field number="167" name="SecurityType" type="STRING">
 	  <value enum="?" description="WILDCARD"/>
 	  <value enum="FXSOPT" description="FX_SPOT"/>
@@ -1040,6 +985,7 @@
     <field number="757" name="Nested2PartyID" type="STRING"/>
     <field number="758" name="Nested2PartyIDSource" type="CHAR"/>
     <field number="759" name="Nested2PartyRole" type="INT"/>
+	<field number="802" name="NoPartySubIDs" description="Repeating group below should contain unique combinations of PartySubID and PartySubIDType" type="NUMINGROUP"/>
 	<field number="803" name="PartySubIDType" description="" type="INT">
       <value enum="2" description="TRADER_CODE"/>
       <value enum="5" description="FULL_LEGAL_NAME_OF_FIRM"/>
@@ -1136,6 +1082,11 @@
       <value enum="1009" description="IMMEDIATE"/>
 	  <value enum="1010" description="BENCHMARK"/>
 	</field>
+	<field number="911" name="TotNumReports" description="Total Number of Execution Report Can be used to identify the total number of Execution Reports which will be returned." type="INT"/>
+	<field number="912" name="LastRptRequested" description="Can be used to indicate that this is the last Execution Reports which will be returned as a result of the request." type="BOOLEAN">
+      <value enum="Y" description="YES"/>
+      <value enum="N" description="NO"/>
+    </field>
 	<field number="916" name="StartDate" type="LOCALMKTDATE"/>
 	<field number="917" name="EndDate" type="LOCALMKTDATE"/>
 	<field number="923" name="UserRequestID" type="STRING"/>
@@ -1146,6 +1097,7 @@
       <value enum="4" description="REQUEST_INDIVIDUAL_USER_STATUS"/>
     </field>
 	<field number="925" name="NewPassword" type="STRING"/>
+	<field number="947" name="StrikeCurrency" description="" type="STRING"/>
 	<field number="948" name="NoNested3PartyIDs" type="NUMINGROUP"/>
     <field number="949" name="Nested3PartyID" type="STRING"/>
     <field number="950" name="Nested3PartyIDSource" type="CHAR"/>
@@ -1211,6 +1163,7 @@
       <value enum="6" description="FULLY_DEALT"/>
       <value enum="7" description="PENDING"/>
     </field>
+	<field number="10256" name="QueryPageNumber" description="Query Page Number(FX Market: Indicate which page will be request.)" type="NUMBER"/>
 	<field number="10264" name="QueryStartDate" description="Date From" type="UTCDATEONLY"/>
 	<field number="10266" name="QueryStartNumber" description="Query Start Number FX Market Start number  in results" type="NUMBER"/>
 	<field number="10270" name="QueryType" description="0-RMB deal inquiry  1-Self Quote Inquiry  2-Self Deal Details Inquiry  3-Deal Details Inquiry by MBO User of Head Office  4-Limit Inquiry  5-Settlement Inquiry  6-Announcement Inquiry   7-Click in Negotiate Reject Ratio Inquiry   8-Ratio Inquiry  9-Collateral Inquiry  10-Benchmark Inquiry   11-Net Value Inquiry   12-Trading Fee Invoice Inquiry   13-Trading Fee Inquiry  14-ABS Information Inquiry   15-FX Deal inquery   16-FX IRS or CRS inquery   17-FX Broadcast Request 18-FX Price Data Full Image Refresh Request 19-FX Historical Data Retransmission Request 20-RMB quote inquiry  21-Data center inquery_database name  22-Data center inquery_database schema name  23-Data center inquery_database char 35-acter sets value  24-Data center inquery_database time  25-Data center inquery_database table name  26-Data center inquery_database view name  27-Data center inquery_database table DDL   28-Data center inquery_database view DDL   29-Data center inquery_database column data  30-Data center inquery_database table data  31-Unsettled positions inquery  32-Calculation agent inquery  33-Derivative limit inquery  34-Net total value of fund inquery  35-Trader privilege data inquery 36-FX Option inquery 37- Gold deal inquery" type="INT">
@@ -1254,6 +1207,7 @@
     </field>
 	<field number="10284" name="RiskLastQty" description="FX  Risk Amount" type="QTY"/>
 	<field number="10296" name="SpotDate" description="FX Market Leg Spot Date" type="UTCDATEONLY"/>
+	<field number="10311" name="TotNumReportPages" description="The query results will be grouped with fixed number. The field indicates that the totol number of groups. Trading system will send the first group of results one by one. If member request next group, trading system will send the next group of results." type="NUMBER"/>
 	<field number="10318" name="TradeTime" description="Time the transaction represented by this ExecutionReport occurred" type="UTCTIMEONLY"/>
 	<field number="10379" name="QueryRejectReason" description="" type="STRING"/>
 	<field number="10471" name="Reference" description="" type="STRING"/>
@@ -1263,6 +1217,7 @@
       <value enum="2" description="EXERCISED"/>
       <value enum="3" description="EXPIRED"/>
     </field>
+	<field number="10741" name="ExpireTimeZone" description="" type="STRING"/>
 	<field number="10773" name="NoFxOptions" description="" type="NUMINGROUP"/>
 	<field number="10774" name="NoCurrencyAmt" description="" type="NUMINGROUP"/>
 	<field number="10775" name="CurrencyAmtType" description="" type="INT">
@@ -1282,7 +1237,12 @@
 	<field number="10780" name="OptPremiumCurrency" description="" type="STRING"/>
 	<field number="10781" name="OptPremiumAmt" description="" type="AMT"/>
 	<field number="10784" name="NoOptionExercise" description="" type="NUMINGROUP"/>
-	 <field number="10787" name="IsOpSpotIndic" description="" type="BOOLEAN">
+	<field number="10785" name="NoOptSettlAmt" description="" type="NUMINGROUP"/>
+	<field number="10786" name="OptSettlAmtType" description="" type="INT">
+      <value enum="1" description="FULL_AMOUNT"/>
+      <value enum="2" description="NETTING"/>
+    </field>
+	<field number="10787" name="IsOpSpotIndic" description="" type="BOOLEAN">
       <value enum="Y" description="YES"/>
       <value enum="N" description="NO"/>
     </field>
