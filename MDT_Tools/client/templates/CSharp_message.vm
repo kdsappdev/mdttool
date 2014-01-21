@@ -2,10 +2,10 @@
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
 #macro(Cma_parseAComponent $p)
 
-	public string ${p.Name}
+	public ${p.Name} ${p.Name}
 	{
-	get{ return DataTypeConverter.Utils.ToMap(this.get(FixMessage.Fields.${p.Name})); }
-	set{ ${p.Name} = this.put(FixMessage.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})}); }
+	get{ return this.Get(MessageDictionary.Fields.${p.Name}) as ${p.Name}; }
+	set{ this.Put(MessageDictionary.Fields.${p.Name}, value ); }
 	}
 	
 #Cma_paraeAFix($p)
@@ -16,8 +16,8 @@
 #foreach($field in $p.Fields)
 	public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${field.Name}
 	{
-	get{ return DataTypeConverter.Utils.To$FixHelper.StrFirstToUpper($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}))(this.get(FixMessage.Fields.${field.Name})); }
-	set{ ${field.Name}= this.put(FixMessage.Fields.${field.Name}, ${codeGenHelper.StrFirstToLower(${field.Name})}); }
+	get{ return DataTypeConverter.To$FixHelper.StrFirstToUpper($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}))(this.Get(MessageDictionary.Fields.${field.Name})); }
+	set{ this.Put(MessageDictionary.Fields.${field.Name}, value); }
 	}
 #end
 #foreach($group in $p.Groups)
@@ -30,7 +30,7 @@
 #end
 #macro(Cma_parseAGroup $p)
 
-	public static readonly string GROUP_${group.Name}=FixMessage.Fields.${group.Name};
+	public static readonly string GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
 	
 	public class ${group.Name} : BaseMessage
 	{
@@ -41,19 +41,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-#foreach($component in $p.Components)
-using Ats.Model.${component.Name};
-#end
-#foreach($group in $p.Groups)
-#foreach($component in $group.Components)
-using Ats.Model.${component.Name};
-#end
-#end
+using Ats.Model.MO.Component;
 
-namespace Ats.Model
+namespace Ats.Model.MO.Message
 {
 
-public class ${p.Name} : BaseMessage
+public class ${p.Name} : FixMessage
 {
 
 #Cma_paraeAFix($p)
