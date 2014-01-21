@@ -4,10 +4,10 @@
 
 
 	public ${p.Name} get${p.Name}(){
-			return (${p.Name}) DataTypeConverter.Utils.toMap(this.get(FixMessage.Fields.${p.Name}));
+			return (${p.Name}) DataTypeConverter.Utils.toMap(this.get(MessageDictionary.Fields.${p.Name}));
 		}
 		public void set${p.Name}(${p.Name} ${codeGenHelper.StrFirstToLower(${p.Name})}){
-			this.put(FixMessage.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})});
+			this.put(MessageDictionary.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})});
 		}
 		
 #Jma_paraeAFix($p)
@@ -17,10 +17,10 @@
 #macro(Jma_paraeAFix $p)
 #foreach($field in $p.Fields)
 		public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) get${field.Name}(){
-			return DataTypeConverter.Utils.to$FixHelper.StrFirstToUpper($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}))(this.get(FixMessage.Fields.${field.Name}));
+			return DataTypeConverter.Utils.to$FixHelper.StrFirstToUpper($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}))(this.get(MessageDictionary.Fields.${field.Name}));
 		}
 		public void set${field.Name}($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${codeGenHelper.StrFirstToLower(${field.Name})}){
-			this.put(FixMessage.Fields.${field.Name}, ${codeGenHelper.StrFirstToLower(${field.Name})});
+			this.put(MessageDictionary.Fields.${field.Name}, ${codeGenHelper.StrFirstToLower(${field.Name})});
 		}
 #end
 #foreach($group in $p.Groups)
@@ -33,7 +33,7 @@
 #end
 #macro(Jma_parseAGroup $p)
 
-	public static final String GROUP_${group.Name}=FixMessage.Fields.${group.Name};
+	public static final String GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
 	
 	public static class ${group.Name} extends BaseMessage{
 #Jma_paraeAFix($p)
@@ -52,11 +52,11 @@ import ats.bbox.common.mo.component.${component.Name};
 import ats.bbox.common.mo.component.${component.Name};
 #end
 #end
-import ats.bbox.common.mo.Message;
 import ats.bbox.common.mo.FixMessage;
+import ats.bbox.common.mo.MessageDictionary;
 import ats.bbox.framework.utils.DataTypeConverter;
 
-public class ${p.Name} extends Message{
+public class ${p.Name} extends FixMessage{
 #Jma_paraeAFix($p)
 }
 #end
