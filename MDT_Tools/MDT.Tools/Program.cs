@@ -17,7 +17,7 @@ namespace MDT.Tools
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            bool flag = Core.Utils.MachineHelper.CheckProcessIsMultiple("MDT.Tools");
+            bool flag = Core.Utils.MachineHelper.CheckProcessIsMultiple("MDT Smart Kit");
             if (flag)
             {
                 MessageBox.Show(@"另一个窗口已在运行，不能重复运行", @"提示");

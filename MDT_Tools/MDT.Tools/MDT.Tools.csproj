@@ -19,7 +19,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>lib\MDT.Tools.pfx</AssemblyOriginatorKeyFile>
-    <ApplicationIcon>Image\db.ico</ApplicationIcon>
+    <ApplicationIcon>Image\Ico.ico</ApplicationIcon>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -147,6 +147,7 @@
   <ItemGroup>
     <Content Include="Image\db.ico" />
     <Content Include="Image\exit.png" />
+    <Content Include="Image\Ico.ico" />
     <Content Include="Image\logo.ico" />
     <Content Include="Image\New.ico" />
     <Content Include="Image\Open.ico" />

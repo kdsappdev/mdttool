@@ -72,9 +72,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(21, 13);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(101, 12);
+            this.label3.Size = new System.Drawing.Size(125, 12);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Name:  MDT.Tools";
+            this.label3.Text = "Name:  MDT Smart Kit";
             // 
             // btnCancel
             // 
@@ -100,9 +100,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(36, 32);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(335, 12);
+            this.label2.Size = new System.Drawing.Size(359, 12);
             this.label2.TabIndex = 3;
-            this.label2.Text = "A new version of MDT.Tools is available.Do you want to ";
+            this.label2.Text = "A new version of MDT Smart Kit is available.Do you want to ";
             // 
             // label1
             // 
