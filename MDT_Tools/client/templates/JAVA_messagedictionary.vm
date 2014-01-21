@@ -2,7 +2,7 @@
 package ats.bbox.common.mo;
 
 
-public class FixMessage {
+public class MessageDictionary {
 
 	public static class FieldsEnum{
 #foreach($field in $fields)
