@@ -33,7 +33,7 @@
 	public static readonly string GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
 	
 	public class ${group.Name} : BaseMessage
-	{s
+	{
 #Ccp_paraeAFix($p)
 	}
 
