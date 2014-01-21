@@ -197,6 +197,8 @@
   <ItemGroup>
     <Content Include="DataAccess\说明.txt" />
     <Content Include="Plugin\说明.txt" />
+    <None Include="Resources\logo.ico" />
+    <Content Include="Resources\Ico.ico" />
     <Content Include="Resources\start.png" />
     <Content Include="Resources\closeAllDocment.png" />
     <Content Include="Resources\setting.ico" />
