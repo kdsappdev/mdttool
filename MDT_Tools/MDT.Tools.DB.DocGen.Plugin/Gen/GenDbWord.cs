@@ -21,7 +21,9 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
 
 
                 base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
+                FileHelper.CreateDirectory(OutPut);
                 OutPut = FilePathHelper.ExportDBDocPath;
+                
                 setEnable(false);
                 string msg = string.Empty;
                 Stopwatch sw = Stopwatch.StartNew();
