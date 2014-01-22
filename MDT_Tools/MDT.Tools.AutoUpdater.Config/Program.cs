@@ -22,6 +22,10 @@ namespace MDT.Tools.AutoUpdater.Config
 
         static void Main(string[] args)
         {
+            if (args != null && args.Length >= 1)
+            {
+                url = args[0];
+            }
             //创建文档对象
             XmlDocument doc = new XmlDocument();
             //创建根节点
