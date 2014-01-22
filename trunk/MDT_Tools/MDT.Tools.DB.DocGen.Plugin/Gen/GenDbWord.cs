@@ -21,8 +21,9 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
 
 
                 base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
-                FileHelper.CreateDirectory(OutPut);
                 OutPut = FilePathHelper.ExportDBDocPath;
+                FileHelper.CreateDirectory(OutPut);
+               
                 
                 setEnable(false);
                 string msg = string.Empty;
@@ -338,6 +339,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
                                     try
                                     {
                                         object fileName = string.Format(path, begin, end);
+                                        
                                         dbDoc.SaveAs(ref fileName, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
