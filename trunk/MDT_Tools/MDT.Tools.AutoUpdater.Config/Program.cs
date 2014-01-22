@@ -17,15 +17,38 @@ namespace MDT.Tools.AutoUpdater.Config
         static string currentDirectory = System.Environment.CurrentDirectory;
         //服务端xml文件名称
         static string serverXmlName = "AutoUpdateService.xml";
+        private static string clientXmlName = "autoupdater.config";
         //更新文件URL前
         static string url = System.Configuration.ConfigurationSettings.AppSettings["url"];
-
+        private static string enableClientStr = System.Configuration.ConfigurationSettings.AppSettings["enableClient"];
+        private static string clientPath = System.Configuration.ConfigurationSettings.AppSettings["clientPath"];
+        private static bool enableClient = bool.TryParse(enableClientStr, out enableClient);
         static void Main(string[] args)
         {
             if (args != null && args.Length >= 1)
             {
                 url = args[0];
             }
+
+
+            #region client
+
+            XmlDocument clientDoc = new XmlDocument();
+            XmlDeclaration clientxmldecl = clientDoc.CreateXmlDeclaration("1.0", "utf-8", null);
+            clientDoc.AppendChild(clientxmldecl);
+            XmlElement clientConfig = clientDoc.CreateElement("Config");
+            clientDoc.AppendChild(clientConfig);
+
+            XmlElement clientEnabled = clientDoc.CreateElement("Enabled");
+            clientEnabled.InnerText = "true";
+            clientConfig.AppendChild(clientEnabled);
+            XmlElement clientServerUrl = clientDoc.CreateElement("ServerUrl");
+            clientServerUrl.InnerText = url + "/" + serverXmlName;
+            clientConfig.AppendChild(clientServerUrl);
+            XmlElement clientRoot = clientDoc.CreateElement("UpdateFileList");
+
+            #endregion
+
             //创建文档对象
             XmlDocument doc = new XmlDocument();
             //创建根节点
@@ -36,15 +59,21 @@ namespace MDT.Tools.AutoUpdater.Config
             //获取当前目录对象
             DirectoryInfo dicInfo = new DirectoryInfo(currentDirectory);
             //调用递归方法组装xml文件
-            PopuAllDirectory(doc, root, dicInfo);
+            PopuAllDirectory(doc, root, clientDoc, clientRoot, dicInfo);
             //追加节点
             doc.AppendChild(root);
             //保存文档
             doc.Save(serverXmlName);
+
+            clientConfig.AppendChild(clientRoot);
+            if (enableClient)
+            {
+                clientDoc.Save(clientPath + clientXmlName);
+            }
         }
 
         //递归组装xml文件方法
-        private static void PopuAllDirectory(XmlDocument doc, XmlElement root, DirectoryInfo dicInfo)
+        private static void PopuAllDirectory(XmlDocument doc, XmlElement root,XmlDocument clientDoc,XmlElement clientRoot, DirectoryInfo dicInfo)
         {
             foreach (FileInfo f in dicInfo.GetFiles())
             {
@@ -72,12 +101,22 @@ namespace MDT.Tools.AutoUpdater.Config
                         child.SetAttribute("md5", ByteArrayToHexString(HashData(f.OpenRead(),"md5")));
                         child.SetAttribute("needRestart", "true");
                         root.AppendChild(child);
+
+
+                        XmlElement clientChild = clientDoc.CreateElement("LocalFile");
+                        clientChild.SetAttribute("path", f.Name);
+                         
+                        clientChild.SetAttribute("lastver", string.IsNullOrEmpty(version) ? "1.0.0.0" : version);
+                        clientChild.SetAttribute("size", f.Length.ToString());
+                        clientChild.SetAttribute("md5", ByteArrayToHexString(HashData(f.OpenRead(),"md5")));
+                       
+                        clientRoot.AppendChild(clientChild);
                     }
                 }
             }
 
             foreach (DirectoryInfo di in dicInfo.GetDirectories())
-                PopuAllDirectory(doc, root, di);
+                PopuAllDirectory(doc, root,clientDoc, clientRoot, di);
 
 
         }
