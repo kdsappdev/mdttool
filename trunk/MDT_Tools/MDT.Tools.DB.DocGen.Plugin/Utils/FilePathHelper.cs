@@ -13,7 +13,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Utils
         private FilePathHelper()
         { }
 
-        public static readonly string ExportDBDocPath = Application.StartupPath + "\\data\\doc";
+        public static readonly string ExportDBDocPath = Application.StartupPath + "\\data\\doc\\";
 
 
         
