@@ -4,7 +4,7 @@
 
 
 	public ${p.Name} get${p.Name}(){
-			return (${p.Name}) DataTypeConverter.Utils.toMap(this.get(MessageDictionary.Fields.${p.Name}));
+			return (${p.Name}) this.get(MessageDictionary.Fields.${p.Name});
 		}
 		public void set${p.Name}(${p.Name} ${codeGenHelper.StrFirstToLower(${p.Name})}){
 			this.put(MessageDictionary.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})});
