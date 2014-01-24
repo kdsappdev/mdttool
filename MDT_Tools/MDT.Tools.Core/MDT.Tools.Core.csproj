@@ -88,6 +88,11 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MDT.Tools\lib\log4net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="lua51, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\MDT.Tools\lib\lua51.dll</HintPath>
@@ -116,7 +121,6 @@
     </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System.Data">
       <Private>False</Private>
@@ -150,6 +154,7 @@
     <Compile Include="DataAccess\IDbHelper.cs" />
     <Compile Include="Log\ConsoleLog.cs" />
     <Compile Include="Log\ILog.cs" />
+    <Compile Include="Log\Log4netLog.cs" />
     <Compile Include="Lua\AttrLuaFunc.cs" />
     <Compile Include="Lua\ILuaEngine.cs" />
     <Compile Include="Lua\LuaEngine.cs" />

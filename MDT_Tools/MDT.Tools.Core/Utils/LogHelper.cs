@@ -5,7 +5,7 @@ namespace MDT.Tools.Core.Utils
 {
    public class LogHelper
     {
-       static readonly ILog Log=new ConsoleLog();
+       static readonly ILog Log=new Log4netLog();
        public  static  void Debug(string str)
        {
            Log.Debug(str);

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using System.IO;
 namespace MDT.Tools.Core.Utils
@@ -153,6 +154,20 @@ namespace MDT.Tools.Core.Utils
             return assembly.GetName().Version.ToString();
         }
 
+        #endregion
+
+        #region ≈–∂œ≥Ã–ÚºØ «∑ÒDebug,Release
+
+        public static bool IsDebugVersion(string assemblyName)
+        {
+            Assembly assembly = Assembly.LoadFile(assemblyName);
+            Debug.Assert(assembly != null);
+            foreach (DebuggableAttribute attribute in assembly.GetCustomAttributes(typeof(DebuggableAttribute), false))
+            {
+                if (attribute.IsJITTrackingEnabled) return true;
+            }
+            return false;
+        }
         #endregion
 
     }
