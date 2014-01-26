@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using LuaInterface;
+using MDT.Tools.Core.Utils;
 
 namespace MDT.Tools.Core.Lua
 {

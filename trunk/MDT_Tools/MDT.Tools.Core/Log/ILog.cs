@@ -4,12 +4,10 @@ using System.Text;
 
 namespace MDT.Tools.Core.Log
 {
-    interface ILog
+    public interface ILog
     {
         void Debug(string str);
         void Warn(string str);
         void Error(Exception ex);
     }
-
- 
 }
