@@ -17,7 +17,7 @@
 #end
 #end
 		#set($i=$i+1)		
-		${column.Name} $dataType #if(${column.DataNullAble} == "N") NULL#else NOT NULL#end #if(!$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) DEFAULT ${column.DataDefault}#else#end#if($i!=$count),#end
+		${column.Name} $dataType #if(${column.DataNullAble} == "N") NULL#else NOT NULL#end #if(!$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) DEFAULT ${column.DataDefault}#else#end#if($i== $count)#else,#end
 						
 #end
 	}
