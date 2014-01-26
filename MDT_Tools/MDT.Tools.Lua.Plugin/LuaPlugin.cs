@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
 using MDT.Tools.Core.Lua;
 using System.IO;
@@ -84,18 +85,18 @@ namespace MDT.Tools.Lua.Plugin
                     {
                         ILuaEngine luaEngine = LuaHelper.CreateLuaEngine();
                         luaEngine.BindLuaFunctions(this);
-                        luaEngine.DoFile(luaScriptPath + fileName);
-                        object[] luaPa= luaEngine.Invoke("initPlugin");
+                        luaEngine.DoFile(fileName);
+                        object[] luaPa = luaEngine.Invoke("initPlugin");
                         if (luaPa != null && luaPa.Length == 5)
                         {
                             int luaPluginKey = 0;
-
-                            if (int.TryParse(luaPa[1] as string, out luaPluginKey) && !luaEngines.ContainsKey(luaPluginKey))
+                            
+                            if (int.TryParse(luaPa[1]+"", out luaPluginKey) && !luaEngines.ContainsKey(luaPluginKey))
                             {
                                 luaEngines.Add(luaPluginKey, luaEngine);
                             }
                         }
-                        
+
                     }
                     catch (Exception ex)
                     {
@@ -105,7 +106,6 @@ namespace MDT.Tools.Lua.Plugin
             }
         }
         #endregion
-
 
         public void loadLua()
         {
@@ -135,7 +135,7 @@ namespace MDT.Tools.Lua.Plugin
                         luaEngines[luaPluginKey].Invoke("onNotify", name, o);
                     }
                 }
-                 
+
             }
         }
         [AttrLuaFunc("registerObject", "注册插件之间共享的信息", "信息key", "信息内容")]
@@ -148,13 +148,13 @@ namespace MDT.Tools.Lua.Plugin
         {
             return base.getObject(pluginKey, name);
         }
-         [AttrLuaFunc("removeObject", "移除插件之间共享的信息", "信息key")]
-        public  void removeObject(string name)
+        [AttrLuaFunc("removeObject", "移除插件之间共享的信息", "信息key")]
+        public void removeObject(string name)
         {
             base.remove(name);
         }
         Dictionary<string, List<int>> luaTopics = new Dictionary<string, List<int>>();
-        [AttrLuaFunc("unsubscribe", "退订插件之间时时改变的信息", "信息key","Lua插件的key")]
+        [AttrLuaFunc("unsubscribe", "退订插件之间时时改变的信息", "信息key", "Lua插件的key")]
         public void unsubscribe(string name, int luaPluginKey)
         {
 
@@ -170,10 +170,10 @@ namespace MDT.Tools.Lua.Plugin
                     unsubscribe(name, this);
                 }
             }
-            
-           
+
+
         }
-         [AttrLuaFunc("subscribe", "订阅插件之间时时改变的信息", "信息key", "Lua插件的key")]
+        [AttrLuaFunc("subscribe", "订阅插件之间时时改变的信息", "信息key", "Lua插件的key")]
         public void subscribe(string name, int luaPluginKey)
         {
 
@@ -199,10 +199,57 @@ namespace MDT.Tools.Lua.Plugin
             base.broadcast(name, o);
         }
         [AttrLuaFunc("getPluginShareKey", "获取插件共享的key", "信息key", "Lua插件的key")]
-        public  string getPluginShareKey( string name,int pluginKey)
+        public string getPluginShareKey(string name, int pluginKey)
         {
             return getPluginShareKey(pluginKey, name);
         }
+
+        #region 创建界面
+        [AttrLuaFunc("getApplication", "获取IApplication")]
+        public IApplication getApplication()
+        {
+            return Application;
+        }
+        [AttrLuaFunc("createToolStripMenuItem", "创建ToolStripMenuItem")]
+        public ToolStripMenuItem createToolStripMenuItem()
+        {
+            return new ToolStripMenuItem();
+        }
+
+        [AttrLuaFunc("createToolStripButton", "创建ToolStripButton")]
+        public ToolStripButton createToolStripButton()
+        {
+            return new ToolStripButton();
+        }
+
+
+        [AttrLuaFunc("showMessage", "显示信息", "消息内容")]
+        public void showMessage(string str)
+        {
+            MessageBox.Show(str);
+        }
+        
         #endregion
+
+        #region log
+        [AttrLuaFunc("debug", "调试日志记录", "日志内容")]
+        public void debug(string str)
+        {
+            LogHelper.Debug(str);
+        }
+        [AttrLuaFunc("warn", "警告日志记录", "日志内容")]
+        public void warn(string str)
+        {
+            LogHelper.Warn(str);
+        }
+        [AttrLuaFunc("error", "错误日志记录", "日志内容")]
+        public void error(string ex)
+        {
+            LogHelper.Error(new Exception(ex));
+        }
+        #endregion
+
+        #endregion
+
     }
 }
