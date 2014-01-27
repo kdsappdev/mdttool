@@ -22,7 +22,7 @@ namespace MDT.Tools.Core.Lua
         
 
             String strFuncHeader = strFuncName + "(%params%) - " + strFuncDoc;
-            String strFuncBody = "\n\n";
+            String strFuncBody = "";
             String strFuncParams = "";
 
             Boolean bFirst = true;
@@ -33,17 +33,13 @@ namespace MDT.Tools.Core.Lua
                     strFuncParams += ", ";
 
                 strFuncParams += strFuncParam.Key;
-                strFuncBody += "\t" + strFuncParam.Key + "\t\t" + strFuncParam.Value + "\n";
+                strFuncBody += " " + strFuncParam.Key + ":" + strFuncParam.Value + ",";
 
                 bFirst = false;
             }
-            for (int i = 0; i < FunctionParameters.Count; i++)
-            {
-               
-            }
-
+            if (strFuncBody.Length>0)
             strFuncBody = strFuncBody.Substring(0, strFuncBody.Length - 1);
-            if (bFirst)
+            if (bFirst && strFuncBody.Length > 0)
                 strFuncBody = strFuncBody.Substring(0, strFuncBody.Length - 1);
 
             FunctionDocString = strFuncHeader.Replace("%params%", strFuncParams) + strFuncBody;
