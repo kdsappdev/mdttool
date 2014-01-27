@@ -1,4 +1,4 @@
-MDT Smart Kit通过Lua脚步编写插件
+MDT Smart Kit通过Lua脚本编写插件
 
 Lua插件接口：
 1.初始化
