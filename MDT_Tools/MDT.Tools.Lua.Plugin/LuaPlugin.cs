@@ -85,13 +85,14 @@ namespace MDT.Tools.Lua.Plugin
                     {
                         ILuaEngine luaEngine = LuaHelper.CreateLuaEngine();
                         luaEngine.BindLuaFunctions(this);
+                        LogHelper.Debug(luaEngine.ToString());
                         luaEngine.DoFile(fileName);
                         object[] luaPa = luaEngine.Invoke("initPlugin");
                         if (luaPa != null && luaPa.Length == 5)
                         {
                             int luaPluginKey = 0;
-                            
-                            if (int.TryParse(luaPa[1]+"", out luaPluginKey) && !luaEngines.ContainsKey(luaPluginKey))
+
+                            if (int.TryParse(luaPa[1] + "", out luaPluginKey) && !luaEngines.ContainsKey(luaPluginKey))
                             {
                                 luaEngines.Add(luaPluginKey, luaEngine);
                             }
@@ -210,25 +211,6 @@ namespace MDT.Tools.Lua.Plugin
         {
             return Application;
         }
-        [AttrLuaFunc("createToolStripMenuItem", "创建ToolStripMenuItem")]
-        public ToolStripMenuItem createToolStripMenuItem()
-        {
-            return new ToolStripMenuItem();
-        }
-
-        [AttrLuaFunc("createToolStripButton", "创建ToolStripButton")]
-        public ToolStripButton createToolStripButton()
-        {
-            return new ToolStripButton();
-        }
-
-
-        [AttrLuaFunc("showMessage", "显示信息", "消息内容")]
-        public void showMessage(string str)
-        {
-            MessageBox.Show(str);
-        }
-        
         #endregion
 
         #region log

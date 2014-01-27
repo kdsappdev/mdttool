@@ -106,6 +106,16 @@ namespace MDT.Tools.Core.Lua
                 }
             }
         }
+
+        public override string ToString()
+        {
+            string str = "\n\r";
+            foreach (KeyValuePair<string, LuaFuncDescriptor> luaFuncDescriptor in pLuaFuncs)
+            {
+                str += luaFuncDescriptor.Value.getFuncFullDoc()+"\n\r";
+            }
+            return str;
+        }
     }
 
 }
