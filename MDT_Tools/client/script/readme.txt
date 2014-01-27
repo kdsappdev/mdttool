@@ -9,7 +9,7 @@ Lua插件接口：
 	local author='孔德帅'--插件名称
 
 	--插件方法:初始化
-	function initPlugin ()
+	function init()
 		return tag,pluginKey,pluginName,description,author
 	end
 2.加载
@@ -60,3 +60,5 @@ Lua引擎提供的方法
 
 	error(ex) - 错误日志记录 ex:日志内容
 
+注意：
+	1.编写的脚本要以ACSII保存，否则涉及中文的，就会乱码.

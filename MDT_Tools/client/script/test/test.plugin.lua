@@ -5,7 +5,8 @@ import("System.Windows.Forms")
 import("System.Drawing")
 import("MDT.ThirdParty.Controls","WeifenLuo.WinFormsUI.Docking")
 import("MDT.Tools.Core","MDT.Tools.Core.UI") 
-
+import("System.IO")
+import("System.Text")
 --获取主Form
 Application=getApplication()
 
@@ -17,7 +18,7 @@ local description='test'
 local author='孔德帅'
 
 --插件方法:初始化
-function initPlugin ()
+function init ()
 return tag,pluginKey,pluginName,description,author
 end
 --创建一个窗口
@@ -25,12 +26,19 @@ explorer = ToolWindow()
 --插件方法:加载
 function load()
 
-debug(string.format("%d %s", pluginKey,"load"))
+debug(string.format("%d %s", pluginKey,"load"))--调试日志
 explorer.Text="Lua插件"
 explorer.CloseButton=False
 explorer.CloseButtonVisible=False
 explorer.Icon= Icon("script\\test\\lua.ico")
 
+code=Code()
+code.Text="test.plugin.lua"
+code.CodeLanguage="Lua"
+file=StreamReader("script\\test\\test.plugin.lua",Encoding.GetEncoding("gbk"))
+code.CodeContent=file:ReadToEnd()
+file:Close()
+code:show(Application.Panel)
 --MessageBox.Show("load")
 explorer:show(Application.Panel, DockState.DockRight)
 subscribe('BroadCastCheckFixNumberIsGreaterThan0',pluginKey)
