@@ -6,7 +6,7 @@ Lua插件接口：
 	local pluginKey=41--插件Id号
 	local pluginName='test'--插件名称
 	local description='test'--插件描述
-	local author='孔德帅'--插件名称
+	local author='孔德帅'--插件编写者
 
 	--插件方法:初始化
 	function init()
