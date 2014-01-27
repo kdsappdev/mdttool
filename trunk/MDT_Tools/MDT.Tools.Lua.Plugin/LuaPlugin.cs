@@ -87,7 +87,7 @@ namespace MDT.Tools.Lua.Plugin
                         luaEngine.BindLuaFunctions(this);
                         LogHelper.Debug(luaEngine.ToString());
                         luaEngine.DoFile(fileName);
-                        object[] luaPa = luaEngine.Invoke("initPlugin");
+                        object[] luaPa = luaEngine.Invoke("init");
                         if (luaPa != null && luaPa.Length == 5)
                         {
                             int luaPluginKey = 0;
