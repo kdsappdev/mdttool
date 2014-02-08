@@ -9,11 +9,11 @@ using MDT.Tools.Lua.Plugin.Utils;
 using MDT.Tools.Core.Utils;
 namespace MDT.Tools.Lua.Plugin
 {
-    public class LuaPlugin : AbstractPlugin
+    public class LuaPlugin : AbstractPlugin, IPluginManager
     {
         #region 插件信息
 
-        private int _tag = 31;
+        private int _tag = 0;
 
         public override int Tag
         {
@@ -42,12 +42,12 @@ namespace MDT.Tools.Lua.Plugin
         }
         protected override void load()
         {
-            laodLuaScript();
-            loadLua();
+            Init();
+            Loading();
         }
         protected override void unload()
         {
-            unloadLua();
+            Unloading();
         }
         public override void onNotify(string name, object o)
         {
@@ -59,27 +59,26 @@ namespace MDT.Tools.Lua.Plugin
         #region lua Function
 
         #region 加载脚本文件
-        private string luaScriptPostfix = "plugin.lua";
-        Dictionary<int, ILuaEngine> luaEngines = new Dictionary<int, ILuaEngine>();
-        private void laodLuaScript()
+
+        Dictionary<int, IPlugin> luaPlugins = new Dictionary<int, IPlugin>();
+        
+        
+
+        private void loadLuaScriptAllfolders(string luaScriptPath, string pluginSign)
         {
-            loadLuaScriptAllfolders(FilePathHelper.LuaScriptPath);
-        }
-        private void loadLuaScriptAllfolders(string luaScriptPath)
-        {
-            loadLuaScriptFile(luaScriptPath);
+            loadLuaScriptFile(luaScriptPath, pluginSign);
             string[] folders = Directory.GetDirectories(luaScriptPath);
             foreach (string nextFolder in folders)
             {
-                loadLuaScriptAllfolders(nextFolder);
+                loadLuaScriptAllfolders(nextFolder, pluginSign);
             }
         }
-        private void loadLuaScriptFile(string luaScriptPath)
+        private void loadLuaScriptFile(string luaScriptPath, string pluginSign)
         {
             string[] files = Directory.GetFiles(luaScriptPath);
             foreach (string fileName in files)
             {
-                if (fileName.EndsWith(luaScriptPostfix))
+                if (fileName.EndsWith(pluginSign))
                 {
                     try
                     {
@@ -90,12 +89,24 @@ namespace MDT.Tools.Lua.Plugin
                         object[] luaPa = luaEngine.Invoke("init");
                         if (luaPa != null && luaPa.Length == 5)
                         {
-                            int luaPluginKey = 0;
+                            int temp = 0;
+                            int tag = 0;
+                            int pluginKey = 0;
+                            if(int.TryParse(luaPa[0] + "", out temp))
+                               tag = temp;
 
-                            if (int.TryParse(luaPa[1] + "", out luaPluginKey) && !luaEngines.ContainsKey(luaPluginKey))
+                            if (int.TryParse(luaPa[1] + "", out temp))
                             {
-                                luaEngines.Add(luaPluginKey, luaEngine);
+                                pluginKey = temp;
                             }
+                            LuaScriptPlugin lsp = new LuaScriptPlugin(tag,pluginKey,luaPa[2]+"",luaPa[3]+"",luaPa[4]+"");
+                            lsp.LuaEngine = luaEngine;
+                            if (luaPlugins.ContainsKey(lsp.PluginKey))
+                            {
+                                luaPlugins.Remove(lsp.PluginKey);
+                            }
+                            luaPlugins.Add(lsp.PluginKey, lsp);
+                            
                         }
 
                     }
@@ -108,21 +119,7 @@ namespace MDT.Tools.Lua.Plugin
         }
         #endregion
 
-        public void loadLua()
-        {
-            foreach (ILuaEngine luaEngine in luaEngines.Values)
-            {
-                luaEngine.Invoke("load");
-            }
-        }
 
-        public void unloadLua()
-        {
-            foreach (ILuaEngine luaEngine in luaEngines.Values)
-            {
-                luaEngine.Invoke("unload");
-            }
-        }
 
         public void onNotifyLua(string name, object o)
         {
@@ -131,18 +128,26 @@ namespace MDT.Tools.Lua.Plugin
                 List<int> subscribers = luaTopics[name];
                 foreach (int luaPluginKey in subscribers)
                 {
-                    if (luaEngines.ContainsKey(luaPluginKey))
+                    if (luaPlugins.ContainsKey(luaPluginKey))
                     {
-                        luaEngines[luaPluginKey].Invoke("onNotify", name, o);
+                        try
+                        {
+                            luaPlugins[luaPluginKey].onNotify(name, o);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Error(ex);
+                        }
                     }
                 }
 
             }
         }
-        [AttrLuaFunc("registerObject", "注册插件之间共享的信息", "信息key", "信息内容")]
-        public new void registerObject(string name, object obj)
+        [AttrLuaFunc("registerObject", "注册插件之间共享的信息", "插件key","信息key", "信息内容")]
+        public void registerObject(int pluginKey,string name, object obj)
         {
-            base.registerObject(name, obj);
+            string key = getPluginShareKey(pluginKey, name);
+            Application.RegisterObject(key, obj);
         }
         [AttrLuaFunc("getObject", "获取插件之间共享的信息", "信息key", "信息内容")]
         public new object getObject(int pluginKey, string name)
@@ -272,6 +277,143 @@ namespace MDT.Tools.Lua.Plugin
         #endregion
 
         #endregion
+
+
+        #region IPluginManager
+
+        private readonly IDictionary<int, IPlugin> _dicPlugin = new Dictionary<int, IPlugin>();
+        private bool _copyToMemory = false;
+
+        public bool CopyToMemory
+        {
+            get
+            {
+                return _copyToMemory;
+            }
+            set
+            {
+                _copyToMemory = value;
+            }
+        }
+
+        public IList<IPlugin> PluginList
+        {
+            get
+            {
+                return dicToIlist(_dicPlugin);
+            }
+        }
+        private string _pluginSign="plugin.lua";
+        public string PluginSign
+        {
+            set { _pluginSign = value; }
+        }
+
+        #region 字典集合到List转换
+        private List<IPlugin> dicToIlist(IEnumerable<KeyValuePair<int, IPlugin>> dic)
+        {
+            List<IPlugin> pluginList = new List<IPlugin>();
+            foreach (KeyValuePair<int, IPlugin> kvp in dic)
+            {
+                if (kvp.Value != null)
+                {
+                    pluginList.Add(kvp.Value);
+                }
+            }
+            return pluginList;
+        }
+        #endregion
+
+        public void Init()
+        {
+            LoadDefault(_pluginSign);
+        }
+
+
+        public void Loading()
+        {
+            List<IPlugin> plugins = dicToIlist(luaPlugins);
+            plugins.Sort(new PluginComparer());
+            foreach (IPlugin plugin in plugins)
+            {
+                try
+                {
+                    plugin.OnLoading();
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error(ex);
+                }
+            }
+
+        }
+        public void Unloading()
+        {
+            List<IPlugin> plugins = dicToIlist(luaPlugins);
+            plugins.Sort(new PluginComparer2());
+            foreach (IPlugin plugin in plugins)
+            {
+                try
+                {
+                    plugin.BeforeTerminating();
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error(ex);
+                }
+            }
+        }
+
+        public void LoadDefault(string pluginSign)
+        {
+            _pluginSign = pluginSign;
+
+            LoadAllPlugins(FilePathHelper.LuaScriptPath, true, _pluginSign);
+        }
+
+        public void LoadAllPlugins(string pluginFolderPath, bool searchChildFolder, string pluginSign)
+        {
+            loadLuaScriptFile(pluginFolderPath, pluginSign);
+            string[] folders = Directory.GetDirectories(pluginFolderPath);
+            foreach (string nextFolder in folders)
+            {
+                loadLuaScriptAllfolders(nextFolder, pluginSign);
+            }
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DynRemovePlugin(int pluginKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void EnablePlugin(int pluginKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisEnablePlugin(int pluginKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPlugin GetPlugin(int pluginKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsPlugin(int pluginKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event PluginChanged PluginChanged;
+        #endregion
+
 
     }
 }

@@ -61,13 +61,7 @@
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient13 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             WeifenLuo.WinFormsUI.Docking.TabGradient tabGradient14 = new WeifenLuo.WinFormsUI.Docking.TabGradient();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
-            this.tsmiWindow = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiCloseAllDocument = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiHelper = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.mainTool = new System.Windows.Forms.ToolStrip();
-            this.tsbCloseAllDocment = new System.Windows.Forms.ToolStripButton();
-            this.tsbExit = new System.Windows.Forms.ToolStripButton();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.mainContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -75,90 +69,29 @@
             this.notifiyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiBack = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiCheckUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.DockPanelWeifenLuo = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.mainMenu.SuspendLayout();
-            this.mainTool.SuspendLayout();
             this.notifiyIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
             // 
-            this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiWindow,
-            this.tsmiHelper});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(988, 25);
+            this.mainMenu.Size = new System.Drawing.Size(988, 24);
             this.mainMenu.TabIndex = 1;
             this.mainMenu.Text = "menuStrip1";
             // 
-            // tsmiWindow
-            // 
-            this.tsmiWindow.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiCloseAllDocument});
-            this.tsmiWindow.Name = "tsmiWindow";
-            this.tsmiWindow.Size = new System.Drawing.Size(64, 21);
-            this.tsmiWindow.Text = "窗口(&W)";
-            // 
-            // tsmiCloseAllDocument
-            // 
-            this.tsmiCloseAllDocument.Name = "tsmiCloseAllDocument";
-            this.tsmiCloseAllDocument.Size = new System.Drawing.Size(162, 22);
-            this.tsmiCloseAllDocument.Text = "关闭所有文档(&L)";
-            this.tsmiCloseAllDocument.Click += new System.EventHandler(this.tsmiCloseAllDocument_Click);
-            // 
-            // tsmiHelper
-            // 
-            this.tsmiHelper.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiCheckUpdate,
-            this.toolStripSeparator1,
-            this.tsmiAbout});
-            this.tsmiHelper.Name = "tsmiHelper";
-            this.tsmiHelper.Size = new System.Drawing.Size(61, 21);
-            this.tsmiHelper.Text = "帮助(&H)";
-            // 
-            // tsmiAbout
-            // 
-            this.tsmiAbout.Name = "tsmiAbout";
-            this.tsmiAbout.Size = new System.Drawing.Size(152, 22);
-            this.tsmiAbout.Text = "关于";
-            this.tsmiAbout.Click += new System.EventHandler(this.TsmiAboutClick);
-            // 
             // mainTool
             // 
-            this.mainTool.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbCloseAllDocment,
-            this.tsbExit});
-            this.mainTool.Location = new System.Drawing.Point(0, 25);
+            this.mainTool.Location = new System.Drawing.Point(0, 24);
             this.mainTool.Name = "mainTool";
             this.mainTool.Size = new System.Drawing.Size(988, 25);
             this.mainTool.TabIndex = 2;
             // 
-            // tsbCloseAllDocment
-            // 
-            this.tsbCloseAllDocment.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseAllDocment.Image")));
-            this.tsbCloseAllDocment.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbCloseAllDocment.Name = "tsbCloseAllDocment";
-            this.tsbCloseAllDocment.Size = new System.Drawing.Size(100, 22);
-            this.tsbCloseAllDocment.Text = "关闭所有文档";
-            this.tsbCloseAllDocment.Click += new System.EventHandler(this.tsmiCloseAllDocument_Click);
-            // 
-            // tsbExit
-            // 
-            this.tsbExit.Image = ((System.Drawing.Image)(resources.GetObject("tsbExit.Image")));
-            this.tsbExit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbExit.Name = "tsbExit";
-            this.tsbExit.Size = new System.Drawing.Size(52, 22);
-            this.tsbExit.Tag = "Exit";
-            this.tsbExit.Text = "退出";
-            this.tsbExit.Click += new System.EventHandler(this.TsmiExitClick);
-            // 
             // statusBar
             // 
-            this.statusBar.Location = new System.Drawing.Point(0, 664);
+            this.statusBar.Location = new System.Drawing.Point(0, 587);
             this.statusBar.Name = "statusBar";
             this.statusBar.Size = new System.Drawing.Size(988, 22);
             this.statusBar.TabIndex = 3;
@@ -212,21 +145,14 @@
             this.tsmiBack.Text = "返回(&B)";
             this.tsmiBack.Click += new System.EventHandler(this.NotifyIcon1Click);
             // 
-            // tsmiCheckUpdate
-            // 
-            this.tsmiCheckUpdate.Name = "tsmiCheckUpdate";
-            this.tsmiCheckUpdate.Size = new System.Drawing.Size(152, 22);
-            this.tsmiCheckUpdate.Text = "检查更新";
-            this.tsmiCheckUpdate.Click += new System.EventHandler(this.tsmiCheckUpdate_Click);
-            // 
             // DockPanelWeifenLuo
             // 
             this.DockPanelWeifenLuo.ActiveAutoHideContent = null;
             this.DockPanelWeifenLuo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.DockPanelWeifenLuo.DockBackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.DockPanelWeifenLuo.Location = new System.Drawing.Point(0, 50);
+            this.DockPanelWeifenLuo.Location = new System.Drawing.Point(0, 49);
             this.DockPanelWeifenLuo.Name = "DockPanelWeifenLuo";
-            this.DockPanelWeifenLuo.Size = new System.Drawing.Size(988, 614);
+            this.DockPanelWeifenLuo.Size = new System.Drawing.Size(988, 538);
             dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
             dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
             autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
@@ -330,16 +256,11 @@
             this.dockPanel1.Skin = dockPanelSkin2;
             this.dockPanel1.TabIndex = 0;
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(988, 686);
+            this.ClientSize = new System.Drawing.Size(988, 609);
             this.Controls.Add(this.DockPanelWeifenLuo);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.mainTool);
@@ -354,10 +275,6 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
             this.Load += new System.EventHandler(this.MainFormLoad);
             this.Move += new System.EventHandler(this.MainForm_Move);
-            this.mainMenu.ResumeLayout(false);
-            this.mainMenu.PerformLayout();
-            this.mainTool.ResumeLayout(false);
-            this.mainTool.PerformLayout();
             this.notifiyIconContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -371,20 +288,12 @@
         private System.Windows.Forms.StatusStrip statusBar;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dockPanel1;
         private WeifenLuo.WinFormsUI.Docking.DockPanel DockPanelWeifenLuo;
-        private System.Windows.Forms.ToolStripMenuItem tsmiHelper;
         private System.Windows.Forms.ImageList imageList;
-        private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
         private System.Windows.Forms.ContextMenuStrip mainContextMenu;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.ContextMenuStrip notifiyIconContextMenu;
         private System.Windows.Forms.ToolStripMenuItem tsmiExit;
         private System.Windows.Forms.ToolStripMenuItem tsmiBack;
-        private System.Windows.Forms.ToolStripButton tsbExit;
-        private System.Windows.Forms.ToolStripMenuItem tsmiWindow;
-        private System.Windows.Forms.ToolStripMenuItem tsmiCloseAllDocument;
-        private System.Windows.Forms.ToolStripButton tsbCloseAllDocment;
-        private System.Windows.Forms.ToolStripMenuItem tsmiCheckUpdate;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
       
     }
 }

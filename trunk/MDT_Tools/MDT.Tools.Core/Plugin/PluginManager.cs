@@ -69,11 +69,49 @@ namespace MDT.Tools.Core.Plugin
 
         #region 方法 加载 卸载 插件
 
-        #region 加载插件
-        public void LoadDefault()
+        public void Init()
         {
             LoadAllPlugins(AppDomain.CurrentDomain.BaseDirectory, false, _pluginSign);
         }
+
+        public void Loading()
+        {
+            List<IPlugin> plugins = dicToIlist(_dicPlugin);
+            plugins.Sort(new PluginComparer());
+            foreach (IPlugin plugin in plugins)
+            {
+                try
+                {
+                    plugin.OnLoading();
+                    PluginChanged();
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error(ex);
+                }
+            }
+
+        }
+        public void Unloading()
+        {
+            List<IPlugin> plugins = dicToIlist(_dicPlugin);
+            plugins.Sort(new PluginComparer2());
+            foreach (IPlugin plugin in plugins)
+            {
+                try
+                {
+                    plugin.BeforeTerminating();
+                    PluginChanged();
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error(ex);
+                }
+            }
+        }
+        #region 加载插件
+
+
         public void LoadDefault(string pluginSign)
         {
             _pluginSign = pluginSign;
@@ -99,15 +137,9 @@ namespace MDT.Tools.Core.Plugin
                 }
                 _dicPlugin.Add(plugin.PluginKey, plugin);
                 plugin.Application = Application;
-                try
-                {
-                    plugin.OnLoading();
-                    PluginChanged();
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.Error(ex);
-                }
+                
+
+
 
             }
 
@@ -217,9 +249,9 @@ namespace MDT.Tools.Core.Plugin
         #endregion
 
         #region 字典集合到List转换
-        private IList<IPlugin> dicToIlist(IEnumerable<KeyValuePair<int, IPlugin>> dic)
+        private List<IPlugin> dicToIlist(IEnumerable<KeyValuePair<int, IPlugin>> dic)
         {
-            IList<IPlugin> pluginList = new List<IPlugin>();
+            List<IPlugin> pluginList = new List<IPlugin>();
             foreach (KeyValuePair<int, IPlugin> kvp in dic)
             {
                 if (kvp.Value != null)

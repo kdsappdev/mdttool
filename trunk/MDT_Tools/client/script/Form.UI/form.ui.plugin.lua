@@ -73,6 +73,7 @@ function load()
 	tsbCloseAllDocment.Click:Add(tsmiCloseAllDocument_Click)
     tsbCloseAllDocment.Image = Resources.closeAllDocment
 	
+	tsbExit.Name="tsbExit"
 	tsbExit.Text="ÍË³ö"
 	tsbExit.Image = Resources.exit
 	tsbExit.Click:Add(tsbExit_Click)
@@ -93,7 +94,15 @@ function load()
                 application.StatusBar.Items:Insert(0, tsslMessage)
                 application.StatusBar.Items:Insert(1, tspbLoadDbProgress)
                 
-            
+				
+				
+            registerObject(pluginKey,"tsmiWindow",tsmiWindow)	
+			
+            registerObject(pluginKey,"tsmiHelper",tsmiHelper)	
+			
+            registerObject(pluginKey,"tsbExit",tsbExit)	
+            registerObject(pluginKey,"tsslMessage",tsslMessage)			
+            registerObject(pluginKey,"tspbLoadDbProgress",tspbLoadDbProgress)
             
 end
 

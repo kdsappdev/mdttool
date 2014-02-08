@@ -11,7 +11,7 @@ import("System.Text")
 Application=getApplication()
 
 --插件信息 
-local tag=41
+local tag=44
 local pluginKey=41
 local pluginName='test'
 local description='test'
@@ -38,7 +38,8 @@ testLuaTSMI.Text="Lua帮助文档"
 testLuaTSMI.Click:Add(testLuaTSMI_click)--增加Click事件
 --toolTSMI.DropDownItems:Add(testLuaTSMI)
 
- Application.MainMenu.Items["tsmiHelper"].DropDownItems:Insert(1, testLuaTSMI);--主Form上面帮助菜单增加一个"Lua帮助文档"菜单
+ 
+getObject(43,"tsmiHelper").DropDownItems:Insert(1, testLuaTSMI);--主Form上面帮助菜单增加一个"Lua帮助文档"菜单
 --MessageBox.Show("load")
 --explorer:show(Application.Panel, DockState.DockRight)
 --subscribe('BroadCastCheckFixNumberIsGreaterThan0',pluginKey)--订阅消息

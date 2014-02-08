@@ -37,6 +37,12 @@ namespace MDT.Tools.Core.Plugin
 
         #region 方法 加载 卸载 插件
 
+        #region
+        void Init();
+        void Loading();
+        void Unloading();
+        #endregion
+
         #region 加载插件
         /// <summary>
         /// LoadDefault 加载当前目录或子目录下的所有有效插件
