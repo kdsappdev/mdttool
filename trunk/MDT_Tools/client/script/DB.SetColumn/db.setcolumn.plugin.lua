@@ -18,7 +18,7 @@ import("System.Data")
 application=getApplication()
 
 --插件信息 
-local tag=42
+local tag=45
 local pluginKey=42
 local pluginName='维护数据库中的字段插件'
 local description='维护当前数据库的所有字段信息'

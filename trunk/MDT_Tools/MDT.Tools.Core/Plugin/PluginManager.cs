@@ -45,10 +45,10 @@ namespace MDT.Tools.Core.Plugin
         {
             get
             {
-                return dicToIlist(_dicPlugin);
+                return PluginHelper.DicToIlist(_dicPlugin);
             }
         }
-        private string _pluginSign;
+        private string _pluginSign=PluginHelper.PluginSign1;
         public string PluginSign
         {
             set { _pluginSign = value; }
@@ -71,12 +71,12 @@ namespace MDT.Tools.Core.Plugin
 
         public void Init()
         {
-            LoadAllPlugins(AppDomain.CurrentDomain.BaseDirectory, false, _pluginSign);
+            LoadDefault( _pluginSign);
         }
 
         public void Loading()
         {
-            List<IPlugin> plugins = dicToIlist(_dicPlugin);
+            List<IPlugin> plugins = PluginHelper.DicToIlist(_dicPlugin);
             plugins.Sort(new PluginComparer());
             foreach (IPlugin plugin in plugins)
             {
@@ -94,7 +94,7 @@ namespace MDT.Tools.Core.Plugin
         }
         public void Unloading()
         {
-            List<IPlugin> plugins = dicToIlist(_dicPlugin);
+            List<IPlugin> plugins = PluginHelper.DicToIlist(_dicPlugin);
             plugins.Sort(new PluginComparer2());
             foreach (IPlugin plugin in plugins)
             {

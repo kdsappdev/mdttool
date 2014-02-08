@@ -13,7 +13,7 @@ import("System.Diagnostics")
 import("System.Configuration")
 application=getApplication()
 
-local tag=43
+local tag=0
 local pluginKey=43
 local pluginName='UI插件'
 local description='form框架中提供的基本界面'
