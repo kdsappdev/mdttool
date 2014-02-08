@@ -215,19 +215,59 @@ namespace MDT.Tools.Lua.Plugin
 
         #region log
         [AttrLuaFunc("debug", "调试日志记录", "日志内容")]
-        public void debug(string str)
+        public void debug(object str)
         {
-            LogHelper.Debug(str);
+            LogHelper.Debug(str + "");
         }
         [AttrLuaFunc("warn", "警告日志记录", "日志内容")]
-        public void warn(string str)
+        public void warn(object str)
         {
-            LogHelper.Warn(str);
+            LogHelper.Warn(str + "");
         }
         [AttrLuaFunc("error", "错误日志记录", "日志内容")]
-        public void error(string ex)
+        public void error(object ex)
         {
-            LogHelper.Error(new Exception(ex));
+            LogHelper.Error(new Exception(ex + ""));
+        }
+        #endregion
+
+        #region DataRow
+        [AttrLuaFunc("getDataRowValue", "获取DataRowValue", "DataRow", "列名")]
+        public object getDataRowValue(System.Data.DataRow dr, string columnName)
+        {
+            object value= dr[columnName];
+            if (value == DBNull.Value)
+            {
+                value = "";
+            }
+            return value;
+        }
+        [AttrLuaFunc("setDataRowValue", "设置DataRowValue", "DataRow", "列名", "列value")]
+        public void setDataRowValue(System.Data.DataRow dr, string columnName, object value)
+        {
+            dr[columnName] = value;
+        }
+        #endregion
+
+        #region dataTable
+        [AttrLuaFunc("getDistinctDataTable", "获取getDistinctDataTable", "DataTable","是否Distinct", "列名")]
+        public System.Data.DataTable getDistinctDataTable(System.Data.DataView dv,bool isDistinct, LuaInterface.LuaTable columnNames)
+        {
+            int count = columnNames.Values.Count;//dt.Merge(dt,true,System.Data.MissingSchemaAction)
+            string[] strs = new string[count];
+            columnNames.Values.CopyTo(strs, 0);
+            System.Data.DataTable temp= dv.ToTable(isDistinct, strs);//temp.Select("")
+            return temp;
+        }
+        #endregion
+
+        #region dataGridView
+        [AttrLuaFunc("getDataGridViewRowCellValue", "获取getDataGridViewRowCellValue", "DataGridView", "rowIndex", "columnIndex")]
+        
+        public object getDataGridViewRowCellValue(DataGridView dgv, int rowIndex, int columnIndex)
+        {
+            object value = dgv.Rows[rowIndex].Cells[columnIndex].Value;
+            return value;
         }
         #endregion
 
