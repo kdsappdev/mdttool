@@ -25,7 +25,7 @@ namespace MDT.Tools
 
         private void MainFormLoad(object sender, EventArgs e)
         {
-            
+            _pluginManager.Loading();
             System.Threading.ThreadPool.QueueUserWorkItem(o =>
                                                               {
                                                                   #region
@@ -60,9 +60,7 @@ namespace MDT.Tools
                                                                        
                                                                   }
 
-                                                                  #endregion
-
-                                                                  
+                                                                  #endregion                                                                  
                                                                  
                                                               });
 
@@ -91,8 +89,7 @@ namespace MDT.Tools
             //typeof(System.Reflection.AssemblyDescriptionAttribute))).Description
             notifyIcon1.Text = Text;
             notifyIcon1.Icon = Icon;
-            tsbExit.Image = Resources.exit;
-            tsbCloseAllDocment.Image = tsmiCloseAllDocument.Image = Resources.closeAllDocment;
+
             
         }
 
@@ -168,7 +165,9 @@ namespace MDT.Tools
 
         private void TsmiExitClick(object sender, EventArgs e)
         {
+            _pluginManager.Unloading();
             saveWorkSpace();
+
             Application.Exit();
         }
         #endregion
@@ -190,7 +189,7 @@ namespace MDT.Tools
             }
             else
             {
-                saveWorkSpace();
+                TsmiExitClick(null, null);
             }
         }
         private void MainForm_Move(object sender, EventArgs e)
@@ -291,57 +290,6 @@ namespace MDT.Tools
             return dc;             
         }
         #endregion
-
-        private void tsmiCheckUpdate_Click(object sender, EventArgs e)
-        {
-            System.Threading.ThreadPool.QueueUserWorkItem(o =>
-            {
-                #region
-
-                
-                IAutoUpdater autoUpdater = new AutoUpdater();
-                bool isUpdate = false;
-                try
-                {
-                    isUpdate = autoUpdater.IsUpdate();
-                    if (isUpdate)
-                    {
-                        DialogResult dr = MessageBox.Show(this,
-                                                          "检查到有新版，是否升级?",
-                                                          "提示",
-                                                          MessageBoxButtons
-                                                              .YesNo,
-                                                          MessageBoxIcon.
-                                                              Information);
-                        if (dr == DialogResult.Yes)
-                        {
-                            Process.Start(
-                                System.Configuration.ConfigurationSettings
-                                    .
-                                    AppSettings["AutoUpdate"], "true");
-                            TsmiExitClick(null, null);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show(this, string.Format("已经是最新版本"), "提示", MessageBoxButtons.OK, MessageBoxIcon.
-                                                              Information);
-                    }
-              
-                }
-
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, "检查失败[" + ex.Message + "]", "提示", MessageBoxButtons.OK, MessageBoxIcon.
-                                                              Information);
-                }
-
-                #endregion
-
-               
-            });
-        }
-
 
     }
 }

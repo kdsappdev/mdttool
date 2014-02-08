@@ -156,7 +156,8 @@ namespace MDT.Tools.DB.Plugin
 
         void _tsmiExit_Click(object sender, EventArgs e)
         {
-            Application.MainTool.Items["tsbExit"].PerformClick();
+            ToolStripButton tsbExit = getObject(43, "tsbExit") as ToolStripButton;
+            tsbExit.PerformClick();
         }
         private void RemoveTool()
         {
@@ -204,8 +205,8 @@ namespace MDT.Tools.DB.Plugin
 
         #region 增加状态栏
 
-        readonly ToolStripStatusLabel _tsslMessage = new ToolStripStatusLabel();
-        readonly ToolStripProgressBar _tspbLoadDbProgress = new ToolStripProgressBar();
+         ToolStripStatusLabel _tsslMessage = new ToolStripStatusLabel();
+         ToolStripProgressBar _tspbLoadDbProgress = new ToolStripProgressBar();
         private void AddStatus()
         {
             if (_mainTool.InvokeRequired)
@@ -215,16 +216,8 @@ namespace MDT.Tools.DB.Plugin
             }
             else
             {
-                _tspbLoadDbProgress.AutoSize = false;
-                _tspbLoadDbProgress.Visible = false;
-                _tspbLoadDbProgress.Width = 250;
-
-                _tsslMessage.AutoSize = false;
-                _tsslMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-                _tsslMessage.Width = Application.StatusBar.Width - _tspbLoadDbProgress.Width - 20;
-                Application.StatusBar.SizeChanged += StatusBarSizeChanged;
-                Application.StatusBar.Items.Insert(0, _tsslMessage);
-                Application.StatusBar.Items.Insert(1, _tspbLoadDbProgress);
+                _tspbLoadDbProgress = getObject(43, "tspbLoadDbProgress") as ToolStripProgressBar;
+                _tsslMessage = getObject(43, "tsslMessage") as ToolStripStatusLabel;
                 registerObject(PluginShareHelper.TsslMessage, _tsslMessage);
                 registerObject(PluginShareHelper.TspbLoadDBProgress, _tspbLoadDbProgress);
             }

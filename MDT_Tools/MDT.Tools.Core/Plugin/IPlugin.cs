@@ -98,4 +98,25 @@ namespace MDT.Tools.Core.Plugin
             return result;
         }
     }
+
+    public class PluginComparer2 : IComparer<IPlugin>
+    {
+        public int Compare(IPlugin x, IPlugin y)
+        {
+            int result = 0;
+            if (x.Tag < y.Tag)
+            {
+                result = 1;
+            }
+            if (x.Tag < y.Tag)
+            {
+                result = -1;
+            }
+            if (x.Tag == y.Tag)
+            {
+                result = 0;
+            }
+            return result;
+        }
+    }
 }

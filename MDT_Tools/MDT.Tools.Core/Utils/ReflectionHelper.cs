@@ -109,7 +109,7 @@ namespace MDT.Tools.Core.Utils
 
                 foreach (Type t in types)
                 {
-                    if (t.IsSubclassOf(baseType) || baseType.IsAssignableFrom(t))
+                    if (t.IsPublic&&(t.IsSubclassOf(baseType) || baseType.IsAssignableFrom(t)))
                     {
                         bool canLoad = config.LoadAbstractType || (!t.IsAbstract);
                         if (canLoad)
