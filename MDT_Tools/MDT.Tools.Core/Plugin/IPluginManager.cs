@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MDT.Tools.Core.Plugin.WindowsPlugin;
 
 namespace MDT.Tools.Core.Plugin
 {
@@ -23,6 +24,8 @@ namespace MDT.Tools.Core.Plugin
     public interface IPluginManager
     {
         #region 属性
+
+        IForm Application { get; set; }
         /// <summary>
         /// CopyToMemory 是否将插件拷贝到内存后加载
         /// </summary>

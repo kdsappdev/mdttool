@@ -76,6 +76,22 @@ namespace MDT.Tools.Core.Plugin
     public class PluginHelper
     {
         public const string PluginSign1 = "Plugin.dll"; //所有的插件都以"Plugins.dll"结尾
+
+        #region 字典集合到List转换
+        public static List<IPlugin> DicToIlist(IEnumerable<KeyValuePair<int, IPlugin>> dic)
+        {
+            List<IPlugin> pluginList = new List<IPlugin>();
+            foreach (KeyValuePair<int, IPlugin> kvp in dic)
+            {
+                if (kvp.Value != null)
+                {
+                    pluginList.Add(kvp.Value);
+                }
+            }
+            return pluginList;
+        }
+        #endregion
+
  
     }
     public class PluginComparer : IComparer<IPlugin>

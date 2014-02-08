@@ -40,6 +40,8 @@ namespace MDT.Tools.Lua.Plugin
         {
             get { return "孔德帅"; }
         }
+        public LuaPlugin()
+        { }
         protected override void load()
         {
             Init();
@@ -281,7 +283,8 @@ namespace MDT.Tools.Lua.Plugin
 
         #region IPluginManager
 
-        private readonly IDictionary<int, IPlugin> _dicPlugin = new Dictionary<int, IPlugin>();
+
+
         private bool _copyToMemory = false;
 
         public bool CopyToMemory
@@ -300,7 +303,7 @@ namespace MDT.Tools.Lua.Plugin
         {
             get
             {
-                return dicToIlist(_dicPlugin);
+                return PluginHelper.DicToIlist(luaPlugins);
             }
         }
         private string _pluginSign="plugin.lua";
@@ -309,58 +312,57 @@ namespace MDT.Tools.Lua.Plugin
             set { _pluginSign = value; }
         }
 
-        #region 字典集合到List转换
-        private List<IPlugin> dicToIlist(IEnumerable<KeyValuePair<int, IPlugin>> dic)
-        {
-            List<IPlugin> pluginList = new List<IPlugin>();
-            foreach (KeyValuePair<int, IPlugin> kvp in dic)
-            {
-                if (kvp.Value != null)
-                {
-                    pluginList.Add(kvp.Value);
-                }
-            }
-            return pluginList;
-        }
-        #endregion
-
+        static bool isInit = false;
         public void Init()
         {
-            LoadDefault(_pluginSign);
+            if (!isInit)
+            {
+                isInit = true;
+                LoadDefault(_pluginSign);
+            }
         }
 
-
+        static bool isLoaded = false;
         public void Loading()
         {
-            List<IPlugin> plugins = dicToIlist(luaPlugins);
-            plugins.Sort(new PluginComparer());
-            foreach (IPlugin plugin in plugins)
+            if (!isLoaded)
             {
-                try
+                List<IPlugin> plugins = PluginHelper.DicToIlist(luaPlugins);
+                plugins.Sort(new PluginComparer());
+                foreach (IPlugin plugin in plugins)
                 {
-                    plugin.OnLoading();
+                    try
+                    {
+                        plugin.OnLoading();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Error(ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    LogHelper.Error(ex);
-                }
+                isLoaded = true;
             }
 
         }
+        static bool isUnloaded = false;
         public void Unloading()
         {
-            List<IPlugin> plugins = dicToIlist(luaPlugins);
-            plugins.Sort(new PluginComparer2());
-            foreach (IPlugin plugin in plugins)
+            if (!isUnloaded)
             {
-                try
+                List<IPlugin> plugins = PluginHelper.DicToIlist(luaPlugins);
+                plugins.Sort(new PluginComparer2());
+                foreach (IPlugin plugin in plugins)
                 {
-                    plugin.BeforeTerminating();
+                    try
+                    {
+                        plugin.BeforeTerminating();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Error(ex);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    LogHelper.Error(ex);
-                }
+                isUnloaded = true;
             }
         }
 

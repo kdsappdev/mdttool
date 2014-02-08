@@ -81,8 +81,9 @@ namespace MDT.Tools
             bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"], out _userClosing);
             //reStoreWorkSpace();
             _pluginUtils = new PluginUtils();
-            _pluginManager = new PluginManager(this);
-            _pluginManager.LoadDefault(PluginHelper.PluginSign1);
+            _pluginManager = new PluginManagers();
+            _pluginManager.Application = this;
+            _pluginManager.Init();
             Text = Text + string.Format(" Beta版本:V{0}(build{1})", ReflectionHelper.GetVersion(this.GetType().Assembly), ReflectionHelper.GetPe32Time(this.GetType().Assembly.Location).ToString("yyyyMMdd"));
             Icon = Resources.Ico;
             //((System.Reflection.AssemblyDescriptionAttribute)System.Reflection.AssemblyDescriptionAttribute.GetCustomAttribute(this.GetType().Assembly,
