@@ -30,35 +30,23 @@ Lua引擎提供的方法
 
 	registerObject(name, obj) - 注册插件之间共享的信息 name:信息key, obj:信息内容
 
-
 	getObject(pluginKey, name) - 获取插件之间共享的信息 pluginKey:信息key, name:信息内容
-
 
 	removeObject(name) - 移除插件之间共享的信息 name:信息key
 
-
 	unsubscribe(name, luaPluginKey) - 退订插件之间时时改变的信息 name:信息key, luaPluginKey:Lua插件的key
-
 
 	subscribe(name, luaPluginKey) - 订阅插件之间时时改变的信息 name:信息key, luaPluginKey:Lua插件的key
 
-
 	broadcast(name, o) - 广播插件之间时时改变的信息 name:信息key, o:信息内容
 
-
 	getPluginShareKey(name, pluginKey) - 获取插件共享的key name:信息key, pluginKey:Lua插件的key
-
-
 	getApplication() - 获取IApplication
-
 
 	debug(str) - 调试日志记录 str:日志内容
 
-
 	warn(str) - 警告日志记录 str:日志内容
 
-
-	error(ex) - 错误日志记录 ex:日志内容
-
+	error(ex) - 错误日志记录 ex:日志内容sssss
 注意：
 	1.编写的脚本要以ACSII编码保存，否则涉及中文的，就会乱码，并且文件的结尾要以plugin.lua命名，如:xx.plugin.lua
