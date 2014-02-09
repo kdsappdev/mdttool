@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using MDT.Tools.Core.Utils;
 
 
 namespace MDT.Tools
@@ -30,12 +31,13 @@ namespace MDT.Tools
 
         static void CurrentDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            MessageBox.Show(e.ExceptionObject.ToString());
+            LogHelper.Error(new Exception(e.ExceptionObject.ToString()));
         }
 
         static void ApplicationThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
-            MessageBox.Show(e.Exception.Message);
+            LogHelper.Error(e.Exception);
+
         }
     }
 }

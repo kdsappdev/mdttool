@@ -112,8 +112,7 @@ function  StatusBarSizeChanged(sender,e)
 end
 
 function tsmiCheckUpdate_Click(sender,e)
---ThreadPool.QueueUserWorkItem(checkUpdate)
-pcall(checkUpdate)
+ThreadPool.QueueUserWorkItem(checkUpdate)
 end
 
 function checkUpdate()
@@ -124,7 +123,7 @@ local suc,err=pcall(function()
     if (isUpdate) then
 	local dr = MessageBox.Show(application.MainMenu, "检查到有新版，是否升级?","提示",MessageBoxButtons.YesNo,MessageBoxIcon.Information)
                         if (dr == DialogResult.Yes) then
-                            Process.Start(ConfigurationSettings.AppSettings["AutoUpdate"], "true")
+                            Process.Start("MDT.Tools.AutoUpdater.exe", "true")
                             pcall(tsmiExit_Click)
                         end
     else                    
@@ -139,6 +138,7 @@ local suc,err=pcall(function()
 end
 
 function tsbExit_Click(sender,e)
+	application.PluginManager:Unloading();
 	Application.Exit()
 end
 function tsmiAbout_Click(sender,e)
