@@ -23,10 +23,10 @@ local pluginKey=42
 local pluginName='维护数据库中的字段插件'
 local description='维护当前数据库的所有字段信息'
 local author='孔德帅'
-
+local version='1.0.0.0'
 --插件方法:初始化
 function init()
-	return tag,pluginKey,pluginName,description,author
+	return tag,pluginKey,pluginName,description,author,version
 end
 --创建按钮
 

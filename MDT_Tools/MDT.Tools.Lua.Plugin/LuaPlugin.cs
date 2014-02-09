@@ -89,7 +89,7 @@ namespace MDT.Tools.Lua.Plugin
                         LogHelper.Debug(luaEngine.ToString());
                         luaEngine.DoFile(fileName);
                         object[] luaPa = luaEngine.Invoke("init");
-                        if (luaPa != null && luaPa.Length == 5)
+                        if (luaPa != null && luaPa.Length == 6)
                         {
                             int temp = 0;
                             int tag = 0;
@@ -101,8 +101,9 @@ namespace MDT.Tools.Lua.Plugin
                             {
                                 pluginKey = temp;
                             }
-                            LuaScriptPlugin lsp = new LuaScriptPlugin(tag,pluginKey,luaPa[2]+"",luaPa[3]+"",luaPa[4]+"");
+                            LuaScriptPlugin lsp = new LuaScriptPlugin(tag, pluginKey, luaPa[2] + "", luaPa[3] + "", luaPa[4] + "", luaPa[5] + "");
                             lsp.LuaEngine = luaEngine;
+                            lsp.Application = Application;
                             if (luaPlugins.ContainsKey(lsp.PluginKey))
                             {
                                 luaPlugins.Remove(lsp.PluginKey);
@@ -405,12 +406,17 @@ namespace MDT.Tools.Lua.Plugin
 
         public IPlugin GetPlugin(int pluginKey)
         {
-            throw new NotImplementedException();
+            IPlugin plugin = null;
+            if (ContainsPlugin(pluginKey))
+            {
+                plugin = luaPlugins[pluginKey];
+            }
+            return plugin;
         }
 
         public bool ContainsPlugin(int pluginKey)
         {
-            throw new NotImplementedException();
+            return luaPlugins.ContainsKey(pluginKey);
         }
 
         public event PluginChanged PluginChanged;

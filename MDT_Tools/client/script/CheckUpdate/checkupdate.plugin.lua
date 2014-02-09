@@ -15,10 +15,11 @@ local pluginName='框架升级'
 local description='框架中增加自动升级程序'
 local author='孔德帅'
 
+local version='1.0.0.0'
 
 
 function init()
-	return tag,pluginKey,pluginName,description,author
+	return tag,pluginKey,pluginName,description,author,version
 end
 
 
