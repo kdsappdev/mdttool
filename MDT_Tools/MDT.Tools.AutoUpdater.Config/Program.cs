@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
+using MDT.Tools.Core.Utils;
 
 namespace MDT.Tools.AutoUpdater.Config
 {
@@ -22,7 +23,13 @@ namespace MDT.Tools.AutoUpdater.Config
         static string url = System.Configuration.ConfigurationSettings.AppSettings["url"];
         private static string enableClientStr = System.Configuration.ConfigurationSettings.AppSettings["enableClient"];
         private static string clientPath = System.Configuration.ConfigurationSettings.AppSettings["clientPath"];
-        private static bool enableClient = bool.TryParse(enableClientStr, out enableClient);
+        private static bool enableClient = false;
+
+        private static string enableEncrpterRunTimeConfigStr = System.Configuration.ConfigurationSettings.AppSettings["enableEncrpterRunTimeConfig"];
+        private static bool enableEncrpterRunTimeConfig = true;
+
+        private static string RunTimeConfigPath = System.Configuration.ConfigurationSettings.AppSettings["RunTimeConfigPath"];
+        private static string privateKey = System.Configuration.ConfigurationSettings.AppSettings["privateKey"];
         static void Main(string[] args)
         {
             if (args != null && args.Length >= 1)
@@ -31,6 +38,9 @@ namespace MDT.Tools.AutoUpdater.Config
             }
 
 
+            bool.TryParse(enableClientStr, out enableClient);
+
+            bool.TryParse(enableEncrpterRunTimeConfigStr, out enableEncrpterRunTimeConfig);
             #region client
 
             XmlDocument clientDoc = new XmlDocument();
@@ -70,10 +80,25 @@ namespace MDT.Tools.AutoUpdater.Config
             {
                 clientDoc.Save(clientPath + clientXmlName);
             }
+
+
+            encryptRunTimeConfig();
+        }
+
+        private static void encryptRunTimeConfig()
+        {
+            if (enableEncrpterRunTimeConfig)
+            {
+                var fi = new FileInfo(RunTimeConfigPath);
+                StreamReader sr = fi.OpenText();
+                string content = sr.ReadToEnd();
+                sr.Close();
+                File.WriteAllText(RunTimeConfigPath, EncrypterHelper.EncryptRASString(content, privateKey));
+            }
         }
 
         //递归组装xml文件方法
-        private static void PopuAllDirectory(XmlDocument doc, XmlElement root,XmlDocument clientDoc,XmlElement clientRoot, DirectoryInfo dicInfo)
+        private static void PopuAllDirectory(XmlDocument doc, XmlElement root, XmlDocument clientDoc, XmlElement clientRoot, DirectoryInfo dicInfo)
         {
             foreach (FileInfo f in dicInfo.GetFiles())
             {
@@ -98,25 +123,25 @@ namespace MDT.Tools.AutoUpdater.Config
                         child.SetAttribute("url", str);
                         child.SetAttribute("lastver", string.IsNullOrEmpty(version) ? "1.0.0.0" : version);
                         child.SetAttribute("size", f.Length.ToString());
-                        child.SetAttribute("md5", ByteArrayToHexString(HashData(f.OpenRead(),"md5")));
+                        child.SetAttribute("md5", ByteArrayToHexString(HashData(f.OpenRead(), "md5")));
                         child.SetAttribute("needRestart", "true");
                         root.AppendChild(child);
 
 
                         XmlElement clientChild = clientDoc.CreateElement("LocalFile");
                         clientChild.SetAttribute("path", f.Name);
-                         
+
                         clientChild.SetAttribute("lastver", string.IsNullOrEmpty(version) ? "1.0.0.0" : version);
                         clientChild.SetAttribute("size", f.Length.ToString());
-                        clientChild.SetAttribute("md5", ByteArrayToHexString(HashData(f.OpenRead(),"md5")));
-                       
+                        clientChild.SetAttribute("md5", ByteArrayToHexString(HashData(f.OpenRead(), "md5")));
+
                         clientRoot.AppendChild(clientChild);
                     }
                 }
             }
 
             foreach (DirectoryInfo di in dicInfo.GetDirectories())
-                PopuAllDirectory(doc, root,clientDoc, clientRoot, di);
+                PopuAllDirectory(doc, root, clientDoc, clientRoot, di);
 
 
         }

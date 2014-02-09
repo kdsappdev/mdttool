@@ -192,6 +192,7 @@
     <Compile Include="UI\ToolWindow.Designer.cs">
       <DependentUpon>ToolWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils\BigInteger.cs" />
     <Compile Include="Utils\EncodingHelper.cs" />
     <Compile Include="Utils\EncrypterHelper.cs" />
     <Compile Include="Utils\FileHelper.cs" />

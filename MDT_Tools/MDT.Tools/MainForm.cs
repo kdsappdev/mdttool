@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Windows.Forms;
-using KnightsWarriorAutoupdater;
+
 using MDT.Tools.Core.Plugin;
 using MDT.Tools.Core.Plugin.WindowsPlugin;
 using MDT.Tools.Core.UI;
@@ -15,7 +15,7 @@ namespace MDT.Tools
 {
     public partial class MainForm : Form, IForm
     {
-        
+
         public MainForm()
         {
             InitializeComponent();
@@ -26,44 +26,6 @@ namespace MDT.Tools
         private void MainFormLoad(object sender, EventArgs e)
         {
             _pluginManager.Loading();
-            System.Threading.ThreadPool.QueueUserWorkItem(o =>
-                                                              {
-                                                                  #region
-
-                                                                   
-                                                                  IAutoUpdater autoUpdater = new AutoUpdater();
-                                                                  bool isUpdate = false;
-                                                                  try
-                                                                  {
-                                                                      isUpdate = autoUpdater.IsUpdate();
-                                                                      if (isUpdate)
-                                                                      {
-                                                                          DialogResult dr = MessageBox.Show(this,
-                                                                                                            "检查到有新版，是否升级?",
-                                                                                                            "提示",
-                                                                                                            MessageBoxButtons
-                                                                                                                .YesNo,
-                                                                                                            MessageBoxIcon.
-                                                                                                                Information);
-                                                                          if (dr == DialogResult.Yes)
-                                                                          {
-                                                                              Process.Start(
-                                                                                  System.Configuration.ConfigurationSettings
-                                                                                      .
-                                                                                      AppSettings["AutoUpdate"], "true");
-                                                                              TsmiExitClick(null, null);
-                                                                          }
-                                                                      }
-                                                                  }
-                                                                  catch
-                                                                  {
-                                                                       
-                                                                  }
-
-                                                                  #endregion                                                                  
-                                                                 
-                                                              });
-
         }
 
         private void TsmiAboutClick(object sender, EventArgs e)
@@ -81,7 +43,11 @@ namespace MDT.Tools
             bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"], out _userClosing);
             //reStoreWorkSpace();
             _pluginUtils = new PluginUtils();
-            _pluginManager = new PluginManagers();
+
+            PluginManagers pms = new PluginManagers();
+            pms.RunTimeConfigPath = System.Configuration.ConfigurationSettings.AppSettings["RunTimeConfigPath"];
+            pms.PublicKey = System.Configuration.ConfigurationSettings.AppSettings["PublicKey"];
+            _pluginManager = pms;
             _pluginManager.Application = this;
             _pluginManager.Init();
             Text = Text + string.Format(" Beta版本:V{0}(build{1})", ReflectionHelper.GetVersion(this.GetType().Assembly), ReflectionHelper.GetPe32Time(this.GetType().Assembly.Location).ToString("yyyyMMdd"));
@@ -91,7 +57,7 @@ namespace MDT.Tools
             notifyIcon1.Text = Text;
             notifyIcon1.Icon = Icon;
 
-            
+
         }
 
         #endregion
@@ -125,7 +91,7 @@ namespace MDT.Tools
             get { return DockPanelWeifenLuo; }
         }
 
-        
+
 
         public ContextMenuStrip MainContextMenu
         {
@@ -285,10 +251,10 @@ namespace MDT.Tools
             }
         }
         private IDockContent GetContentFromPersistString(string str)
-        {          
-            string[] strs = str.Split(new char[] { ','});
+        {
+            string[] strs = str.Split(new char[] { ',' });
             IDockContent dc = Assembly.Load(strs[1]).CreateInstance(strs[0]) as IDockContent;
-            return dc;             
+            return dc;
         }
         #endregion
 

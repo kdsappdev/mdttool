@@ -43,10 +43,12 @@ namespace MDT.Tools
             set { _pluginSign = value; }
         }
 
-
-
+        public string RunTimeConfigPath { get; set; }
+        public string PublicKey { get; set; }
+        private RunTimeConfig rtc;
         public void Init()
         {
+            rtc = IniConfigHelper.ReadRunTimeConfig(RunTimeConfigPath, PublicKey);
             LoadDefault(_pluginSign);
         }
 
@@ -54,12 +56,44 @@ namespace MDT.Tools
         {
             List<IPlugin> plugins = PluginHelper.DicToIlist(_dicPlugin);
             plugins.Sort(new PluginComparer());
-            foreach (IPlugin plugin in plugins)
+            List<IPlugin> framePlugins = new List<IPlugin>();
+            List<IPlugin> functionPlugins = new List<IPlugin>();
+            foreach (int framePluginKey in rtc.GetFramePluginKeyList)
+            {
+                IPlugin p = GetPlugin(framePluginKey);
+                if (p != null)
+                {
+                    plugins.Remove(p);
+                    framePlugins.Add(p);
+                }
+            }
+            foreach (int functionPluginKey in rtc.GetFunctionPluginKeyList)
+            {
+                IPlugin p = GetPlugin(functionPluginKey);
+                if (p != null)
+                {
+                    plugins.Remove(p);
+                    functionPlugins.Add(p);
+                }
+            }
+
+            foreach (IPlugin plugin in framePlugins)
             {
                 try
                 {
                     plugin.OnLoading();
-                    
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error(ex);
+                }
+            }
+            
+            foreach (IPlugin plugin in plugins)
+            {
+                try
+                {
+                    plugin.OnLoading();                    
 
                 }
                 catch (Exception ex)
@@ -73,12 +107,48 @@ namespace MDT.Tools
         {
             List<IPlugin> plugins = PluginHelper.DicToIlist(_dicPlugin);
             plugins.Sort(new PluginComparer2());
+            List<IPlugin> framePlugins = new List<IPlugin>();
+            List<IPlugin> functionPlugins = new List<IPlugin>();
+            foreach (int framePluginKey in rtc.GetFramePluginKeyList)
+            {
+                IPlugin p = GetPlugin(framePluginKey);
+                if (p != null)
+                {
+                    plugins.Remove(p);
+                    framePlugins.Add(p);
+                }
+            }
+            foreach (int functionPluginKey in rtc.GetFunctionPluginKeyList)
+            {
+                IPlugin p = GetPlugin(functionPluginKey);
+                if (p != null)
+                {
+                    plugins.Remove(p);
+                    functionPlugins.Add(p);
+                }
+            }
+
+            
+            
+
+           
             foreach (IPlugin plugin in plugins)
             {
                 try
                 {
                     plugin.BeforeTerminating();
                     
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error(ex);
+                }
+            }
+            for (int i = framePlugins.Count - 1; i >= 0; i--)
+            {
+                try
+                {
+                    framePlugins[i].BeforeTerminating();
                 }
                 catch (Exception ex)
                 {
@@ -101,6 +171,7 @@ namespace MDT.Tools
             for (int i = 0; i < pluginManagerTypeList.Count; i++)
             {
                 var pluginManager = (IPluginManager)Activator.CreateInstance(pluginManagerTypeList[i]);
+                pluginManager.CopyToMemory = CopyToMemory;
                 pluginManager.Application = Application;
                 pluginManager.Init();
                 foreach (var plugin in pluginManager.PluginList)
@@ -141,12 +212,17 @@ namespace MDT.Tools
 
         public IPlugin GetPlugin(int pluginKey)
         {
-            throw new NotImplementedException();
+            IPlugin plugin=null;
+            if (ContainsPlugin(pluginKey))
+            {
+                plugin = _dicPlugin[pluginKey];
+            }
+            return plugin;
         }
 
         public bool ContainsPlugin(int pluginKey)
         {
-            throw new NotImplementedException();
+            return _dicPlugin.ContainsKey(pluginKey);
         }
 
         public event PluginChanged PluginChanged;
