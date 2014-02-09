@@ -7,10 +7,10 @@ Lua插件接口：
 	local pluginName='test'--插件名称
 	local description='test'--插件描述
 	local author='孔德帅'--插件编写者
-
+	local version='1.0.0.0'--版本号
 	--插件方法:初始化
 	function init()
-		return tag,pluginKey,pluginName,description,author
+		return tag,pluginKey,pluginName,description,author,version
 	end
 2.加载
 	function load()

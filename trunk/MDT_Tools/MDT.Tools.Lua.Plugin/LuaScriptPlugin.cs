@@ -18,6 +18,7 @@ namespace MDT.Tools.Lua.Plugin
         private string _author;
         private string _pluginName;
         private int _pluginKey;
+        private string _version;
 
         public override int Tag
         {
@@ -44,13 +45,21 @@ namespace MDT.Tools.Lua.Plugin
         {
             get { return _author; }
         }
-        public LuaScriptPlugin(int tag, int pluginKey, string pluginName, string description, string author)
+        public new string Version
+        {
+            get
+            {
+                return _version;
+            }
+        }
+        public LuaScriptPlugin(int tag, int pluginKey, string pluginName, string description, string author,string version)
         {
             _tag = tag;
             _pluginKey = pluginKey;
             _pluginName = pluginName;
             _description = description;
             _author = author;
+            _version = version;
         }
 
         protected override void load()

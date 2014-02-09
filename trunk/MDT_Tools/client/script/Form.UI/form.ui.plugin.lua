@@ -18,11 +18,11 @@ local pluginKey=43
 local pluginName='UI插件'
 local description='form框架中提供的基本界面'
 local author='孔德帅'
-
+local version='1.0.0.0'
 
 
 function init()
-	return tag,pluginKey,pluginName,description,author
+	return tag,pluginKey,pluginName,description,author,version
 end
 --菜单栏
 --帮助
