@@ -18,43 +18,37 @@ local author='孔德帅'
 
 
 function init()
-return tag,pluginKey,pluginName,description,author
+	return tag,pluginKey,pluginName,description,author
 end
 
 
 function load()
-ThreadPool.QueueUserWorkItem(checkUpdate)
+	ThreadPool.QueueUserWorkItem(checkUpdate)
 end
 
 function checkUpdate()
-
-local suc,err=pcall(function()
-	local autoUpdater = AutoUpdater()
-    local isUpdate= autoUpdater:IsUpdate()
 	
-    if (isUpdate) then
-	local dr = MessageBox.Show(application.MainMenu, "检查到有新版，是否升级?","提示",MessageBoxButtons.YesNo,MessageBoxIcon.Information)
-                        if (dr == DialogResult.Yes) then
-                            Process.Start("MDT.Tools.AutoUpdater.exe", "true")
-                            
-            getObject(43,"tsbExit"):PerformClick();
-                        end
-    
-	end   
-	end)
-	
-	
-	
+	local suc,err=pcall(function()
+		local autoUpdater = AutoUpdater()
+		local isUpdate= autoUpdater:IsUpdate()
+		
+		if (isUpdate) then
+			local dr = MessageBox.Show(application.MainMenu, "检查到有新版，是否升级?","提示",MessageBoxButtons.YesNo,MessageBoxIcon.Information)
+			if (dr == DialogResult.Yes) then
+				Process.Start("MDT.Tools.AutoUpdater.exe", "true")
+				
+				getObject(43,"tsbExit"):PerformClick();
+			end
+			
+		end
+	end)	
 end
 
-
-
-
 function unload()
-
+	
 end
 
 
 function onNotify(name,o)
-
+	
 end
