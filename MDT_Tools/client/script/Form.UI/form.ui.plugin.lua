@@ -132,7 +132,7 @@ function checkUpdate()
 	end)
 	
 	if not suc then
-		MessageBox.Show(application.MainMenu, "检查失败[" .. err .."]", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
+		MessageBox.Show(application.MainMenu, "检查失败", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
 	end
 	
 end
