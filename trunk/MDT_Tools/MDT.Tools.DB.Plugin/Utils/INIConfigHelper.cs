@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Plugin.Model;
 
@@ -55,9 +56,10 @@ namespace MDT.Tools.DB.Plugin.Utils
             try
             {
 
-                var fi = new FileInfo(FilePathHelper.SystemConfig);
-                StreamReader sr = fi.OpenText();
+              
+                StreamReader sr = new StreamReader(FilePathHelper.SystemConfig,Encoding.Default);
                 string content = sr.ReadToEnd();
+                
                 string[] temps = content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
                 sr.Close();
                 string dbType = "";
