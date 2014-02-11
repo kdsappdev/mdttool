@@ -19,8 +19,6 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
     {
 
         public JavaCodeGenConfig cmc;
-
-        private IbatisConfigHelper ibatisConfigHelper = new IbatisConfigHelper();
         public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
             try
@@ -37,7 +35,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                 {
                     if (cmc.CodeRule == CodeGenRuleHelper.Ibatis)
                     {
-                        ibatisConfigHelper.ReadConfig(cmc.Ibatis);
+                        CodeGenHelper.ReadConfig(cmc.Ibatis);
                     }
 
                     if (!cmc.IsShowGenCode)
