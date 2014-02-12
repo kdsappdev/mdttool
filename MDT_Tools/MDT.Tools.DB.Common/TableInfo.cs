@@ -31,6 +31,13 @@ namespace MDT.Tools.DB.Common
 
     public class ColumnInfo
     {
+        private bool isChanged = false;
+        public bool IsChanged
+        {
+            get { return isChanged; }
+            set { isChanged = value; }
+
+        }
         private string name;
 
         public string Name
@@ -39,11 +46,28 @@ namespace MDT.Tools.DB.Common
             set { name = value; }
         }
         private string comments;
-
+        private string oldComments;
+        private bool isfirst = true;
         public string Comments
         {
             get { return comments; }
-            set { comments = value; }
+            set { 
+                comments = value;
+                if (isfirst)
+                {
+                    oldComments = comments;
+                    isfirst = false;
+                }
+                if (comments != oldComments)
+                {
+                    isChanged = true;
+                }
+                else
+                {
+                    isChanged = false;
+                }
+
+            }
         }
         private string dataType;
 

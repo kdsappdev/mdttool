@@ -89,7 +89,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin
         private readonly ToolStripMenuItem _tsibsGen = new ToolStripMenuItem();
         private readonly ToolStripMenuItem _tsiwsGen = new ToolStripMenuItem();
         private readonly ToolStripMenuItem _tsispringConfigGen = new ToolStripMenuItem();
-        private delegate void Simple();
+       
         protected override void AddContextMenu()
         {
             if (Application.MainContextMenu.InvokeRequired)

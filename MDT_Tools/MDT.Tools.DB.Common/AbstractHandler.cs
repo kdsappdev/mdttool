@@ -60,8 +60,8 @@ namespace MDT.Tools.DB.Common
                 {
                     string tableName = drTable["name"] + "";
                     string tableComments = drTable["comments"] + "";
-                    tableComments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding,
-                                                                       tableComments);
+                    //tableComments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding,
+                    //                                                   tableComments);
                     TableInfo tableInfo = new TableInfo();
                     tableInfo.TableName = tableName;
                     tableInfo.TableComments = tableComments;
@@ -90,8 +90,9 @@ namespace MDT.Tools.DB.Common
                         {
                             columnInfo.IsForeignkey = true;
                         }
-                        columnInfo.Comments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding, columnInfo.Comments);
-                          tableInfo.Columns.Add(columnInfo);
+                        //columnInfo.Comments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding, columnInfo.Comments);
+                        
+                        tableInfo.Columns.Add(columnInfo);
                     }
 
                     lt.Add(tableInfo);

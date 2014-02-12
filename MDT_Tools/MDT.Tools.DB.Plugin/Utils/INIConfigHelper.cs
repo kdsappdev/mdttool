@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using MDT.Tools.Core.Utils;
+using MDT.Tools.DB.Common;
 using MDT.Tools.DB.Plugin.Model;
 
 namespace MDT.Tools.DB.Plugin.Utils
@@ -15,10 +16,10 @@ namespace MDT.Tools.DB.Plugin.Utils
 
         private static void CreateFile()
         {
-            FileHelper.CreateDirectory(FilePathHelper.SystemConfig);
-            if (!File.Exists(FilePathHelper.SystemConfig))
+            FileHelper.CreateDirectory(DBFileHelper.SystemConfig);
+            if (!File.Exists(DBFileHelper.SystemConfig))
             {
-                FileStream fs = File.Create(FilePathHelper.SystemConfig);
+                FileStream fs = File.Create(DBFileHelper.SystemConfig);
                 fs.Close();
             }
 
@@ -26,7 +27,7 @@ namespace MDT.Tools.DB.Plugin.Utils
         public static void DeleteFile()
         {
 
-            File.Delete(FilePathHelper.SystemConfig);
+            File.Delete(DBFileHelper.SystemConfig);
 
         }
 
@@ -39,7 +40,7 @@ namespace MDT.Tools.DB.Plugin.Utils
                 try
                 {
                     CreateFile();
-                    WritePrivateProfileString(dbConfigInfo.DbType, dbConfigInfo.DbConfigName, dbConfigInfo.ConnectionString, FilePathHelper.SystemConfig);
+                    WritePrivateProfileString(dbConfigInfo.DbType, dbConfigInfo.DbConfigName, dbConfigInfo.ConnectionString, DBFileHelper.SystemConfig);
                     status = true;
                 }
                 catch (Exception ex)
@@ -57,7 +58,7 @@ namespace MDT.Tools.DB.Plugin.Utils
             {
 
               
-                StreamReader sr = new StreamReader(FilePathHelper.SystemConfig,Encoding.Default);
+                StreamReader sr = new StreamReader(DBFileHelper.SystemConfig,Encoding.Default);
                 string content = sr.ReadToEnd();
                 
                 string[] temps = content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);

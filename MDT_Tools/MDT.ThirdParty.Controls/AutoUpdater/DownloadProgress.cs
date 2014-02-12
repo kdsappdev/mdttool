@@ -114,7 +114,7 @@ namespace KnightsWarriorAutoupdater
                         clientDownload = new WebClient();
 
                         //Added the function to support proxy
-                        clientDownload.Proxy = System.Net.WebProxy.GetDefaultProxy();
+                        clientDownload.Proxy = new System.Net.WebProxy();
                         clientDownload.Proxy.Credentials = CredentialCache.DefaultCredentials;
                         clientDownload.Credentials = System.Net.CredentialCache.DefaultCredentials;
                         //End added
@@ -189,7 +189,7 @@ namespace KnightsWarriorAutoupdater
                 }
 
             }
-            catch (Exception e)
+            catch
             {
                 ShowErrorAndRestartApplication();
                 //throw;
@@ -288,7 +288,7 @@ namespace KnightsWarriorAutoupdater
 
                     }
                 }
-                catch (Exception exp)
+                catch 
                 {
                     //log the error message,you can use the application's log code
                 }

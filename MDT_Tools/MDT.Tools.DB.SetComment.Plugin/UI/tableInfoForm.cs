@@ -8,10 +8,7 @@ using System.Windows.Forms;
 using MDT.Tools.Core.Utils;
 using WeifenLuo.WinFormsUI.Docking;
 using MDT.Tools.Core.Resources;
-using ICSharpCode.TextEditor;
-using ICSharpCode.TextEditor.Gui.CompletionWindow;
 using ICSharpCode.TextEditor.Document;
-using ICSharpCode.TextEditor.Actions;
 using MDT.Tools.DB.Common;
 namespace MDT.Tools.DB.SetComment.Plugin.UI
 {
@@ -48,15 +45,17 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
 
         public setComment sc;
 
-        private readonly NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
+       
 
         private void bindSql()
         {
 
             tbScript.Text = createTableSql() + createCommentSql();
+            tbScript.Refresh();
         }
         private string createTableSql()
         {
+             NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             Dictionary<string, object> dic = new Dictionary<string, object>();
             dic.Add("tableInfo", tableInfo);
             dic.Add("codeGenHelper", new CodeGenHelper());
@@ -65,6 +64,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
 
         private string createCommentSql()
         {
+            NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             Dictionary<string, object> dic = new Dictionary<string, object>();
             dic.Add("tableInfo", tableInfo);
             dic.Add("codeGenHelper", new CodeGenHelper());
@@ -116,7 +116,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                 }
                 foreach (ColumnInfo column in tableInfo.Columns)
                 {
-                    if (!string.IsNullOrEmpty(column.Comments))
+                    if (column.IsChanged)
                     {
                         temp = column.Comments;
                         DataRow[] drs = sc.dsTableColumn.Tables[sc.dbName + sc.DBtablesColumns].Select("TABLE_NAME = '" + tableInfo.TableName + "' and COLUMN_NAME = '" + column.Name + "'");

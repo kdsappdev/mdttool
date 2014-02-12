@@ -122,7 +122,6 @@
       <DependentUpon>OracleDBConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\DBType.cs" />
-    <Compile Include="Utils\FilePathHelper.cs" />
     <Compile Include="Utils\INIConfigHelper.cs" />
     <Compile Include="Utils\PluginShareHelper.cs" />
     <Compile Include="Utils\SqlDefHelper.cs" />
@@ -136,6 +135,11 @@
     <ProjectReference Include="..\MDT.Tools.Core\MDT.Tools.Core.csproj">
       <Project>{D53A3267-6A1D-4258-B7A7-14BBEDA88D44}</Project>
       <Name>MDT.Tools.Core</Name>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj">
+      <Project>{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}</Project>
+      <Name>MDT.Tools.DB.Common</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
