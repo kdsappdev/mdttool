@@ -89,7 +89,7 @@ namespace MDT.Tools.Template.Plugin
         #region 增加上下文菜单
 
         
-        private delegate void Simple();
+       
 
         private ContextMenuStrip fixCmcSubPlugin;
         protected override void AddContextMenu()
@@ -105,7 +105,6 @@ namespace MDT.Tools.Template.Plugin
                 TemplateConfig templateConfig = IniConfigHelper.ReadTemplateConfig();
                 if (templateConfig.TemplateNum > 0)
                 {
-                    bool flag = false;
                     foreach (var template in templateConfig.TemplateParas)
                     {
                         if (template.DataTye == "DB")

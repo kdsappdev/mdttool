@@ -28,7 +28,7 @@ namespace MDT.Tools.Template.Plugin.Gen
                 OutPut = TemplateParas.SaveFilePath;
                 setEnable(false);
                 setStatusBar("");
-                string[] strs = null;
+               
                 if (!TemplateParas.IsShowGenCode)
                 {
                     FileHelper.DeleteDirectory(OutPut);
@@ -89,7 +89,7 @@ namespace MDT.Tools.Template.Plugin.Gen
                 OutPut = TemplateParas.SaveFilePath;
                 setEnable(false);
                 setStatusBar("");
-                string[] strs = null;
+               
 
                 if (drTables != null && dsTableColumns != null)
                 {
