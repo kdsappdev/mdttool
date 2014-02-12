@@ -103,6 +103,12 @@ namespace MDT.Tools.DB.Plugin.UI
                                 createTreeNode();
                                 isChanged = true;
                             }
+                            else if(dr2.Equals(DialogResult.Yes))
+                            {
+                                dbConfigInfos.Remove(dbConfigInfo);
+                                dbConfigInfos.Insert(0,of2.DbConfigInfo);
+                                isChanged = true;
+                            }
                         }
                     }
                     break;

@@ -2,15 +2,21 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
 using MDT.Tools.Core.UI;
 using MDT.Tools.Core.Resources;
+using MDT.Tools.Core.Utils;
+using MDT.Tools.DB.Common;
 using MDT.Tools.DB.Plugin.Model;
 using MDT.Tools.DB.Plugin.UI;
 using MDT.Tools.DB.Plugin.Utils;
 using WeifenLuo.WinFormsUI.Docking;
+using DBType = MDT.Tools.DB.Plugin.Utils.DBType;
+using PluginShareHelper = MDT.Tools.DB.Plugin.Utils.PluginShareHelper;
 
 namespace MDT.Tools.DB.Plugin
 {
@@ -70,7 +76,7 @@ namespace MDT.Tools.DB.Plugin
             _dsTablePrimaryKey.Clear();
             ClearTree();
             RemoveShareData();
-             
+
             RemoveTool();
             RemoveStatus();
             RemoveTreeControl();
@@ -121,9 +127,9 @@ namespace MDT.Tools.DB.Plugin
             else
             {
 
-               
+
                 _tsmiSystem.Text = "系统(&S)";
-                _tsmiDbSet.Text=_tsbDbSet.Text = "数据库配置";
+                _tsmiDbSet.Text = _tsbDbSet.Text = "数据库配置";
                 _tsmiDbConfig.DisplayStyle = _tsbDbSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                 _tsbDbSet.Click += tsbDBSet_Click;
                 _tsmiDbSet.Click += tsbDBSet_Click;
@@ -132,8 +138,8 @@ namespace MDT.Tools.DB.Plugin
                 _tscbDbConfig.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                 _tscbDbConfig.SelectedIndexChanged += TscbDbConfigSelectedIndexChanged;
 
-                _tsmiDbConfig.Text=_tsbDbReSet.Text = "重新加载数据库";
-                _tsmiDbConfig.DisplayStyle=_tsbDbReSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+                _tsmiDbConfig.Text = _tsbDbReSet.Text = "重新加载数据库";
+                _tsmiDbConfig.DisplayStyle = _tsbDbReSet.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                 _tsbDbReSet.Click += TsbDbReSetClick;
                 _tsmiDbConfig.Click += TsbDbReSetClick;
                 _tsmiDbConfig.Image = _tsbDbReSet.Image = Resources.reload;
@@ -142,7 +148,7 @@ namespace MDT.Tools.DB.Plugin
                 _tsmiExit.Image = Resources.exit;
                 _tsmiExit.Click += new EventHandler(_tsmiExit_Click);
                 _tsmiSystem.DropDownItems.Add(_tsmiDbSet);
-                _tsmiSystem.DropDownItems.Add( _tsmiDbConfig);
+                _tsmiSystem.DropDownItems.Add(_tsmiDbConfig);
                 _tsmiSystem.DropDownItems.Add(_tsmiSeparator);
                 _tsmiSystem.DropDownItems.Add(_tsmiExit);
                 Application.MainMenu.Items.Insert(0, _tsmiSystem);
@@ -205,8 +211,8 @@ namespace MDT.Tools.DB.Plugin
 
         #region 增加状态栏
 
-         ToolStripStatusLabel _tsslMessage = new ToolStripStatusLabel();
-         ToolStripProgressBar _tspbLoadDbProgress = new ToolStripProgressBar();
+        ToolStripStatusLabel _tsslMessage = new ToolStripStatusLabel();
+        ToolStripProgressBar _tspbLoadDbProgress = new ToolStripProgressBar();
         private void AddStatus()
         {
             if (_mainTool.InvokeRequired)
@@ -335,8 +341,8 @@ namespace MDT.Tools.DB.Plugin
             }
             else
             {
-                _tsbDbSet.Enabled = flag;
-                _tsbDbReSet.Enabled = flag;
+                _tsmiDbSet.Enabled = _tsbDbSet.Enabled = flag;
+                _tsmiDbConfig.Enabled = _tsbDbReSet.Enabled = flag;
                 _tscbDbConfig.Enabled = flag;
                 _tspbLoadDbProgress.Visible = !flag;
                 SetTbDbEnable(flag);
@@ -586,15 +592,15 @@ namespace MDT.Tools.DB.Plugin
 
         #region 初始化
         private readonly BackgroundWorker _backgroundWorkerLoadDb = new BackgroundWorker();
-       ContextMenuStrip contextMenuStrip=new ContextMenuStrip();
+        ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
         protected override void load()
         {
-         
+
             registerObject(PluginShareHelper.DBtable, Tables);
             registerObject(PluginShareHelper.DBtablesColumns, TablesColumns);
             registerObject(PluginShareHelper.DBviews, Views);
             registerObject(PluginShareHelper.DBtablesPrimaryKeys, TablesPrimaryKeys);
-            
+
             _mainTool = Application.MainMenu;
             foreach (IDockContent content in Application.Panel.Contents)
             {
@@ -793,25 +799,28 @@ namespace MDT.Tools.DB.Plugin
             return dbConfigInfo;
         }
 
-        private bool _isLoadSuccess;
+        private bool _isLoadSuccess = false;
         private void LoadDbInfoBySync(bool reloadDb)
         {
+            _isLoadSuccess = false;
             DbConfigInfo dbConfigInfo = GetCurenctDbConfigInfo();
+            string TargetEncoding = "";
+            string OriginalEncoding = "";
             if (dbConfigInfo != null)
             {
                 try
                 {
                     #region 贡献当前数据库配置信息
+
                     if ("Oracle".Equals(dbConfigInfo.DbType))
                     {
-                        registerObject(PluginShareHelper.TargetEncoding, "GBK");
-                        registerObject(PluginShareHelper.OriginalEncoding, "ISO-8859-1");
+                        TargetEncoding = "GBK";
+                        OriginalEncoding = "ISO-8859-1";
                     }
-                    else
-                    {
-                        registerObject(PluginShareHelper.TargetEncoding, "");
-                        registerObject(PluginShareHelper.OriginalEncoding, "");
-                    }
+
+                    registerObject(PluginShareHelper.TargetEncoding, TargetEncoding);
+                    registerObject(PluginShareHelper.OriginalEncoding, OriginalEncoding);
+
                     registerObject(PluginShareHelper.DBCurrentDBName, dbConfigInfo.DbConfigName);
                     registerObject(PluginShareHelper.DBCurrentDBConnectionString, dbConfigInfo.ConnectionString);
                     registerObject(PluginShareHelper.DBCurrentDBType, dbConfigInfo.DbType);
@@ -827,13 +836,13 @@ namespace MDT.Tools.DB.Plugin
                     }
 
                     #region 从本地读取数据
-                    bool status = FilePathHelper.IsExist(dbConfigInfo.DbConfigName, Tables);
-                    //MessageBox.Show(status + ":" + reloadDb);
+                    bool status = DBFileHelper.IsExist(dbConfigInfo.DbConfigName, Tables);
+
                     if (!reloadDb)
                     {
                         if (status)
                         {
-                            FilePathHelper.ReadXml(_dsTable, dbConfigInfo.DbConfigName, Tables);
+                            DBFileHelper.ReadXml(_dsTable, dbConfigInfo.DbConfigName, Tables);
                         }
                     }
                     #endregion
@@ -842,9 +851,11 @@ namespace MDT.Tools.DB.Plugin
                     if (!status || reloadDb)
                     {
                         DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
-                        string sql = SqlDefHelper.GetTableNames(dbConfigInfo.DbType);                       
-                        db.Fill(sql, _dsTable, new[] { dbConfigInfo.DbConfigName + Tables });
-                        FilePathHelper.WriteXml(_dsTable);//缓存表数据到本地
+                        string sql = SqlDefHelper.GetTableNames(dbConfigInfo.DbType);
+                        DataSet temp = new DataSet();
+                        db.Fill(sql, temp, new[] { dbConfigInfo.DbConfigName + Tables });
+                        temp = DBFileHelper.WriteXml(temp, OriginalEncoding, TargetEncoding);//缓存表数据到本地
+                        _dsTable.Merge(temp);
                     }
                     #endregion
 
@@ -861,12 +872,12 @@ namespace MDT.Tools.DB.Plugin
                     }
 
                     #region 从本地读取数据
-                    status = FilePathHelper.IsExist(dbConfigInfo.DbConfigName, TablesPrimaryKeys);
+                    status = DBFileHelper.IsExist(dbConfigInfo.DbConfigName, TablesPrimaryKeys);
                     if (!reloadDb)
                     {
                         if (status)
                         {
-                            FilePathHelper.ReadXml(_dsTablePrimaryKey, dbConfigInfo.DbConfigName, TablesPrimaryKeys);
+                            DBFileHelper.ReadXml(_dsTablePrimaryKey, dbConfigInfo.DbConfigName, TablesPrimaryKeys);
                         }
                     }
                     #endregion
@@ -876,8 +887,10 @@ namespace MDT.Tools.DB.Plugin
                     {
                         DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
                         string sql = SqlDefHelper.GetAllTablePrimaryKeys(dbConfigInfo.DbType);
-                        db.Fill(sql, _dsTablePrimaryKey, new[] { dbConfigInfo.DbConfigName + TablesPrimaryKeys });
-                        FilePathHelper.WriteXml(_dsTablePrimaryKey);//缓存表数据到本地
+                        DataSet temp = new DataSet();
+                        db.Fill(sql, temp, new[] { dbConfigInfo.DbConfigName + TablesPrimaryKeys });
+                        temp = DBFileHelper.WriteXml(temp, OriginalEncoding, TargetEncoding);//缓存表数据到本地
+                        _dsTablePrimaryKey.Merge(temp);
                     }
                     #endregion
 
@@ -899,12 +912,12 @@ namespace MDT.Tools.DB.Plugin
                     }
 
                     #region 从本地读取表字段信息
-                    status = FilePathHelper.IsExist(dbConfigInfo.DbConfigName, TablesColumns);
+                    status = DBFileHelper.IsExist(dbConfigInfo.DbConfigName, TablesColumns);
                     if (!reloadDb)
                     {
                         if (status)
                         {
-                            FilePathHelper.ReadXml(_dsTableColumn, dbConfigInfo.DbConfigName, TablesColumns);
+                            DBFileHelper.ReadXml(_dsTableColumn, dbConfigInfo.DbConfigName, TablesColumns);
                             SetProgress(80);
                         }
                     }
@@ -918,6 +931,7 @@ namespace MDT.Tools.DB.Plugin
                         int temp1 = count / 7;
                         bool isDivisible = count % temp1 == 0;
                         string sql = SqlDefHelper.GetTableColumnNames(dbConfigInfo.DbType);
+                        DataSet dsTemp = new DataSet();
                         for (int i = 0; i < count; i++)
                         {
                             DataRow dr = _dsTable.Tables[dbConfigInfo.DbConfigName + Tables].Rows[i];
@@ -925,13 +939,17 @@ namespace MDT.Tools.DB.Plugin
                             var dicPar = new Dictionary<string, string> { { "@tableName", dr["name"] as string } };
                             SetStatusBar(string.Format("正在获取{0}中{1}字段信息", dbConfigInfo.DbConfigName, dr["name"] as string));
                             db.Fill(sql, temp, new[] { dbConfigInfo.DbConfigName + TablesColumns }, dicPar);
-                            _dsTableColumn.Merge(temp);
+                            dsTemp.Merge(temp);
                             if (i % temp1 == 0)
                             {
                                 SetProgress(10);
                             }
                         }
-                        FilePathHelper.WriteXml(_dsTableColumn);//缓存表字段数据到本地，
+                        dsTemp = DBFileHelper.WriteXml(dsTemp, OriginalEncoding, TargetEncoding);//缓存表字段数据到本地，
+
+                        _dsTableColumn.Merge(dsTemp);
+
+
                         if (!isDivisible)
                         {
                             SetProgress(10);
@@ -948,7 +966,7 @@ namespace MDT.Tools.DB.Plugin
                 }
                 catch (System.Data.Common.DbException ex)
                 {
-                    SetStatusBar(string.Format("加载数据失败[{0}]",ex.Message));
+                    SetStatusBar(string.Format("加载数据失败[{0}]", ex.Message));
 
                 }
             }

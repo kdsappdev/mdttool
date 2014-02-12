@@ -260,8 +260,6 @@
             // 
             // cbExecuteDB
             // 
-            this.cbExecuteDB.Checked = true;
-            this.cbExecuteDB.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbExecuteDB.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cbExecuteDB.Location = new System.Drawing.Point(101, 6);
             this.cbExecuteDB.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);

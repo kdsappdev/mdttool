@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using MDT.Tools.DB.Plugin.Model;
 using MDT.Tools.DB.Plugin.Utils;
@@ -20,6 +21,7 @@ namespace MDT.Tools.DB.Plugin.UI
             : this()
         {
             btnAdd.Text = "删除";
+            btnUpdate.Visible = true;
             setDbConfigInfo(dbConfigInfo);
 
         }
@@ -29,17 +31,27 @@ namespace MDT.Tools.DB.Plugin.UI
             {
                 if (checkData())
                 {
-                    DbConfigInfo dbConfigInfo = getDbConfigInfo();
-                    string conString = dbConfigInfo.ConnectionString.Trim(new char[] { '"' });
-                    string dbProvider = DBType.GetDbProviderString(dbConfigInfo.DbType);
-                    DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(conString, dbProvider).IDbHelper;
-                    bool success = db.TestConnection();
-                    string tip = "数据库连接失败";
-                    if (success)
-                    {
-                        tip = "数据库连接成功";
-                    }
-                    MessageBox.Show(this, tip, "提示", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+                    ThreadPool.QueueUserWorkItem(o =>
+                                                     {
+                                                         DbConfigInfo dbConfigInfo = getDbConfigInfo();
+                                                         string conString =
+                                                             dbConfigInfo.ConnectionString.Trim(new char[] {'"'});
+                                                         string dbProvider =
+                                                             DBType.GetDbProviderString(dbConfigInfo.DbType);
+                                                         DNCCFrameWork.DataAccess.IDbHelper db =
+                                                             new DNCCFrameWork.DataAccess.DbFactory(conString,
+                                                                                                    dbProvider).
+                                                                 IDbHelper;
+                                                         bool success = db.TestConnection();
+                                                         string tip = "数据库连接失败";
+                                                         if (success)
+                                                         {
+                                                             tip = "数据库连接成功";
+                                                         }
+                                                         MessageBox.Show(this, tip, "提示", MessageBoxButtons.OK,
+                                                                         MessageBoxIcon.Information,
+                                                                         MessageBoxDefaultButton.Button1);
+                                                     });
                 }
             }
             catch (System.Data.Common.DbException ex)
@@ -53,7 +65,7 @@ namespace MDT.Tools.DB.Plugin.UI
             teUserName.Text = dbConfigInfo.DbUserName;
             teUserPwd.Text = dbConfigInfo.DbUserPwd;
             teConfigName.Text = dbConfigInfo.DbConfigName;
-            teUserPwd.ReadOnly = teConfigName.ReadOnly = teUserName.ReadOnly = teServerName.ReadOnly = true;
+            teConfigName.ReadOnly = true;
 
         }
         private DbConfigInfo getDbConfigInfo()
@@ -105,6 +117,11 @@ namespace MDT.Tools.DB.Plugin.UI
                 DbConfigInfo = getDbConfigInfo();
                 Close();
             }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            btnAdd_Click(sender, e);
         }
     }
 }

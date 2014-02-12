@@ -109,5 +109,7 @@ namespace MDT.Tools.Core.Utils
             }
             return path;
         }
+
+        public static string[] FileNameNotAllowed = new string[] { "<", ">", "/", "\\", "|", ":", "\"", "*", "?" };
     }
 }
