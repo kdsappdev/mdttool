@@ -25,7 +25,7 @@ namespace MDT.Tools.DB.Common
         public const string DBPlugin_DBtablesPrimaryKeys = "DBtablesPrimaryKeys";
 
         public const string DBPlugin_BroadCast_CheckTableNumberIsGreaterThan0 = "BroadCast_CheckTableNumberIsGreaterThan0";//广播：选中table个数是否大于0
-
+        public const string DBPlugin_BroadCast_DBEnable = "BroadCastDBEnable";
         //共享控件
         public const string DBPlugin_tsslMessage = "tsslMessage";//状态栏label
         public const string CmcSubPlugin = "CmcSubPlugin";// 上下文菜单

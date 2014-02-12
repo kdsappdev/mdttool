@@ -346,6 +346,7 @@ namespace MDT.Tools.DB.Plugin
                 _tscbDbConfig.Enabled = flag;
                 _tspbLoadDbProgress.Visible = !flag;
                 SetTbDbEnable(flag);
+                broadcast(PluginShareHelper.BroadCastDBEnable, flag);
             }
 
         }
