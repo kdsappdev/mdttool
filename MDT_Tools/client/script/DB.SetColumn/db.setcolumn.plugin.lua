@@ -9,11 +9,11 @@ import("MDT.Tools.Core","MDT.Tools.Core.UI")
 import("MDT.Tools.Core","MDT.Tools.Core.Utils")
 import("MDT.ThirdParty.Controls","WeifenLuo.WinFormsUI.Docking")
 import("MDT.Tools.Core","MDT.Tools.Core.Resources")
-import("MDT.Tools.DB.Common")
+import("MDT.Tools.DB.Common","MDT.Tools.DB.Common")
 import("System.IO")
 import("System.Text")
 import("System.Data")
-
+import("System.Threading")
 --获取主Form
 application=getApplication()
 
@@ -56,17 +56,27 @@ function setcolumnTSMI_click(sender,args)
 	btnSave.Image = Resources.start
 	btnSave.Text="保存"
 	btnSave.Click:Add(btnSave_Click)
+	lbSearch=Label()
+	lbSearch.Dock=DockStyle.Fill
+	lbSearch.Text = "快速查询:"
+    lbSearch.TextAlign =ContentAlignment.MiddleRight
+	
+	tbSearch=TextBox()
+	tbSearch.Dock=DockStyle.Fill
+	tbSearch.TextChanged:Add(tbSearch_TextChanged);
 	tableLayoutPanel2=TableLayoutPanel()
 	
 	tableLayoutPanel2.ColumnCount = 6
 	tableLayoutPanel2.ColumnStyles:Add(ColumnStyle(SizeType.Absolute, 84))
-	tableLayoutPanel2.ColumnStyles:Add(ColumnStyle(SizeType.Absolute, 14))
+	tableLayoutPanel2.ColumnStyles:Add(ColumnStyle(SizeType.Absolute, 300))
 	tableLayoutPanel2.ColumnStyles:Add(ColumnStyle(SizeType.Absolute, 131))
 	tableLayoutPanel2.ColumnStyles:Add(ColumnStyle(SizeType.Percent, 100))
-	--tableLayoutPanel2.Controls:Add(btnSave, 0, 0)
+	
 	tableLayoutPanel2.Dock = DockStyle.Fill
 	tableLayoutPanel2.RowCount = 1
 	tableLayoutPanel2.RowStyles:Add(RowStyle(SizeType.Percent, 100))
+	tableLayoutPanel2.Controls:Add(lbSearch, 0, 0)
+	tableLayoutPanel2.Controls:Add(tbSearch, 1, 0)
 	dbName=getObject(1,"DBCurrentDBName")
 	dbTablesColumns=getObject(1,"DBtablesColumns")
 	colName = DataGridViewTextBoxColumn()
@@ -87,6 +97,20 @@ function setcolumnTSMI_click(sender,args)
 	gv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
 	gv.CellValueChanged:Add(gv_CellValueChanged)
 	
+	
+
+local dc=DockContent()
+dc.Text=dbName..setcolumnTSMI.Text
+
+tableLayoutPanel1.Controls:Add(tableLayoutPanel2,0,0)
+tableLayoutPanel1.Controls:Add(gv, 0, 1)
+dc.Controls:Add(tableLayoutPanel1)
+dc:show(application.Panel)
+--ThreadPool.QueueUserWorkItem(bindGridView)
+pcall(bindGridView)
+end
+
+function bindGridView()
 	dataTable=DataTable("setColumn")
 	dataTable.Columns:Add("COLUMN_NAME")
 	dataTable.Columns:Add("COMMENTS")
@@ -94,7 +118,7 @@ function setcolumnTSMI_click(sender,args)
 	path= Application.StartupPath .."\\data\\"..dbName.."_TABLE_SETCOLUMN.data"
 	if(File.Exists(path))then
 	dataTable:ReadXml(path)
-end
+	end
 columns=getObject(1,"DBCurrentDBAllTablesColumns")
 local dv=columns.Tables[str].DefaultView
 local distinctTable=getDistinctDataTable(dv,true,{"COLUMN_NAME"})
@@ -110,19 +134,18 @@ for i=0,count do
 	end
 end
 
-dv=dataTable.DefaultView
+pcall(tbSearch_TextChanged)
+
+end
+
+function tbSearch_TextChanged(sender, e)
+local dv=dataTable.DefaultView
 dv.Sort="COLUMN_NAME ASC"
-
+if(not String.IsNullOrEmpty(tbSearch.Text)) then
+dv.RowFilter="COLUMN_NAME like '"..tbSearch.Text.."*'"
+end
 gv.DataSource=dv
-gv:Refresh()
-
-local dc=DockContent()
-dc.Text=dbName..setcolumnTSMI.Text
-
-tableLayoutPanel1.Controls:Add(tableLayoutPanel2,0,0)
-tableLayoutPanel1.Controls:Add(gv, 0, 1)
-dc.Controls:Add(tableLayoutPanel1)
-dc:show(application.Panel)
+CallCtrlWithThreadSafety.RefreshGridViewDataSource(gv,gv)
 end
 
 function gv_CellValueChanged(sender, e)
@@ -135,14 +158,13 @@ function gv_CellValueChanged(sender, e)
 		local tempComment=getDataRowValue(dr,"COMMENTS")
 		if((columnComment==tempComment) or (String.IsNullOrEmpty(tempComment)) ) then
 		setDataRowValue(dr,"COMMENTS",columnComment)
+		end
 	end
-end
 
 local path= Application.StartupPath .."\\data\\"..dbName.."_TABLE_SETCOLUMN.data"
 FileHelper.CreateDirectory(path)
 dataTable:WriteXml(path, XmlWriteMode.WriteSchema)
-registerObject("SetColumn",dataTable)
-
+registerObject(pluginKey,"SetColumn",dataTable)
 DBFileHelper.WriteXml(columns)
 end
 
@@ -150,7 +172,7 @@ function btnSave_Click(sender,args)
 	local path= Application.StartupPath .."\\data\\"..dbName.."_TABLE_SETCOLUMN.data"
 	FileHelper.CreateDirectory(path)
 	dataTable:WriteXml(path, XmlWriteMode.WriteSchema)
-	registerObject("SetColumn",dataTable)
+	registerObject(pluginKey,"SetColumn",dataTable)
 	MessageBox.Show(btnSave,"保存成功","提示", MessageBoxButtons.OK,
 	MessageBoxIcon.Information)
 end
