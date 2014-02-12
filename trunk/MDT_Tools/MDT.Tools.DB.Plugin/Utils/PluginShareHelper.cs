@@ -7,7 +7,7 @@
         public const string DBCurrentDBAllTablesColumns = "DBCurrentDBAllTablesColumns";
         public const string DBCurrentDBViews = "DBCurrentDBViews";
         public const string DBCurrentDBTablesPrimaryKeys = "DBCurrentDBTablesPrimaryKeys";
-
+        
         //共享变量
         public const string DBCurrentDBName = "DBCurrentDBName";
         public const string DBCurrentDBConnectionString = "DBCurrentDBConnectionString";
@@ -20,7 +20,7 @@
         public const string DBtablesPrimaryKeys = "DBtablesPrimaryKeys";
 
         public const string BroadCastCheckTableNumberIsGreaterThan0 = "BroadCast_CheckTableNumberIsGreaterThan0";//广播：选中table个数是否大于0
-
+        public const string BroadCastDBEnable = "BroadCastDBEnable";
 
         //共享控件
         public const string TsslMessage = "tsslMessage";//状态栏label
