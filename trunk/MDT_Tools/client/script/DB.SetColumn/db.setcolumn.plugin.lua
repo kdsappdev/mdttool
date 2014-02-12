@@ -39,6 +39,7 @@ function load()
 	setcolumnTSMI.Click:Add(setcolumnTSMI_click)--增加Click事件
 	
 	application.MainTool.Items:Insert(3, setcolumnTSMI)
+	subscribe("BroadCastDBEnable",pluginKey)
 	
 end
 --按钮事件
@@ -183,5 +184,8 @@ end
 
 --插件方法:广播插件之间共享的信息
 function onNotify(name,o)
+	if(name=="BroadCastDBEnable") then
+	setcolumnTSMI.Enabled=o
 	
+	end
 end
