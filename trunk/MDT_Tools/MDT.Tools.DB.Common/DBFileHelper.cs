@@ -14,27 +14,51 @@ namespace MDT.Tools.DB.Common
         public static readonly string SystemConfig = Application.StartupPath + "\\control\\dbconfig.ini";
         public static readonly string SaveDBDataPath = Application.StartupPath + "\\data\\";
 
-        public static DataSet WriteXml(DataSet ds,string OriginalEncoding, string TargetEncoding)
+        public static DataSet WriteXml(DataSet ds, string OriginalEncoding, string TargetEncoding)
         {
-            WriteXml(ds);
-            DataSet temp=new DataSet();
-             foreach (DataTable dt in ds.Tables)
-             {
-                 string fileName = dt.TableName;
-                 foreach (string str in FileHelper.FileNameNotAllowed)
-                 {
-                     fileName = fileName.Replace(str, "");
-                 }
+            DataSet temp = ds;
 
-                 string path = SaveDBDataPath + fileName + ".data";
-                 string s = File.ReadAllText(path);
-                 if (!string.IsNullOrEmpty(OriginalEncoding) && !string.IsNullOrEmpty(TargetEncoding))
-                     s = EncodingHelper.ConvertEncoder(Encoding.GetEncoding(OriginalEncoding), Encoding.GetEncoding(TargetEncoding), s);
-                 File.WriteAllText(path, s);
-                 ReadXml(temp, fileName);
-             
-             }
+            if (!string.IsNullOrEmpty(OriginalEncoding) && !string.IsNullOrEmpty(TargetEncoding))
+            {
+                foreach (DataTable dt in ds.Tables)
+                {
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        foreach (DataColumn column in dt.Columns)
+                        {
+                            if (!string.IsNullOrEmpty(row[column.ColumnName] + ""))
+                            {
+                                row[column.ColumnName] = convertType(column.DataType,
+                                                                     EncodingHelper.ConvertEncoder(
+                                                                         Encoding.GetEncoding(OriginalEncoding),
+                                                                         Encoding.GetEncoding(TargetEncoding),
+                                                                         row[column.ColumnName] + ""));
+                            }
+                        }
+                    }
+                }
+            }
+            WriteXml(ds);
+
             return temp;
+        }
+        private static object convertType(Type t, string str)
+        {
+            object o = str;
+            try
+            {
+
+                if (t == typeof(decimal))
+                {
+                    o = decimal.Parse(str);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(new Exception(string.Format("str:{0},type:{1}",str,t.Name),ex));
+            }
+            return o;
         }
 
         public static void WriteXml(DataSet ds)
@@ -74,6 +98,7 @@ namespace MDT.Tools.DB.Common
                 string fileName = dbConfigName + dataType;
                 ReadXml(ds, fileName);
             }
+          
             return ds;
         }
         public static DataSet ReadXml(DataSet ds, string fileName)
@@ -81,20 +106,22 @@ namespace MDT.Tools.DB.Common
             try
             {
                 var dt = new DataTable();
-                
+
                 foreach (string str in FileHelper.FileNameNotAllowed)
                 {
                     fileName = fileName.Replace(str, "");
                 }
                 string path = SaveDBDataPath + fileName + ".data";
+
                 FileHelper.CreateDirectory(path);
                 dt.ReadXml(path);
                 ds.Tables.Add(dt);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogHelper.Error(ex);
             }
+
             return ds;
         }
 

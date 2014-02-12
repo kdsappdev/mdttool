@@ -828,6 +828,8 @@ namespace MDT.Tools.DB.Plugin
                     #endregion
 
                     #region 加载所有表信息
+
+                  
                     SetStatusBar(string.Format("正在获取{0}中所有表信息", dbConfigInfo.DbConfigName));
                     SetProgress(0);
 
@@ -847,16 +849,20 @@ namespace MDT.Tools.DB.Plugin
                         }
                     }
                     #endregion
-
+              
                     #region  从数据库中读取数据
                     if (!status || reloadDb)
                     {
                         DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
                         string sql = SqlDefHelper.GetTableNames(dbConfigInfo.DbType);
                         DataSet temp = new DataSet();
+                       
                         db.Fill(sql, temp, new[] { dbConfigInfo.DbConfigName + Tables });
+                        
                         temp = DBFileHelper.WriteXml(temp, OriginalEncoding, TargetEncoding);//缓存表数据到本地
+                        
                         _dsTable.Merge(temp);
+                      
                     }
                     #endregion
 
@@ -927,8 +933,11 @@ namespace MDT.Tools.DB.Plugin
                     #region 从数据库读取表字段信息
                     if (!status || reloadDb)
                     {
+                         
                         DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
+                         
                         int count = _dsTable.Tables[dbConfigInfo.DbConfigName + Tables].Rows.Count;
+                         
                         int temp1 = count / 7;
                         bool isDivisible = count % temp1 == 0;
                         string sql = SqlDefHelper.GetTableColumnNames(dbConfigInfo.DbType);
@@ -949,7 +958,7 @@ namespace MDT.Tools.DB.Plugin
                         dsTemp = DBFileHelper.WriteXml(dsTemp, OriginalEncoding, TargetEncoding);//缓存表字段数据到本地，
 
                         _dsTableColumn.Merge(dsTemp);
-
+                      
 
                         if (!isDivisible)
                         {

@@ -96,15 +96,6 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                 string temp = tbComment.Text.Trim();
                 if (!string.IsNullOrEmpty(temp))
                 {
-                    if (sc.OriginalEncoding != null &&
-                        sc.OriginalEncoding != null)
-                    {
-                        temp = EncodingHelper.
-                                ConvertEncoder(sc.TargetEncoding,
-                                               sc.OriginalEncoding,
-                                               temp);
-                    }
-
                     DataRow[] drs = sc.dsTable.Tables[sc.dbName + sc.DBtable].Select("name = '" + tableInfo.TableName + "'");
 
                     if (drs != null && drs.Length > 0)
@@ -120,14 +111,6 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                     {
                         temp = column.Comments;
                         DataRow[] drs = sc.dsTableColumn.Tables[sc.dbName + sc.DBtablesColumns].Select("TABLE_NAME = '" + tableInfo.TableName + "' and COLUMN_NAME = '" + column.Name + "'");
-
-                        if (drs != null && drs.Length > 0 && sc.OriginalEncoding != null &&
-                            sc.OriginalEncoding != null)
-                        {
-                            temp = EncodingHelper.ConvertEncoder(
-                                        sc.TargetEncoding,
-                                        sc.OriginalEncoding, temp);
-                        }
                         drs[0]["COMMENTS"] = temp;
                         flag = true;
                         DBFileHelper.WriteXml(sc.dsTableColumn);
