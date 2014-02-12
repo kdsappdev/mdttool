@@ -7,5 +7,9 @@
 #foreach($column in $tableInfo.Columns)
 #if(!$codeGenHelper.IsNullOrEmpty(${column.Comments}))
 	comment on column ${tableInfo.TableName}.${column.Name} is '${column.Comments}';
+#else
+#if($column.IsChanged)
+	comment on column ${tableInfo.TableName}.${column.Name} is '';
+#end
 #end
 #end
