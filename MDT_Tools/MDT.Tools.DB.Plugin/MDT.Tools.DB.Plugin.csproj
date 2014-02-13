@@ -110,7 +110,6 @@
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Explorer.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Explorer.Designer.cs">
       <DependentUpon>Explorer.cs</DependentUpon>

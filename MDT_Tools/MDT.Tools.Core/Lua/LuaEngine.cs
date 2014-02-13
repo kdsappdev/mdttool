@@ -4,18 +4,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using LuaInterface;
 using MDT.Tools.Core.Utils;
 
 namespace MDT.Tools.Core.Lua
 {
     public class LuaEngine : ILuaEngine
     {
-        private LuaInterface.Lua luavm = new LuaInterface.Lua();
+        private const string X64_DLL = "bin/LuaInterface.x64.dll";
+        private const string X86_DLL = "bin/LuaInterface.x86.dll";
+        private const string luaType = "LuaInterface.Lua";
+
+        private object luavm = null;
+
+        public LuaEngine()
+        {
+            Initialize();
+        }
+
+        private MethodInfo luaDispose = null;
+        private MethodInfo luaDoFile = null;
+        private MethodInfo luaDoString = null;
+        private MethodInfo luaGetFunction = null;
+        private MethodInfo luaRegisterFunction = null;
+        public void Initialize()
+        {
+            try
+            {
+                string assemblyName = X86_DLL;
+                if (MachineHelper.Is64BitProcess())
+                {
+                    assemblyName = X64_DLL;
+                }
+                
+               Assembly assembly = Assembly.LoadFrom(assemblyName);
+               luavm= assembly.CreateInstance(luaType);
+                Type t = luavm.GetType();
+                luaDispose = ReflectionHelper.GetMethodInfo(t, "Dispose");
+                luaDoFile = ReflectionHelper.GetMethodInfo(t, "DoFile");
+                luaDoString = ReflectionHelper.GetMethodInfo(t, "DoString");
+                luaGetFunction = ReflectionHelper.GetMethodInfo(t, "GetFunction");
+                luaRegisterFunction = ReflectionHelper.GetMethodInfo(t, "RegisterFunction");
+            }
+            catch (Exception ex)
+            {
+
+                LogHelper.Error(ex);
+            }
+        }
+
 
         public void Dispose()
         {
-            luavm.Dispose();
+            luaDispose.Invoke(luavm, null);
         }
 
 
@@ -26,22 +66,25 @@ namespace MDT.Tools.Core.Lua
 
         public object[] DoFile(string luaFileName)
         {
-            
-            return luavm.DoFile(luaFileName);
+
+            return luaDoFile.Invoke(luavm, new object[] { luaFileName }) as object[];
         }
 
         public object[] DoString(string luaStr)
         {
-            return luavm.DoString(luaStr);
+            return luaDoString.Invoke(luavm, new object[] { luaStr }) as object[];
         }
 
         public object[] Invoke(string luaFunction, params object[] args)
         {
-            object[] os=null;
-            LuaFunction fun = luavm.GetFunction(luaFunction);
-            if (fun != null)
+            object[] os = null;
+
+            object o = luaGetFunction.Invoke(luavm, new object[] { luaFunction });
+            Type t = o.GetType();
+            MethodInfo methodInfo = ReflectionHelper.GetMethodInfo(t, "Call");
+            if (methodInfo != null)
             {
-                os=fun.Call(args);
+                os = methodInfo.Invoke(o,new object[]{ args}) as object[];
             }
             return os;
         }
@@ -67,7 +110,7 @@ namespace MDT.Tools.Core.Lua
                     if (attr.GetType() == typeof(AttrLuaFunc))
                     {
                         AttrLuaFunc pAttr = (AttrLuaFunc)attr;
-                        Dictionary<string, string> pParams = new Dictionary<string, string>();
+                        Dictionary<ParameterInfo, string> pParams = new Dictionary<ParameterInfo, string>();
 
                         // Get the desired function name and doc string, along with parameter info
                         string strFName = pAttr.getFuncName();
@@ -91,7 +134,7 @@ namespace MDT.Tools.Core.Lua
                         // Build a parameter <-> parameter doc hashtable
                         for (int i = 0; i < pPrmInfo.Length; i++)
                         {
-                            pParams.Add(pPrmInfo[i].Name, pPrmDocs[i]);
+                            pParams.Add(pPrmInfo[i], pPrmDocs[i]);
                         }
 
                         // Get a new function descriptor from this information
@@ -101,7 +144,8 @@ namespace MDT.Tools.Core.Lua
                         pLuaFuncs.Add(strFName, pDesc);
 
                         // And tell the VM to register it.
-                        luavm.RegisterFunction(strFName, pTarget, mInfo);
+                        luaRegisterFunction.Invoke(luavm, new object[] { strFName, pTarget, mInfo });
+
                     }
                 }
             }
@@ -112,7 +156,7 @@ namespace MDT.Tools.Core.Lua
             string str = "\n\r";
             foreach (KeyValuePair<string, LuaFuncDescriptor> luaFuncDescriptor in pLuaFuncs)
             {
-                str += luaFuncDescriptor.Value.getFuncFullDoc()+"\n\r";
+                str += luaFuncDescriptor.Value.getFuncFullDoc() + "\n\r";
             }
             return str;
         }

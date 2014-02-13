@@ -164,15 +164,15 @@ namespace MDT.Tools.Lua.Plugin
         }
         Dictionary<string, List<int>> luaTopics = new Dictionary<string, List<int>>();
         [AttrLuaFunc("unsubscribe", "退订插件之间时时改变的信息", "信息key", "Lua插件的key")]
-        public void unsubscribe(string name, int luaPluginKey)
+        public void unsubscribe(string name, int pluginKey)
         {
 
             if (luaTopics.ContainsKey(name))
             {
                 List<int> subscribers = luaTopics[name];
-                if (subscribers.Contains(luaPluginKey))
+                if (subscribers.Contains(pluginKey))
                 {
-                    subscribers.Remove(luaPluginKey);
+                    subscribers.Remove(pluginKey);
                 }
                 if (subscribers.Count == 0)//没有lua插件订阅
                 {
@@ -183,7 +183,7 @@ namespace MDT.Tools.Lua.Plugin
 
         }
         [AttrLuaFunc("subscribe", "订阅插件之间时时改变的信息", "信息key", "Lua插件的key")]
-        public void subscribe(string name, int luaPluginKey)
+        public void subscribe(string name, int pluginKey)
         {
 
             List<int> subscribers = null;
@@ -197,9 +197,9 @@ namespace MDT.Tools.Lua.Plugin
                 luaTopics.Add(name, subscribers);
                 subscribe(name, this);//初次订阅
             }
-            if (!subscribers.Contains(luaPluginKey))
+            if (!subscribers.Contains(pluginKey))
             {
-                subscribers.Add(luaPluginKey);
+                subscribers.Add(pluginKey);
             }
         }
         [AttrLuaFunc("broadcast", "广播插件之间时时改变的信息", "信息key", "信息内容")]
@@ -258,15 +258,16 @@ namespace MDT.Tools.Lua.Plugin
         #endregion
 
         #region dataTable
-        [AttrLuaFunc("getDistinctDataTable", "获取getDistinctDataTable", "DataTable","是否Distinct", "列名")]
-        public System.Data.DataTable getDistinctDataTable(System.Data.DataView dv,bool isDistinct, LuaInterface.LuaTable columnNames)
-        {
-            int count = columnNames.Values.Count;//dt.Merge(dt,true,System.Data.MissingSchemaAction)
-            string[] strs = new string[count];
-            columnNames.Values.CopyTo(strs, 0);
-            System.Data.DataTable temp= dv.ToTable(isDistinct, strs);//temp.Select("")
-            return temp;
-        }
+        //[AttrLuaFunc("getDistinctDataTable", "获取getDistinctDataTable", "DataTable","是否Distinct", "列名")]
+        //public System.Data.DataTable getDistinctDataTable(System.Data.DataView dv,bool isDistinct, LuaInterface.LuaTable columnNames)
+        //{
+        //    int count = columnNames.Values.Count;//dt.Merge(dt,true,System.Data.MissingSchemaAction)
+        //    string[] strs = new string[count];
+        //    columnNames.Values.CopyTo(strs, 0);
+        //    System.Data.DataTable temp= dv.ToTable(isDistinct, strs);//temp.Select("")
+            
+        //    return temp;
+        //}
         #endregion
 
         #region dataGridView

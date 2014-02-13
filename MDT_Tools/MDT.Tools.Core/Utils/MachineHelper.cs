@@ -1,25 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Management;
 using System.Text;
 using System.Threading;
 namespace MDT.Tools.Core.Utils
 {
-   public class MachineHelper
+    public class MachineHelper
     {
-       private static Mutex mutex = null;
-       public static bool CheckProcessIsMultiple(string name)
-       {            
-           bool newMutexCreated = false;
-           try
-           {
-               string mutexName = "Global\\" + name;
-               mutex = new Mutex(false, mutexName, out newMutexCreated);
-           }
-           catch
-           {
- 
-           }
-           return !newMutexCreated;
-       }
+        private static Mutex mutex = null;
+
+        public static bool CheckProcessIsMultiple(string name)
+        {
+            bool newMutexCreated = false;
+            try
+            {
+                string mutexName = "Global\\" + name;
+                mutex = new Mutex(false, mutexName, out newMutexCreated);
+            }
+            catch
+            {
+
+            }
+            return !newMutexCreated;
+        }
+        public static bool Is64BitProcess()
+        {
+            bool flag = false;
+            int bit = GetOSBit();
+            if(bit==64)
+            {
+                flag = true;
+            }
+            return flag;
+        }
+
+        public static int GetOSBit()
+        {
+
+            try
+            {
+                string addressWidth = String.Empty;
+                ConnectionOptions mConnOption = new ConnectionOptions();
+                ManagementScope mMs = new ManagementScope(@"\\localhost", mConnOption);
+                ObjectQuery mQuery = new ObjectQuery("select AddressWidth from Win32_Processor");
+                ManagementObjectSearcher mSearcher = new ManagementObjectSearcher(mMs, mQuery);
+                ManagementObjectCollection mObjectCollection = mSearcher.Get();
+                foreach (ManagementObject mObject in mObjectCollection)
+                {
+                    addressWidth = mObject["AddressWidth"].ToString();
+                }
+                return Int32.Parse(addressWidth);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex);
+                return 32;
+            }
+        }
     }
 }
