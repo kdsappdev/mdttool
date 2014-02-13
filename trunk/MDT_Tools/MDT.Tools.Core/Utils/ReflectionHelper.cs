@@ -94,7 +94,7 @@ namespace MDT.Tools.Core.Utils
                         asm = Assembly.LoadFrom(file);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     LogHelper.Error(ex);
                 }
@@ -109,7 +109,7 @@ namespace MDT.Tools.Core.Utils
 
                 foreach (Type t in types)
                 {
-                    if (t.IsPublic&&(t.IsSubclassOf(baseType) || baseType.IsAssignableFrom(t)))
+                    if (t.IsPublic && (t.IsSubclassOf(baseType) || baseType.IsAssignableFrom(t)))
                     {
                         bool canLoad = config.LoadAbstractType || (!t.IsAbstract);
                         if (canLoad)
@@ -170,6 +170,207 @@ namespace MDT.Tools.Core.Utils
         }
         #endregion
 
+
+        #region
+        #region 私有方法
+        #region 获得对象属性名
+        //private static Dictionary<string, Dictionary<string, string>> dic2 = new Dictionary<string, Dictionary<string, string>>();
+        private static Dictionary<string, Dictionary<string, PropertyInfo>> dic3 = new Dictionary<string, Dictionary<string, PropertyInfo>>();
+        /// <summary>
+        /// 获得对象属性名
+        /// </summary>
+        /// <param name="o">对象</param>
+        /// <returns>对象属性名集合</returns>
+        public static Dictionary<string, PropertyInfo> GetObjectPropertyName(Type type)
+        {
+            Dictionary<string, PropertyInfo> dicp = null;
+            if (object.Equals(type, null))
+            {
+                throw new System.Exception("对象不能为空");
+            }
+            Type objectType = type;
+            string objectName = objectType.ToString();
+            if (!dic3.ContainsKey(objectName))
+            {
+                PropertyInfo[] objectPropertyInfo = objectType.GetProperties();
+
+                dicp = new Dictionary<string, PropertyInfo>();
+                foreach (PropertyInfo pt in objectPropertyInfo)
+                {
+                    dicp.Add(pt.Name.ToUpper(), pt);
+                }
+                dic3.Add(objectName, dicp);
+            }
+            dicp = dic3[objectName];
+            return dicp;
+        }
+        #endregion
+
+        private static Dictionary<string, Dictionary<string, MethodInfo>> dic5 = new Dictionary<string, Dictionary<string, MethodInfo>>();
+
+        public static Dictionary<string, MethodInfo> GetObjectMethodName(Type type)
+        {
+            Dictionary<string, MethodInfo> dicp = null;
+            if (object.Equals(type, null))
+            {
+                throw new System.Exception("对象不能为空");
+            }
+            Type objectType = type;
+            string objectName = objectType.ToString();
+            if (!dic5.ContainsKey(objectName))
+            {
+                MethodInfo[] objectMethodInfo = objectType.GetMethods();
+
+                dicp = new Dictionary<string, MethodInfo>();
+                foreach (MethodInfo pt in objectMethodInfo)
+                {
+                    if (!dicp.ContainsKey(pt.Name))
+                        dicp.Add(pt.Name, pt);
+                }
+                dic5.Add(objectName, dicp);
+            }
+            dicp = dic5[objectName];
+            return dicp;
+        }
+        public static MethodInfo GetMethodInfo(Type type,string methodName)
+        {
+            MethodInfo methodInfo = null;
+            Dictionary<string, MethodInfo> dic = GetObjectMethodName(type);
+            if(dic.ContainsKey(methodName))
+            {
+                methodInfo = dic[methodName];
+            }
+            return methodInfo;
+        }
+
+        #region 获得对象属性值
+        private static Dictionary<string, Dictionary<string, string>> dicp = new Dictionary<string, Dictionary<string, string>>();
+        public static Dictionary<string, string> GetObjectPropertyValue(object o)
+        {
+            Dictionary<string, string> dic = null;
+            if (object.Equals(o, null))
+            {
+                throw new System.Exception("对象o不能为NULL");
+            }
+            Type objectType = o.GetType();
+            if (!dicp.ContainsKey(objectType.ToString()))
+            {
+                PropertyInfo[] objectPropertyInfo = objectType.GetProperties();
+                dic = new Dictionary<string, string>();
+                foreach (PropertyInfo pt in objectPropertyInfo)
+                {
+                    object value = pt.GetValue(o, null);
+                    if (object.Equals(value, null))//判断值是否是空值
+                    {
+                        value = "";
+                    }
+                    dic.Add(pt.Name, value.ToString());
+                }
+                dicp.Add(objectType.ToString(), dic);
+            }
+            dic = dicp[objectType.ToString()] as Dictionary<string, string>;
+            return dic;
+        }
+        #endregion
+        #region 获得对象名
+        /// <summary>
+        /// 获得对象名
+        /// </summary>
+        /// <param name="o">对象</param>
+        /// <returns>对象名字</returns>
+        public static string GetObjectName(object o)
+        {
+            if (object.Equals(o, null))
+            {
+                throw new System.Exception("对象不能为空");
+            }
+            Type objectType = o.GetType();
+            return objectType.Name;
+        }
+        #endregion
+        #region 获得对象单一属性值
+        public static string GetObjectPropertyValue(object o, string propertyName)
+        {
+            if (object.Equals(o, null))
+            {
+                throw new System.Exception("对象不能为空");
+            }
+            Type objectType = o.GetType();
+            PropertyInfo pt = objectType.GetProperty(propertyName);//获得属性信息
+            object value = pt.GetValue(o, null);//得到值
+            if (object.Equals(value, null))//判断值是否是空值
+            {
+                value = "";
+            }
+            return value.ToString();
+        }
+        #endregion
+
+
+        #endregion
+        #region 类型转换
+        public static Object StringToObject(Type t, String str, ref bool isSuccess)
+        {
+            Object o = str;
+            if (t == typeof(string))
+            {
+                o = str;
+                isSuccess = true;
+            }
+            if (t == typeof(DateTime) || t == typeof(DateTime?))
+            {
+                DateTime dt = new DateTime();
+                if (DateTime.TryParse(str, out dt))
+                {
+                    o = dt;
+                    isSuccess = true;
+                }
+
+            }
+            if (t == typeof(int) || t == typeof(int?))
+            {
+                int i = 0;
+                if (int.TryParse(str, out i))
+                {
+                    o = i;
+                    isSuccess = true;
+                }
+            }
+            if (t == typeof(decimal) || t == typeof(decimal?))
+            {
+                decimal d = 0;
+                if (decimal.TryParse(str, out d))
+                {
+                    o = d;
+                    isSuccess = true;
+                }
+            }
+            if (t == typeof(float) || t == typeof(float?))
+            {
+                float d = 0;
+                if (float.TryParse(str, out d))
+                {
+                    o = d;
+                    isSuccess = true;
+                }
+            }
+            if (t == typeof(double) || t == typeof(double?))
+            {
+                double d = 0;
+                if (double.TryParse(str, out d))
+                {
+                    o = d;
+                    isSuccess = true;
+                }
+            }
+
+            return o;
+        }
+
+        #endregion
+
+        #endregion
+
     }
     #region TypeLoadConfig
     public class TypeLoadConfig
@@ -220,3 +421,4 @@ namespace MDT.Tools.Core.Utils
     }
     #endregion
 }
+

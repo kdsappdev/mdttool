@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace MDT.Tools.Core.Lua
@@ -10,11 +11,11 @@ namespace MDT.Tools.Core.Lua
     {
         private String FunctionName;
         private String FunctionDoc;
-        private Dictionary<string, string> FunctionParameters;
+        private Dictionary<ParameterInfo, string> FunctionParameters;
        
         private String FunctionDocString;
 
-        public LuaFuncDescriptor(String strFuncName, String strFuncDoc, Dictionary<string, string> pParams)
+        public LuaFuncDescriptor(String strFuncName, String strFuncDoc, Dictionary<ParameterInfo, string> pParams)
         {
             FunctionName = strFuncName;
             FunctionDoc = strFuncDoc;
@@ -33,7 +34,7 @@ namespace MDT.Tools.Core.Lua
                     strFuncParams += ", ";
 
                 strFuncParams += strFuncParam.Key;
-                strFuncBody += " " + strFuncParam.Key + ":" + strFuncParam.Value + ",";
+                strFuncBody += " " + strFuncParam.Key.Name + ":" + strFuncParam.Value + "(" + strFuncParam.Key.ParameterType.Name + "),";
 
                 bFirst = false;
             }
