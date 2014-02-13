@@ -54,8 +54,6 @@ getDataRowValue(System.Data.DataRow dr, System.String columnName) - 获取DataRowV
 
 setDataRowValue(System.Data.DataRow dr, System.String columnName, System.Object value) - 设置DataRowValue dr:DataRow(DataRow), columnName:列名(String), value:列value(Object)
 
-getDistinctDataTable(System.Data.DataView dv, Boolean isDistinct, LuaInterface.LuaTable columnNames) - 获取getDistinctDataTable dv:DataTable(DataView), isDistinct:是否Distinct(Boolean), columnNames:列名(LuaTable)
-
 getDataGridViewRowCellValue(System.Windows.Forms.DataGridView dgv, Int32 rowIndex, Int32 columnIndex) - 获取getDataGridViewRowCellValue dgv:DataGridView(DataGridView), rowIndex:rowIndex(Int32), columnIndex:columnIndex(Int32)
 
 注意：

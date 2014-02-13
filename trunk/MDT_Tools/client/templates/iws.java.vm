@@ -19,8 +19,6 @@ import javax.jws.WebService;
 @WebService
 public interface I${model} {
 	
-	public byte[] select();
-	
 	public byte[] insert(byte[] ${lmodel});
 	
 	public byte[] delete(byte[] deleteCondition);
