@@ -28,25 +28,35 @@ Lua插件接口：
 
 Lua引擎提供的方法
 
-	registerObject(name, obj) - 注册插件之间共享的信息 name:信息key, obj:信息内容
+registerObject(Int32 pluginKey, System.String name, System.Object obj) - 注册插件之间共享的信息 pluginKey:插件key(Int32), name:信息key(String), obj:信息内容(Object)
 
-	getObject(pluginKey, name) - 获取插件之间共享的信息 pluginKey:信息key, name:信息内容
+getObject(Int32 pluginKey, System.String name) - 获取插件之间共享的信息 pluginKey:信息key(Int32), name:信息内容(String)
 
-	removeObject(name) - 移除插件之间共享的信息 name:信息key
+removeObject(System.String name) - 移除插件之间共享的信息 name:信息key(String)
 
-	unsubscribe(name, luaPluginKey) - 退订插件之间时时改变的信息 name:信息key, luaPluginKey:Lua插件的key
+unsubscribe(System.String name, Int32 pluginKey) - 退订插件之间时时改变的信息 name:信息key(String), pluginKey:Lua插件的key(Int32)
 
-	subscribe(name, luaPluginKey) - 订阅插件之间时时改变的信息 name:信息key, luaPluginKey:Lua插件的key
+subscribe(System.String name, Int32 pluginKey) - 订阅插件之间时时改变的信息 name:信息key(String), pluginKey:Lua插件的key(Int32)
 
-	broadcast(name, o) - 广播插件之间时时改变的信息 name:信息key, o:信息内容
+broadcast(System.String name, System.Object o) - 广播插件之间时时改变的信息 name:信息key(String), o:信息内容(Object)
 
-	getPluginShareKey(name, pluginKey) - 获取插件共享的key name:信息key, pluginKey:Lua插件的key
-	getApplication() - 获取IApplication
+getPluginShareKey(System.String name, Int32 pluginKey) - 获取插件共享的key name:信息key(String), pluginKey:Lua插件的key(Int32)
 
-	debug(str) - 调试日志记录 str:日志内容
+getApplication() - 获取IApplication
 
-	warn(str) - 警告日志记录 str:日志内容
+debug(System.Object str) - 调试日志记录 str:日志内容(Object)
 
-	error(ex) - 错误日志记录 ex:日志内容sssss
+warn(System.Object str) - 警告日志记录 str:日志内容(Object)
+
+error(System.Object ex) - 错误日志记录 ex:日志内容(Object)
+
+getDataRowValue(System.Data.DataRow dr, System.String columnName) - 获取DataRowValue dr:DataRow(DataRow), columnName:列名(String)
+
+setDataRowValue(System.Data.DataRow dr, System.String columnName, System.Object value) - 设置DataRowValue dr:DataRow(DataRow), columnName:列名(String), value:列value(Object)
+
+getDistinctDataTable(System.Data.DataView dv, Boolean isDistinct, LuaInterface.LuaTable columnNames) - 获取getDistinctDataTable dv:DataTable(DataView), isDistinct:是否Distinct(Boolean), columnNames:列名(LuaTable)
+
+getDataGridViewRowCellValue(System.Windows.Forms.DataGridView dgv, Int32 rowIndex, Int32 columnIndex) - 获取getDataGridViewRowCellValue dgv:DataGridView(DataGridView), rowIndex:rowIndex(Int32), columnIndex:columnIndex(Int32)
+
 注意：
 	1.编写的脚本要以ACSII编码保存，否则涉及中文的，就会乱码，并且文件的结尾要以plugin.lua命名，如:xx.plugin.lua
