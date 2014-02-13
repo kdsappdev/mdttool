@@ -37,56 +37,6 @@ public class ${model}Service extends BaseWebService implements I${model} {
 		this.${ibsServer} = ${ibsServer};
 	}
 
-
-	@Override
-	public byte[] select() {
-		try {
-			if (_permissionCheck != null) {
-				int pCode = _permissionCheck.check(this);
-				if (pCode != 0) {
-					logger.info("The method insert()--check user defined");
-					return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(
-							"3101", "permissionCheck faild"));
-				}
-			}
-
-			String location = "";
-			try {
-				location = CharsetConvert.charsetConvert(this
-						.getSessionLocation());
-			} catch (Exception e) {
-				logger.error("can't get login infomation from session", e);
-				return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4105",
-						"can't get session", e.getMessage()));
-			}
-
-			List<${model}> list = ${ibsServer}.select(location);
-			logger.info("The List<${model}> size is:" + list.size());
-
-			String result = MsgHelper.SerializerObjectToATSMessage(list,
-					CharsetConvertType.ISO8859_1ToGBK);
-			return ZipUtils.gzipStr(result);
-		} catch (CodeException e) {
-			logger.error("select ${model} failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(e.code(),
-					"select ${model} failed!", e.getMessage()));
-		}
-
-		catch (SerializerException e) {
-			logger.error("Serializer List<${model}> failed !", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4104",
-					"Serializer List<${model}> failed !", e.getMessage()));
-		}
-
-		catch (Exception e) {
-			logger.error("select failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4102",
-					"delete  failed!", e.getMessage()));
-		}
-	}
-
-
-
 	@Override
 	public byte[] insert(byte[] ${lmodel}b) {
 		try {

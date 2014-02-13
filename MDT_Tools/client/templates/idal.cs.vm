@@ -24,15 +24,7 @@ namespace ${idalNameSpace}
 	/// </remarks>
 	public interface I${model}DALServer: IBaseDALServer
 	{
-		${region}region Select
-		/// <summary>
-		/// 根据location 查询出${model}集合对象
-		/// </summary>
-		/// <param name="location">实体</param>
-		/// <returns>AtsMsg对象</returns>
-		AtsMsg<List<${model}>> Select();
-		${region}endregion		
-
+	
 		${region}region Insert
 		/// <summary>
 		/// 增加${model}方法

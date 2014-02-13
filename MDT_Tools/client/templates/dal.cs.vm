@@ -26,19 +26,7 @@ namespace ${dalNameSpace}
 	/// </remarks>
 	public class ${model}DALServer: BaseDALServer,I${model}DALServer
 	{
-		${region}region Select
-		 
-		public AtsMsg<List<${model}>> Select()
-		{
-			var args =new string[0];
-			const string strURL = "/ats/services/I${model}Service?wsdl";
-			const string strClassName = "I${model}Service";
-			const string strMonthedName = "select";
-			return ServersHelper.GetResultMSG<List<${model}>>(strURL, strClassName, strMonthedName,args);
-		}
-		${region}endregion
-
-
+		
 		${region}region Insert
 		/// <summary>
 		/// 增加${model}方法
