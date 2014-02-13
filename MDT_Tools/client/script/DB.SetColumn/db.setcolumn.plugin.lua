@@ -5,15 +5,16 @@ import("System")
 import("System.Windows.Forms")
 import("System.Drawing")
 import("System.Collections.Generic")
+import("System.IO")
+import("System.Text")
+import("System.Data")
+import("System.Threading")
 import("MDT.Tools.Core","MDT.Tools.Core.UI")
 import("MDT.Tools.Core","MDT.Tools.Core.Utils")
 import("MDT.ThirdParty.Controls","WeifenLuo.WinFormsUI.Docking")
 import("MDT.Tools.Core","MDT.Tools.Core.Resources")
 import("MDT.Tools.DB.Common","MDT.Tools.DB.Common")
-import("System.IO")
-import("System.Text")
-import("System.Data")
-import("System.Threading")
+
 --»ñÈ¡Ö÷Form
 application=getApplication()
 
@@ -107,11 +108,10 @@ tableLayoutPanel1.Controls:Add(tableLayoutPanel2,0,0)
 tableLayoutPanel1.Controls:Add(gv, 0, 1)
 dc.Controls:Add(tableLayoutPanel1)
 dc:show(application.Panel)
---ThreadPool.QueueUserWorkItem(bindGridView)
 pcall(bindGridView)
 end
 
-function bindGridView()
+function bindGridView(o)
 	dataTable=DataTable("setColumn")
 	dataTable.Columns:Add("COLUMN_NAME")
 	dataTable.Columns:Add("COMMENTS")
@@ -122,7 +122,7 @@ function bindGridView()
 	end
 columns=getObject(1,"DBCurrentDBAllTablesColumns")
 local dv=columns.Tables[str].DefaultView
-local distinctTable=getDistinctDataTable(dv,true,{"COLUMN_NAME"})
+local distinctTable=columns.Tables[str]--getDistinctDataTable(dv,true,{"COLUMN_NAME"})
 local count=distinctTable.Rows.Count-1
 for i=0,count do
 	local newRow=dataTable:NewRow()

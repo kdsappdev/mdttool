@@ -134,6 +134,7 @@ function checkUpdate()
 	if not suc then
 		MessageBox.Show(application.MainMenu, "ºÏ≤È ß∞‹", "Ã· æ", MessageBoxButtons.OK, MessageBoxIcon.Information)
 	end
+	return suc
 	
 end
 
