@@ -33,10 +33,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.AutoUpdater.Confi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDT.Tools.Lua.Plugin", "..\MDT.Tools.Lua.Plugin\MDT.Tools.Lua.Plugin.csproj", "{E4F122CA-9A00-4626-9D80-C59370F77DA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaInterface.net35", "..\LuaInterface.net35\LuaInterface.net35.csproj", "{817FF371-DB5F-4382-8E68-F1E569D20A81}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua511", "..\lua-5.1.4\src\lua514.vcproj", "{0A82CC4C-9A27-461C-8DB0-A65AC6393748}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -333,38 +329,6 @@ Global
 		{E4F122CA-9A00-4626-9D80-C59370F77DA0}.Release|x64.Build.0 = Release|x64
 		{E4F122CA-9A00-4626-9D80-C59370F77DA0}.Release|x86.ActiveCfg = Release|x86
 		{E4F122CA-9A00-4626-9D80-C59370F77DA0}.Release|x86.Build.0 = Release|x86
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|Win32.ActiveCfg = Debug|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|x64.ActiveCfg = Debug|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|x64.Build.0 = Debug|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|x86.ActiveCfg = Debug|x86
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Debug|x86.Build.0 = Debug|x86
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|Any CPU.Build.0 = Release|Any CPU
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|Mixed Platforms.Build.0 = Release|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|Win32.ActiveCfg = Release|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|x64.ActiveCfg = Release|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|x64.Build.0 = Release|x64
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|x86.ActiveCfg = Release|x86
-		{817FF371-DB5F-4382-8E68-F1E569D20A81}.Release|x86.Build.0 = Release|x86
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Debug|Win32.ActiveCfg = Debug|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Debug|Win32.Build.0 = Debug|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Debug|x64.ActiveCfg = Debug|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Debug|x86.ActiveCfg = Debug|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Release|Any CPU.ActiveCfg = Release|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Release|Win32.ActiveCfg = Release|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Release|Win32.Build.0 = Release|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Release|x64.ActiveCfg = Release|Win32
-		{0A82CC4C-9A27-461C-8DB0-A65AC6393748}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
