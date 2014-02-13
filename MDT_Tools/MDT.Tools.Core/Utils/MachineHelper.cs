@@ -25,13 +25,9 @@ namespace MDT.Tools.Core.Utils
         }
         public static bool Is64BitProcess()
         {
-            bool flag = false;
-            int bit = GetOSBit();
-            if(bit==64)
-            {
-                flag = true;
-            }
-            return flag;
+
+            return IntPtr.Size == 8;
+
         }
 
         public static int GetOSBit()
