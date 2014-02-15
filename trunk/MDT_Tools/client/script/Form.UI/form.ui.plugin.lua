@@ -103,7 +103,7 @@ function load()
 	registerObject(pluginKey,"tsbExit",tsbExit)
 	registerObject(pluginKey,"tsslMessage",tsslMessage)
 	registerObject(pluginKey,"tspbLoadDbProgress",tspbLoadDbProgress)
-	
+	ThreadPool.QueueUserWorkItem(doOther)
 end
 
 function  StatusBarSizeChanged(sender,e)
@@ -112,10 +112,18 @@ function  StatusBarSizeChanged(sender,e)
 end
 
 function tsmiCheckUpdate_Click(sender,e)
-	ThreadPool.QueueUserWorkItem(checkUpdate)
+	ThreadPool.QueueUserWorkItem(pcall(checkUpdate,true))
 end
 
-function checkUpdate()
+function doOther()
+--check lic
+pcall(checkUpdate,false)--check update
+--login
+--other
+end
+
+
+function checkUpdate(flag)
 	
 	local suc,err=pcall(function()
 		local autoUpdater = AutoUpdater()
@@ -124,23 +132,27 @@ function checkUpdate()
 			local dr = MessageBox.Show(application.MainMenu, "检查到有新版，是否升级?","提示",MessageBoxButtons.YesNo,MessageBoxIcon.Information)
 			if (dr == DialogResult.Yes) then
 				Process.Start("MDT.Tools.AutoUpdater.exe", "true")
-				pcall(tsmiExit_Click)
+				pcall(tsbExit_Click,nil,nil)
 			end
-		else
+		else 
+			if(flag) then
 			MessageBox.Show(application.MainMenu, "已经是最新版本", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
+			end
 		end
 	end)
-	
+	if(flag) then
 	if not suc then
 		MessageBox.Show(application.MainMenu, "检查失败", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
+	end
 	end
 	return suc
 	
 end
 
 function tsbExit_Click(sender,e)
-	application.PluginManager:Unloading();
+	application.PluginManager:Unloading()
 	Application.Exit()
+	
 end
 function tsmiAbout_Click(sender,e)
 	local aboutDialog = AboutDialog()
