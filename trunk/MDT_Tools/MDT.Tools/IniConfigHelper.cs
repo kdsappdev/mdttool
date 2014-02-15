@@ -61,8 +61,9 @@ namespace MDT.Tools
                             }
                         }
                         catch (Exception ex)
-                        {
+                        {                           
                             LogHelper.Error(ex);
+                            Environment.Exit();
                         }
                     }
                 }

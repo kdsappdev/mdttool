@@ -54,52 +54,61 @@ namespace MDT.Tools
 
         public void Loading()
         {
-            List<IPlugin> plugins = PluginHelper.DicToIlist(_dicPlugin);
-            plugins.Sort(new PluginComparer());
-            List<IPlugin> framePlugins = new List<IPlugin>();
-            List<IPlugin> functionPlugins = new List<IPlugin>();
-            foreach (int framePluginKey in rtc.GetFramePluginKeyList)
+            try
             {
-                IPlugin p = GetPlugin(framePluginKey);
-                if (p != null)
+                List<IPlugin> plugins = PluginHelper.DicToIlist(_dicPlugin);
+                plugins.Sort(new PluginComparer());
+                List<IPlugin> framePlugins = new List<IPlugin>();
+                List<IPlugin> functionPlugins = new List<IPlugin>();
+                foreach (int framePluginKey in rtc.GetFramePluginKeyList)
                 {
-                    plugins.Remove(p);
-                    framePlugins.Add(p);
+                    IPlugin p = GetPlugin(framePluginKey);
+                    if (p != null)
+                    {
+                        plugins.Remove(p);
+                        framePlugins.Add(p);
+                    }
                 }
-            }
-            foreach (int functionPluginKey in rtc.GetFunctionPluginKeyList)
-            {
-                IPlugin p = GetPlugin(functionPluginKey);
-                if (p != null)
+                foreach (int functionPluginKey in rtc.GetFunctionPluginKeyList)
                 {
-                    plugins.Remove(p);
-                    functionPlugins.Add(p);
+                    IPlugin p = GetPlugin(functionPluginKey);
+                    if (p != null)
+                    {
+                        plugins.Remove(p);
+                        functionPlugins.Add(p);
+                    }
                 }
-            }
 
-            foreach (IPlugin plugin in framePlugins)
-            {
-                try
+                foreach (IPlugin plugin in framePlugins)
                 {
-                    plugin.OnLoading();
+                    try
+                    {
+                        plugin.OnLoading();
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Error(ex);
+                        Environment.Exit();
+                    }
                 }
-                catch (Exception ex)
+
+                foreach (IPlugin plugin in plugins)
                 {
-                    LogHelper.Error(ex);
+                    try
+                    {
+                        plugin.OnLoading();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Error(ex);
+                    }
                 }
             }
-            
-            foreach (IPlugin plugin in plugins)
+            catch (Exception ex)
             {
-                try
-                {
-                    plugin.OnLoading();                    
-
-                }
-                catch (Exception ex)
-                {
-                    LogHelper.Error(ex);
-                }
+                LogHelper.Error(ex);
+                Environment.Exit();
             }
         }
 
