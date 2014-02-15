@@ -96,7 +96,7 @@ namespace MDT.Tools.Core.Utils
                 }
                 catch (Exception ex)
                 {
-                    LogHelper.Error(ex);
+                    //LogHelper.Error(ex);
                 }
 
                 if (asm == null)
