@@ -68,6 +68,11 @@ namespace MDT.Tools
                         plugins.Remove(p);
                         framePlugins.Add(p);
                     }
+                    else
+                    {
+                        LogHelper.Error(new Exception("Frame Plugin Lost,Please Check."));
+                        Environment.Exit(0);
+                    }
                 }
                 foreach (int functionPluginKey in rtc.GetFunctionPluginKeyList)
                 {
@@ -88,7 +93,7 @@ namespace MDT.Tools
                     catch (Exception ex)
                     {
                         LogHelper.Error(ex);
-                        Environment.Exit();
+                        Environment.Exit(0);
                     }
                 }
 
@@ -108,7 +113,7 @@ namespace MDT.Tools
             catch (Exception ex)
             {
                 LogHelper.Error(ex);
-                Environment.Exit();
+                Environment.Exit(0);
             }
         }
 
