@@ -37,6 +37,7 @@ setcolumnTSMI=ToolStripMenuItem()
 function load()
 	debug(string.format("%d %s", pluginKey,"load"))--调试日志
 	setcolumnTSMI.Text="表字段维护"
+	setcolumnTSMI.Image=Image.FromFile("script\\db.setcolumn\\dbsetcolumn.ico")
 	setcolumnTSMI.Click:Add(setcolumnTSMI_click)--增加Click事件
 	
 	application.MainTool.Items:Insert(3, setcolumnTSMI)
