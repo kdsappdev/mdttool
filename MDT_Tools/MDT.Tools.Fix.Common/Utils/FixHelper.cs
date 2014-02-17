@@ -44,12 +44,15 @@ namespace MDT.Tools.Fix.Common.Utils
         public static string GetFieldOrGroupType(string codeLanage, string name)
         {
             string type = name;
-            string key = (name + "").ToLower();
+            string key = (name + "").Trim().ToLower();
             if (dic.ContainsKey(key))
             {
                 type = dic[key].Type;
             }
-           
+            else
+            {
+                LogHelper.Error(string.Format("{0}{1} not exist type", codeLanage,name));
+            }
 
             type = GetCodeLanageType(codeLanage, type);
 
