@@ -14,6 +14,10 @@ namespace MDT.Tools.Core.Utils
        {
            Log.Error(ex);
        }
+       public static void Error(string str)
+       {
+           Log.Error(str);
+       }
        public static void Warn(string str)
        {
            Log.Warn(str);
