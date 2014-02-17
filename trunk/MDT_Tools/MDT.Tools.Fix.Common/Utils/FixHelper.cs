@@ -70,10 +70,6 @@ namespace MDT.Tools.Fix.Common.Utils
         }
         public static string GetCodeLanageType(string codeLangage, string fixType)
         {
-            if (fixType == "BidForwardPoint")
-            {
-                Console.WriteLine(fixType);
-            }
             string type = fixType;
             string key = getkey(codeLangage, fixType);
             if (fieldsTypeDic.ContainsKey(key))
@@ -132,7 +128,7 @@ namespace MDT.Tools.Fix.Common.Utils
                                 }
                                 else
                                 {
-                                    LogHelper.Warn("ric exits ");
+                                    LogHelper.Warn(key+" exits ");
                                 }
                             }
                         }
