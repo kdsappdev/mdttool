@@ -14,9 +14,15 @@ namespace MDT.Tools.Core.Log
        {
            Console.WriteLine(str);
        }
-       public void Error(Exception ex)
+
+        public void Error(string str)
+        {
+            Console.WriteLine(str);
+        }
+
+        public void Error(Exception ex)
        {
-           Console.WriteLine(ex.Message);
+           Error(ex.Message);
        }
     }
 }

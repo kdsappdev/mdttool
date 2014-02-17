@@ -8,6 +8,7 @@ namespace MDT.Tools.Core.Log
     {
         void Debug(string str);
         void Warn(string str);
+        void Error(string str);
         void Error(Exception ex);
     }
 }

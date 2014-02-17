@@ -28,6 +28,11 @@ namespace MDT.Tools.Core.Log
             _log.Warn(str);
         }
 
+        public void Error(string str)
+        {
+            _log.Error(str);
+        }
+
         public void Error(Exception ex)
         {
             _log.Error(ex);
