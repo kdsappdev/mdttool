@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using MDT.Tools.Core.Plugin;
+using MDT.Tools.Core.Utils;
 using MDT.Tools.Fix.Plugin.UI;
 using MDT.Tools.Fix.Plugin.Utils;
 using WeifenLuo.WinFormsUI.Docking;
@@ -528,6 +529,7 @@ namespace MDT.Tools.Fix.Plugin
         {
             g.Name = node.Attributes["name"].Value;
             g.Required = node.Attributes["required"].Value == "Y";
+            LogHelper.Debug(string.Format("\t\tgroup:{0},{1}", g.Name, g.Required));
             foreach (XmlNode xn in node.ChildNodes)
             {
                 if (xn.Name == "field")
@@ -535,6 +537,7 @@ namespace MDT.Tools.Fix.Plugin
                     Field f = new Field();
                     f.Name = xn.Attributes["name"].Value;
                     f.Required = xn.Attributes["required"].Value == "Y";
+                    LogHelper.Debug(string.Format("\t\t\t\tfield:{0},{1}", f.Name, f.Required));
                     g.Fields.Add(f);
                 }
                 else if (xn.Name == "group")
@@ -620,6 +623,7 @@ namespace MDT.Tools.Fix.Plugin
                     c.Required = node.Attributes["required"].Value == "Y";
                 }
             }
+            LogHelper.Debug(string.Format("component:{0},{1}", c.Name, c.Required));
             foreach (XmlNode xn in node.ChildNodes)
             {
                 if (xn.Name == "field")
@@ -627,6 +631,7 @@ namespace MDT.Tools.Fix.Plugin
                     Field f = new Field();
                     f.Name = xn.Attributes["name"].Value;
                     f.Required = xn.Attributes["required"].Value == "Y";
+                    LogHelper.Debug(string.Format("\t\tfield:{0},{1}", f.Name, f.Required));
                     c.Fields.Add(f);
                 }
                 else if (xn.Name == "group")
@@ -651,11 +656,15 @@ namespace MDT.Tools.Fix.Plugin
 
             foreach (XmlNode xn in node.ChildNodes)
             {
-                if (xn.Name == "field")
+                if ((xn.Name+"").ToLower() == "field")
                 {
                     FieldDic fd = new FieldDic();
                     parseFieldDic(fd, xn);
                     fix.Fields.Add(fd);
+                }
+                else
+                {
+                    LogHelper.Warn(string.Format("{0} not field",xn.Name));
                 }
             }
         }
@@ -665,6 +674,7 @@ namespace MDT.Tools.Fix.Plugin
             fd.Name = node.Attributes["name"].Value;
             fd.Number = int.Parse(node.Attributes["number"].Value);
             fd.Type = node.Attributes["type"].Value;
+            LogHelper.Debug(string.Format("field:{0},{1},{2}", fd.Name, fd.Number, fd.Type));
             foreach (XmlNode xn in node.ChildNodes)
             {
                 if (xn.Name == "value")
@@ -672,6 +682,7 @@ namespace MDT.Tools.Fix.Plugin
                     Value v = new Value();
                     v.Enum = xn.Attributes["enum"].Value;
                     v.Description = xn.Attributes["description"].Value;
+                    LogHelper.Debug(string.Format("\t\tvalue:{0},{1}", v.Enum, v.Description));
                     fd.Values.Add(v);
                 }
             }
