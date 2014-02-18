@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -86,10 +87,38 @@ namespace MDT.Tools.Fix.Plugin
             {
                 _tvFix.Dock = DockStyle.Fill;
                 _tvFix.CheckBoxes = true;
+                _tvFix.AllowDrop = true;
+                _tvFix.DragEnter += new DragEventHandler(_tvFix_DragEnter);
+                _tvFix.DragDrop += new DragEventHandler(_tvFix_DragDrop);
                 _tvFix.AfterCheck += TvDbAfterCheck;
                 _tvFix.MouseClick += TvDbMouseClick;
                 _explorer.Controls.Add(_tvFix);
             }
+        }
+
+        void _tvFix_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            e.Effect = DragDropEffects.Move;
+        }
+
+        void _tvFix_DragDrop(object sender, DragEventArgs e)
+        {
+            string path = ((System.Array)e.Data.GetData(DataFormats.FileDrop)).GetValue(0).ToString();
+           
+            
+            try
+            {
+                parseFix(path);
+                File.Copy(path, FilePathHelper.FixXml, true);
+                loadFix();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(_tvFix,string.Format("文件错误[{0}]",ex.Message), "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+           
         }
 
         #region 获取选择项
@@ -268,12 +297,12 @@ namespace MDT.Tools.Fix.Plugin
             }
             else
             {
-                var fixNode = new TreeNode { Text = TagType.Fix.ToString() + fix.Major + "." + fix.Minor, Tag = TagType.Header };
+                var fixNode = new TreeNode { Text = TagType.Fix.ToString() + fixM.Major + "." + fixM.Minor, Tag = TagType.Header };
 
                 AddTreeNode(collection, fixNode);
 
                 var headerNode = new TreeNode { Text = TagType.Header.ToString(), Tag = TagType.Header };
-                headerNode.Tag = new NodeTag(TagType.Header, fix.Header);
+                headerNode.Tag = new NodeTag(TagType.Header, fixM.Header);
                 AddTreeNode(fixNode.Nodes, headerNode);
 
 
@@ -281,7 +310,7 @@ namespace MDT.Tools.Fix.Plugin
                 var messagesNode = new TreeNode { Text = TagType.Messages.ToString(), Tag = TagType.Messages };
                 AddTreeNode(fixNode.Nodes, messagesNode);
 
-                foreach (Fix.Common.Model.Message message in fix.Messages)
+                foreach (Fix.Common.Model.Message message in fixM.Messages)
                 {
                     //新建一个结点 =                 
                     TreeNode node = new TreeNode { Text = message.Name };
@@ -293,7 +322,7 @@ namespace MDT.Tools.Fix.Plugin
 
                 var componentNode = new TreeNode { Text = TagType.Components.ToString(), Tag = TagType.Components };
                 AddTreeNode(fixNode.Nodes, componentNode);
-                foreach (Fix.Common.Model.Component component in fix.Components)
+                foreach (Fix.Common.Model.Component component in fixM.Components)
                 {
                     //新建一个结点 =                 
                     TreeNode node = new TreeNode { Text = component.Name };
@@ -304,7 +333,7 @@ namespace MDT.Tools.Fix.Plugin
                 var fieldsNode = new TreeNode { Text = TagType.Fields.ToString(), Tag = TagType.Fields };
                 AddTreeNode(fixNode.Nodes, fieldsNode);
 
-                foreach (Fix.Common.Model.FieldDic fieldDic in fix.Fields)
+                foreach (Fix.Common.Model.FieldDic fieldDic in fixM.Fields)
                 {
                     //新建一个结点 =                 
                     TreeNode node = new TreeNode { Text = fieldDic.Name };
@@ -313,10 +342,10 @@ namespace MDT.Tools.Fix.Plugin
                     AddTreeNode(fieldsNode.Nodes, node); //加入到结点集合中              
 
                 }
-                registerObject(PluginShareHelper.FixFieldDic, fix.Fields);
+                registerObject(PluginShareHelper.FixFieldDic, fixM.Fields);
                 var trailerNode = new TreeNode { Text = TagType.Trailer.ToString(), Tag = TagType.Trailer };
                 AddTreeNode(fixNode.Nodes, trailerNode);
-                trailerNode.Tag = new NodeTag(TagType.Trailer, fix.Trailer);
+                trailerNode.Tag = new NodeTag(TagType.Trailer, fixM.Trailer);
                 fixNode.Expand();
             }
 
@@ -417,25 +446,29 @@ namespace MDT.Tools.Fix.Plugin
         #endregion
 
         #region 解析Fix
-        private Fix.Common.Model.Fix fix = new Fix.Common.Model.Fix();
+        private Fix.Common.Model.Fix fixM = new Fix.Common.Model.Fix();
 
         private void loadFix()
         {
             SetTbDbEnable(false);
             ClearTree();
-            parseFix();
+            fixM= parseFix(FilePathHelper.FixXml);
             CreateRootNode(_tvFix.Nodes);
             //ExandAllTreeNode();
             SetTbDbEnable(true);
         }
 
-        private void parseFix()
+        private Fix.Common.Model.Fix parseFix(string path)
         {
             XmlDocument document = new XmlDocument();
-            document.Load(FilePathHelper.FixXml);
+            document.Load(path);
             XmlNodeList fixNodes = document.GetElementsByTagName("fix");
             XmlNode fixNode = fixNodes[0];
-
+            if(fixNode==null)
+            {
+                throw new Exception("错误的Fix文件");
+            }
+            Fix.Common.Model.Fix fix = new Fix.Common.Model.Fix();
             fix.Major = int.Parse(fixNode.Attributes["major"].Value);
             fix.Minor = int.Parse(fixNode.Attributes["minor"].Value);
             foreach (XmlNode node in fixNode.ChildNodes)
@@ -443,19 +476,19 @@ namespace MDT.Tools.Fix.Plugin
                 switch (node.Name)
                 {
                     case "header":
-                        parseHeader(node);
+                        parseHeader(node, fix);
                         break;
                     case "components":
-                        parseComponents(node);
+                        parseComponents(node,fix);
                         break;
                     case "messages":
-                        parseMessages(node);
+                        parseMessages(node,fix);
                         break;
                     case "fields":
-                        parseFields(node);
+                        parseFields(node,fix);
                         break;
                     case "trailer":
-                        parseTrailer(node);
+                        parseTrailer(node,fix);
                         break;
 
                 }
@@ -466,9 +499,10 @@ namespace MDT.Tools.Fix.Plugin
             {
                 fix.Fields.Add(new FieldDic() { Name = component.Name, Type = "STRING", Number = -1 });
             }
+            return fix;
         }
 
-        private void parseHeader(XmlNode node)
+        private void parseHeader(XmlNode node,Fix.Common.Model.Fix fix)
         {
             foreach (XmlNode xn in node.ChildNodes)
             {
@@ -482,20 +516,20 @@ namespace MDT.Tools.Fix.Plugin
                 else if (xn.Name == "group")
                 {
                     Group g = new Group();
-                    parseGroup(g, xn);
+                    parseGroup(g, xn,fix);
                     fix.Header.Groups.Add(g);
 
                 } if (xn.Name == "component")
                 {
                     Component c = new Component();
-                    parseComponent(c, xn);
+                    parseComponent(c, xn,fix);
                     fix.Header.Components.Add(c);
 
                 }
             }
         }
 
-        private void parseTrailer(XmlNode node)
+        private void parseTrailer(XmlNode node, Fix.Common.Model.Fix fix)
         {
             foreach (XmlNode xn in node.ChildNodes)
             {
@@ -509,7 +543,7 @@ namespace MDT.Tools.Fix.Plugin
                 else if (xn.Name == "group")
                 {
                     Group g = new Group();
-                    parseGroup(g, xn);
+                    parseGroup(g, xn,fix);
                     fix.Trailer.Groups.Add(g);
                 }
 
@@ -517,7 +551,7 @@ namespace MDT.Tools.Fix.Plugin
                     if (xn.Name == "component")
                     {
                         Component c = new Component();
-                        parseComponent(c, xn);
+                        parseComponent(c, xn,fix);
                         fix.Trailer.Components.Add(c);
 
                     }
@@ -525,7 +559,7 @@ namespace MDT.Tools.Fix.Plugin
 
         }
 
-        private void parseGroup(Group g, XmlNode node)
+        private void parseGroup(Group g, XmlNode node, Fix.Common.Model.Fix fix)
         {
             g.Name = node.Attributes["name"].Value;
             g.Required = node.Attributes["required"].Value == "Y";
@@ -543,43 +577,43 @@ namespace MDT.Tools.Fix.Plugin
                 else if (xn.Name == "group")
                 {
                     Group gt = new Group();
-                    parseGroup(gt, xn);
+                    parseGroup(gt, xn,fix);
                     g.Groups.Add(gt);
                 }
                 else if (xn.Name == "component")
                 {
                     Component c = new Component();
-                    parseComponent(c, xn);
+                    parseComponent(c, xn,fix);
                     g.Components.Add(c);
                 }
 
             }
         }
-        private void parseComponents(XmlNode node)
+        private void parseComponents(XmlNode node, Fix.Common.Model.Fix fix)
         {
             foreach (XmlNode xn in node.ChildNodes)
             {
                 if (xn.Name == "component")
                 {
                     Component c = new Component();
-                    parseComponent(c, xn);
+                    parseComponent(c, xn,fix);
                     fix.Components.Add(c);
                 }
             }
         }
-        private void parseMessages(XmlNode node)
+        private void parseMessages(XmlNode node, Fix.Common.Model.Fix fix)
         {
             foreach (XmlNode xn in node.ChildNodes)
             {
                 if (xn.Name == "message")
                 {
                     Fix.Common.Model.Message m = new Fix.Common.Model.Message();
-                    parseMessage(m, xn);
+                    parseMessage(m, xn,fix);
                     fix.Messages.Add(m);
                 }
             }
         }
-        private void parseMessage(Fix.Common.Model.Message m, XmlNode node)
+        private void parseMessage(Fix.Common.Model.Message m, XmlNode node, Fix.Common.Model.Fix fix)
         {
             m.Name = node.Attributes["name"].Value;
             m.MsgType = node.Attributes["msgtype"].Value;
@@ -596,13 +630,13 @@ namespace MDT.Tools.Fix.Plugin
                 else if (xn.Name == "group")
                 {
                     Group gt = new Group();
-                    parseGroup(gt, xn);
+                    parseGroup(gt, xn,fix);
                     m.Groups.Add(gt);
                 }
                 else if (xn.Name == "component")
                 {
                     Component ct = new Component();
-                    parseComponent(ct, xn);
+                    parseComponent(ct, xn,fix);
                     m.Components.Add(ct);
 
                 }
@@ -611,7 +645,7 @@ namespace MDT.Tools.Fix.Plugin
             }
         }
 
-        private void parseComponent(Component c, XmlNode node)
+        private void parseComponent(Component c, XmlNode node, Fix.Common.Model.Fix fix)
         {
 
             c.Name = node.Attributes["name"].Value;
@@ -637,20 +671,20 @@ namespace MDT.Tools.Fix.Plugin
                 else if (xn.Name == "group")
                 {
                     Group gt = new Group();
-                    parseGroup(gt, xn);
+                    parseGroup(gt, xn,fix);
                     c.Groups.Add(gt);
                 }
                 else if (xn.Name == "component")
                 {
                     Component ct = new Component();
-                    parseComponent(ct, xn);
+                    parseComponent(ct, xn,fix);
                     c.Components.Add(ct);
 
                 }
 
             }
         }
-        private void parseFields(XmlNode node)
+        private void parseFields(XmlNode node, Fix.Common.Model.Fix fix)
         {
 
 
@@ -659,7 +693,7 @@ namespace MDT.Tools.Fix.Plugin
                 if ((xn.Name+"").ToLower() == "field")
                 {
                     FieldDic fd = new FieldDic();
-                    parseFieldDic(fd, xn);
+                    parseFieldDic(fd, xn,fix);
                     fix.Fields.Add(fd);
                 }
                 else
@@ -668,7 +702,7 @@ namespace MDT.Tools.Fix.Plugin
                 }
             }
         }
-        private void parseFieldDic(FieldDic fd, XmlNode node)
+        private void parseFieldDic(FieldDic fd, XmlNode node, Fix.Common.Model.Fix fix)
         {
 
             fd.Name = node.Attributes["name"].Value;
