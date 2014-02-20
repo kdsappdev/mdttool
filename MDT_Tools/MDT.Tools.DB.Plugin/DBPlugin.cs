@@ -583,10 +583,14 @@ namespace MDT.Tools.DB.Plugin
             }
             if (_dbConfigList != null && _dbConfigList.Count > 0)
             {
-                if (String.IsNullOrEmpty(_tscbDbConfig.Text))
+                if (string.IsNullOrEmpty(_tscbDbConfig.Text))
                 {
                     _tscbDbConfig.Text = _dbConfigList[0].DbConfigName;
                 }
+            }
+            else
+            {
+                _tscbDbConfig.Text = "";
             }
         }
         #endregion
@@ -829,7 +833,7 @@ namespace MDT.Tools.DB.Plugin
 
                     #region 加载所有表信息
 
-                  
+
                     SetStatusBar(string.Format("正在获取{0}中所有表信息", dbConfigInfo.DbConfigName));
                     SetProgress(0);
 
@@ -841,7 +845,7 @@ namespace MDT.Tools.DB.Plugin
                     #region 从本地读取数据
                     bool status = DBFileHelper.IsExist(dbConfigInfo.DbConfigName, Tables);
 
-                    if (!reloadDb)
+                    //if (!reloadDb)
                     {
                         if (status)
                         {
@@ -849,20 +853,38 @@ namespace MDT.Tools.DB.Plugin
                         }
                     }
                     #endregion
-              
+
                     #region  从数据库中读取数据
                     if (!status || reloadDb)
                     {
                         DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
                         string sql = SqlDefHelper.GetTableNames(dbConfigInfo.DbType);
                         DataSet temp = new DataSet();
-                       
+
                         db.Fill(sql, temp, new[] { dbConfigInfo.DbConfigName + Tables });
-                        
+
+                        if (status)
+                        {
+                            DataTable dt1 = _dsTable.Tables[dbConfigInfo.DbConfigName + Tables];
+                            DataTable dt2 = temp.Tables[dbConfigInfo.DbConfigName + Tables];
+                            DataTable dtRetAdd;
+                            DataTable dtRetDif1;
+                            DataTable dtRetDif2;
+                            DataTable dtRetDel;
+                            DataTableHelper.CompareDt(dt1, dt2, new string[]{"NAME"} , out dtRetAdd, out dtRetDif1, out dtRetDif2, out dtRetDel);
+                            dt1.Merge(dtRetAdd);
+                            foreach (DataRow dr in dtRetDel.Rows)
+                            {
+                                dt1.Rows.Remove(dr);
+                            }
+                            _dsTable.Tables.Remove(dt1);
+                        }
+                        else
+                        {
                         temp = DBFileHelper.WriteXml(temp, OriginalEncoding, TargetEncoding);//缓存表数据到本地
                         
                         _dsTable.Merge(temp);
-                      
+                        }
                     }
                     #endregion
 
@@ -880,7 +902,7 @@ namespace MDT.Tools.DB.Plugin
 
                     #region 从本地读取数据
                     status = DBFileHelper.IsExist(dbConfigInfo.DbConfigName, TablesPrimaryKeys);
-                    if (!reloadDb)
+                    //if (!reloadDb)
                     {
                         if (status)
                         {
@@ -896,8 +918,28 @@ namespace MDT.Tools.DB.Plugin
                         string sql = SqlDefHelper.GetAllTablePrimaryKeys(dbConfigInfo.DbType);
                         DataSet temp = new DataSet();
                         db.Fill(sql, temp, new[] { dbConfigInfo.DbConfigName + TablesPrimaryKeys });
-                        temp = DBFileHelper.WriteXml(temp, OriginalEncoding, TargetEncoding);//缓存表数据到本地
-                        _dsTablePrimaryKey.Merge(temp);
+
+                        if (status)
+                        {
+                            DataTable dt1 = _dsTablePrimaryKey.Tables[dbConfigInfo.DbConfigName + TablesPrimaryKeys];
+                            DataTable dt2 = temp.Tables[dbConfigInfo.DbConfigName + TablesPrimaryKeys];
+                            DataTable dtRetAdd;
+                            DataTable dtRetDif1;
+                            DataTable dtRetDif2;
+                            DataTable dtRetDel;
+                            DataTableHelper.CompareDt(dt1, dt2, new string[] { "TABLE_NAME", "COLUMN_NAME" }, out dtRetAdd, out dtRetDif1, out dtRetDif2, out dtRetDel);
+                            dt1.Merge(dtRetAdd);
+                            foreach (DataRow dr in dtRetDel.Rows)
+                            {
+                                dt1.Rows.Remove(dr);
+                            }
+                            
+                        }
+                        else
+                        {
+                            temp = DBFileHelper.WriteXml(temp, OriginalEncoding, TargetEncoding); //缓存表数据到本地
+                            _dsTablePrimaryKey.Merge(temp);
+                        }
                     }
                     #endregion
 
@@ -920,7 +962,7 @@ namespace MDT.Tools.DB.Plugin
 
                     #region 从本地读取表字段信息
                     status = DBFileHelper.IsExist(dbConfigInfo.DbConfigName, TablesColumns);
-                    if (!reloadDb)
+                    //if (!reloadDb)
                     {
                         if (status)
                         {
@@ -933,11 +975,11 @@ namespace MDT.Tools.DB.Plugin
                     #region 从数据库读取表字段信息
                     if (!status || reloadDb)
                     {
-                         
+
                         DNCCFrameWork.DataAccess.IDbHelper db = new DNCCFrameWork.DataAccess.DbFactory(dbConfigInfo.ConnectionString.Trim(new[] { '"' }), DBType.GetDbProviderString(dbConfigInfo.DbType)).IDbHelper;
-                         
+
                         int count = _dsTable.Tables[dbConfigInfo.DbConfigName + Tables].Rows.Count;
-                         
+
                         int temp1 = count / 7;
                         bool isDivisible = count % temp1 == 0;
                         string sql = SqlDefHelper.GetTableColumnNames(dbConfigInfo.DbType);
@@ -955,10 +997,29 @@ namespace MDT.Tools.DB.Plugin
                                 SetProgress(10);
                             }
                         }
-                        dsTemp = DBFileHelper.WriteXml(dsTemp, OriginalEncoding, TargetEncoding);//缓存表字段数据到本地，
 
-                        _dsTableColumn.Merge(dsTemp);
-                      
+                        if (status)
+                        {
+                            DataTable dt1 = _dsTableColumn.Tables[dbConfigInfo.DbConfigName + TablesColumns];
+                            DataTable dt2 = dsTemp.Tables[dbConfigInfo.DbConfigName + TablesColumns];
+                            DataTable dtRetAdd;
+                            DataTable dtRetDif1;
+                            DataTable dtRetDif2;
+                            DataTable dtRetDel;
+                            DataTableHelper.CompareDt(dt1, dt2, new string[] { "TABLE_NAME", "COLUMN_NAME" }, out dtRetAdd, out dtRetDif1, out dtRetDif2, out dtRetDel);
+                            dt1.Merge(dtRetAdd);
+                            foreach (DataRow dr in dtRetDel.Rows)
+                            {
+                                dt1.Rows.Remove(dr);
+                            }
+                            
+                        }
+                        else
+                        {
+                            dsTemp = DBFileHelper.WriteXml(dsTemp, OriginalEncoding, TargetEncoding); //缓存表字段数据到本地，
+
+                            _dsTableColumn.Merge(dsTemp);
+                        }
 
                         if (!isDivisible)
                         {
@@ -985,6 +1046,9 @@ namespace MDT.Tools.DB.Plugin
                 SetStatusBar("加载数据失败[没有获取到数据库配置]");
             }
         }
+
+
+
 
         #endregion
 
