@@ -115,7 +115,7 @@ namespace MDT.Tools.Lua.Plugin
                     }
                     catch (Exception ex)
                     {
-                        LogHelper.Error(ex);
+                        LogHelper.Error(string.Format("{0}:{1}",fileName,ex.StackTrace));
                     }
                 }
             }
@@ -139,7 +139,7 @@ namespace MDT.Tools.Lua.Plugin
                         }
                         catch (Exception ex)
                         {
-                            LogHelper.Error(ex);
+                            LogHelper.Error(string.Format("{0}:{1}", luaPluginKey, ex.StackTrace));
                         }
                     }
                 }
@@ -339,7 +339,7 @@ namespace MDT.Tools.Lua.Plugin
                     }
                     catch (Exception ex)
                     {
-                        LogHelper.Error(ex);
+                        LogHelper.Error(string.Format("{0}:{1}", plugin.PluginKey, ex.StackTrace));
                     }
                 }
                 isLoaded = true;
@@ -361,7 +361,7 @@ namespace MDT.Tools.Lua.Plugin
                     }
                     catch (Exception ex)
                     {
-                        LogHelper.Error(ex);
+                        LogHelper.Error(string.Format("{0}:{1}", plugin.PluginKey, ex.StackTrace));
                     }
                 }
                 isUnloaded = true;
