@@ -1,0 +1,5 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.Lua.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.Lua.Plugin.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\obj\Release\MDT.Tools.Lua.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\obj\Release\MDT.Tools.Lua.Plugin.pdb

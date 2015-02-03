@@ -1,0 +1,583 @@
+﻿2014/02/13 +08:00 21:15:58     [14468] ERROR Postion: System.ArgumentNullException: 值不能为空。
+参数名: fileName
+   在 System.IO.FileInfo..ctor(String fileName)
+   在 MDT.Tools.IniConfigHelper.ReadRunTimeConfig(String runTimePath, String publicKey) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools\IniConfigHelper.cs:行号 25 e 
+2014/02/13 +08:00 21:16:09     [14468] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/lua51.x86.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:16:10     [14468] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/System.Data.SQLite.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:22:44     [14696] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/lua51.x86.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:22:44     [14696] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/System.Data.SQLite.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:24:18     [15332] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/lua51.x86.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:24:19     [15332] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/System.Data.SQLite.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:33:55     [16160] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/lua51.x86.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:33:55     [16160] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/System.Data.SQLite.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:34:30     [13444] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/lua51.x86.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:34:30     [13444] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/System.Data.SQLite.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 21:35:19     [14556] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 21:35:19     [14556] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 21:35:20     [14556] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:35:20     [14556] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:35:20     [14556] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:35:20     [14556] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:35:20     [14556] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:35:20     [14556] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:35:20     [14556] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:35:20     [14556] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:35:21     [16276] ERROR Postion: System.Exception: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   在 System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   在 MDT.Tools.DB.Plugin.DbPlugin.SetEnable(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 340
+   在 MDT.Tools.DB.Plugin.DbPlugin.DoWork(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 705
+   在 MDT.Tools.DB.Plugin.DbPlugin.<>c__DisplayClass6.<Run>b__4(Object o) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 638
+   在 System.Threading._ThreadPoolWaitCallback.WaitCallback_Context(Object state)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallbackInternal(_ThreadPoolWaitCallback tpWaitCallBack)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallback(Object state) e 
+2014/02/13 +08:00 21:35:39     [16276] ERROR Postion: System.Exception: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   在 System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   在 MDT.Tools.DB.Plugin.DbPlugin.SetEnable(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 340
+   在 MDT.Tools.DB.Plugin.DbPlugin.DoWork(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 705
+   在 MDT.Tools.DB.Plugin.DbPlugin.<>c__DisplayClass6.<Run>b__4(Object o) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 638
+   在 System.Threading._ThreadPoolWaitCallback.WaitCallback_Context(Object state)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallbackInternal(_ThreadPoolWaitCallback tpWaitCallBack)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallback(Object state) e 
+2014/02/13 +08:00 21:35:58     [16276] ERROR Postion: System.Exception: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   在 System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   在 MDT.Tools.DB.Plugin.DbPlugin.SetEnable(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 340
+   在 MDT.Tools.DB.Plugin.DbPlugin.DoWork(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 705
+   在 MDT.Tools.DB.Plugin.DbPlugin.<>c__DisplayClass6.<Run>b__4(Object o) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 638
+   在 System.Threading._ThreadPoolWaitCallback.WaitCallback_Context(Object state)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallbackInternal(_ThreadPoolWaitCallback tpWaitCallBack)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallback(Object state) e 
+2014/02/13 +08:00 21:37:22     [13504] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 21:37:22     [13504] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 21:37:23     [13504] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:37:23     [13504] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:37:23     [13504] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:37:23     [13504] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:37:23     [13504] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:37:23     [13504] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:37:23     [13504] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:37:23     [13504] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:37:29     [16304] ERROR Postion: System.Exception: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   在 System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   在 MDT.Tools.DB.Plugin.DbPlugin.SetEnable(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 340
+   在 MDT.Tools.DB.Plugin.DbPlugin.DoWork(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 705
+   在 MDT.Tools.DB.Plugin.DbPlugin.<>c__DisplayClass6.<Run>b__4(Object o) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 638
+   在 System.Threading._ThreadPoolWaitCallback.WaitCallback_Context(Object state)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallbackInternal(_ThreadPoolWaitCallback tpWaitCallBack)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallback(Object state) e 
+2014/02/13 +08:00 21:38:05     [16352] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 21:38:05     [16352] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 21:48:36     [11612] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 21:48:36     [11612] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 21:48:37     [11612] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:48:37     [11612] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:48:37     [11612] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:48:37     [11612] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:48:37     [11612] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:48:37     [11612] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:48:37     [11612] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Lua.LuaEngine.Initialize() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 39
+
+ e 
+2014/02/13 +08:00 21:48:37     [11612] ERROR Postion: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/13 +08:00 21:48:38     [16336] ERROR Postion: System.Exception: System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous)
+   在 System.Windows.Forms.Control.Invoke(Delegate method, Object[] args)
+   在 MDT.Tools.DB.Plugin.DbPlugin.SetEnable(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 340
+   在 MDT.Tools.DB.Plugin.DbPlugin.DoWork(Boolean flag) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 705
+   在 MDT.Tools.DB.Plugin.DbPlugin.<>c__DisplayClass6.<Run>b__4(Object o) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\DBPlugin.cs:行号 638
+   在 System.Threading._ThreadPoolWaitCallback.WaitCallback_Context(Object state)
+   在 System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallbackInternal(_ThreadPoolWaitCallback tpWaitCallBack)
+   在 System.Threading._ThreadPoolWaitCallback.PerformWaitCallback(Object state) e 
+2014/02/13 +08:00 22:01:32     [14736] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“lua51.x64, Version=0.0.0.0, Culture=neutral, PublicKeyToken=1e1fb15b02227b8a”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 22:01:32     [14736] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“LuaInterface.x64, Version=2.0.4.0, Culture=neutral, PublicKeyToken=null”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoadFrom(String assemblyFile, Evidence securityEvidence, Byte[] hashValue, AssemblyHashAlgorithm hashAlgorithm, Boolean forIntrospection, StackCrawlMark& stackMark)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+ e 
+2014/02/13 +08:00 22:02:12     [15836] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\lua51.x86.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/lua51.x86.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 22:02:13     [15836] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\LuaInterface.x86.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\LuaInterface.x86.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\LuaInterface.x86.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/LuaInterface.x86.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 
+2014/02/13 +08:00 22:02:13     [15836] ERROR Postion: System.BadImageFormatException: 未能加载文件或程序集“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”或它的某一个依赖项。试图加载格式不正确的程序。
+文件名:“file:///C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll”
+   在 System.Reflection.Assembly._nLoad(AssemblyName fileName, String codeBase, Evidence assemblySecurity, Assembly locationHint, StackCrawlMark& stackMark, Boolean throwOnFileNotFound, Boolean forIntrospection)
+   在 System.Reflection.Assembly.InternalLoad(AssemblyName assemblyRef, Evidence assemblySecurity, StackCrawlMark& stackMark, Boolean forIntrospection)
+   在 System.Reflection.Assembly.LoadFrom(String assemblyFile)
+   在 MDT.Tools.Core.Utils.ReflectionHelper.LoadDerivedTypeInOneFolder(Type baseType, IList`1 derivedTypeList, String folderPath, TypeLoadConfig config) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Utils\ReflectionHelper.cs:行号 94
+
+=== 预绑定状态信息 ===
+日志: 用户 = cdit-00007635\Administrator
+日志: Where-ref 绑定。位置 = C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\System.Data.SQLite.dll
+日志: Appbase = file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/
+日志: 初始 PrivatePath = NULL
+调用程序集: (Unknown)。
+===
+日志: 此绑定从 LoadFrom 加载上下文开始。
+警告: 将不在 LoadFrom 上下文中探测本机映像。仅在默认加载上下文中探测本机映像，例如，使用 Assembly.Load()。
+日志: 正在使用应用程序配置文件: C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.vshost.exe.Config
+日志: 使用 C:\Windows\Microsoft.NET\Framework64\v2.0.50727\config\machine.config 的计算机配置文件。
+日志: 试图下载新的 URL file:///C:/Users/Administrator/Desktop/mdttool/MDT_Tools/client/bin/System.Data.SQLite.dll。
+错误: 未能完成程序集的安装(hr = 0x8007000b)。探测终止。
+ e 

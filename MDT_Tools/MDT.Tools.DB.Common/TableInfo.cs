@@ -125,5 +125,80 @@ namespace MDT.Tools.DB.Common
             get { return isForeignkey; }
             set { isForeignkey = value; }
         }
+
+        #region 扩展
+
+        public bool CommentsIsNull
+        {
+            get { return string.IsNullOrEmpty(comments); }
+        }
+
+        public string JdbcType
+        {
+            get
+            {
+                string retval = "VARCHAR";
+                if (!string.IsNullOrEmpty(dataType))
+                {
+                    string temp = dataType.ToUpper();
+                    if ("NVARCHAR".Equals(temp) || "NVARCHAR2".Equals(temp) || "VARCHAR2".Equals(temp))
+                    {
+                        retval = "VARCHAR";
+                    }
+                    else if ("NUMBER".Equals(temp))
+                    {
+                        retval = "DECIMAL";
+                    }
+                    else if ("CLOB".Equals(temp))
+                    {
+                        retval = "OTHER";
+                    }
+                    else if ("DATE".Equals(temp))
+                    {
+                        retval = "TIMESTAMP";
+                    }
+                    else
+                    {
+                        retval = temp;
+                    }
+                }
+                return retval;
+            }
+        }
+
+        public string JavaType
+        {
+            get
+            {
+                string retval = "String";
+                if (!string.IsNullOrEmpty(dataType))
+                {
+                    string temp = dataType.ToUpper();
+                    if ("CHAR".Equals(temp) || "VARCHAR".Equals(temp) || "VARCHAR2".Equals(temp) ||
+                        "NVARCHAR".Equals(temp) || "NVARCHAR2".Equals(temp))
+                    {
+                        retval = "String";
+                    }
+                    else if ("NUMBER".Equals(temp))
+                    {
+                        retval = "BigDecimal";
+                    }
+                    else if ("DATE".Equals(temp))
+                    {
+                        retval = "Date";
+                    }
+                    else if ("TIMESTAMP".Contains(temp))
+                    {
+                        retval = "Timestamp";
+                    }
+                    else if ("CLOB".Equals(temp))
+                    {
+                        retval = "Object";
+                    }
+                }
+                return retval;
+            }
+        }
+        #endregion
     }
 }

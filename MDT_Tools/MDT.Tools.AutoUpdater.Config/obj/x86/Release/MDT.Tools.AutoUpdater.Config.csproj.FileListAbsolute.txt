@@ -1,0 +1,6 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT.Tools.AutoUpdater.Config.exe.config
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT.Tools.AutoUpdater.Config.exe
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT.Tools.AutoUpdater.Config.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.AutoUpdater.Config\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.AutoUpdater.Config\obj\x86\Release\MDT.Tools.AutoUpdater.Config.exe
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.AutoUpdater.Config\obj\x86\Release\MDT.Tools.AutoUpdater.Config.pdb

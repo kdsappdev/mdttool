@@ -1,6 +1,9 @@
 #set($codeLanguage ='Java')
 package ats.bbox.common.mo;
-
+/**
+ *
+ *$date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
+ */
 
 public class MessageDictionary {
 

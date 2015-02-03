@@ -1,0 +1,73 @@
+﻿2014/02/16 +08:00 00:20:22     [199596] ERROR Postion: System.Exception: Frame Plugin Lost,Please Check. e 
+2014/02/16 +08:00 00:25:44     [199260] ERROR Postion: System.Exception: LuaInterface.LuaScriptException: ...l\MDT_Tools\client\script\Form.UI\form.ui.plugin.lua:120: bad argument #1 to 'pcall' (value expected) e 
+2014/02/16 +08:00 00:48:28     [199920] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...rator\Desktop\mdttool\MDT_Tools\client\script\Form.UI\form.ui.plugin.lua:139: 'then' expected near 'MessageBox'
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 91 e 
+2014/02/16 +08:00 00:48:28     [199920] ERROR Postion: System.Exception: Frame Plugin Lost,Please Check. e 
+2014/02/16 +08:00 00:49:35     [199736] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...rator\Desktop\mdttool\MDT_Tools\client\script\Form.UI\form.ui.plugin.lua:139: 'then' expected near 'MessageBox'
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/16 +08:00 00:49:35     [199736] ERROR Postion: System.Exception: Frame Plugin Lost,Please Check. e 
+2014/02/16 +08:00 00:50:14     [17328] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...rator\Desktop\mdttool\MDT_Tools\client\script\Form.UI\form.ui.plugin.lua:139: 'then' expected near 'MessageBox'
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/16 +08:00 00:51:49     [200632] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...rator\Desktop\mdttool\MDT_Tools\client\script\Form.UI\form.ui.plugin.lua:139: 'then' expected near 'MessageBox'
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 90 e 
+2014/02/16 +08:00 00:53:19     [198752] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...rator\Desktop\mdttool\MDT_Tools\client\script\Form.UI\form.ui.plugin.lua:139: 'then' expected near 'MessageBox'
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 91 e 
+2014/02/16 +08:00 00:53:19     [198752] ERROR Postion: System.Exception: Frame Plugin Lost,Please Check. e 
+2014/02/16 +08:00 00:54:13     [200996] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...rator\Desktop\mdttool\MDT_Tools\client\script\Form.UI\form.ui.plugin.lua:144: 'then' expected near 'if'
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 MDT.Tools.Core.Lua.LuaEngine.DoFile(String luaFileName) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 70
+   在 MDT.Tools.Lua.Plugin.LuaPlugin.loadLuaScriptFile(String luaScriptPath, String pluginSign) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaPlugin.cs:行号 91 e 
+2014/02/16 +08:00 00:54:13     [200996] ERROR Postion: System.Exception: Frame Plugin Lost,Please Check. e 
+2014/02/16 +08:00 00:57:09     [200808] ERROR Postion: LuaInterface.LuaScriptException: ...l\MDT_Tools\client\script\Form.UI\form.ui.plugin.lua:115: invalid arguments to method: ThreadPool.QueueUserWorkItem e 
+2014/02/16 +08:00 16:29:42     [3464] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...s\client\script\DB.SetColumn\db.setcolumn.plugin.lua:40: A .NET exception occured in user-code
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 MDT.Tools.Core.Lua.LuaEngine.Invoke(String luaFunction, Object[] args) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 89
+   在 MDT.Tools.Lua.Plugin.LuaScriptPlugin.load() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaScriptPlugin.cs:行号 69 e 
+2014/02/16 +08:00 16:32:34     [5656] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...s\client\script\DB.SetColumn\db.setcolumn.plugin.lua:40: A .NET exception occured in user-code
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 MDT.Tools.Core.Lua.LuaEngine.Invoke(String luaFunction, Object[] args) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 89
+   在 MDT.Tools.Lua.Plugin.LuaScriptPlugin.load() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaScriptPlugin.cs:行号 69 e 
+2014/02/16 +08:00 16:36:47     [6488] ERROR Postion: System.Reflection.TargetInvocationException: 调用的目标发生了异常。 ---> LuaInterface.LuaScriptException: ...s\client\script\DB.SetColumn\db.setcolumn.plugin.lua:40: A .NET exception occured in user-code
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   在 System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   在 MDT.Tools.Core.Lua.LuaEngine.Invoke(String luaFunction, Object[] args) 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Core\Lua\LuaEngine.cs:行号 89
+   在 MDT.Tools.Lua.Plugin.LuaScriptPlugin.load() 位置 C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Lua.Plugin\LuaScriptPlugin.cs:行号 69 e 

@@ -161,7 +161,8 @@ namespace MDT.Tools.Template.Plugin.Gen
             string tableName = "";
 
             string path = string.Format(@"{0}", TemplateParas.TemplateName);
-            var dic = new Dictionary<string, object>();
+            //var dic = new Dictionary<string, object>();
+            var dic = GetNVelocityVars();
             if (header != null)
             {
                 tableName = "header";
@@ -190,16 +191,15 @@ namespace MDT.Tools.Template.Plugin.Gen
 
             FixHelper.FieldDics = FieldDics;
             dic.Add("FixHelper", new FixHelper());
-            dic.Add("codeGenHelper", new CodeGenHelper());
+            //dic.Add("codeGenHelper", new CodeGenHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
-
-
             string title = tableName + "." + (TemplateParas.Language + "").ToLower();
 
 
-            if (!TemplateParas.IsAutoGenSaveFileName)
+            if (!string.IsNullOrEmpty(TemplateParas.SaveFileName))
             {
                 title = TemplateParas.SaveFileName;
+                title = nVelocityHelper.GenByStr(title, dic);
             }
 
             if (TemplateParas.IsShowGenCode)
@@ -228,7 +228,8 @@ namespace MDT.Tools.Template.Plugin.Gen
             string tableName = "";
 
             string path = string.Format(@"{0}", TemplateParas.TemplateName);
-            var dic = new Dictionary<string, object>();
+            //var dic = new Dictionary<string, object>();
+            var dic = GetNVelocityVars();
             if (header != null)
             {
                 tableName = "header";
@@ -257,14 +258,15 @@ namespace MDT.Tools.Template.Plugin.Gen
 
             FixHelper.FieldDics = FieldDics;
             dic.Add("FixHelper", new FixHelper());
-            dic.Add("codeGenHelper", new CodeGenHelper());
+            //dic.Add("codeGenHelper", new CodeGenHelper());
             string str = nVelocityHelper.GenByTemplate(path, dic);
             string title = tableName + "." + (TemplateParas.CodeLanguage + "").ToLower();
 
 
-            if (!TemplateParas.IsAutoGenSaveFileName)
+            if (!string.IsNullOrEmpty(TemplateParas.SaveFileName))
             {
                 title = TemplateParas.SaveFileName;
+                title = nVelocityHelper.GenByStr(title, dic);
             }
 
             if (TemplateParas.IsShowGenCode)
@@ -291,9 +293,10 @@ namespace MDT.Tools.Template.Plugin.Gen
 
 
             string title = tableName + "." + (TemplateParas.CodeLanguage + "").ToLower();
-            if (!TemplateParas.IsAutoGenSaveFileName)
+            if (!string.IsNullOrEmpty(TemplateParas.SaveFileName))
             {
                 title = TemplateParas.SaveFileName;
+                title = nVelocityHelper.GenByStr(title, dic);
             }
             if (TemplateParas.IsShowGenCode)
             {
@@ -314,9 +317,10 @@ namespace MDT.Tools.Template.Plugin.Gen
             var dic = GetNVelocityVars();
             string str = nVelocityHelper.GenByTemplate(path, dic);
             string title = "";
-            if (!TemplateParas.IsAutoGenSaveFileName)
+            if (!string.IsNullOrEmpty(TemplateParas.SaveFileName))
             {
                 title = TemplateParas.SaveFileName;
+                title = nVelocityHelper.GenByStr(title, dic);
             }
             if (TemplateParas.IsShowGenCode)
             {

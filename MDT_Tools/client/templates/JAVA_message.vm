@@ -1,9 +1,31 @@
 #set($codeLanguage ='Java')
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
+#macro(Jma_paraeAFix2 $p)
+#foreach($field in $p.Fields)
+		t.set${field.Name}(get${field.Name}());
+#end
+#foreach($group in $p.Groups)
+#Jma_parseAGroup2($group)
+#end
+#foreach($component in $p.Components)
+#Jma_parseAComponent2($component)
+#end
+#end
+#macro(Jma_parseAGroup2 $p)
+		t.${group.Name}=new List<G${group.Name}>();
+		foreach( var g in ${group.Name})
+		{
+			G${group.Name} g${group.Name}=g.Clone();		 
+			t.${group.Name}.Add(g${group.Name});
+		}	
+#end
+#macro(Jma_parseAComponent2 $p)
+	${p.Name}.g${p.Name}=${p.Name};
+#end
 #macro(Jma_parseAComponent $p)
 
 
-	public ${p.Name} get${p.Name}(){
+		public ${p.Name} get${p.Name}(){
 			return (${p.Name}) this.get(MessageDictionary.Fields.${p.Name});
 		}
 		public void set${p.Name}(${p.Name} ${codeGenHelper.StrFirstToLower(${p.Name})}){
@@ -33,10 +55,22 @@
 #end
 #macro(Jma_parseAGroup $p)
 
-	public static final String GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
-	
-	public static class ${group.Name} extends BaseMessage{
+	private final String GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
+	public List<G${group.Name}> get${group.Name}(){
+			return (List<G${p.Name}>) this.get(GROUP_${group.Name});
+		}
+	public void set${group.Name}(List<G${group.Name}> ${codeGenHelper.StrFirstToLower(${group.Name})}){
+			this.put(GROUP_${group.Name},${codeGenHelper.StrFirstToLower(${group.Name})});
+		}
+	public static class G${group.Name} extends BaseMessage{
 #Jma_paraeAFix($p)
+
+	public G${group.Name} Clone()
+	{
+		G${group.Name} t=new  G${group.Name}();
+		#Jma_paraeAFix2($p)
+		return t;
+	}
 	}
 	
 #end
@@ -56,9 +90,22 @@ import ats.bbox.common.mo.BaseMessage;
 import ats.bbox.common.mo.FixMessage;
 import ats.bbox.common.mo.MessageDictionary;
 import ats.bbox.framework.utils.DataTypeConverter;
-
+import java.util.List;
+/**
+ *
+ *$date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
+ */
 public class ${p.Name} extends FixMessage{
 #Jma_paraeAFix($p)
+	public ${p.Name} Clone()
+	{
+		${p.Name} t=new ${p.Name}();
+		t.setStandardHeader(getStandardHeader());
+		t.setStandardTrailer(getStandardTrailer());
+#Jma_paraeAFix2($p)
+		return t;
+	}
+
 }
 #end
 #Jma_parseComponent($message)

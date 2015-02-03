@@ -43,6 +43,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
                         setStatusBar(string.Format("正在生成Spring配置文件"));
+                        LogHelper.Info("Generating spring config file.");
                         setProgreesEditValue(0);
                         setProgress(0);
                         setProgressMax(drTables.Length);
@@ -68,6 +69,8 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                             setStatusBar(string.Format("正在生成Spring配置{0}的配置,共{1}个配置，已生成了{2}个配置,过滤了{3}个配置",
                                                        CodeGenHelper.GetClassName(tableName, cmc.CodeRule),
                                                        drTables.Length, i - j, j));
+                            LogHelper.Info("Generationg spring config " + CodeGenHelper.GetClassName(tableName, cmc.CodeRule)
+                                + " configuration, of " + drTables.Length + " configuration, " + (i - j) + " of configuration has generated, " + j + " of configuration was filtered.");
                             setProgress(1);
                         }
                         if (!flag)
@@ -80,8 +83,9 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
 
                 if (!cmc.IsShowGenCode)
                 {
-                    FileHelper.Write(cmc.OutPut + CodeGenRuleHelper.DAL, new[] { DAL.ToString() });
+                    FileHelper.Write(cmc.OutPut + CodeGenRuleHelper.Object, new[] { DAL.ToString() });
                     setStatusBar(string.Format("Spring配置生成成功"));
+                    LogHelper.Info("Spring config has generated.");
                     openDialog();
                 }
                 else
@@ -94,7 +98,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             catch (Exception ex)
             {
                 setStatusBar(string.Format("Spring配置生成失败[{0}]", ex.Message));
-
+                LogHelper.Error("Spring config generated fail " + ex.Message);
             }
             finally
             {
@@ -116,6 +120,10 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             dic.Add("bllNameSpace", cmc.BLLNameSpace);
             dic.Add("guiPluginName", cmc.PluginName);
             dic.Add("codeRule", cmc.CodeRule);
+
+            dic.Add("dalDllName", cmc.DALDllName);
+            dic.Add("bllDllName", cmc.BLLDllName);
+
             string str = nVelocityHelper.GenByTemplate(path, dic);
 
             return str;

@@ -310,6 +310,11 @@ namespace DNCCFrameWork.DataAccess
                 parFormat = "@{0}";
                 return parFormat;
             }
+            if (Instance().GetType().ToString().Equals("System.Data.SQLite.SQLiteFactory"))
+            {
+                parFormat = "@{0}";
+                return parFormat;
+            }
             if (Instance().GetType().ToString().Equals("MySql.Data.MySqlClient.MySqlClientFactory"))
             {
                 parFormat = "?{0}";

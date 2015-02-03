@@ -16,11 +16,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace KnightsWarriorAutoupdater
+namespace MDT.ThirdParty.Controls
 {
     public interface IAutoUpdater
     {
-        bool IsUpdate();
+        int IsUpdate();
         void Update();
 
         void RollBack();

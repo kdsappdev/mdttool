@@ -5,7 +5,12 @@ using System.Text;
 
 namespace Ats.Model.MO
 {
-
+ 	/// <summary>
+	/// MessageDictionary
+	/// </summary>
+	/// <remarks>
+	/// $date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
+	/// </remarks>
 public class MessageDictionary 
 {
 

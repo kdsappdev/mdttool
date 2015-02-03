@@ -7,7 +7,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
    public class CodeGenRuleHelper
    {
        public const string Ibatis = "ibatis";
-       //DAL
+       //Object
        public const string DALServer = "DALServer";
        public const string DALServerSummary = "数据访问服务";
        public const string IDALServerSummary = "数据访问服务接口";
@@ -17,6 +17,6 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
        public const string BLLServerSummary = "业务层";
        public const string IBLLServerSummary = "业务接口";
        //Spring
-       public const string DAL = "";
+       public const string Object = "Object.xml";
    }
 }

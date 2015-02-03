@@ -78,7 +78,7 @@
             // 
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(988, 24);
+            this.mainMenu.Size = new System.Drawing.Size(971, 24);
             this.mainMenu.TabIndex = 1;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -86,14 +86,14 @@
             // 
             this.mainTool.Location = new System.Drawing.Point(0, 24);
             this.mainTool.Name = "mainTool";
-            this.mainTool.Size = new System.Drawing.Size(988, 25);
+            this.mainTool.Size = new System.Drawing.Size(971, 25);
             this.mainTool.TabIndex = 2;
             // 
             // statusBar
             // 
-            this.statusBar.Location = new System.Drawing.Point(0, 587);
+            this.statusBar.Location = new System.Drawing.Point(0, 637);
             this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size(988, 22);
+            this.statusBar.Size = new System.Drawing.Size(971, 22);
             this.statusBar.TabIndex = 3;
             this.statusBar.Text = "statusStrip1";
             // 
@@ -152,7 +152,7 @@
             this.DockPanelWeifenLuo.DockBackColor = System.Drawing.SystemColors.AppWorkspace;
             this.DockPanelWeifenLuo.Location = new System.Drawing.Point(0, 49);
             this.DockPanelWeifenLuo.Name = "DockPanelWeifenLuo";
-            this.DockPanelWeifenLuo.Size = new System.Drawing.Size(988, 538);
+            this.DockPanelWeifenLuo.Size = new System.Drawing.Size(971, 588);
             dockPanelGradient1.EndColor = System.Drawing.SystemColors.ControlLight;
             dockPanelGradient1.StartColor = System.Drawing.SystemColors.ControlLight;
             autoHideStripSkin1.DockStripGradient = dockPanelGradient1;
@@ -160,7 +160,7 @@
             tabGradient1.StartColor = System.Drawing.SystemColors.Control;
             tabGradient1.TextColor = System.Drawing.SystemColors.ControlDarkDark;
             autoHideStripSkin1.TabGradient = tabGradient1;
-            autoHideStripSkin1.TextFont = new System.Drawing.Font("Microsoft YaHei", 9F);
+            autoHideStripSkin1.TextFont = new System.Drawing.Font("微软雅黑", 9F);
             dockPanelSkin1.AutoHideStripSkin = autoHideStripSkin1;
             tabGradient2.EndColor = System.Drawing.SystemColors.ControlLightLight;
             tabGradient2.StartColor = System.Drawing.SystemColors.ControlLightLight;
@@ -174,7 +174,7 @@
             tabGradient3.TextColor = System.Drawing.SystemColors.ControlText;
             dockPaneStripGradient1.InactiveTabGradient = tabGradient3;
             dockPaneStripSkin1.DocumentGradient = dockPaneStripGradient1;
-            dockPaneStripSkin1.TextFont = new System.Drawing.Font("Microsoft YaHei", 9F);
+            dockPaneStripSkin1.TextFont = new System.Drawing.Font("微软雅黑", 9F);
             tabGradient4.EndColor = System.Drawing.SystemColors.ActiveCaption;
             tabGradient4.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
             tabGradient4.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -215,7 +215,7 @@
             tabGradient8.StartColor = System.Drawing.SystemColors.Control;
             tabGradient8.TextColor = System.Drawing.SystemColors.ControlDarkDark;
             autoHideStripSkin2.TabGradient = tabGradient8;
-            autoHideStripSkin2.TextFont = new System.Drawing.Font("Microsoft YaHei", 9F);
+            autoHideStripSkin2.TextFont = new System.Drawing.Font("微软雅黑", 9F);
             dockPanelSkin2.AutoHideStripSkin = autoHideStripSkin2;
             tabGradient9.EndColor = System.Drawing.SystemColors.ControlLightLight;
             tabGradient9.StartColor = System.Drawing.SystemColors.ControlLightLight;
@@ -229,7 +229,7 @@
             tabGradient10.TextColor = System.Drawing.SystemColors.ControlText;
             dockPaneStripGradient2.InactiveTabGradient = tabGradient10;
             dockPaneStripSkin2.DocumentGradient = dockPaneStripGradient2;
-            dockPaneStripSkin2.TextFont = new System.Drawing.Font("Microsoft YaHei", 9F);
+            dockPaneStripSkin2.TextFont = new System.Drawing.Font("微软雅黑", 9F);
             tabGradient11.EndColor = System.Drawing.SystemColors.ActiveCaption;
             tabGradient11.LinearGradientMode = System.Drawing.Drawing2D.LinearGradientMode.Vertical;
             tabGradient11.StartColor = System.Drawing.SystemColors.GradientActiveCaption;
@@ -260,7 +260,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(988, 609);
+            this.ClientSize = new System.Drawing.Size(971, 659);
             this.Controls.Add(this.DockPanelWeifenLuo);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.mainTool);
@@ -271,10 +271,11 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "MDT";
-            this.MaximizedBoundsChanged += new System.EventHandler(this.MainForm_MaximizedBoundsChanged);
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainFormLoad);
+            this.MaximizedBoundsChanged += new System.EventHandler(this.MainForm_MaximizedBoundsChanged);
             this.Move += new System.EventHandler(this.MainForm_Move);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
             this.notifiyIconContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

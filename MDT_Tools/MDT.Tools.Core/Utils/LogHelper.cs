@@ -22,5 +22,9 @@ namespace MDT.Tools.Core.Utils
        {
            Log.Warn(str);
        }
+       public static void Info(string str)
+       {
+           Log.Info(str);
+       }
     }
 }

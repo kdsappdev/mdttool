@@ -43,6 +43,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin
         {
             get { return "孔德帅"; }
         }
+       
 
         #endregion
 
@@ -139,20 +140,20 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin
         {
             var gen = new GenJavaBS();
             
-            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+            gen.cmc = IniConfigHelper.getDefaultObject();
             process(drTable, gen);             
         }
 
         private void GenJavaSpringConfig(DataRow[] drTable)
         {
             var gen = new GenJavaSpringConfig();
-            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+            gen.cmc = IniConfigHelper.getDefaultObject();
             process(drTable, gen);  
         }
         private void GenwsService(DataRow[] drTable)
         {
             var gen = new GenJavaWS();
-            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+            gen.cmc = IniConfigHelper.getDefaultObject();
             process(drTable, gen);  
         }
 

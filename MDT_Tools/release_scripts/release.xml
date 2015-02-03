@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir=".." default="autoBuild" name="autoBuild">
+	<property environment="env" />
+	<taskdef name="if" classname="net.sf.antcontrib.logic.IfTask"/>
+
+
+	<tstamp prefix="my">
+		<format property="day" pattern="yyyyMMdd"/>
+	</tstamp>	  
+
+	<property name="release.URL" value="http://atflite.oss-cn-hangzhou.aliyuncs.com/" />
+	<property name="c.URL" value="http://www.cfets.net:8000/" />
+	<property name="release.dir" value="../../../release" />
+	<property name="release.dir.temp" value="./client" />
+	<property name="release.dir.x86" value="${release.dir}/MSK/x86" />
+	<property name="release.dir.x64" value="${release.dir}/MSK/x64" />
+	<property name="release.dir.anyCPU" value="${release.dir}/MSK/anyCPU" />
+	<property name="release.dir.installation" value="${release.dir}/MSK/installation" />
+
+
+	<target name="init">
+		<mkdir dir="${release.dir.x86}" />
+		<mkdir dir="${release.dir.x64}" />
+		<mkdir dir="${release.dir.anyCPU}" />
+		<mkdir dir="${release.dir.installation}" />
+	</target>
+
+	<target name="release">
+
+		<if>
+			<equals arg1="${env.Platform}" arg2="x86"/>
+			<then>
+
+				<echo message="${line.separator}****** Deleting old file at ${release.dir.x86}"/>	
+				<delete dir="${release.dir.x86}" failonerror="false" />
+
+				<echo message="${line.separator}****** Generating AutoUpdate Configuration"/>
+				<exec dir="${release.dir.temp}" executable="cmd.exe">
+					<arg line="/c MDT.Tools.AutoUpdater.Config.exe -u ${release.URL} -uc ${c.URL}x86/"/>
+				</exec>
+
+				<echo message="${line.separator}****** Copying new file to ${release.dir.x86}"/>
+				<copy todir="${release.dir.x86}">
+					<fileset dir="${release.dir.temp}" excludes="**/*.pdb,MDT.Tools.AutoUpdater.Config.exe.config,MDT.Tools.AutoUpdater.Config.exe"/>
+				</copy>
+
+				<echo message="${line.separator}****** Generating installation file"/>
+				<zip destfile="${release.dir.installation}/MDTSmartKit_x86.zip" basedir="${release.dir.x86}" excludes="AutoUpdateService.xml,autoUpdaterUrl.txt"/>
+
+			</then>
+		</if>
+		<if>
+			<equals arg1="${env.Platform}" arg2="x64"/>
+			<then>
+				<echo message="${line.separator}****** Deleting old file at ${release.dir.x64}"/>	
+				<delete dir="${release.dir.x64}" failonerror="false" />
+
+				<echo message="${line.separator}****** Generating AutoUpdate configuration"/>
+				<exec dir="${release.dir.temp}" executable="cmd.exe">
+					<arg line="/c MDT.Tools.AutoUpdater.Config.exe -u ${release.URL} -uc ${c.URL}x64/"/>
+				</exec>
+
+				<echo message="${line.separator}****** Copying new file to ${release.dir.x64}"/>
+				<copy todir="${release.dir.x64}">
+					<fileset dir="${release.dir.temp}"  excludes="**/*.pdb,MDT.Tools.AutoUpdater.Config.exe.config,MDT.Tools.AutoUpdater.Config.exe"/>
+				</copy>
+
+				<echo message="${line.separator}****** Generating installation file"/>
+				<zip destfile="${release.dir.installation}/MDTSmartKit_x64.zip" basedir="${release.dir.x64}" excludes="AutoUpdateService.xml,autoUpdaterUrl.txt"/>
+
+			</then>
+		</if>
+		<if>
+			<equals arg1="${env.Platform}" arg2="'Any CPU'"/>
+			<then>
+				<echo message="${line.separator}****** Deleting old file at ${release.dir.anyCPU}"/>	
+				<delete dir="${release.dir.anyCPU}" failonerror="false" />
+
+				<echo message="${line.separator}****** Generating AutoUpdate configuration"/>
+				<exec dir="${release.dir.temp}" executable="cmd.exe">
+					<arg line="/c MDT.Tools.AutoUpdater.Config.exe -u ${release.URL} -uc ${c.URL}anyCPU/"/>
+				</exec>
+
+				<echo message="${line.separator}****** Copying new file to ${release.dir.anyCPU}"/>
+				<copy todir="${release.dir.anyCPU}">
+					<fileset dir="${release.dir.temp}" excludes="**/*.pdb,MDT.Tools.AutoUpdater.Config.exe.config,MDT.Tools.AutoUpdater.Config.exe"/>
+				</copy>
+				
+				<echo message="${line.separator}****** Generating installation file"/>
+				<zip destfile="${release.dir.installation}/MDTSmartKit_anyCPU.zip" basedir="${release.dir.anyCPU}" excludes="AutoUpdateService.xml,autoUpdaterUrl.txt"/>
+			</then>
+		</if>
+	</target>
+
+
+	<target name="autoBuild" >
+		<echo message="${line.separator}***************************************************************************"/>
+		<echo message="${env.JOB_NAME} publish begin"/>
+		<echo message="Configuration is ${env.Configuration} ,Platform is ${env.Platform}, Publish URL is ${release.URL}"/>
+		<echo message="${line.separator}*************************************************************************** ${line.separator}"/>
+		<antcall target="init" />
+		<antcall target="release" />
+
+		<echo message="${line.separator}***************************************************************************"/>
+		<echo message="${env.JOB_NAME} publish end"/>
+		<echo message="${line.separator}***************************************************************************${line.separator}"/>
+	</target>
+
+
+</project>
+

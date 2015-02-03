@@ -16,8 +16,82 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace KnightsWarriorAutoupdater
+namespace MDT.ThirdParty.Controls
 {
+    public class RemoteConfig
+    {
+        private string version = "1.0.0.0";
+        private string minimumRequiredVersion = "1.0.0.0";
+        private string comment = "";
+        public string Version
+        {
+            get { return version; }
+        }
+
+        public string MinimumRequiredVersion
+        {
+            get { return minimumRequiredVersion; }
+        }
+
+        public string Comment
+        {
+            get { return comment; }
+        }
+        private Dictionary<string, RemoteFile> remoteFiles=new Dictionary<string, RemoteFile>();
+        public Dictionary<string, RemoteFile> RemoteFiles
+        {
+            get
+            {
+              
+                return remoteFiles;
+            }
+        }
+
+        public RemoteConfig(XmlDocument document)
+        {
+            if (document.DocumentElement != null)
+                foreach (XmlNode node in document.DocumentElement.ChildNodes)
+                {
+                    switch (node.Name.ToLower())
+                    {
+                        case "version":
+                            version = node.InnerText;
+                            break;
+                        case "minimumrequiredversion":
+                            minimumRequiredVersion = node.InnerText;
+                            break;
+                        case "comment":
+                            comment = node.InnerText;
+                            break;
+                        case "updatefiles":
+                            foreach (XmlNode nodex in node.ChildNodes)
+                            {
+                                try
+                                {
+                                    if (nodex.Attributes != null)
+                                    {
+                                        string path = nodex.Attributes["path"].Value;
+                                        if (!remoteFiles.ContainsKey(path))
+                                        {
+                                            remoteFiles.Add(path, new RemoteFile(nodex));
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("error:" + path);
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine(e.Message);
+                                }
+                            }
+                            break;
+                    }
+                }
+        }
+    }
+
     public class RemoteFile
     {
         #region The private fields

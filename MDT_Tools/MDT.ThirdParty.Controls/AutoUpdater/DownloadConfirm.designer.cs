@@ -1,4 +1,4 @@
-﻿namespace KnightsWarriorAutoupdater
+﻿namespace MDT.ThirdParty.Controls
 {
     partial class DownloadConfirm
     {
@@ -55,7 +55,7 @@
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(83, 23);
             this.btnOk.TabIndex = 0;
-            this.btnOk.Text = "OK";
+            this.btnOk.Text = "确定";
             this.btnOk.UseVisualStyleBackColor = true;
             // 
             // label4
@@ -63,9 +63,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(21, 34);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(125, 12);
+            this.label4.Size = new System.Drawing.Size(107, 12);
             this.label4.TabIndex = 0;
-            this.label4.Text = "From:  Remote server";
+            this.label4.Text = "  从： 远程服务器";
             // 
             // label3
             // 
@@ -74,7 +74,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(125, 12);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Name:  MDT Smart Kit";
+            this.label3.Text = "名称： MDT Smart Kit";
             // 
             // btnCancel
             // 
@@ -83,7 +83,7 @@
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(83, 23);
             this.btnCancel.TabIndex = 0;
-            this.btnCancel.Text = "Skip";
+            this.btnCancel.Text = "跳过";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
             // pictureBox1
@@ -100,9 +100,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(36, 32);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(359, 12);
+            this.label2.Size = new System.Drawing.Size(269, 12);
             this.label2.TabIndex = 3;
-            this.label2.Text = "A new version of MDT Smart Kit is available.Do you want to ";
+            this.label2.Text = "系统检查到有一个新版可用，你想现在就下载吗？";
             // 
             // label1
             // 
@@ -110,9 +110,9 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.Location = new System.Drawing.Point(11, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 13);
+            this.label1.Size = new System.Drawing.Size(59, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Application update";
+            this.label1.Text = "应用升级";
             // 
             // panel1
             // 
@@ -132,17 +132,17 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(37, 49);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(101, 12);
+            this.label5.Size = new System.Drawing.Size(0, 12);
             this.label5.TabIndex = 3;
-            this.label5.Text = "download it now?";
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.label4);
-            this.panel2.Location = new System.Drawing.Point(0, 78);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 77);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(498, 67);
+            this.panel2.Size = new System.Drawing.Size(498, 113);
             this.panel2.TabIndex = 5;
             // 
             // panel3
@@ -194,7 +194,8 @@
             this.MinimizeBox = false;
             this.Name = "DownloadConfirm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Update Available";
+            this.Text = "自动升级";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);

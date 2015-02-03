@@ -1,0 +1,9 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.Plugin.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\obj\x64\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\obj\x64\Release\MDT.Tools.DB.Plugin.UI.ConfigForm.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\obj\x64\Release\MDT.Tools.DB.Plugin.UI.Explorer.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\obj\x64\Release\MDT.Tools.DB.Plugin.UI.OracleDBConfigForm.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\obj\x64\Release\MDT.Tools.DB.Plugin.csproj.GenerateResource.Cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\obj\x64\Release\MDT.Tools.DB.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Plugin\obj\x64\Release\MDT.Tools.DB.Plugin.pdb

@@ -11,7 +11,9 @@
 #Cma_paraeAFix($p)
 
 #end
-	
+#macro(Cma_parseAComponent2 $p)
+	${p.Name}.g${p.Name}=${p.Name};
+#end	
 #macro(Cma_paraeAFix $p)
 #foreach($field in $p.Fields)
 	public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${field.Name}
@@ -28,14 +30,46 @@
 #Cma_parseAComponent($component)
 #end
 #end
+#macro(Cma_paraeAFix2 $p)
+#foreach($field in $p.Fields)
+		t.${field.Name}=${field.Name};
+#end
+#foreach($group in $p.Groups)
+#Cma_parseAGroup2($group)
+#end
+#foreach($component in $p.Components)
+#Cma_parseAComponent2($component)
+#end
+#end
 #macro(Cma_parseAGroup $p)
 
-	public static readonly string GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
-	
-	public class ${group.Name} : BaseMessage
+	private readonly string GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
+	public List<G${group.Name}> ${group.Name}
+	{
+	get{ return this.Get(GROUP_${group.Name}) as List<G${group.Name}>;}
+	set{ this.Put(GROUP_${group.Name},value);}
+	}
+	public class G${group.Name} : BaseMessage
 	{
 #Cma_paraeAFix($p)
+	public G${group.Name} Clone()
+	{
+		G${group.Name} t=new  G${group.Name}();
+		#Cma_paraeAFix2($p)
+		return t;
 	}
+	}
+#end
+#macro(Cma_parseAGroup2 $p)
+		t.${group.Name}=new List<G${group.Name}>();
+		if(${group.Name}!=null)
+		{
+			foreach( var g in ${group.Name})
+			{
+				G${group.Name} g${group.Name}=g.Clone();		 
+				t.${group.Name}.Add(g${group.Name});
+			}
+		}
 #end
 #macro(Cma_parseComponent $p)
 using System;
@@ -45,11 +79,27 @@ using Ats.Model.MO.Component;
 
 namespace Ats.Model.MO.Message
 {
-
+ 	/// <summary>
+	/// Message
+	/// </summary>
+	/// <remarks>
+	/// $date: 创建. ${pluginName} 模板版本(v1.0.1.1)<br/>
+	/// </remarks>
 public class ${p.Name} : FixMessage
 {
-
+  public ${p.Name}()
+    {		 
+		StandardHeader.MsgType="${p.MsgType}";
+    }
 #Cma_paraeAFix($p)
+	public ${p.Name} Clone()
+	{
+		${p.Name} t=new ${p.Name}();
+		t.StandardHeader=StandardHeader;
+		t.StandardTrailer=StandardTrailer;
+#Cma_paraeAFix2($p)
+		return t;
+	}
 	}
 }
 #end

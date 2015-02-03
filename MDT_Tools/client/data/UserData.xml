@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserDataObjects xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Lists>
+    <UserDataObject>
+      <Key>Subscribe_ServerType</Key>
+      <Value>ACS</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Subscribe_Address</Key>
+      <Value>192.168.20.2/mq.httpMQTunnel</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Subscribe_Port</Key>
+      <Value>19990</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Subscribe_IsVS</Key>
+      <Value>Y</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Subscribe_Topic</Key>
+      <Value>**</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_ServerType</Key>
+      <Value>ACS</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_Address</Key>
+      <Value>192.168.20.2/mq.httpMQTunnel</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_Port</Key>
+      <Value>29990</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_IsVS</Key>
+      <Value>N</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_Topic</Key>
+      <Value>OHLC.*</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_ServiceName</Key>
+      <Value>MQ</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_RequestMsg</Key>
+      <Value>{"ASK":5556.045000750663,"BID":5555.715000747981,"DATE":"20140822","GROUP":"1","PAIR":"EUR/USD","STATUS":"0","StandardHeader":{"MsgType":"M04"},"TIME":"141525","TYPE":"03"}</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Subscribe_UserName</Key>
+      <Value />
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Subscribe_Pwd</Key>
+      <Value />
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Subscribe_RoleName</Key>
+      <Value />
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Subscribe_ClearNm</Key>
+      <Value>88</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_ServerType</Key>
+      <Value>ACS</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_Address</Key>
+      <Value>192.168.20.2</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_Port</Key>
+      <Value>19990</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_IsVS</Key>
+      <Value>Y</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_Topic</Key>
+      <Value>STALEWARNING.1</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_PubMsg</Key>
+      <Value>{"ASK":5556.045000750663,"BID":5555.715000747981,"DATE":"20140822","GROUP":"1","PAIR":"EUR/USD","STATUS":"0","StandardHeader":{"MsgType":"M04"},"TIME":"141525","TYPE":"03"}</Value>
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_UserName</Key>
+      <Value />
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_Pwd</Key>
+      <Value />
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Publish_RoleName</Key>
+      <Value />
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_UserName</Key>
+      <Value />
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_Pwd</Key>
+      <Value />
+    </UserDataObject>
+    <UserDataObject>
+      <Key>Request_RoleName</Key>
+      <Value />
+    </UserDataObject>
+  </Lists>
+</UserDataObjects>

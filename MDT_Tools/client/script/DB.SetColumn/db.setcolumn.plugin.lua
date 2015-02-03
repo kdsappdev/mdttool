@@ -24,7 +24,7 @@ local pluginKey=42
 local pluginName='维护数据库中的字段插件'
 local description='维护当前数据库的所有字段信息'
 local author='孔德帅'
-local version='1.0.0.0'
+local version='1.0.0.1'
 --插件方法:初始化
 function init()
 	return tag,pluginKey,pluginName,description,author,version
@@ -40,7 +40,7 @@ function load()
 	setcolumnTSMI.Image=Image.FromFile("script\\db.setcolumn\\dbsetcolumn.ico")
 	setcolumnTSMI.Click:Add(setcolumnTSMI_click)--增加Click事件
 	
-	application.MainTool.Items:Insert(3, setcolumnTSMI)
+	getObject(43,"tsmiTool").DropDownItems:Add(setcolumnTSMI)
 	subscribe("BroadCastDBEnable",pluginKey)
 	
 end
@@ -87,6 +87,13 @@ function setcolumnTSMI_click(sender,args)
 	colName.HeaderText = "列名"
 	colName.Name = "colName"
 	colName.ReadOnly = true
+	
+	colTableName = DataGridViewTextBoxColumn()
+	colTableName.DataPropertyName = "COLUMN_TABLENAMES"
+	colTableName.HeaderText = "所属表名"
+	colTableName.Name = "colTableName"
+	colTableName.ReadOnly = true
+	
 	colComment = DataGridViewTextBoxColumn()
 	colComment.DataPropertyName = "COMMENTS"
 	colComment.HeaderText = "备注"
@@ -95,6 +102,7 @@ function setcolumnTSMI_click(sender,args)
 	gv=DataGridView()
 	gv.AutoGenerateColumns=false
 	gv.Columns:Add(colName)
+	gv.Columns:Add(colTableName)
 	gv.Columns:Add(colComment)
 	gv.Dock=DockStyle.Fill
 	gv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
@@ -115,6 +123,7 @@ end
 function bindGridView(o)
 	dataTable=DataTable("setColumn")
 	dataTable.Columns:Add("COLUMN_NAME")
+	dataTable.Columns:Add("COLUMN_TABLENAMES")
 	dataTable.Columns:Add("COMMENTS")
 	str=dbName..dbTablesColumns
 	path= Application.StartupPath .."\\data\\"..dbName.."_TABLE_SETCOLUMN.data"
@@ -125,26 +134,40 @@ columns=getObject(1,"DBCurrentDBAllTablesColumns")
 local dv=columns.Tables[str].DefaultView
 local distinctTable=columns.Tables[str]--getDistinctDataTable(dv,true,{"COLUMN_NAME"})
 local count=distinctTable.Rows.Count-1
+
 for i=0,count do
 	local newRow=dataTable:NewRow()
 	local temp=distinctTable.Rows[i]
 	local columnName=getDataRowValue(temp,"COLUMN_NAME")
+	local tableName=getDataRowValue(temp,"TABLE_NAME")
+	local comments=getDataRowValue(temp,"COMMENTS")	
 	local drs=dataTable:Select("COLUMN_NAME ='"..columnName.."'")
 	if (drs.Length==0) then
 		setDataRowValue(newRow,"COLUMN_NAME",columnName)
+		setDataRowValue(newRow,"COLUMN_TABLENAMES",tableName)
+		setDataRowValue(newRow,"COMMENTS",comments)
 		dataTable.Rows:Add(newRow)
+	else
+	 
+	local dr=drs[0]
+	local tempTableName=getDataRowValue(dr,"COLUMN_TABLENAMES")	 
+	if (not string.find(tempTableName,tableName)) then	 
+	tempTableName=tempTableName..","..tableName
+	setDataRowValue(dr,"COLUMN_TABLENAMES",tempTableName)
+	end
 	end
 end
 
 pcall(tbSearch_TextChanged)
-
 end
 
 function tbSearch_TextChanged(sender, e)
 local dv=dataTable.DefaultView
 dv.Sort="COLUMN_NAME ASC"
 if(not String.IsNullOrEmpty(tbSearch.Text)) then
-dv.RowFilter="COLUMN_NAME like '"..tbSearch.Text.."*'"
+dv.RowFilter="COLUMN_NAME like '"..tbSearch.Text.."*' Or COMMENTS like '"..tbSearch.Text.."*'"
+else
+dv.RowFilter=null
 end
 gv.DataSource=dv
 CallCtrlWithThreadSafety.RefreshGridViewDataSource(gv,gv)
@@ -158,9 +181,9 @@ function gv_CellValueChanged(sender, e)
 	for i=0,count do
 		local dr=drs[i]
 		local tempComment=getDataRowValue(dr,"COMMENTS")
-		if((columnComment==tempComment) or (String.IsNullOrEmpty(tempComment)) ) then
+		--if((columnComment==tempComment) or (String.IsNullOrEmpty(tempComment)) ) then
 		setDataRowValue(dr,"COMMENTS",columnComment)
-		end
+		--end
 	end
 
 local path= Application.StartupPath .."\\data\\"..dbName.."_TABLE_SETCOLUMN.data"

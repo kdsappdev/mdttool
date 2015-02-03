@@ -767,7 +767,7 @@ namespace MDT.Tools.Fix.Plugin
             get { return _o; }
         }
     }
-    internal enum TagType
+    public enum TagType
     {
         Fix,
         Header,

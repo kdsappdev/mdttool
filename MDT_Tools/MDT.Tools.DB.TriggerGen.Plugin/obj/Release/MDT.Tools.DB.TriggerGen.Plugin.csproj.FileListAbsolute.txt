@@ -1,0 +1,7 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.TriggerGen.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.TriggerGen.Plugin.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.TriggerGen.Plugin\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.TriggerGen.Plugin\obj\Release\MDT.Tools.DB.TriggerGen.Plugin.UI.ExecuteSql.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.TriggerGen.Plugin\obj\Release\MDT.Tools.DB.TriggerGen.Plugin.csproj.GenerateResource.Cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.TriggerGen.Plugin\obj\Release\MDT.Tools.DB.TriggerGen.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.TriggerGen.Plugin\obj\Release\MDT.Tools.DB.TriggerGen.Plugin.pdb

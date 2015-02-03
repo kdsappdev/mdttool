@@ -38,6 +38,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
                         setStatusBar(string.Format("正在生成{0}命名空间的BLL&GUI", cmc.BLLNameSpace));
+                        LogHelper.Info("Generating " + cmc.BLLNameSpace + " namespace BLL&GUI.");
                         setProgreesEditValue(0);
                         setProgress(0);
                         setProgressMax(drTables.Length);
@@ -63,6 +64,8 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                             setStatusBar(string.Format("正在生成{0}命名空间中{1}代码,共{2}个代码，已生成了{3}个代码,过滤了{4}个代码", cmc.BLLNameSpace,
                                                         CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.BLLService,
                                                        drTables.Length, i - j, j));
+                            LogHelper.Info("Generationg in " + cmc.BLLNameSpace + " namespace " + CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.BLLService
+                                + " code, of " + drTables.Length + " codes, " + (i - j) + " of code has generated, " + j + " filtering code");
                             setProgress(1);
                         }
                         if (!flag)
@@ -77,13 +80,17 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                 if (!cmc.IsShowGenCode)
                 {
                     setStatusBar(string.Format("{0}命名空间代码生成成功", cmc.BLLNameSpace));
+                    LogHelper.Info(cmc.BLLNameSpace + " namespace code has generated success.");
                     openDialog();
                 }
             }
             catch (Exception ex)
             {
+              
                 setStatusBar(string.Format("{0}命名空间代码生成失败[{1}]", cmc.BLLNameSpace, ex.Message));
 
+                LogHelper.Error(cmc.BLLNameSpace + " namespace code generated fail " + ex.Message);
+              
             }
             finally
             {

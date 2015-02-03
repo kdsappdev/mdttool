@@ -1,0 +1,8 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT.Tools.AutoUpdater.exe.config
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT.Tools.AutoUpdater.exe
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT.Tools.AutoUpdater.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.AutoUpdater\obj\x64\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.AutoUpdater\obj\x64\Release\MDT.Tools.AutoUpdater.Properties.Resources.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.AutoUpdater\obj\x64\Release\MDT.Tools.AutoUpdater.csproj.GenerateResource.Cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.AutoUpdater\obj\x64\Release\MDT.Tools.AutoUpdater.exe
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.AutoUpdater\obj\x64\Release\MDT.Tools.AutoUpdater.pdb

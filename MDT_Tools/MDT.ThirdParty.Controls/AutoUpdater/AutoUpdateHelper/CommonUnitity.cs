@@ -19,7 +19,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Windows.Forms;
 
-namespace KnightsWarriorAutoupdater
+namespace MDT.ThirdParty.Controls
 {
     class CommonUnitity
     {
@@ -45,12 +45,25 @@ namespace KnightsWarriorAutoupdater
                 }
             }
         }
+        public static void ShowErrorAndRestartApplication()
+        {
+            try
+            {
+                Directory.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstFile.TEMPFOLDERNAME), true);
 
+            }
+            catch (Exception e)
+            {
+
+                LogHelper.Error(e);
+            }
+            MessageBox.Show(ConstFile.NOTNETWORK, ConstFile.MESSAGETITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            CommonUnitity.RestartApplication();
+        }
         public static void RestartApplication()
         {
-            string exe = System.Configuration.ConfigurationSettings.AppSettings["exe"];
-            KillProcess(exe.Replace(".exe",""));
-            Process.Start(exe);
+            KillProcess(ConstFile.AppExe);
+            Process.Start(ConstFile.ROOLBACKFILE,"-N");
             Environment.Exit(0);
         }
 

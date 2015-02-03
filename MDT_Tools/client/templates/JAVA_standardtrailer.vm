@@ -1,5 +1,29 @@
 #set($codeLanguage ='Java')
 #macro(convertBoolean $p)#if($p)Y#else N#end#end
+
+#macro(Jst_paraeAFix2 $p)
+#foreach($field in $p.Fields)
+		t.set${field.Name}(get${field.Name}());
+#end
+#foreach($group in $p.Groups)
+#Jst_parseAGroup2($group)
+#end
+#foreach($component in $p.Components)
+#Jst_parseAComponent2($component)
+#end
+#end
+#macro(Jst_parseAGroup2 $p)
+		t.${group.Name}=new ArrayList<G${group.Name}>();
+		for(G${group.Name} g : ${group.Name})
+		{
+			G${group.Name} g${group.Name}=g.Clone();		 
+			t.${group.Name}.Add(g${group.Name});
+		}	
+#end
+#macro(Jst_parseAComponent2 $p)
+	t.g${p.Name}=${p.Name};
+#end
+
 #macro(Jst_parseAComponent $p)
 
 
@@ -33,25 +57,47 @@
 #end
 #macro(Jst_parseAGroup $p)
 
-	public static final String GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
-	
-	public static class ${group.Name} extends BaseMessage{
+	private final String GROUP_${group.Name}=MessageDictionary.Fields.${group.Name};
+	public List<G${group.Name}> get${group.Name}(){
+			return (List<G${p.Name}>) this.get(GROUP_${group.Name});
+		}
+	public void set${group.Name}(List<G${group.Name}> ${codeGenHelper.StrFirstToLower(${group.Name})}){
+			this.put(GROUP_${group.Name},${codeGenHelper.StrFirstToLower(${group.Name})});
+		}
+	public static class G${group.Name} extends BaseMessage{
 #Jst_paraeAFix($p)
+
+	public G${group.Name} Clone()
+	{
+		G${group.Name} t=new  G${group.Name}();
+		#Jst_paraeAFix2($p)
+		return t;
+	}
 	}
 
 #end
 #macro(Jst_parseComponent $p)
 package ats.bbox.common.mo.component;
 
-
+import java.util.List;
 import ats.bbox.common.mo.BaseMessage;
 import ats.bbox.common.mo.MessageDictionary;
 import ats.bbox.framework.utils.DataTypeConverter;
-
+/**
+ *
+ *$date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
+ */
 
 public class StandardTrailer extends BaseMessage{
 
 #Jst_paraeAFix($p)
+	public StandardTrailer Clone()
+	{
+		StandardTrailer t=new StandardTrailer();
+#Jst_paraeAFix2($p)
+		return t;
+	}
+
 }
 #end
 #Jst_parseComponent($trailer)

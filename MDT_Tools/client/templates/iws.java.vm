@@ -1,4 +1,4 @@
-﻿## model字符串
+## model字符串
 #set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
 ## 第一个字符为小写的model字符串
 #set($lmodel=${codeGenHelper.StrFirstToLower($model)})
@@ -14,16 +14,67 @@ import javax.jws.WebService;
  *${tableInfo.TableName}
 #end
  *
- *$date: 创建. ${pluginName} <br/>
+ *$date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
  */
 @WebService
 public interface I${model} {
-	
+	/**
+	 *增加${lmodel}对象
+	 *
+	 * @param ${lmodel}对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${lmodel}[AtsMsg字符串压缩字节码]
+	 */
 	public byte[] insert(byte[] ${lmodel});
 	
+	/**
+	 *删除${lmodel}对象
+	 *
+	 * @param Condition对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${lmodel}[AtsMsg字符串压缩字节码]
+	 */
 	public byte[] delete(byte[] deleteCondition);
 	
+	/**
+	 *更新${lmodel}对象
+	 *
+	 * @param ${lmodel}对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @param Condition对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${lmodel}[AtsMsg字符串压缩字节码]
+	 */
 	public byte[] update(byte[] ${lmodel},byte[] updateCondition);
+
+         /**
+	 *批量更新${lmodel}方法
+	 *
+	 * @param ${lmodel}对象集合[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @param Condition对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${lmodel}[AtsMsg字符串压缩字节码]
+	 */
+	public byte[] updateBatch(byte[] ${lmodel}s,byte[] updateCondition);
 	
+	/**
+	 *根据Condition对象查询出${lmodel}集合对象
+	 *
+	 * @param Condition对象[字符串压缩字节码]
+	 * @return ${lmodel}[字符串压缩字节码]
+	 */
 	public byte[] select(byte[] queryCondition);
+	
+	
+	/**
+	 *根据Condition对象查询出${lmodel}集合数量
+	 *
+	 * @param Condition对象[字符串压缩字节码]
+	 * @return ${lmodel}数量[字符串压缩字节码]
+	 */
+	public byte[] selectCount(byte[] queryCondition);
+	
+	
+	/**
+	 *根据Condition对象分页查询出${lmodel}集合
+	 *
+	 * @param Condition对象[字符串压缩字节码]
+	 * @return ${lmodel}[字符串压缩字节码]
+	 */
+	public byte[] selectPage(byte[] queryCondition);
 }

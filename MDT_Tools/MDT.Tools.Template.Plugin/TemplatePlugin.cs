@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using MDT.Tools.Core.Lua;
+using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Common;
 using MDT.Tools.Template.Plugin.Gen;
 using MDT.Tools.Template.Plugin.Model;
@@ -53,6 +55,8 @@ namespace MDT.Tools.Template.Plugin
             _dbContextMenuStrip = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.CmcSubPlugin) as ContextMenuStrip;
             fixCmcSubPlugin = getObject(MDT.Tools.Fix.Common.Utils.PluginShareHelper.FixPluginKey, MDT.Tools.Fix.Common.Utils.PluginShareHelper.CmsSubPlugin) as ContextMenuStrip;
             AddContextMenu();
+            ILuaEngine luaEngine = LuaHelper.CreateLuaEngine();
+            luaEngine.BindLuaFunctions(this);
         }
         protected override void unload()
         {
@@ -90,7 +94,7 @@ namespace MDT.Tools.Template.Plugin
 
         
        
-
+        
         private ContextMenuStrip fixCmcSubPlugin;
         protected override void AddContextMenu()
         {
@@ -107,12 +111,39 @@ namespace MDT.Tools.Template.Plugin
                 {
                     foreach (var template in templateConfig.TemplateParas)
                     {
+                        string[] strs = template.MenuName.Split(new[]{"|"},StringSplitOptions.RemoveEmptyEntries);
+                        string menuName = "";
+                        var tsmiTemplate = new ToolStripMenuItem();
                         if (template.DataTye == "DB")
                         {
-                            var tsmiTemplate = new ToolStripMenuItem();
-                            tsmiTemplate.Text = template.MenuName;
+							SetEnable(false);
+                            ToolStripMenuItem itemG = null;
+                          if(strs.Length>=2)
+                          {
+                              foreach (ToolStripMenuItem temp in _dbContextMenuStrip.Items)
+                              {
+                                  if (temp.Text == strs[0])
+                                  {
+                                      itemG = temp;
+                                      break;
+                                  }
+                              }
+                              if (itemG==null)
+                              {
+                                  itemG=new ToolStripMenuItem();
+                                  itemG.Text = strs[0];
+                                  _dbContextMenuStrip.Items.Add(itemG);
+                              }
+                              menuName = strs[1];
+                              itemG.DropDownItems.Add(tsmiTemplate);
+                          }
+                          else
+                          {
+                              menuName = strs[0];
+                              _dbContextMenuStrip.Items.AddRange(new[] { tsmiTemplate });
+                          }
+                            tsmiTemplate.Text = menuName;
                             tsmiTemplate.Tag = template;
-                            _dbContextMenuStrip.Items.AddRange(new[] { tsmiTemplate });
                             tsmiTemplate.Click += new EventHandler(tsmiTemplate_Click);
                         }
                         else if (template.DataTye == "Fix")
@@ -121,10 +152,34 @@ namespace MDT.Tools.Template.Plugin
                               if (fixCmcSubPlugin != null)
                               {
                                   SetFixCmcEnable(false);
-                                  var tsmiTemplate = new ToolStripMenuItem();
-                                  tsmiTemplate.Text = template.MenuName;
+
+                                  ToolStripMenuItem itemG = null;
+                                  if (strs.Length >= 2)
+                                  {
+                                      foreach (ToolStripMenuItem temp in fixCmcSubPlugin.Items)
+                                      {
+                                          if (temp.Text == strs[0])
+                                          {
+                                              itemG = temp;
+                                              break;
+                                          }
+                                      }
+                                      if (itemG == null)
+                                      {
+                                          itemG = new ToolStripMenuItem();
+                                          itemG.Text = strs[0];
+                                          fixCmcSubPlugin.Items.Add(itemG);
+                                      }
+                                      menuName = strs[1];
+                                      itemG.DropDownItems.Add(tsmiTemplate);
+                                  }
+                                  else
+                                  {
+                                      menuName = strs[0];
+                                      fixCmcSubPlugin.Items.AddRange(new[] { tsmiTemplate });
+                                  }
+                                  tsmiTemplate.Text = menuName;
                                   tsmiTemplate.Tag = template;
-                                  fixCmcSubPlugin.Items.AddRange(new[] {tsmiTemplate});
                                   tsmiTemplate.Click += new EventHandler(tsmiTemplate_Click);
                               }
                         }
@@ -176,6 +231,19 @@ namespace MDT.Tools.Template.Plugin
                 }
 
             }
+        }
+        #endregion
+
+        #region
+        [AttrLuaFunc("getDBContextMenu", "获取DB类型的上下文菜单")]
+        public ContextMenuStrip getDBContextMenu()
+        {
+            return _dbContextMenuStrip;
+        }
+        [AttrLuaFunc("getFixContextMenu", "获取Fix类型的上下文菜单")]
+        public ContextMenuStrip getFixContextMenu()
+        {
+            return fixCmcSubPlugin;
         }
         #endregion
     }

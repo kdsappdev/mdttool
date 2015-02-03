@@ -14,7 +14,7 @@ BEGIN
 	/*
 	* Function : This trigger will create bbox Aq automatic and call a procedure which send this message .
 	* Create Date : ${tgGenHelper.getCurrentTime()} 
-	* Create By : MDT_Tools .
+	* Create By : MDT Smart Kit .
 	*/
 	IF DELETING
 	THEN

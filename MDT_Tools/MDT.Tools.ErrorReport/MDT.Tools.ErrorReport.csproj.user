@@ -1,0 +1,23 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PublishUrlHistory>publish\</PublishUrlHistory>
+    <InstallUrlHistory>
+    </InstallUrlHistory>
+    <SupportUrlHistory>
+    </SupportUrlHistory>
+    <UpdateUrlHistory>
+    </UpdateUrlHistory>
+    <BootstrapperUrlHistory>
+    </BootstrapperUrlHistory>
+    <FallbackCulture>zh-CN</FallbackCulture>
+    <VerifyUploadedFiles>false</VerifyUploadedFiles>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <StartArguments>-i lf8CQbIzXAXBVWbp|A0mp4mPXEKEBgB09wSs4tVX4MOtyTM|atflite -n logs\MDT.Tools.ErrorReport_20141201.LOG</StartArguments>
+    <StartWorkingDirectory>G:\KongKit\trunk\src\MDT_Tools\client\</StartWorkingDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <StartWorkingDirectory>G:\KongKit\trunk\src\MDT_Tools\client\</StartWorkingDirectory>
+    <StartArguments>-i lf8CQbIzXAXBVWbp|A0mp4mPXEKEBgB09wSs4tVX4MOtyTM|errorreport -n txt.txt</StartArguments>
+  </PropertyGroup>
+</Project>

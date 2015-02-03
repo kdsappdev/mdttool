@@ -4,18 +4,18 @@
 #set($lmodel=${codeGenHelper.StrFirstToLower($model)})
 #set($region="#")
 	<!-- I${model}DALServer DAL-->
-	<object id="I${model}DALServer" class="${dalNameSpace}.${model}DALServer">
+	<object id="I${model}DALServer" type="${dalNameSpace}.${model}DALServer, ${dalDllName}">
 	</object>
 
 
 	<!-- I${guiPluginName}BLLService BLL-->
-	<object id="I${guiPluginName}BLLService" class="${bllNameSpace}.${guiPluginName}BLLService">
+	<object id="I${guiPluginName}BLLService" type="${bllNameSpace}.${guiPluginName}BLLService, ${bllDllName}">
 		<property name="I${model}DALServer" ref="I${model}DALServer"/>
 	</object>
 
 
 	<!-- ${guiPluginName} GUI-->
-	<object id="${guiPluginName}GUI" class="${bllNameSpace}.${guiPluginName}GUI">
+	<object id="${guiPluginName}GUI" type="${bllNameSpace}.${guiPluginName}GUI,${bllDllName}">
 		<property name="I${guiPluginName}BLLService" ref="I${guiPluginName}BLLService"/>
 	</object>
 

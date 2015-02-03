@@ -13,7 +13,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
 {
     internal class GenDbWord : AbstractHandler
     {
-
+        private int num = 100;
         public override void process(DataRow[] drTables, DataSet dsTableColumns, DataSet dsTablePrimaryKeys)
         {
             try
@@ -63,7 +63,7 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
                         {
                             try
                             {
-                                if ((j + 1)%10 == 0 || (j + 1).Equals(drTables.Length))
+                                if ((j + 1) % num == 0 || (j + 1).Equals(drTables.Length))
                                 {
                                     begin = end;
                                     end = j;
@@ -82,15 +82,31 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
                                 
                                 setStatusBar(string.Format("正在生成{0}中{1}表信息,共{2}张表，已生成了{3}张表", dbName, tableName,
                                                            drTables.Length, j));
+                            
+
+                                //Word段落
+                                Word.Paragraph p;
+                                p = dbDoc.Content.Paragraphs.Add(ref Nothing);
+                                //设置段落中的内容文本
+                                p.Range.Text = "表" + Convert.ToString(j + 1) + ":" + tableName + "(" +
+                                                             tableComments + ")";
+                                //设置为一号标题
+                                object style = Word.WdBuiltinStyle.wdStyleHeading1;
+                                p.set_Style(ref style);
+                                //添加到末尾
+                                p.Range.InsertParagraphAfter();
+
+                                 style = Word.WdBuiltinStyle.wdStyleBodyText;
+                                p.set_Style(ref style);
+                               
+                                //dbWordApp.Selection.TypeText("表" + Convert.ToString(j + 1) + ":" + tableName + "(" +
+                                //                             tableComments + ")");
+
                                 dbWordApp.Selection.ParagraphFormat.LineSpacing = 15f;
-                                object count = 14;
+                                object count = 20;
                                 object WdLine = Word.WdUnits.wdLine;
                                 dbWordApp.Selection.MoveDown(ref WdLine, ref count, ref Nothing);
-                                dbWordApp.Selection.TypeParagraph();
-                                dbWordApp.Selection.TypeText("表" + Convert.ToString(j + 1) + ":" + tableName + "(" +
-                                                             tableComments + ")");
-
-
+                                
                                 Word.Table newTable = dbDoc.Tables.Add(dbWordApp.Selection.Range,
                                                                        drTableColumns.Length + 2, 7, ref Nothing,
                                                                        ref Nothing);
@@ -332,11 +348,11 @@ namespace MDT.Tools.DB.DocGen.Plugin.Gen
                             {
                                 #region 释放资源
 
-                                if ((j + 1)%10 == 0 || (j + 1).Equals(drTables.Length))
+                                if ((j + 1) % num == 0 || (j + 1).Equals(drTables.Length))
                                 {
                                     try
                                     {
-                                        object fileName = string.Format(path, begin, end);
+                                        object fileName = string.Format(path, begin+1, end+1);
                                         
                                         dbDoc.SaveAs(ref fileName, ref Nothing, ref Nothing, ref Nothing, ref Nothing,
                                                      ref Nothing, ref Nothing, ref Nothing, ref Nothing, ref Nothing,

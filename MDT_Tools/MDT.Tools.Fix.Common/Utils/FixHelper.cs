@@ -40,6 +40,16 @@ namespace MDT.Tools.Fix.Common.Utils
             }
         }
 
+        public static FieldDic GetFieldDic(string name)
+        {
+            FieldDic fieldDic = null;
+            string key = (name + "").Trim().ToLower();
+            if (dic.ContainsKey(key))
+            {
+                fieldDic = dic[key];
+            }
+            return fieldDic;
+        }
 
         public static string GetFieldOrGroupType(string codeLanage, string name)
         {

@@ -1,0 +1,61 @@
+#set($codeLanguage ='Java')
+#macro(convertBoolean $p)#if($p)Y#else N#end#end
+
+#macro(parseAComponent $p)
+
+
+	public ${p.Name} get${p.Name}(){
+			return (${p.Name}) DataTypeConverter.Utils.toMap(this.get(FixMessage.Fields.${p.Name}));
+		}
+		public void set${p.Name}(${p.Name} ${codeGenHelper.StrFirstToLower(${p.Name})}){
+			this.put(FixMessage.Fields.${p.Name}, ${codeGenHelper.StrFirstToLower(${p.Name})});
+		}
+
+#paraeAFix($p)
+
+#end
+	
+#macro(paraeAFix $p)
+#foreach($field in $p.Fields)
+		public $FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) get${field.Name}(){
+			return DataTypeConverter.Utils.to$FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name})(this.get(FixMessage.Fields.${field.Name}));
+		}
+		public void set${field.Name}($FixHelper.GetFieldOrGroupType($codeLanguage,${field.Name}) ${codeGenHelper.StrFirstToLower(${field.Name})}){
+			this.put(FixMessage.Fields.${field.Name}, ${codeGenHelper.StrFirstToLower(${field.Name})});
+		}
+#end
+#foreach($group in $p.Groups)
+#parseAGroup($group)
+
+#end
+#foreach($component in $p.Components)
+#parseAComponent($component)
+#end
+#end
+#macro(parseAGroup $p)
+
+	public static final String GROUP_${group.Name}=FixMessage.Fields.${group.Name};
+	
+	public static class ${group.Name} extends BaseMessage{
+#paraeAFix($p)
+	}
+
+#end
+#macro(parseComponent $p)
+package ats.bbox.common.mo;
+#foreach($component in $p.Components)
+import ats.bbox.common.mo.component.${component.Name};
+#end
+#foreach($group in $p.Groups)
+#foreach($component in $group.Components)
+import ats.bbox.common.mo.component.${component.Name};
+#end
+#end
+import ats.bbox.framework.utils.DataTypeConverter;
+
+
+public class ${p.Name} extends BaseMessage{
+#paraeAFix($p)
+}
+#end
+#parseComponent($component)

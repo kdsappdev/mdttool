@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace KnightsWarriorAutoupdater
+namespace MDT.ThirdParty.Controls
 {
     public class DownloadFileInfo
     {

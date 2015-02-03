@@ -1,0 +1,10 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.exe.config
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.exe
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\MDT Smart Kit.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools\obj\x86\Release\MDT.Tools.MainForm.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools\obj\x86\Release\MDT.Tools.Properties.Resources.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools\obj\x86\Release\MDT.Tools.UI.AboutDialog.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools\obj\x86\Release\MDT.Tools.csproj.GenerateResource.Cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools\obj\x86\Release\MDT Smart Kit.exe
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools\obj\x86\Release\MDT Smart Kit.pdb

@@ -16,7 +16,7 @@ namespace ${bllNameSpace}
 	/// ${guiPluginName}业务层
 	/// </summary>
 	/// <remarks>
-	/// $date: 创建. ${pluginName} <br/>
+	/// $date: 创建. ${pluginName} 模板版本(v1.0.0.0)<br/>
 	/// </remarks>
 	public class ${guiPluginName}BLLService: BaseBLLService,I${guiPluginName}BLLService
 	{

@@ -54,8 +54,7 @@ namespace MDT.Tools.DB.SetComment.Plugin
             {
                 base.AddContextMenu();
                 _tsiGen.Text = "表备注修改";             
-                _tsiGen.Click += new EventHandler(_tsiGen_Click);
-                
+                _tsiGen.Click += new EventHandler(_tsiGen_Click);   
             }
         }
 

@@ -19,12 +19,18 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace KnightsWarriorAutoupdater
+namespace MDT.ThirdParty.Controls
 {
     public partial class DownloadConfirm : Form
     {
         #region The private fields
+        
         List<DownloadFileInfo> downloadFileList = null;
+        public bool IsCanCancel
+        {
+            set { btnCancel.Visible = value; }
+        }
+
         #endregion
 
         #region The constructor of DownloadConfirm
@@ -39,6 +45,7 @@ namespace KnightsWarriorAutoupdater
         #region The private method
         private void OnLoad(object sender, EventArgs e)
         {
+            setUI();
             foreach (DownloadFileInfo file in this.downloadFileList)
             {
                 ListViewItem item = new ListViewItem(new string[] { file.FileName, file.LastVer, file.Size.ToString() });
@@ -48,5 +55,15 @@ namespace KnightsWarriorAutoupdater
             this.Focus();
         }
         #endregion
+
+        private void setUI()
+        {
+            label2.Text = string.Format("系统检查到有一个新版可用，你想现在就下载吗？");
+            
+            label3.Text = string.Format("名称： {0}", ConstFile.AppName);
+        }
+
+        
+
     }
 }

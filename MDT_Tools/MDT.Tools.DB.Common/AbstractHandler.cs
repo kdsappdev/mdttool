@@ -31,7 +31,7 @@ namespace MDT.Tools.DB.Common
         public Encoding OriginalEncoding;
         public Encoding TargetEncoding;
         public string PluginName;
-        protected List<TableInfo> tableInfos;
+        public List<TableInfo> tableInfos;
         protected CodeGenHelper CodeGenHelper = new CodeGenHelper();
 
         protected virtual Dictionary<string, object> GetNVelocityVars()
@@ -60,8 +60,7 @@ namespace MDT.Tools.DB.Common
                 {
                     string tableName = drTable["name"] + "";
                     string tableComments = drTable["comments"] + "";
-                    //tableComments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding,
-                    //                                                   tableComments);
+                   
                     TableInfo tableInfo = new TableInfo();
                     tableInfo.TableName = tableName;
                     tableInfo.TableComments = tableComments;
@@ -74,11 +73,47 @@ namespace MDT.Tools.DB.Common
                         columnInfo.Name = drTableColumn["COLUMN_NAME"] as string;//列名
                         columnInfo.Comments = drTableColumn["COMMENTS"] as string;//列说明
                         columnInfo.DataType = drTableColumn["DATA_TYPE"] as string;//列类型
+                    
                         columnInfo.DataScale = drTableColumn["DATA_SCALE"] + "";//列精度
                         columnInfo.DataLength = drTableColumn["DATA_LENGTH"] + "";//列长度
+                   
                         columnInfo.DataNullAble = "Y".Equals(drTableColumn["NULLABLE"]+"");//可空
                         columnInfo.DataDefault = drTableColumn["DATA_DEFAULT"] as string;//默认值
                         columnInfo.DataPrecision = drTableColumn["Data_Precision"] + "";
+                        string dataType = (columnInfo.DataType+"").ToUpper();
+                        Dictionary<string, DataType> dic = DataTypeMappingHelper.GetDataType(dbType);
+                        DataType dt = null;
+                        if(dic.ContainsKey(dataType))
+                        {
+                             dt = dic[dataType];
+                            
+                        }
+                        else
+                        {
+                            foreach (var type in dic)
+                            {
+                                if(dataType.Contains(type.Key))
+                                {
+                                    dt = type.Value;
+                                    break; 
+                                }
+                            }
+                        }
+                        if (dt != null)
+                        {
+                            if(!dt.Size)
+                            {
+                                columnInfo.DataLength = ""; //列长度
+                            }
+                            if(!dt.Precision)
+                            {
+                                columnInfo.DataPrecision = "";
+                            }
+                            if (!dt.Scale)
+                            {
+                                columnInfo.DataScale = ""; //列精度
+                            }
+                        }
                         DataRow[] dr = dsTablePrimaryKeys.Tables[dbName + DBtablesPrimaryKeys].Select("TABLE_NAME = '" + tableName + "' AND COLUMN_NAME ='" + columnInfo.Name + "' and constraint_type='P'");
 
                         if (dr.Length > 0)
@@ -90,8 +125,6 @@ namespace MDT.Tools.DB.Common
                         {
                             columnInfo.IsForeignkey = true;
                         }
-                        //columnInfo.Comments = EncodingHelper.ConvertEncoder(OriginalEncoding, TargetEncoding, columnInfo.Comments);
-                        
                         tableInfo.Columns.Add(columnInfo);
                     }
 

@@ -9,7 +9,7 @@ namespace ${modelNameSpace}
 #end
 	/// </summary>
 	/// <remarks>
-	/// $date: 创建. ${pluginName} <br/>
+	/// $date: 创建. ${pluginName} 模板版本(v1.0.0.0)<br/>
 	/// </remarks>
 	[Serializable]
 	public class ${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)}

@@ -33,17 +33,20 @@
             this.label1 = new System.Windows.Forms.Label();
             this.teServerName = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.tbDbEncoder = new System.Windows.Forms.ComboBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.teUserName = new System.Windows.Forms.TextBox();
             this.teUserPwd = new System.Windows.Forms.TextBox();
-            this.teConfigName = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.teConfigName = new System.Windows.Forms.TextBox();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -55,27 +58,30 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 7F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 336F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 38F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.teServerName, 2, 0);
             this.tableLayoutPanel1.Controls.Add(this.label2, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tbDbEncoder, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.teUserName, 2, 1);
             this.tableLayoutPanel1.Controls.Add(this.teUserPwd, 2, 2);
-            this.tableLayoutPanel1.Controls.Add(this.teConfigName, 2, 3);
             this.tableLayoutPanel1.Controls.Add(this.label3, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.btnTestConnection, 1, 4);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.btnTestConnection, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.label5, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.teConfigName, 2, 4);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 5;
+            this.tableLayoutPanel1.RowCount = 6;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(470, 160);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(471, 193);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -95,6 +101,7 @@
             this.teServerName.Name = "teServerName";
             this.teServerName.Size = new System.Drawing.Size(330, 21);
             this.teServerName.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.teServerName, "Ip:Port/数据库实例名称");
             // 
             // label2
             // 
@@ -106,6 +113,31 @@
             this.label2.Text = "用户名称：";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // tbDbEncoder
+            // 
+            this.tbDbEncoder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbDbEncoder.FormattingEnabled = true;
+            this.tbDbEncoder.Items.AddRange(new object[] {
+            "GBK",
+            "UTF-8",
+            "ISO-8859-1"});
+            this.tbDbEncoder.Location = new System.Drawing.Point(100, 93);
+            this.tbDbEncoder.Name = "tbDbEncoder";
+            this.tbDbEncoder.Size = new System.Drawing.Size(330, 20);
+            this.tbDbEncoder.TabIndex = 15;
+            this.tbDbEncoder.Text = "GBK";
+            this.toolTip1.SetToolTip(this.tbDbEncoder, "数据库实例的存储编码");
+            // 
+            // label4
+            // 
+            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label4.Location = new System.Drawing.Point(10, 120);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(84, 30);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "配置项名称：";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // teUserName
             // 
             this.teUserName.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -113,6 +145,7 @@
             this.teUserName.Name = "teUserName";
             this.teUserName.Size = new System.Drawing.Size(330, 21);
             this.teUserName.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.teUserName, "数据库实例的用户名称");
             // 
             // teUserPwd
             // 
@@ -121,14 +154,7 @@
             this.teUserPwd.Name = "teUserPwd";
             this.teUserPwd.Size = new System.Drawing.Size(330, 21);
             this.teUserPwd.TabIndex = 4;
-            // 
-            // teConfigName
-            // 
-            this.teConfigName.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.teConfigName.Location = new System.Drawing.Point(100, 93);
-            this.teConfigName.Name = "teConfigName";
-            this.teConfigName.Size = new System.Drawing.Size(330, 21);
-            this.teConfigName.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.teUserPwd, "数据库实例的用户密码");
             // 
             // label3
             // 
@@ -140,20 +166,10 @@
             this.label3.Text = "用户密码：";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label4
-            // 
-            this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(10, 90);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 30);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "配置项名称：";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // btnTestConnection
             // 
             this.btnTestConnection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTestConnection.Location = new System.Drawing.Point(19, 123);
+            this.btnTestConnection.Location = new System.Drawing.Point(19, 153);
             this.btnTestConnection.Name = "btnTestConnection";
             this.btnTestConnection.Size = new System.Drawing.Size(75, 23);
             this.btnTestConnection.TabIndex = 10;
@@ -167,16 +183,16 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 105F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 8F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             this.tableLayoutPanel2.Controls.Add(this.btnCancel, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnAdd, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnUpdate, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(100, 123);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(100, 153);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(330, 34);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(330, 37);
             this.tableLayoutPanel2.TabIndex = 13;
             // 
             // btnCancel
@@ -188,10 +204,10 @@
             this.btnCancel.TabIndex = 12;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnAdd
             // 
-            this.btnAdd.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnAdd.Location = new System.Drawing.Point(189, 3);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(74, 23);
@@ -202,7 +218,6 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.btnUpdate.Location = new System.Drawing.Point(108, 3);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
@@ -212,11 +227,38 @@
             this.btnUpdate.Visible = false;
             this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Location = new System.Drawing.Point(10, 90);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(84, 30);
+            this.label5.TabIndex = 14;
+            this.label5.Text = "数据库编码：";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // teConfigName
+            // 
+            this.teConfigName.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.teConfigName.Location = new System.Drawing.Point(100, 123);
+            this.teConfigName.Name = "teConfigName";
+            this.teConfigName.Size = new System.Drawing.Size(330, 21);
+            this.teConfigName.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.teConfigName, "配置项名称");
+            // 
             // errorProvider1
             // 
             this.errorProvider1.BlinkRate = 0;
             this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             this.errorProvider1.ContainerControl = this;
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 5000;
+            this.toolTip1.InitialDelay = 1;
+            this.toolTip1.ReshowDelay = 100;
+            this.toolTip1.ShowAlways = true;
             // 
             // OracleDBConfigForm
             // 
@@ -224,7 +266,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(470, 160);
+            this.ClientSize = new System.Drawing.Size(471, 193);
             this.Controls.Add(this.tableLayoutPanel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -248,7 +290,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox teUserName;
         private System.Windows.Forms.TextBox teUserPwd;
-        private System.Windows.Forms.TextBox teConfigName;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnTestConnection;
@@ -257,5 +298,9 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.TextBox teConfigName;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox tbDbEncoder;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

@@ -5,8 +5,10 @@ using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using System.Xml;
-using MDT.Tools.Core.Utils;
+using MDT.Tools.Aliyun.Common.Oss;
+
 
 namespace MDT.Tools.AutoUpdater.Config
 {
@@ -19,8 +21,16 @@ namespace MDT.Tools.AutoUpdater.Config
         //服务端xml文件名称
         static string serverXmlName = "AutoUpdateService.xml";
         private static string clientXmlName = "autoupdater.config";
+        private static string autoUpdaterUrl = "autoUpdaterUrl.txt";
         //更新文件URL前
+
+        static string clientAutoUpdaterUrl = System.Configuration.ConfigurationSettings.AppSettings["clientAutoUpdaterUrl"];
+        
+
         static string url = System.Configuration.ConfigurationSettings.AppSettings["url"];
+        
+
+        
         private static string enableClientStr = System.Configuration.ConfigurationSettings.AppSettings["enableClient"];
         private static string clientPath = System.Configuration.ConfigurationSettings.AppSettings["clientPath"];
         private static bool enableClient = false;
@@ -30,17 +40,63 @@ namespace MDT.Tools.AutoUpdater.Config
 
         private static string RunTimeConfigPath = System.Configuration.ConfigurationSettings.AppSettings["RunTimeConfigPath"];
         private static string privateKey = System.Configuration.ConfigurationSettings.AppSettings["privateKey"];
+
+        private static string enableAliyunStr = System.Configuration.ConfigurationSettings.AppSettings["enableAliyun"];
+        private static bool enableAliyun = true;
+        private static string accessId = System.Configuration.ConfigurationSettings.AppSettings["accessId"];
+        private static string accessKey = System.Configuration.ConfigurationSettings.AppSettings["accessKey"];
+        private static string bucketName = System.Configuration.ConfigurationSettings.AppSettings["bucketName"];
+        private static string prefix = System.Configuration.ConfigurationSettings.AppSettings["prefix"];
+        static OssHelper ossHelper=new OssHelper();
         static void Main(string[] args)
         {
-            if (args != null && args.Length >= 1)
+            string version = "1.0.0.0";
+            string minimumRequiredVersion = "1.0.0.0";
+            string comment = "";
+             
+            if (args != null && args.Length >= 0)
             {
-                url = args[0];
+                for (int i = 0; i < args.Length;i=i+2 )
+                {
+                    switch (args[i])
+                    {
+                        case "-u":
+                            url = args[i + 1];
+                            break;
+                        case "-uc":
+                            clientAutoUpdaterUrl = args[i + 1];
+                            break;
+                        case "-v":
+                            version = args[i + 1];
+                            break;
+                        case "-m":
+                            minimumRequiredVersion = args[i + 1];
+                            break;
+                        case "-c":
+                            comment = args[i + 1];
+                            break;
+                           
+                    }
+                }
+
             }
 
-
+            
+            
             bool.TryParse(enableClientStr, out enableClient);
 
+
+
             bool.TryParse(enableEncrpterRunTimeConfigStr, out enableEncrpterRunTimeConfig);
+
+            bool.TryParse(enableAliyunStr, out enableAliyun);
+
+            if(enableAliyun)
+            {
+                ossHelper.OssConfig = new OssConfig() { AccessId = accessId, AccessKey =accessKey, BucketName = bucketName };
+                ossHelper.Delete(prefix);
+            }
+
             #region client
 
             XmlDocument clientDoc = new XmlDocument();
@@ -49,38 +105,69 @@ namespace MDT.Tools.AutoUpdater.Config
             XmlElement clientConfig = clientDoc.CreateElement("Config");
             clientDoc.AppendChild(clientConfig);
 
-            XmlElement clientEnabled = clientDoc.CreateElement("Enabled");
-            clientEnabled.InnerText = "true";
-            clientConfig.AppendChild(clientEnabled);
+            //XmlElement clientEnabled = clientDoc.CreateElement("Enabled");
+            //clientEnabled.InnerText = "true";
+            //clientConfig.AppendChild(clientEnabled);
             XmlElement clientServerUrl = clientDoc.CreateElement("ServerUrl");
-            clientServerUrl.InnerText = url + "/" + serverXmlName;
+            clientServerUrl.InnerText = clientAutoUpdaterUrl + autoUpdaterUrl;
             clientConfig.AppendChild(clientServerUrl);
+            XmlElement clientVersion = clientDoc.CreateElement("Version");
+            clientVersion.InnerText = version;
+            clientConfig.AppendChild(clientVersion);
             XmlElement clientRoot = clientDoc.CreateElement("UpdateFileList");
 
+           var f = File.CreateText(autoUpdaterUrl);
+           f.WriteLine(url + prefix+serverXmlName);
+            f.Close();
             #endregion
 
             //创建文档对象
             XmlDocument doc = new XmlDocument();
+            
             //创建根节点
-            XmlElement root = doc.CreateElement("updateFiles");
+            XmlElement root = doc.CreateElement("config");
+
+            XmlElement versionE = doc.CreateElement("version");
+            versionE.InnerText = version;
+            XmlElement commentE = doc.CreateElement("comment");
+            commentE.InnerText = comment;
+
+            XmlElement minimumRequiredVersionE = doc.CreateElement("minimumrequiredversion");
+            minimumRequiredVersionE.InnerText = minimumRequiredVersion;
+
+            XmlElement updateFilesE = doc.CreateElement("updateFiles");
             //头声明
             XmlDeclaration xmldecl = doc.CreateXmlDeclaration("1.0", "utf-8", null);
             doc.AppendChild(xmldecl);
             //获取当前目录对象
             DirectoryInfo dicInfo = new DirectoryInfo(currentDirectory);
             //调用递归方法组装xml文件
-            PopuAllDirectory(doc, root, clientDoc, clientRoot, dicInfo);
+            PopuAllDirectory(doc, updateFilesE, clientDoc, clientRoot, dicInfo);
+            root.AppendChild(versionE);
+            root.AppendChild(minimumRequiredVersionE);
+            root.AppendChild(commentE);
+            root.AppendChild(updateFilesE);
             //追加节点
             doc.AppendChild(root);
             //保存文档
+            
             doc.Save(serverXmlName);
-
+            Console.WriteLine(serverXmlName+" 保存成功");
             clientConfig.AppendChild(clientRoot);
             if (enableClient)
             {
                 clientDoc.Save(clientPath + clientXmlName);
+                Console.WriteLine(clientPath + clientXmlName + " 保存成功");
+                if (enableAliyun)
+                {
+                    ossHelper.UpLoad(clientPath + clientXmlName,prefix + clientPath + clientXmlName);
+                }
             }
 
+            if(enableAliyun)
+            {
+                ossHelper.UpLoad(serverXmlName,prefix + serverXmlName);
+            }
 
             encryptRunTimeConfig();
         }
@@ -93,7 +180,7 @@ namespace MDT.Tools.AutoUpdater.Config
                 StreamReader sr = fi.OpenText();
                 string content = sr.ReadToEnd();
                 sr.Close();
-                File.WriteAllText(RunTimeConfigPath, EncrypterHelper.EncryptRASString(content, privateKey));
+                //File.WriteAllText(RunTimeConfigPath, EncrypterHelper.EncryptRASString(content, privateKey));
             }
         }
 
@@ -108,20 +195,47 @@ namespace MDT.Tools.AutoUpdater.Config
                 lt.Add("AutoupdateService.xml".ToLower());
                 lt.Add("AutoUpdater.config".ToLower());
                 lt.Add("MDT.Tools.AutoUpdater.exe".ToLower());
+                lt.Add("AutoUpdater.exe".ToLower());
+                lt.Add(autoUpdaterUrl.ToLower());
                 //lt.Add("MDT.Tools.AutoUpdater.exe.config".ToLower());
                 lt.Add("MDT.Tools.AutoUpdater.Config.exe".ToLower());
                 lt.Add("MDT.Tools.AutoUpdater.Config.exe.config".ToLower());
                 if (!lt.Contains(f.Name.ToLower()) && !f.Name.EndsWith("pdb"))
                 {
-                    string path = dicInfo.FullName.Replace(currentDirectory, "").Replace("\\", "/");
-                    string str = url + path + "/" + f.Name;
+                    string path = dicInfo.FullName.Replace(currentDirectory, "").Replace("\\", "/").TrimStart('/');
+                    if(!string.IsNullOrEmpty(path))
+                    {
+                        path = path + "/";
+                    }
+                    string str = url + prefix+  path + f.Name;
+
+                    string path1 = f.Name;
+                    if (!string.IsNullOrEmpty(path))
+                    {
+                        path1 = path  + f.Name;
+
+                    }
+                    path1 = path1.Trim('/');
                     if (!(str.IndexOf("svn") > 0))
                     {
-                        string version = FileVersionInfo.GetVersionInfo(f.FullName).FileVersion;
+                        string versionStr = FileVersionInfo.GetVersionInfo(f.FullName).FileVersion;
+                        Version version=new Version(1,0,0,0);
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(versionStr))
+                            {
+                                version = new Version(versionStr);
+                            }
+                        }
+                        catch  
+                        {
+                            
+                            
+                        }
                         XmlElement child = doc.CreateElement("file");
                         child.SetAttribute("path", f.Name);
-                        child.SetAttribute("url", str);
-                        child.SetAttribute("lastver", string.IsNullOrEmpty(version) ? "1.0.0.0" : version);
+                        child.SetAttribute("url", url + prefix + path + HttpUtility.UrlEncode(f.Name).Replace("+", "%20"));
+                        child.SetAttribute("lastver",   version.ToString());
                         child.SetAttribute("size", f.Length.ToString());
                         child.SetAttribute("md5", ByteArrayToHexString(HashData(f.OpenRead(), "md5")));
                         child.SetAttribute("needRestart", "true");
@@ -131,11 +245,18 @@ namespace MDT.Tools.AutoUpdater.Config
                         XmlElement clientChild = clientDoc.CreateElement("LocalFile");
                         clientChild.SetAttribute("path", f.Name);
 
-                        clientChild.SetAttribute("lastver", string.IsNullOrEmpty(version) ? "1.0.0.0" : version);
+                        clientChild.SetAttribute("lastver", version.ToString());
                         clientChild.SetAttribute("size", f.Length.ToString());
                         clientChild.SetAttribute("md5", ByteArrayToHexString(HashData(f.OpenRead(), "md5")));
 
                         clientRoot.AppendChild(clientChild);
+
+                        if(enableAliyun)
+                        {
+                            path1 = prefix + path1;
+                            ossHelper.UpLoad(f, path1);
+                           
+                        }
                     }
                 }
             }

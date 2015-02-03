@@ -1,0 +1,49 @@
+#foreach($tableInfo in $tableInfos)
+#set($i=0)
+#set($pk='')
+#set($count=${tableInfo.Columns.Count})	
+
+	CREATE TABLE ${tableInfo.TableName} (
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
+#if($codeGenHelper.IsNullOrEmpty(${column.DataPrecision}))
+#if($codeGenHelper.IsNullOrEmpty(${column.DataLength}))
+#set($dataType =${column.DataType})
+#else
+#set($dataType = ${column.DataType} + "(" + ${column.DataLength} + ")")
+#end
+#else
+#if("0"==${column.DataScale})
+#set($dataType = ${column.DataType} + "(" + ${column.DataPrecision} + ")")
+#else
+#set($dataType = ${column.DataType} + "(" + ${column.DataPrecision} + "," + ${column.DataScale} + ")")
+#end
+#end
+		#set($i=$i+1)		
+		${column.Name} $dataType #if(${column.DataNullAble}) NULL#else NOT NULL#end #if(!$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) DEFAULT ${column.DataDefault}#else#end#if($i== $count)#else,#end
+						
+#end
+	);
+#set($length=$pk.length - 1)
+#if($length>1)
+  #set($pk=$pk.subString(1,$length))
+	
+	ALTER TABLE ${tableInfo.TableName} ADD CONSTRAINT PK_${tableInfo.TableName} PRIMARY KEY($pk);
+#end
+
+#if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
+	comment on table ${tableInfo.TableName} is '${tableInfo.TableComments}';
+#end
+
+#foreach($column in $tableInfo.Columns)
+#if(!$codeGenHelper.IsNullOrEmpty(${column.Comments}))
+	comment on column ${tableInfo.TableName}.${column.Name} is '${column.Comments}';
+#else
+#if($column.IsChanged)
+	comment on column ${tableInfo.TableName}.${column.Name} is '';
+#end
+#end
+#end
+#end

@@ -17,5 +17,18 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Model
        public bool IsShowComment { get; set; }
        public string CodeRule { get; set; }
        public string Ibatis { get; set; }
+
+       public bool IsDelete { get; set; }
+       public string Id { get; set; }
+
+        #region dll路径
+       public string DALDllName { get; set; }
+       public string BLLDllName { get; set; }
+        #endregion
+
+        /// <summary>
+        /// 唯一标识展示名
+        /// </summary>
+       public string DisplayName { get; set; }
     }
 }

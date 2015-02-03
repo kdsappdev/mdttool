@@ -45,6 +45,7 @@ namespace MDT.Tools.DB.Common
             else
             {
                 _tsiGen.Enabled = flag;
+				_dbContextMenuStrip.Enabled = flag;
             }
         }
         #endregion
@@ -74,7 +75,7 @@ namespace MDT.Tools.DB.Common
         }
         #endregion
 
-        protected virtual void process(DataRow[] drTable, AbstractHandler handler)
+        public virtual void process(DataRow[] drTable, AbstractHandler handler)
         {
             getDBShare(handler);
             handler.process(drTable, handler.dsTableColumn, handler.dsTablePrimaryKey);

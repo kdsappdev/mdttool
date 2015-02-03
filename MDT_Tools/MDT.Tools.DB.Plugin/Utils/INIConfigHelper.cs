@@ -1,51 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Common;
 using MDT.Tools.DB.Plugin.Model;
-
+using DNCCFrameWork.DataAccess;
 namespace MDT.Tools.DB.Plugin.Utils
 {
     internal static class IniConfigHelper
     {
-        [System.Runtime.InteropServices.DllImport("kernel32")]
-        private static extern long WritePrivateProfileString(string lpApplicationName, string lpKeyName, string lpString, string lpFileName);
 
 
-        private static void CreateFile()
+
+
+        static IDbHelper db = new DbFactory(@"data source=control\db.plugin.db", "SqlLiteHelper").IDbHelper;
+
+        public static bool WriteDefaultDBInfo(DbConfigInfo dbConfigInfo)
         {
-            FileHelper.CreateDirectory(DBFileHelper.SystemConfig);
-            if (!File.Exists(DBFileHelper.SystemConfig))
+            bool status = false;
+            if (dbConfigInfo != null)
             {
-                FileStream fs = File.Create(DBFileHelper.SystemConfig);
-                fs.Close();
+                try
+                {
+
+                    var dic = new Dictionary<string, string>();
+                    dic.Add("@dbId", dbConfigInfo.DbId);
+                    string delSql = "delete from db_plugin_defaultSelect";
+                    int result = db.ExecuteNonQuery(delSql);
+                    string insertSql = "INSERT INTO db_plugin_defaultSelect(dbId) VALUES(@dbId)";
+                    result = db.ExecuteNonQuery(insertSql, dic);
+                    status = true;
+                }
+                catch (Exception ex)
+                {
+                    LogHelper.Error(ex);
+
+                }
+            }
+            return status;
+        }
+        public static string ReadDefaultDBInfo()
+        {
+            string str = "";
+
+            try
+            {
+                string sql = "select dbId from db_plugin_defaultSelect";
+                str = db.ExecuteScalar(sql) + "";
+
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex);
+
             }
 
+            return str;
         }
-        public static void DeleteFile()
-        {
-
-            File.Delete(DBFileHelper.SystemConfig);
-
-        }
-
         public static bool WriteDBInfo(DbConfigInfo dbConfigInfo, ref string message)
         {
             bool status = false;
             if (dbConfigInfo != null)
             {
-
                 try
                 {
-                    CreateFile();
-                    WritePrivateProfileString(dbConfigInfo.DbType, dbConfigInfo.DbConfigName, dbConfigInfo.ConnectionString, DBFileHelper.SystemConfig);
+                    var dic = new Dictionary<string, string>();
+                    string sql = "";
+                    if (dbConfigInfo.IsDelete)
+                    {
+                        sql = "delete from db_plugin_config where dbId=@dbId";
+                        dic.Add("@dbId", dbConfigInfo.DbId);
+                    }
+                    else
+                    {
+
+                        dic.Add("@dbName", dbConfigInfo.DbConfigName);
+                        dic.Add("@dbConnectionString", dbConfigInfo.ConnectionString);
+                        dic.Add("@dbType", dbConfigInfo.DbType);
+                        dic.Add("@dbEncoder", dbConfigInfo.DbEncoder);
+
+                        if (string.IsNullOrEmpty(dbConfigInfo.DbId))
+                        {
+                            dic.Add("@dbId", Guid.NewGuid().ToString());
+                            sql = "INSERT INTO db_plugin_config(dbId, dbName, dbConnectionString, dbType, dbEncoder) VALUES(@dbId, @dbName, @dbConnectionString, @dbType, @dbEncoder)";
+                        }
+                        else
+                        {
+                            dic.Add("@dbId", dbConfigInfo.DbId);
+                            sql = "update db_plugin_config set dbName=@dbName,dbConnectionString=@dbConnectionString,dbType=@dbType,dbEncoder=@dbEncoder where dbId=@dbId";
+                        }
+                    }
+                    db.ExecuteNonQuery(sql, dic);
                     status = true;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    LogHelper.Error(ex);
                     message = ex.Message;
                 }
             }
@@ -57,43 +109,22 @@ namespace MDT.Tools.DB.Plugin.Utils
             try
             {
 
-              
-                StreamReader sr = new StreamReader(DBFileHelper.SystemConfig,Encoding.Default);
-                string content = sr.ReadToEnd();
-                
-                string[] temps = content.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-                sr.Close();
-                string dbType = "";
-                foreach (string str in temps)
+                var dataSet = new DataSet();
+                db.Fill("select * from db_plugin_config", dataSet);
+                foreach (DataRow row in dataSet.Tables[0].Rows)
                 {
-                    if (str.Contains("[") && str.Contains("]"))
-                    {
-                        dbType = str.Replace("[", "").Replace("]", "");
-                        continue;
-                    }
-                    int index = str.IndexOf('=');
-                    if (index >= 1)
-                    {
-                        try
-                        {
-                            var dbConfigInfo = new DbConfigInfo { DbType = dbType };
-
-                            string dbConfigName = str.Substring(0, index);
-                            string connectionString = str.Substring(index + 1, str.Length - index - 1).Trim(new[] { '"' });
-                            dbConfigInfo.ConnectionString = connectionString;
-                            dbConfigInfo.DbConfigName = dbConfigName;
-                            dbConfigList.Add(dbConfigInfo);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
-                    }
+                    var dbConfigInfo = new DbConfigInfo();
+                    dbConfigInfo.DbType = row["dbtype"] + "";
+                    dbConfigInfo.DbConfigName = row["dbName"] + "";
+                    dbConfigInfo.ConnectionString = row["dbConnectionString"] + "";
+                    dbConfigInfo.DbEncoder = row["dbEncoder"] + "";
+                    dbConfigInfo.DbId = row["dbId"] + "";
+                    dbConfigList.Add(dbConfigInfo);
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogHelper.Error(ex);
             }
             return dbConfigList;
         }

@@ -13,11 +13,8 @@ namespace MDT.Tools.DB.Common
         { }
         public static readonly string SystemConfig = Application.StartupPath + "\\control\\dbconfig.ini";
         public static readonly string SaveDBDataPath = Application.StartupPath + "\\data\\";
-
-        public static DataSet WriteXml(DataSet ds, string OriginalEncoding, string TargetEncoding)
+        public static  DataSet ConvertDataSet(DataSet ds, string OriginalEncoding, string TargetEncoding)
         {
-            DataSet temp = ds;
-
             if (!string.IsNullOrEmpty(OriginalEncoding) && !string.IsNullOrEmpty(TargetEncoding))
             {
                 foreach (DataTable dt in ds.Tables)
@@ -39,6 +36,14 @@ namespace MDT.Tools.DB.Common
                     }
                 }
             }
+            return ds;
+        }
+
+        public static DataSet WriteXml(DataSet ds, string OriginalEncoding, string TargetEncoding)
+        {
+            DataSet temp = ds;
+            ds=ConvertDataSet(ds, OriginalEncoding, TargetEncoding);
+            
             WriteXml(ds);
 
             return temp;

@@ -2,92 +2,194 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Data;
+
 using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Java_CodeGen.Plugin.Model;
 using MDT.Tools.DB.Java_CodeGen.Plugin.Utils;
-
+using DNCCFrameWork.DataAccess;
 
 namespace MDT.Tools.DB.Java_CodeGen.Plugin.Utils
 {
     internal class IniConfigHelper
     {
-        [System.Runtime.InteropServices.DllImport("kernel32")]
-        private static extern long WritePrivateProfileString(string lpApplicationName, string lpKeyName, string lpString, string lpFileName);
-        [System.Runtime.InteropServices.DllImport("kernel32")]
-        private static extern long GetPrivateProfileString(string lpApplicationName, string lpKeyName, string lpDefault, System.Text.StringBuilder lpReturnedString, int nSize, string lpFileName);
+        static IDbHelper db = new DbFactory(@"data source=control\db.plugin.Java.db", "SqlLiteHelper").IDbHelper;
 
-        private static void CreateFile()
-        {
-            FileHelper.CreateDirectory(FilePathHelper.SystemConfig);
-            if (!File.Exists(FilePathHelper.SystemConfig))
-            {
-                FileStream fs = File.Create(FilePathHelper.SystemConfig);
-                fs.Close();
-            }
-            
-        }
-        private const string Group = "JavaCodeGenConfig";
-        private const string BSPackage = "BSPackage";
-        private const string WSPackage = "WSPackage";
-        private const string OutPut = "OutPut";
-        private const string TableFilter = "TableFilter";
-        private const string IsShowGenCode = "IsShowGenCode";
-        private const string CodeRule = "CodeRule";
-        private const string Ibatis = "Ibatis";
-        public static bool Write(JavaCodeGenConfig cms, ref string message)
+
+        public static bool writeDefaultDBInfo(JavaCodeGenConfig config)
         {
             bool status = false;
-            if (cms != null)
+            try
             {
+                string deleteSql = "delete from db_plugin_Java_defaultConfig";
+                int result = db.ExecuteNonQuery(deleteSql);
+                status = true;
+                if (config != null)
+                {
+                    status = false;
+                    Dictionary<string, string> dic = new Dictionary<string, string>();
+                    dic.Add("@DisplayName", config.DisplayName);
 
+                    string insertSql = "insert into db_plugin_Java_defaultConfig(DisplayName) values(@DisplayName)";
+                    result = db.ExecuteNonQuery(insertSql, dic);
+                    status = true;
+                }
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error(e.Message);
+            }
+            return status;
+        }
+
+        public static string ReadDefaultDBInfo()
+        {
+            string str = "";
+            try
+            {
+                string sql = "select DisplayName from db_plugin_Java_defaultConfig";
+                str = db.ExecuteScalar(sql) + "";
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex);
+            }
+            return str;
+        }
+
+        public static bool deleteDBInfo()
+        {
+            bool status = false;
+            try
+            {
+                string sql = "delete from db_plugin_Java_config";
+                db.ExecuteNonQuery(sql);
+                status = true;
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error(e.Message);
+            }
+            return status;
+        }
+
+        public static bool WriteDBInfo(JavaCodeGenConfig config, ref string message)
+        {
+            bool status = false;
+            if (config != null)
+            {
                 try
                 {
-                    CreateFile();
-                    WritePrivateProfileString(Group, BSPackage, cms.BSPackage, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, WSPackage, cms.WSPackage + "", FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, OutPut, cms.OutPut, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, TableFilter, cms.TableFilter, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, IsShowGenCode, cms.IsShowGenCode + "", FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, CodeRule, cms.CodeRule, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, Ibatis, cms.Ibatis + "", FilePathHelper.SystemConfig);
-
+                    var dic = new Dictionary<string, string>();
+                    string sql = "";
+                    if (config.IsDelete)
+                    {
+                        sql = "delete from db_plugin_Java_config where Id = @Id";
+                        dic.Add("@Id", config.Id);
+                    }
+                    else
+                    {
+                        dic.Add("@BSPackage", config.BSPackage);
+                        dic.Add("@CodeRule", config.CodeRule);
+                        dic.Add("@DisplayName", config.DisplayName);
+                        dic.Add("@Ibatis", config.Ibatis);
+                        
+                        dic.Add("@IsShowGenCode", config.IsShowGenCode.ToString());
+                        dic.Add("@OutPut", config.OutPut);
+                        dic.Add("@TableFilter", config.TableFilter);
+                        dic.Add("@WSPackage", config.WSPackage);
+                       
+                        if (string.IsNullOrEmpty(config.Id))
+                        {
+                            dic.Add("@Id", Guid.NewGuid().ToString());
+                            sql = "insert into db_plugin_Java_config(BSPackage, CodeRule, DisplayName, Ibatis, Id, IsShowGenCode, OutPut, TableFilter, WSPackage)"
+                           + " values(@BSPackage, @CodeRule, @DisplayName, @Ibatis, @Id, @IsShowGenCode, @OutPut, @TableFilter, @WSPackage)";
+                    
+                        }
+                        else
+                        {
+                            dic.Add("@Id", config.Id);
+                            sql = "update db_plugin_Java_config set BSPackage=@BSPackage, CodeRule=@CodeRule, DisplayName=@DisplayName, Ibatis=@Ibatis, Id=@Id, IsShowGenCode=@IsShowGenCode, OutPut=@OutPut"
+                                + ", TableFilter=@TableFilter, WSPackage=@WSPackage where Id=@Id";
+                        }
+                    }
+                    db.ExecuteNonQuery(sql, dic);
                     status = true;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    LogHelper.Error(ex);
                     message = ex.Message;
                 }
             }
             return status;
         }
-        public static JavaCodeGenConfig ReadCsharpModelGenConfig()
-        {
-            JavaCodeGenConfig cmc = new JavaCodeGenConfig();
 
+        public static IList<JavaCodeGenConfig> ReadDBInfo()
+        {
+            IList<JavaCodeGenConfig> configList = new List<JavaCodeGenConfig>();
             try
             {
-                StringBuilder sb = new StringBuilder(255);
-                GetPrivateProfileString(Group, BSPackage, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.BSPackage = sb.ToString();
-                GetPrivateProfileString(Group, WSPackage, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.WSPackage = sb.ToString();
-                GetPrivateProfileString(Group, OutPut, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.OutPut = sb.ToString();
-                GetPrivateProfileString(Group, TableFilter, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.TableFilter = sb.ToString();
-                GetPrivateProfileString(Group, IsShowGenCode, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.IsShowGenCode = "true".Equals(sb.ToString().ToLower());
-                GetPrivateProfileString(Group, CodeRule, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.CodeRule = sb.ToString();
-                GetPrivateProfileString(Group, Ibatis, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.Ibatis = sb.ToString();
+
+                var dataSet = new DataSet();
+                db.Fill("select * from db_plugin_Java_config", dataSet);
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    JavaCodeGenConfig config = new JavaCodeGenConfig();
+                    config.BSPackage = row["BSPackage"] + "";
+                    config.CodeRule = row["CodeRule"] + "";
+                    config.DisplayName = row["DisplayName"] + "";
+                    config.Ibatis = row["Ibatis"] + "";
+                    config.Id = row["Id"] + "";
+                    config.IsShowGenCode = bool.Parse(row["IsShowGenCode"] + "");
+                    config.OutPut = row["OutPut"] + "";
+                    config.TableFilter = row["TableFilter"] + "";
+                    config.WSPackage = row["WSPackage"] + "";
+                  
+
+                    configList.Add(config);
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogHelper.Error(ex);
             }
-            return cmc;
+            return configList;
+        }
+
+        public static JavaCodeGenConfig getDefaultObject()
+        {
+            JavaCodeGenConfig config = new JavaCodeGenConfig();
+            string str = ReadDefaultDBInfo();
+            IList<JavaCodeGenConfig> configList = ReadDBInfo();
+            if (string.IsNullOrEmpty(str))
+            {
+                config.BSPackage = "";
+                config.CodeRule = "";
+                config.DisplayName = "";
+                config.Ibatis = "";
+                config.Id = "";
+                config.IsDelete = false;
+                config.IsShowGenCode = true;
+                config.OutPut = "";
+                config.TableFilter = "";
+                config.WSPackage = "";
+                return config;
+            }
+            else
+            {
+                foreach (JavaCodeGenConfig tem in configList)
+                {
+                    if (!string.IsNullOrEmpty(tem.DisplayName))
+                    {
+                        if (str.Equals(tem.DisplayName))
+                        {
+                            config = tem;
+                        }
+                    }
+                }
+            }
+            return config;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             {
                 base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
                 CodeLanguage = "Java";
-                SaveFileEncoding = Encoding.GetEncoding("GBK");
+                //SaveFileEncoding = Encoding.GetEncoding("GBK");
                 OutPut = cmc.OutPut;
                 setEnable(false);
                 setStatusBar("");
@@ -43,6 +43,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
                         setStatusBar(string.Format("正在生成{0}包路径ws层代码", cmc.WSPackage));
+                        LogHelper.Info("Generating " + cmc.WSPackage + " package path ws layer code.");
                         setProgreesEditValue(0);
                         setProgress(0);
                         setProgressMax(drTables.Length);
@@ -68,6 +69,8 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                             setStatusBar(string.Format("正在生成{0}包路径ws中{1}的代码,共{2}个代码，已生成了{3}个代码,过滤了{4}个代码", cmc.WSPackage,
                                                        CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.WSService,
                                                        drTables.Length, i - j, j));
+                            LogHelper.Info("Generatig in " + cmc.WSPackage + " package path ws " + CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.WSService + "'s code,"
+                                + drTables.Length + " of codes," + (i - j) + " of code was generated," + j + " of code was filtered.");
                             setProgress(1);
                         }
                         if (!flag)
@@ -82,13 +85,17 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                 if (!cmc.IsShowGenCode)
                 {
                     setStatusBar(string.Format("{0}包路径ws代码生成成功", cmc.WSPackage));
+                    LogHelper.Info(cmc.WSPackage + " package path ws layer code has generated success.");
                     openDialog();
                 }
             }
             catch (Exception ex)
             {
+              
                 setStatusBar(string.Format("{0}包路径ws代码生成失败[{1}]", cmc.WSPackage, ex.Message));
 
+                LogHelper.Info(cmc.WSPackage + " package path ws layer code generate fail " + ex.Message);
+               
             }
             finally
             {

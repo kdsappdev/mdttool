@@ -1,0 +1,7 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.Csharp_CodeGen.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.Csharp_CodeGen.Plugin.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Csharp_CodeGen.Plugin\obj\x64\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Csharp_CodeGen.Plugin\obj\x64\Release\MDT.Tools.DB.Csharp_ModelGen.Plugin.UI.Csharp_CodeGenConfigUI.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Csharp_CodeGen.Plugin\obj\x64\Release\MDT.Tools.DB.Csharp_CodeGen.Plugin.csproj.GenerateResource.Cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Csharp_CodeGen.Plugin\obj\x64\Release\MDT.Tools.DB.Csharp_CodeGen.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Csharp_CodeGen.Plugin\obj\x64\Release\MDT.Tools.DB.Csharp_CodeGen.Plugin.pdb

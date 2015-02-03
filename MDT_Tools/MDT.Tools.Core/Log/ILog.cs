@@ -10,5 +10,6 @@ namespace MDT.Tools.Core.Log
         void Warn(string str);
         void Error(string str);
         void Error(Exception ex);
+        void Info(string str);
     }
 }

@@ -43,6 +43,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
                         setStatusBar(string.Format("正在生成{0}命名空间的Model", cmc.ModelNameSpace));
+                        LogHelper.Info("Generating " + cmc.ModelNameSpace + " namespace model.");
                         setProgreesEditValue(0);
                         setProgress(0);
                         setProgressMax(drTables.Length);
@@ -69,6 +70,8 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                             setStatusBar(string.Format("正在生成{0}命名空间中{1}信息,共{2}个Model，已生成了{3}个Model,过滤了{4}个Model", cmc.ModelNameSpace,
                                 CodeGenHelper.GetClassName(tableName,cmc.CodeRule),
                                                        drTables.Length, i - j, j));
+                            LogHelper.Info("Generationg in " + cmc.ModelNameSpace + " namespace " + CodeGenHelper.GetClassName(tableName, cmc.CodeRule)
+                               + " code, of " + drTables.Length + " codes, " + (i - j) + " of code has generated, " + j + " of code was filtered.");
                             setProgress(1);
                         }
                         if (!flag)
@@ -83,13 +86,17 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
                 if (!cmc.IsShowGenCode)
                 {
                     setStatusBar(string.Format("{0}命名空间Model生成成功", cmc.ModelNameSpace));
+                    LogHelper.Info(cmc.ModelNameSpace + " namespace code has generated success.");
                     openDialog();
                 }
             }
             catch (Exception ex)
             {
+               
                 setStatusBar(string.Format("{0}命名空间Model生成失败[{1}]", cmc.ModelNameSpace, ex.Message));
 
+                LogHelper.Error(cmc.ModelNameSpace + " namespace code generated fail " + ex.Message);
+             
             }
             finally
             {

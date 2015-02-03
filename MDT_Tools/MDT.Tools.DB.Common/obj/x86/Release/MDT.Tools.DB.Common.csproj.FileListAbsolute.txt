@@ -1,0 +1,5 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.Common.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.Common.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Common\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Common\obj\x86\Release\MDT.Tools.DB.Common.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Common\obj\x86\Release\MDT.Tools.DB.Common.pdb
