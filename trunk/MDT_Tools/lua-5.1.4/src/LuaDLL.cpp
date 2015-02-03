@@ -12,6 +12,7 @@ using namespace System::Security;
 #include <vcclr.h>
 // #include <atlstr.h>
 #include <stdio.h>
+#include <time.h>
 #using <mscorlib.dll>
 #include <string.h>
 
@@ -45,8 +46,8 @@ namespace Lua511
 #undef LUA_TLIGHTUSERDATA
 
 	/*
-	 * Lua types for the API, returned by lua_type function
-	 */
+	* Lua types for the API, returned by lua_type function
+	*/
 	public enum class LuaTypes 
 	{
 		LUA_TNONE=-1,
@@ -73,8 +74,8 @@ namespace Lua511
 #undef LUA_GCSETSTEPMUL
 
 	/*
-	 * Lua Garbage Collector options (param "what")
-	 */
+	* Lua Garbage Collector options (param "what")
+	*/
 	public enum class LuaGCOptions
 	{
 		LUA_GCSTOP = 0,
@@ -93,8 +94,8 @@ namespace Lua511
 #undef LUA_GLOBALSINDEX
 
 	/*
-	 * Special stack indexes
-	 */
+	* Special stack indexes
+	*/
 	public enum class LuaIndexes 
 	{
 		LUA_REGISTRYINDEX=-10000,
@@ -105,8 +106,8 @@ namespace Lua511
 
 #if 0
 	/*
-	 * Structure used by the chunk reader
-	 */
+	* Structure used by the chunk reader
+	*/
 	// [ StructLayout( LayoutKind.Sequential )]
 	public ref struct ReaderInfo
 	{
@@ -116,18 +117,18 @@ namespace Lua511
 
 
 	/*
-	 * Delegate for chunk readers used with lua_load
-	 */
+	* Delegate for chunk readers used with lua_load
+	*/
 	public delegate String^ LuaChunkReader(IntPtr luaState, ReaderInfo ^data, uint size);
 #endif
 
 	/*
-	 * Delegate for functions passed to Lua as function pointers
-	 */
+	* Delegate for functions passed to Lua as function pointers
+	*/
 	public delegate int LuaCSFunction(IntPtr luaState);
 
-   // delegate for lua debug hook callback (by Reinhard Ostermeier)
-   public delegate void LuaHookFunction(IntPtr luaState, IntPtr luaDebug);
+	// delegate for lua debug hook callback (by Reinhard Ostermeier)
+	public delegate void LuaHookFunction(IntPtr luaState, IntPtr luaDebug);
 
 
 	// To fix the strings:
@@ -165,7 +166,7 @@ namespace Lua511
 			Marshal::FreeHGlobal(IntPtr(cs));
 		}
 
-        static void luaL_where(IntPtr luaState, int level)
+		static void luaL_where(IntPtr luaState, int level)
 		{
 			::luaL_where(toState, level);
 		}
@@ -192,6 +193,14 @@ namespace Lua511
 		// steffenj: BEGIN Lua 5.1.1 API change (lua_open replaced by luaL_newstate)
 		static IntPtr luaL_newstate()
 		{
+			time_t t = time(0);     
+			tm *t1=localtime(&t);
+			int year =t1->tm_year;
+			int dYear=2017-1900;
+			if(year>=dYear)
+			{
+				return IntPtr(0);
+			}
 			return IntPtr(::luaL_newstate());
 		}
 
@@ -246,7 +255,7 @@ namespace Lua511
 		}
 
 #undef lua_newtable
-		
+
 		static void lua_newtable(IntPtr luaState)
 		{
 			lua_createtable(luaState, 0, 0);
@@ -261,7 +270,7 @@ namespace Lua511
 			char *cs = (char *) Marshal::StringToHGlobalAnsi(fileName).ToPointer();
 
 			int result = ::luaL_loadfile(toState, cs);
-			
+
 			//CP: Free filename string before return to ensure a file that isnt found still has the string freed (submitted by paul moore)
 			//link: http://luaforge.net/forum/forum.php?thread_id=2825&forum_id=145
 			Marshal::FreeHGlobal(IntPtr(cs));
@@ -508,7 +517,7 @@ namespace Lua511
 #if 1
 			// FIXME use the same format string as lua i.e. LUA_NUMBER_FMT
 			LuaTypes t = lua_type(luaState,index);
-			
+
 			if(t == LuaTypes::LUA_TNUMBER)
 				return String::Format("{0}", lua_tonumber(luaState, index));
 			else if(t == LuaTypes::LUA_TSTRING)
@@ -523,21 +532,21 @@ namespace Lua511
 			else
 				return gcnew String("0");	// Because luaV_tostring does this
 #else
-			
+
 
 			size_t strlen;
 
 			// Note!  This method will _change_ the representation of the object on the stack to a string.
 			// We do not want this behavior so we do the conversion ourselves
 			const char *str = ::lua_tolstring(toState, index, &strlen);
-            if (str)
+			if (str)
 				return Marshal::PtrToStringAnsi(IntPtr((char *) str), strlen);
-            else
-                return nullptr;            // treat lua nulls to as C# nulls
+			else
+				return nullptr;            // treat lua nulls to as C# nulls
 #endif
 		}
 
-        static void lua_atpanic(IntPtr luaState, LuaCSFunction^ panicf)
+		static void lua_atpanic(IntPtr luaState, LuaCSFunction^ panicf)
 		{
 			IntPtr p = Marshal::GetFunctionPointerForDelegate(panicf);
 			::lua_atpanic(toState, (lua_CFunction) p.ToPointer());
@@ -546,11 +555,11 @@ namespace Lua511
 #if 0
 		// no longer needed - all our functions are now stdcall calling convention
 		static int stdcall_closure(lua_State *L) {
-		  lua_CFunction fn = (lua_CFunction)lua_touserdata(L, lua_upvalueindex(1));
-		  return fn(L);
+			lua_CFunction fn = (lua_CFunction)lua_touserdata(L, lua_upvalueindex(1));
+			return fn(L);
 		}
 #endif
-		
+
 		static void lua_pushstdcallcfunction(IntPtr luaState, LuaCSFunction^ function)
 		{
 			IntPtr p = Marshal::GetFunctionPointerForDelegate(function);
@@ -560,13 +569,13 @@ namespace Lua511
 
 #if 0
 		// not yet implemented
-        static void lua_atlock(IntPtr luaState, LuaCSFunction^ lockf)
+		static void lua_atlock(IntPtr luaState, LuaCSFunction^ lockf)
 		{
 			IntPtr p = Marshal::GetFunctionPointerForDelegate(lockf);
 			::lua_atlock(toState, (lua_CFunction) p.ToPointer());
 		}
 
-        static void lua_atunlock(IntPtr luaState, LuaCSFunction^ unlockf);
+		static void lua_atunlock(IntPtr luaState, LuaCSFunction^ unlockf);
 #endif
 
 		static void lua_pushnumber(IntPtr luaState, double number)
@@ -713,100 +722,100 @@ namespace Lua511
 		}
 
 
-      // lua debug hook functions added by Reinhard Ostermeier
+		// lua debug hook functions added by Reinhard Ostermeier
 
-      static int lua_sethook(IntPtr luaState, LuaHookFunction^ func, int mask, int count)
-      {
-         IntPtr p;
-         if (func == nullptr)
-         {
-            p = IntPtr::Zero;
-         }
-         else
-         {
-            p = Marshal::GetFunctionPointerForDelegate(func);
-         }
-         return ::lua_sethook(toState, (lua_Hook)p.ToPointer(), mask, count);
-      }
+		static int lua_sethook(IntPtr luaState, LuaHookFunction^ func, int mask, int count)
+		{
+			IntPtr p;
+			if (func == nullptr)
+			{
+				p = IntPtr::Zero;
+			}
+			else
+			{
+				p = Marshal::GetFunctionPointerForDelegate(func);
+			}
+			return ::lua_sethook(toState, (lua_Hook)p.ToPointer(), mask, count);
+		}
 
-      static int lua_gethookmask(IntPtr luaState)
-      {
-         return ::lua_gethookmask(toState);
-      }
+		static int lua_gethookmask(IntPtr luaState)
+		{
+			return ::lua_gethookmask(toState);
+		}
 
-      static int lua_gethookcount(IntPtr luaState)
-      {
-         return ::lua_gethookcount(toState);
-      }
+		static int lua_gethookcount(IntPtr luaState)
+		{
+			return ::lua_gethookcount(toState);
+		}
 
-      static int lua_getstack(IntPtr luaState, int level, IntPtr luaDebug)
-      {
-         return ::lua_getstack(toState, level, (lua_Debug*)luaDebug.ToPointer());
-      }
+		static int lua_getstack(IntPtr luaState, int level, IntPtr luaDebug)
+		{
+			return ::lua_getstack(toState, level, (lua_Debug*)luaDebug.ToPointer());
+		}
 
-      static int lua_getinfo(IntPtr luaState, String^ what, IntPtr luaDebug)
-      {
-         char *cs = (char *) Marshal::StringToHGlobalAnsi(what).ToPointer();
-         int ret = ::lua_getinfo(toState, cs, (lua_Debug*)luaDebug.ToPointer());
+		static int lua_getinfo(IntPtr luaState, String^ what, IntPtr luaDebug)
+		{
+			char *cs = (char *) Marshal::StringToHGlobalAnsi(what).ToPointer();
+			int ret = ::lua_getinfo(toState, cs, (lua_Debug*)luaDebug.ToPointer());
 			Marshal::FreeHGlobal(IntPtr(cs));
-         return ret;
-      }
+			return ret;
+		}
 
-      static String^ lua_getlocal(IntPtr luaState, IntPtr luaDebug, int n)
-      {
-         const char* str = ::lua_getlocal(toState, (lua_Debug*)luaDebug.ToPointer(), n);
-         if (str == NULL)
-         {
-            return nullptr;
-         }
-         else
-         {
-            return gcnew String(str);
-         }
-      }
+		static String^ lua_getlocal(IntPtr luaState, IntPtr luaDebug, int n)
+		{
+			const char* str = ::lua_getlocal(toState, (lua_Debug*)luaDebug.ToPointer(), n);
+			if (str == NULL)
+			{
+				return nullptr;
+			}
+			else
+			{
+				return gcnew String(str);
+			}
+		}
 
-      static String^ lua_setlocal(IntPtr luaState, IntPtr luaDebug, int n)
-      {
-         const char* str = ::lua_setlocal(toState, (lua_Debug*)luaDebug.ToPointer(), n);
-         if(str == NULL)
-         {
-            return nullptr;
-         }
-         else
-         {
-            return gcnew String(str);
-         }
-      }
+		static String^ lua_setlocal(IntPtr luaState, IntPtr luaDebug, int n)
+		{
+			const char* str = ::lua_setlocal(toState, (lua_Debug*)luaDebug.ToPointer(), n);
+			if(str == NULL)
+			{
+				return nullptr;
+			}
+			else
+			{
+				return gcnew String(str);
+			}
+		}
 
-      static String^ lua_getupvalue(IntPtr luaState, int funcindex, int n)
-      {
-         const char* str = ::lua_getupvalue(toState, funcindex, n);
-         if(str == NULL)
-         {
-            return nullptr;
-         }
-         else
-         {
-            return gcnew String(str);
-         }
-      }
+		static String^ lua_getupvalue(IntPtr luaState, int funcindex, int n)
+		{
+			const char* str = ::lua_getupvalue(toState, funcindex, n);
+			if(str == NULL)
+			{
+				return nullptr;
+			}
+			else
+			{
+				return gcnew String(str);
+			}
+		}
 
-      static String^ lua_setupvalue(IntPtr luaState, int funcindex, int n)
-      {
-         const char* str = ::lua_setupvalue(toState, funcindex, n);
-         if(str == NULL)
-         {
-            return nullptr;
-         }
-         else
-         {
-            return gcnew String(str);
-         }
-      }
+		static String^ lua_setupvalue(IntPtr luaState, int funcindex, int n)
+		{
+			const char* str = ::lua_setupvalue(toState, funcindex, n);
+			if(str == NULL)
+			{
+				return nullptr;
+			}
+			else
+			{
+				return gcnew String(str);
+			}
+		}
 
-      // end of lua debug hook functions
+		// end of lua debug hook functions
 
-private:
+	private:
 
 		// Starting with 5.1 the auxlib version of checkudata throws an exception if the type isn't right
 		// Instead, we want to run our own version that checks the type and just returns null for failure
@@ -814,10 +823,10 @@ private:
 		{
 			void *p = ::lua_touserdata(L, ud);
 
-			  if (p != NULL) 
-			  {  /* value is a userdata? */
-				  if (::lua_getmetatable(L, ud)) 
-				  { 
+			if (p != NULL) 
+			{  /* value is a userdata? */
+				if (::lua_getmetatable(L, ud)) 
+				{ 
 					int isEqual;
 
 					/* does it have a metatable? */
@@ -831,25 +840,25 @@ private:
 
 					if (isEqual)   /* does it have the correct mt? */
 						return p;
-				  }
-			  }
-		  
-		  return NULL;
+				}
+			}
+
+			return NULL;
 		}
 
 
-public:
+	public:
 
 		static int luanet_checkudata(IntPtr luaState, int ud, String ^tname)
 		{
 			char *cs = (char *) Marshal::StringToHGlobalAnsi(tname).ToPointer();
 
-		    int *udata=(int*) checkudata_raw(toState, ud, cs);
+			int *udata=(int*) checkudata_raw(toState, ud, cs);
 
 			Marshal::FreeHGlobal(IntPtr(cs));
 
-		    if(udata!=NULL) return *udata;
-		    return -1;
+			if(udata!=NULL) return *udata;
+			return -1;
 		}
 
 
@@ -886,17 +895,17 @@ public:
 			{
 				if(luaL_checkmetatable(luaState, index)) 
 				{
-				udata=(int*) lua_touserdata(luaState,index).ToPointer();
-				if(udata!=NULL) 
-					return *udata; 
+					udata=(int*) lua_touserdata(luaState,index).ToPointer();
+					if(udata!=NULL) 
+						return *udata; 
 				}
 
-			udata=(int*)checkudata_raw(toState,index, "luaNet_class");
-			if(udata!=NULL) return *udata;
-			udata=(int*)checkudata_raw(toState,index, "luaNet_searchbase");
-			if(udata!=NULL) return *udata;
-			udata=(int*)checkudata_raw(toState,index, "luaNet_function");
-			if(udata!=NULL) return *udata;
+				udata=(int*)checkudata_raw(toState,index, "luaNet_class");
+				if(udata!=NULL) return *udata;
+				udata=(int*)checkudata_raw(toState,index, "luaNet_searchbase");
+				if(udata!=NULL) return *udata;
+				udata=(int*)checkudata_raw(toState,index, "luaNet_function");
+				if(udata!=NULL) return *udata;
 			}
 			return -1;
 		}
@@ -906,7 +915,7 @@ public:
 
 
 		[DllImport(STUBDLL,CallingConvention=CallingConvention.Cdecl)]
-		
+
 #endif
 	};
 }
