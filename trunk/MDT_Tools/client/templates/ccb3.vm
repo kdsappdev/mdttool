@@ -1,0 +1,12 @@
+Tomcat WebService服务地址	服务方法	服务描述
+#foreach($tableInfo in $tableInfos)
+#set($exist=false)
+#foreach($column in $tableInfo.Columns)
+#if($column.IsPrimaryKeys)
+		#set($exist=true)
+#end
+#end
+#if(!$exist)
+${tableInfo.tableName}
+#end
+#end

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Management;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 namespace MDT.Tools.Core.Utils
@@ -52,6 +53,13 @@ namespace MDT.Tools.Core.Utils
                 LogHelper.Error(ex);
                 return 32;
             }
+        }
+
+        public static bool IsAdministrator()
+        {
+            WindowsIdentity identity = WindowsIdentity.GetCurrent();
+            WindowsPrincipal principal = new WindowsPrincipal(identity);
+            return principal.IsInRole(WindowsBuiltInRole.Administrator);
         }
     }
 }

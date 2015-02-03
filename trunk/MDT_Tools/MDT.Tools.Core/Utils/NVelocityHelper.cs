@@ -38,8 +38,24 @@ namespace MDT.Tools.Core.Utils
             Template template = Velocity.GetTemplate(path);
             template.Merge(context, writer);
             string str= writer.GetStringBuilder().ToString();
-            Console.WriteLine(str);
+            //Console.WriteLine(str);
             return str;
+        }
+        public string GenByStr(string str,Dictionary<string, object> vars)
+        {
+            string temp = str;
+            VelocityContext context = new VelocityContext();
+            if (vars != null)
+            {
+                foreach (KeyValuePair<string, object> kvp in vars)
+                {
+                    context.Put(kvp.Key, kvp.Value);
+                }
+            }
+            StringWriter writer = new StringWriter();
+            Velocity.Evaluate(context, writer, "", str);
+            temp = writer.GetStringBuilder().ToString();
+            return temp;
         }
 
     }

@@ -17,6 +17,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
+using System.Web;
 using System.Windows.Forms;
 using System.Threading;
 using System.Net;
@@ -24,7 +25,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Xml;
 
-namespace KnightsWarriorAutoupdater
+namespace MDT.ThirdParty.Controls
 {
     public partial class DownloadProgress : Form
     {
@@ -35,6 +36,7 @@ namespace KnightsWarriorAutoupdater
         private ManualResetEvent evtDownload = null;
         private ManualResetEvent evtPerDonwload = null;
         private WebClient clientDownload = null;
+
         #endregion
 
         #region The constructor of DownloadProgress
@@ -68,9 +70,16 @@ namespace KnightsWarriorAutoupdater
                 evtPerDonwload.Set();
             }
         }
+        private void setUI()
+        {
+            label3.Text = string.Format("正在更新 {0}", ConstFile.AppName);
+            Text = string.Format("{0} 更新中", ConstFile.AppName);
+            label7.Text = string.Format("名称： {0}", ConstFile.AppName);
+        }
 
         private void OnFormLoad(object sender, EventArgs e)
         {
+            setUI();
             evtDownload = new ManualResetEvent(true);
             evtDownload.Reset();
             ThreadPool.QueueUserWorkItem(new WaitCallback(this.ProcDownload));
@@ -78,7 +87,7 @@ namespace KnightsWarriorAutoupdater
 
         long total = 0;
         long nDownloadedTotal = 0;
-
+        private bool bCancel = false;
         private void ProcDownload(object o)
         {
             string tempFolderPath = Path.Combine(CommonUnitity.SystemBinUrl, ConstFile.TEMPFOLDERNAME);
@@ -96,14 +105,14 @@ namespace KnightsWarriorAutoupdater
             }
             try
             {
-                while (!evtDownload.WaitOne(0, false))
+                while (!evtDownload.WaitOne(0, false) && !bCancel)
                 {
                     if (this.downloadFileList.Count == 0)
                         break;
-                    this.SetProcessBar(100,(int)(nDownloadedTotal * 100 /total));
+                    this.SetProcessBar(100, (int)(nDownloadedTotal * 100 / total));
                     DownloadFileInfo file = this.downloadFileList[0];
 
-
+                    LogHelper.Debug(string.Format("Start Download:{0}", file.FileName));
                     //Debug.WriteLine(String.Format("Start Download:{0}", file.FileName));
 
                     this.ShowCurrentDownloadFileName(file.FileName);
@@ -129,9 +138,12 @@ namespace KnightsWarriorAutoupdater
                                                                                                    e.BytesReceived) * 100 /
                                                                                                   total));
                                                                           }
-                                                                          catch
+                                                                          catch (Exception ex)
                                                                           {
-                                                                              //log the error message,you can use the application's log code
+                                                                              LogHelper.Error(ex);
+                                                                              //EventLog.WriteEntry("DownloadProgress", ex.Message,
+                                                                              //                   EventLogEntryType.Error);
+
                                                                           }
 
                                                                       };
@@ -149,11 +161,15 @@ namespace KnightsWarriorAutoupdater
                                                                                               (nDownloadedTotal * 100 /
                                                                                                total));
 
+
+
                                                                             evtPerDonwload.Set();
                                                                         }
-                                                                        catch (Exception)
+                                                                        catch (Exception ex)
                                                                         {
-                                                                            //log the error message,you can use the application's log code
+                                                                            LogHelper.Error(ex);
+                                                                            //EventLog.WriteEntry("DownloadProgress", ex.Message,
+                                                                            //EventLogEntryType.Error);
                                                                         }
 
                                                                     };
@@ -187,10 +203,16 @@ namespace KnightsWarriorAutoupdater
                     clientDownload.Dispose();
                     clientDownload = null;
                 }
+                if (bCancel)
+                {
+                    ShowErrorAndRestartApplication();
+                }
 
             }
-            catch
+            catch (Exception ex)
             {
+                //EventLog.WriteEntry("DownloadProgress", ex.Message,
+                LogHelper.Error(ex);                                                                                  //EventLogEntryType.Error);
                 ShowErrorAndRestartApplication();
                 //throw;
             }
@@ -201,8 +223,7 @@ namespace KnightsWarriorAutoupdater
                 return;
             }
 
-            //Test network and deal with errors if there have 
-            DealWithDownloadErrors();
+
             foreach (DownloadFileInfo file in this.allFileList)
             {
                 string tempUrlPath = CommonUnitity.GetFolderUrl(file);
@@ -218,21 +239,27 @@ namespace KnightsWarriorAutoupdater
                     oldPath = Path.Combine(CommonUnitity.SystemBinUrl, file.FileName);
                     newPath = Path.Combine(CommonUnitity.SystemBinUrl + ConstFile.TEMPFOLDERNAME, file.FileName);
                 }
+
                 System.IO.FileInfo f = new FileInfo(newPath);
                 if (!file.Size.ToString().Equals(f.Length.ToString()))
                 {
-                    System.Console.WriteLine(f.Name);
+                    LogHelper.Debug(string.Format("{0}.Size({1})!={2}.Size({3})", file.FileName, file.Size, f.Name, f.Length));
+                    //EventLog.WriteEntry("DownloadProgress", string.Format("{0}.Size({1})!={2}.Size({3})",file.FileName,file.Size,f.Name,f.Length),
+                    //EventLogEntryType.Error);
                     ShowErrorAndRestartApplication();
                 }
             }
-            //Debug.WriteLine("All Downloaded");
-            foreach (DownloadFileInfo file in this.allFileList)
+
+            LogHelper.Debug("All Downloaded");
+             
+            try
             {
-                string tempUrlPath = CommonUnitity.GetFolderUrl(file);
-                string oldPath = string.Empty;
-                string newPath = string.Empty;
-                try
+                foreach (DownloadFileInfo file in this.allFileList)
                 {
+                    string tempUrlPath = CommonUnitity.GetFolderUrl(file);
+                    string oldPath = string.Empty;
+                    string newPath = string.Empty;
+
                     if (!string.IsNullOrEmpty(tempUrlPath))
                     {
                         oldPath = Path.Combine(CommonUnitity.SystemBinUrl + tempUrlPath.Substring(1), file.FileName);
@@ -272,8 +299,6 @@ namespace KnightsWarriorAutoupdater
                             if (!Directory.Exists(CommonUnitity.SystemBinUrl + tempUrlPath.Substring(1)))
                             {
                                 Directory.CreateDirectory(CommonUnitity.SystemBinUrl + tempUrlPath.Substring(1));
-
-
                                 MoveFolderToOld(oldPath, newPath);
                             }
                             else
@@ -288,37 +313,47 @@ namespace KnightsWarriorAutoupdater
 
                     }
                 }
-                catch 
-                {
-                    //log the error message,you can use the application's log code
-                }
+
 
             }
+            catch (Exception ex)
+            {
 
-            //After dealed with all files, clear the data
-            this.allFileList.Clear();
+                LogHelper.Error(ex);
+                 
+                //EventLog.WriteEntry("DownloadProgress", ex.Message, EventLogEntryType.Error);
+                ShowErrorAndRestartApplication();
+            }
+            finally
+            {
+                this.allFileList.Clear();
 
-            if (this.downloadFileList.Count == 0)
-                Exit(true);
-            else
-                Exit(false);
+                if (this.downloadFileList.Count == 0)
+                    Exit(true);
+                else
+                    Exit(false);
 
-            evtDownload.Set();
+                evtDownload.Set();
+            }
         }
 
         //To delete or move to old files
         void MoveFolderToOld(string oldPath, string newPath)
         {
+            LogHelper.Debug(string.Format("MoveFolderToOld oldPath:{0},newPath:{1}", oldPath, newPath));
             if (File.Exists(oldPath + ".old"))
+            {
                 File.Delete(oldPath + ".old");
+            }
 
             if (File.Exists(oldPath))
+            {
                 File.Move(oldPath, oldPath + ".old");
 
-
+            }
 
             File.Move(newPath, oldPath);
-            //File.Delete(oldPath + ".old");
+            File.Delete(oldPath + ".old");
         }
 
         delegate void ShowCurrentDownloadFileNameCallBack(string name);
@@ -368,10 +403,15 @@ namespace KnightsWarriorAutoupdater
 
         private void OnCancel(object sender, EventArgs e)
         {
-            //bCancel = true;
-            //evtDownload.Set();
-            //evtPerDonwload.Set();
-            ShowErrorAndRestartApplication();
+
+            if (clientDownload != null)
+            {
+                clientDownload.CancelAsync();
+            }
+            bCancel = true;
+            evtDownload.Set();
+            evtPerDonwload.Set();
+
         }
 
         private void DealWithDownloadErrors()
@@ -383,18 +423,19 @@ namespace KnightsWarriorAutoupdater
                 WebClient client = new WebClient();
                 client.DownloadString(config.ServerUrl);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //log the error message,you can use the application's log code
+                LogHelper.Error(ex);
+                // EventLog.WriteEntry("DownloadProgress", ex.Message, EventLogEntryType.Error);
+
                 ShowErrorAndRestartApplication();
             }
         }
 
         private void ShowErrorAndRestartApplication()
         {
-            Directory.Delete(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstFile.TEMPFOLDERNAME), true);
-            MessageBox.Show(ConstFile.NOTNETWORK, ConstFile.MESSAGETITLE, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            CommonUnitity.RestartApplication();
+ 
+            CommonUnitity.ShowErrorAndRestartApplication();
         }
 
         #endregion

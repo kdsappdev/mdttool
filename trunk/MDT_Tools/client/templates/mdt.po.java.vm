@@ -1,0 +1,47 @@
+﻿##Ibatis Po
+##
+package $package;
+
+import java.math.*;
+import java.util.*;
+
+#set ($now=${GenHelper.GetNow()})
+/**
+*${table.TableName}
+*${table.TableComments}
+*Create Time: $now
+*Create By: MDT Smart Kit .
+*/
+public class ${GenHelper.GetProperty($table.TableName)} {
+
+#foreach($column in ${table.Columns})
+#set ($field=${GenHelper.GetField(${column.Name})})
+#if(${column.CommentsIsNull})
+#set ($comments=$field)
+#{else}
+#set ($comments=$column.Comments)
+#end
+    /**
+    *${comments}
+    *Create by MDT MDT Smart Kit at ${now}
+    */
+    private ${column.JavaType} $field;
+#end
+
+#foreach($column in ${table.Columns})
+#set ($field=${GenHelper.GetField(${column.Name})})
+#set ($property=${GenHelper.GetProperty(${column.Name})})
+    public ${column.JavaType} get${property}() {
+        return $field;
+    }
+
+    public void set${property}(${column.JavaType} $field) {
+#if(${column.JavaType}=="String")
+        this.$field = $field == null ? null : ${field}.trim();
+#else
+        this.$field = $field;
+#end
+    }
+#end
+
+}

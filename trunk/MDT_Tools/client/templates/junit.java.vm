@@ -1,0 +1,313 @@
+## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+
+
+package ats.pingo.datamanager.marketdata.bs.impl;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.math.BigDecimal;
+import org.junit.Before;
+import org.junit.Test;
+import org.apache.log4j.PropertyConfigurator;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import ats.common.model.po.${model};
+import ats.foundation.condition.Condition;
+import ats.foundation.condition.ConditionInfo;
+import ats.foundation.condition.ConditionOperator;
+import ats.message2.CharsetConvertType;
+import ats.message2.MsgHelper;
+import ats.pingo.datamanager.marketdata.bs.I${model}Server;
+
+
+
+ /**
+#if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
+   *${tableInfo.TableComments} junit单元测试
+#else
+   *${tableInfo.TableName}
+ #end
+  *
+  *$date: 创建. ${pluginName} 模板版本(v1.0.0.0) <br/>
+  */
+ public class ${model}Test {
+        ApplicationContext appContext = null;
+	    I${model}Server i${model}Server = null;
+		
+	 @Before
+	 public void setUpBefore(){
+	         PropertyConfigurator
+					.configure("./control/WebServiceConfig.properties");
+			String[] str = new String[] { "./control/DAOContext.xml",
+					"./control/WebServiceContext.xml" };
+			appContext = new ClassPathXmlApplicationContext(str);
+			i${model}Server = (I${model}Server) appContext
+					.getBean("I${model}Server_bs");
+	   }
+	
+	  
+   @Test
+   public void Select() throws Exception{
+		Condition queryCondition = new Condition();
+		queryCondition.setTableName("${model}");
+#set($pk='')
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
+#end
+#set($length=$pk.length - 1)
+#if($length>1)
+#set($pk=$pk.subString(1,$length))
+		queryCondition.AndCondition(new ConditionInfo("$codeGenHelper.StrProperty($pk)", "11",
+				ConditionOperator.EqualTo, false));   //以主键为查询条件
+#end
+		List<${model}> lt = null;
+		String msg =null;
+		lt = i${model}Server.select(queryCondition);
+		msg = MsgHelper.Serializer(lt, CharsetConvertType.ISO8859_1ToGBK);
+		System.out.println(msg);
+   }
+   
+   
+   
+	@Test
+	public void  insert() throws Exception{
+	       ${model}  ${codeGenHelper.StrFirstToLower(${model})} = new ${model}(); 
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
+#if($codeGenHelper.IsNullOrEmpty(${column.DataPrecision}))
+#if($codeGenHelper.IsNullOrEmpty(${column.DataLength}))
+#set($dataType =${column.DataType})
+#set($num="1111")
+#else
+##set($dataType = ${column.DataType} + "(" + ${column.DataLength} + ")")
+#set($Integer=0)
+#set($Integer=$Integer.Parse(${column.DataLength}))
+#set($n=[1 .. $Integer])
+#set($number="")
+#foreach($j in  $n)
+#set($number="${number}"+1)
+#end
+#set($num='"'+$number+'"')
+#end
+#else
+#if("0"==${column.DataScale})
+##set($dataType = ${column.DataType} + "(" + ${column.DataPrecision} + ")")
+#set($Integer3=0)
+#set($Integer3=$Integer3.Parse(${column.DataPrecision}))
+#set($n3=[1 .. $Integer3])
+#set($num="")
+#foreach($h in  $n3)
+#set($num="${num}"+1)
+#end
+#else
+##set($dataType = ${column.DataType} + "(" + ${column.DataPrecision} + "," + ${column.DataScale} + ")")
+#set($Integer1=0)
+#set($Integer1=$Integer1.Parse(${column.DataPrecision}))
+#set($n1=[1 .. $Integer1])
+#set($num1="")
+#foreach($j in  $n1)
+#set($num1="${num1}"+1)
+#end
+#set($Integer2=0)
+#set($Integer2=$Integer2.Parse(${column.DataScale}))
+#set($n2=[1 .. $Integer2])
+#set($num2="")
+#foreach($k in  $n2)
+#set($num2="${num2}"+1)
+#end
+#set($num="")
+#set($num="BigDecimal.valueOf("+$num1+"."+$num2+")")
+#end
+#end
+           #set($i=$i+1)		
+           #if(!${column.IsPrimaryKeys})${codeGenHelper.StrFirstToLower(${model})}.set$codeGenHelper.StrProperty(${column.Name})($num); #end #if(!$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) DEFAULT ${column.DataDefault}#else#end#if($i== $count)#else,#end
+						
+#end
+
+           i${model}Server.insert(${codeGenHelper.StrFirstToLower(${model})});
+      }
+   
+   
+   
+   @Test
+   public void delete() throws Exception{
+		Condition delCondition = new Condition();
+	    delCondition.setTableName("${model}");
+#set($pk='')
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
+#end
+#set($length=$pk.length - 1)
+#if($length>1)
+#set($pk=$pk.subString(1,$length))
+	   delCondition.AndCondition(new ConditionInfo("$codeGenHelper.StrProperty($pk)", "11",
+		    ConditionOperator.EqualTo, false));   //以主键为删除条件
+#end
+	   i${model}Server.delete(delCondition);
+   }
+   
+   
+   @Test
+   public void update() throws Exception{
+		Condition upCondition = new Condition();
+		upCondition.setTableName("${model}");
+#set($pk='')
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
+#end
+#set($length=$pk.length - 1)
+#if($length>1)
+#set($pk=$pk.subString(1,$length))
+	    upCondition.AndCondition(new ConditionInfo("$codeGenHelper.StrProperty($pk)", "11",
+		    ConditionOperator.EqualTo, false));  //以主键为更新条件
+#end
+	   ${model}  ${codeGenHelper.StrFirstToLower(${model})} = new ${model}(); 
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
+#if($codeGenHelper.IsNullOrEmpty(${column.DataPrecision}))
+#if($codeGenHelper.IsNullOrEmpty(${column.DataLength}))
+#set($dataType =${column.DataType})
+#set($num="2222")
+#else
+##set($dataType = ${column.DataType} + "(" + ${column.DataLength} + ")")
+#set($Integer=0)
+#set($Integer=$Integer.Parse(${column.DataLength}))
+#set($n=[1 .. $Integer])
+#set($number="")
+#foreach($j in  $n)
+#set($number="${number}"+2)
+#end
+#set($num='"'+$number+'"')
+#end
+#else
+#if("0"==${column.DataScale})
+##set($dataType = ${column.DataType} + "(" + ${column.DataPrecision} + ")")
+#set($Integer3=0)
+#set($Integer3=$Integer3.Parse(${column.DataPrecision}))
+#set($n3=[1 .. $Integer3])
+#set($num="")
+#foreach($h in  $n3)
+#set($num="${num}"+2)
+#end
+#else
+##set($dataType = ${column.DataType} + "(" + ${column.DataPrecision} + "," + ${column.DataScale} + ")")
+#set($Integer1=0)
+#set($Integer1=$Integer1.Parse(${column.DataPrecision}))
+#set($n1=[1 .. $Integer1])
+#set($num1="")
+#foreach($j in  $n1)
+#set($num1="${num1}"+2)
+#end
+#set($Integer2=0)
+#set($Integer2=$Integer2.Parse(${column.DataScale}))
+#set($n2=[1 .. $Integer2])
+#set($num2="")
+#foreach($k in  $n2)
+#set($num2="${num2}"+2)
+#end
+#set($num="")
+#set($num="BigDecimal.valueOf("+$num1+"."+$num2+")")
+#end
+#end
+       #set($i=$i+1)		
+       #if(!${column.IsPrimaryKeys})${codeGenHelper.StrFirstToLower(${model})}.set$codeGenHelper.StrProperty(${column.Name})($num); #end #if(!$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) DEFAULT ${column.DataDefault}#else#end#if($i== $count)#else,#end
+						
+#end
+
+	   i${model}Server.update(${codeGenHelper.StrFirstToLower(${model})},upCondition);
+		
+   }
+   
+   
+   @Test
+   public void  updateBatch() throws Exception{
+         Condition updateBatchCondition = new Condition();
+		 updateBatchCondition.setTableName("${model}");
+	     List<${model}> updateBatch${model}s = new ArrayList<${model}>();
+#set($pk='')
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
+#end
+#set($length=$pk.length - 1)
+#if($length>1)
+#set($pk=$pk.subString(1,$length))
+	    updateBatchCondition.AndCondition(new ConditionInfo("$codeGenHelper.StrProperty($pk)", "11",
+		    ConditionOperator.EqualTo, false));   //以主键为更新条件
+#end
+	    ${model}  ${codeGenHelper.StrFirstToLower(${model})} = new ${model}(); 
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
+#if($codeGenHelper.IsNullOrEmpty(${column.DataPrecision}))
+#if($codeGenHelper.IsNullOrEmpty(${column.DataLength}))
+#set($dataType =${column.DataType})
+#set($num="333")
+#else
+##set($dataType = ${column.DataType} + "(" + ${column.DataLength} + ")")
+#set($Integer=0)
+#set($Integer=$Integer.Parse(${column.DataLength}))
+#set($n=[1 .. $Integer])
+#set($number="")
+#foreach($j in  $n)
+#set($number="${number}"+3)
+#end
+#set($num='"'+$number+'"')
+#end
+#else
+#if("0"==${column.DataScale})
+##set($dataType = ${column.DataType} + "(" + ${column.DataPrecision} + ")")
+#set($Integer3=0)
+#set($Integer3=$Integer3.Parse(${column.DataPrecision}))
+#set($n3=[1 .. $Integer3])
+#set($num="")
+#foreach($h in  $n3)
+#set($num="${num}"+3)
+#end
+#else
+##set($dataType = ${column.DataType} + "(" + ${column.DataPrecision} + "," + ${column.DataScale} + ")")
+#set($Integer1=0)
+#set($Integer1=$Integer1.Parse(${column.DataPrecision}))
+#set($n1=[1 .. $Integer1])
+#set($num1="")
+#foreach($j in  $n1)
+#set($num1="${num1}"+3)
+#end
+#set($Integer2=0)
+#set($Integer2=$Integer2.Parse(${column.DataScale}))
+#set($n2=[1 .. $Integer2])
+#set($num2="")
+#foreach($k in  $n2)
+#set($num2="${num2}"+3)
+#end
+#set($num="")
+#set($num="BigDecimal.valueOf("+$num1+"."+$num2+")")
+#end
+#end
+        #set($i=$i+1)		
+        #if(!${column.IsPrimaryKeys})${codeGenHelper.StrFirstToLower(${model})}.set$codeGenHelper.StrProperty(${column.Name})($num); #end #if(!$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) DEFAULT ${column.DataDefault}#else#end#if($i== $count)#else,#end
+						
+#end
+
+         updateBatch${model}s.add(${codeGenHelper.StrFirstToLower(${model})});  
+	     i${model}Server.updateBatch(updateBatch${model}s,updateBatchCondition);
+		
+   }		
+	 
+   }

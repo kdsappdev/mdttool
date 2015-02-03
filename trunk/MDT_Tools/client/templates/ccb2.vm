@@ -1,0 +1,91 @@
+Tomcat WebService服务地址	服务方法	服务描述
+#foreach($tableInfo in $tableInfos)
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+#set($comments=${tableInfo.TableComments})
+#set($count=1)
+I${model}Service?wsdl	Insert	增加 $comments 服务
+输入报文
+#foreach($column in $tableInfo.Columns)
+#if(!$column.IsPrimaryKeys)
+		$codeGenHelper.StrProperty(${column.Name})		${column.DataType}		${column.DataLength}		${column.Comments}
+#end
+#end
+输出报文
+#foreach($column in $tableInfo.Columns)
+#if($column.IsPrimaryKeys)
+		$codeGenHelper.StrProperty(${column.Name})		${column.DataType}		${column.DataLength}		${column.Comments}
+#end
+#end
+		AtsMsg对象
+		Code		字符串		长度无要求		code码，服务状态码
+		Common		字符串		长度无要求		备注，备注信息
+		Exception		字符串		长度无要求		异常，服务异常的错误信息
+		SendTime		字符串		长度无要求		服务器时间，调用服务的服务器返回时间
+		Source		字符串		长度无要求		消息源，描述消息从那个地方发出
+		MsgType			字符串		长度无要求		消息类型，描述本次结果使用的是什么消息格式，json,xml
+		Version		字符串		长度无要求		版本号，描述该消息组件的版本号
+
+I${model}Service?wsdl	Delete	删除 $comments 服务
+输入报文
+#foreach($column in $tableInfo.Columns)
+#if($column.IsPrimaryKeys)
+		$codeGenHelper.StrProperty(${column.Name})		${column.DataType}		${column.DataLength}		${column.Comments}
+#end
+#end
+输出报文
+		AtsMsg对象
+		Code		字符串		长度无要求		code码，服务状态码
+		Common		字符串		长度无要求		备注，备注信息
+		Exception		字符串		长度无要求		异常，服务异常的错误信息
+		SendTime		字符串		长度无要求		服务器时间，调用服务的服务器返回时间
+		Source		字符串		长度无要求		消息源，描述消息从那个地方发出
+		MsgType			字符串		长度无要求		消息类型，描述本次结果使用的是什么消息格式，json,xml
+		Version		字符串		长度无要求		版本号，描述该消息组件的版本号
+
+I${model}Service?wsdl	Update	更新 $comments 服务
+输入报文
+#foreach($column in $tableInfo.Columns)
+		$codeGenHelper.StrProperty(${column.Name})		${column.DataType}		${column.DataLength}		${column.Comments}
+#end
+输出报文
+		AtsMsg对象
+		Code		字符串		长度无要求		code码，服务状态码
+		Common		字符串		长度无要求		备注，备注信息
+		Exception		字符串		长度无要求		异常，服务异常的错误信息
+		SendTime		字符串		长度无要求		服务器时间，调用服务的服务器返回时间
+		Source		字符串		长度无要求		消息源，描述消息从那个地方发出
+		MsgType			字符串		长度无要求		消息类型，描述本次结果使用的是什么消息格式，json,xml
+		Version		字符串		长度无要求		版本号，描述该消息组件的版本号
+
+I${model}Service?wsdl	UpdateBatch	批量更新 $comments 服务
+输入报文
+#foreach($column in $tableInfo.Columns)
+		$codeGenHelper.StrProperty(${column.Name})		${column.DataType}		${column.DataLength}		${column.Comments}
+#end
+输出报文
+		AtsMsg对象
+		Code		字符串		长度无要求		code码，服务状态码
+		Common		字符串		长度无要求		备注，备注信息
+		Exception		字符串		长度无要求		异常，服务异常的错误信息
+		SendTime		字符串		长度无要求		服务器时间，调用服务的服务器返回时间
+		Source		字符串		长度无要求		消息源，描述消息从那个地方发出
+		MsgType			字符串		长度无要求		消息类型，描述本次结果使用的是什么消息格式，json,xml
+		Version		字符串		长度无要求		版本号，描述该消息组件的版本号
+
+I${model}Service?wsdl	Select	查询 $comments 服务
+输入报文
+		Condition		查询组件，根据业务需求，自动组合查询条件
+输出报文
+		AtsMsg对象
+		Code		字符串		长度无要求		code码，服务状态码
+		Common		字符串		长度无要求		备注，备注信息
+		Exception		字符串		长度无要求		异常，服务异常的错误信息
+		SendTime		字符串		长度无要求		服务器时间，调用服务的服务器返回时间
+		Source		字符串		长度无要求		消息源，描述消息从那个地方发出
+		MsgType			字符串		长度无要求		消息类型，描述本次结果使用的是什么消息格式，json,xml
+		Version		字符串		长度无要求		版本号，描述该消息组件的版本号
+#foreach($column in $tableInfo.Columns)
+		$codeGenHelper.StrProperty(${column.Name})		${column.DataType}		${column.DataLength}		${column.Comments}
+#end
+-----------------------------------------------------------
+#end

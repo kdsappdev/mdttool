@@ -1,0 +1,7 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.Fix.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.Fix.Plugin.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Fix.Plugin\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Fix.Plugin\obj\x86\Release\MDT.Tools.Fix.Plugin.UI.FixExplorer.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Fix.Plugin\obj\x86\Release\MDT.Tools.Fix.Plugin.csproj.GenerateResource.Cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Fix.Plugin\obj\x86\Release\MDT.Tools.Fix.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.Fix.Plugin\obj\x86\Release\MDT.Tools.Fix.Plugin.pdb

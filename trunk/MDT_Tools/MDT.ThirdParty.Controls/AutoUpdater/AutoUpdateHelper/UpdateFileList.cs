@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace KnightsWarriorAutoupdater
+namespace MDT.ThirdParty.Controls
 {
     public class UpdateFileList : List<LocalFile>
     {

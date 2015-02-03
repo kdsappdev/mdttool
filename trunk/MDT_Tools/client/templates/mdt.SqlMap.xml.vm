@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+#set ($poname= ${GenHelper.GetProperty($table.TableName)})
+#set ($sharp="#")
+<sqlMap namespace="${table.TableName}" >
+  <resultMap id="abatorgenerated_${poname}Result" class="${popackage}.${poname}" >
+#foreach($column in ${table.Columns}) 
+#set ($field=${GenHelper.GetField(${column.Name})}) 
+#if(${column.JdbcType}=="OTHER")
+    <result column="${column.Name}" property="${field}" jdbcType="CLOB" javaType ="java.lang.String" />
+#else
+    <result column="${column.Name}" property="${field}" jdbcType="${column.JdbcType}" />
+#end
+##  <result column="PGFC_WRK_ZON_CFG_DSC" property="pgfcWrkZonCfgDsc"  jdbcType="CLOB" javaType ="java.lang.String" />
+#end
+  </resultMap>
+  <sql id="abatorgenerated_Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$
+            ${sharp}oredCriteria[].criteriaWithSingleValue[].value${sharp}
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            ${sharp}oredCriteria[].criteriaWithListValue[].values[]${sharp}
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          ${sharp}oredCriteria[].criteriaWithBetweenValue[].values[0]${sharp} and
+          ${sharp}oredCriteria[].criteriaWithBetweenValue[].values[1]${sharp}
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <select id="abatorgenerated_selectByExample" resultMap="abatorgenerated_${poname}Result" parameterClass="${popackage}.${poname}Example" >
+    select #foreach($column in ${table.Columns})
+#if($velocityCount==${table.Columns.Count})${column.Name}#else${column.Name}, #end
+#end
+
+    from ${table.TableName}
+    <isParameterPresent >
+      <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
+      <isNotNull property="orderByClause" >
+        order by $orderByClause$
+      </isNotNull>
+    </isParameterPresent>
+  </select>
+
+  <delete id="abatorgenerated_deleteByExample" parameterClass="${popackage}.${poname}Example" >
+    delete from ${table.TableName}
+    <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
+  </delete>
+  
+
+  <insert id="abatorgenerated_insert" parameterClass="${popackage}.${poname}" >
+#if(${GenHelper.HasPrimaryKey(${table.TableName})})
+#if(${KeyJavaType}=="String")
+    <selectKey resultClass="java.lang.String" keyProperty="${KeyField}" >
+      select to_char(SEQ_${table.TableName}.nextVal) autoid  from dual
+    </selectKey>
+#else
+    <selectKey resultClass="java.math.BigDecimal" keyProperty="${KeyField}" >
+      select SEQ_${table.TableName}.nextVal  from dual
+    </selectKey>
+#end
+#end
+    insert into ${table.TableName} (#foreach($column in ${table.Columns})#if($velocityCount==${table.Columns.Count})${column.Name}#else${column.Name}, #end#end)
+    values (#foreach($column in ${table.Columns})#set ($field = $GenHelper.GetField(${column.Name}))#if($velocityCount==${table.Columns.Count})
+${sharp}${field}:${column.JdbcType}${sharp}#else${sharp}${field}:${column.JdbcType}${sharp}, #end
+#end)
+  </insert>
+
+
+  <select id="abatorgenerated_countByExample" parameterClass="${popackage}.${poname}Example" resultClass="java.lang.Integer" >
+    select count(*) from ${table.TableName}
+    <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
+  </select>
+  
+  <update id="abatorgenerated_updateByExampleSelective" >
+    update ${table.TableName}
+    <dynamic prepend="set" >
+#foreach($column in $table.Columns)
+#set ($field = $GenHelper.GetField(${column.Name}))
+      <isNotNull prepend="," property="record.${field}" >
+        ${column.Name} = ${sharp}record.${field}:${column.JdbcType}${sharp}
+      </isNotNull>
+#end      
+    </dynamic>
+    <isParameterPresent >
+      <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  
+  <update id="abatorgenerated_updateByExample" >
+    update ${table.TableName}
+    set
+#foreach($column in ${table.Columns})
+#set ($field = $GenHelper.GetField(${column.Name}))
+#if($velocityCount==${table.Columns.Count})
+      ${column.Name} = ${sharp}record.${field}:${column.JdbcType}${sharp}
+#else
+      ${column.Name} = ${sharp}record.${field}:${column.JdbcType}${sharp},
+#end
+#end    
+    <isParameterPresent >
+      <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  
+#if(${GenHelper.HasPrimaryKey(${table.TableName})})
+  <select id="abatorgenerated_selectByPrimaryKey" resultMap="abatorgenerated_${poname}Result" parameterClass="${popackage}.${poname}" >
+    select #foreach($column in ${table.Columns})
+#if($velocityCount==${table.Columns.Count})${column.Name}#else${column.Name}, #end
+#end
+
+    from ${table.TableName}
+    where ${ColumnKey.Name} = ${sharp}${KeyField}:${ColumnKey.JdbcType}${sharp}
+  </select>
+  
+  <delete id="abatorgenerated_deleteByPrimaryKey" parameterClass="${popackage}.${poname}" >
+    delete from ${table.TableName}
+    where ${ColumnKey.Name} = ${sharp}${KeyField}:${ColumnKey.JdbcType}${sharp}
+  </delete>
+
+  <update id="abatorgenerated_updateByPrimaryKey" parameterClass="${popackage}.${poname}" >
+    update ${table.TableName}
+    set
+#foreach($column in ${table.Columns})
+#set ($field = $GenHelper.GetField(${column.Name}))
+#if(${ColumnKey.Name}!=${column.Name})
+#if($velocityCount==${table.Columns.Count})
+      ${column.Name} = ${sharp}${field}:${column.JdbcType}${sharp}
+#else
+      ${column.Name} = ${sharp}${field}:${column.JdbcType}${sharp}, 
+#end
+#end
+#end
+    where ${ColumnKey.Name} = ${sharp}${KeyField}:${ColumnKey.JdbcType}${sharp}
+  </update>
+
+ <update id="abatorgenerated_updateByPrimaryKeySelective" parameterClass="${popackage}.${poname}" >
+    update ${table.TableName}
+    <dynamic prepend="set" >
+#foreach($column in $table.Columns)
+#set ($field = $GenHelper.GetField(${column.Name}))
+#if(${ColumnKey.Name}!=${column.Name})
+      <isNotNull prepend="," property="${field}" >
+        ${column.Name} = ${sharp}${field}:${column.JdbcType}${sharp}
+      </isNotNull>
+#end
+#end
+    </dynamic>
+    where ${ColumnKey.Name} = ${sharp}${KeyField}:${ColumnKey.JdbcType}${sharp}
+  </update>
+
+#end
+</sqlMap>

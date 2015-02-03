@@ -1,9 +1,11 @@
-﻿## model字符串
+## model字符串
 #set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
 ## 第一个字符为小写的model字符串
 #set($lmodel=${codeGenHelper.StrFirstToLower($model)})
 package ${wsPackage}.impl;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -26,7 +28,7 @@ import ats.foundation.utils.exception.CodeException;
  *${tableInfo.TableName}
 #end
  *
- *$date: 创建. ${pluginName} <br/>
+ *$date: 创建. ${pluginName} 模板版本(v1.0.3.0)<br/>
  */
 public class ${model}Service extends BaseWebService implements I${model} {
 	private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -37,161 +39,267 @@ public class ${model}Service extends BaseWebService implements I${model} {
 		this.${ibsServer} = ${ibsServer};
 	}
 
+
+        /**
+	 *增加${lmodel}对象
+	 *
+	 * @param ${lmodel}b[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${lmodel}[AtsMsg字符串压缩字节码]
+	 */
 	@Override
 	public byte[] insert(byte[] ${lmodel}b) {
-		try {
-			if (_permissionCheck != null) {
-				int pCode = _permissionCheck.check(this);
-				if (pCode != 0) {
-					logger.info("The method insert()--check user defined");
-					return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(
-							"3101", "permissionCheck faild"));
-				}
-			}
-			String location = "";
-			try {
-				location = CharsetConvert.charsetConvert(this
-						.getSessionLocation());
-			} catch (Exception e) {
-				logger.error("can't get login infomation from session", e);
-				return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4105",
-						"can't get session", e.getMessage()));
-			}
+	        String result = "";
+		try {		 
+			
 			String msg = ZipUtils.ungzipByte(${lmodel}b); 
+			logger.debug("after ungzipByte param:" + msg);
 			${model} ${lmodel} = MsgHelper.Deserialize(msg, ${model}.class,
-					CharsetConvertType.None);
-			${lmodel}.setLocation(location);
-
+					CharsetConvertType.None);			
 			${ibsServer}.insert(${lmodel});
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("0000", "sucess"));
+                        result = MsgHelper.SerializerObjectToATSMessage(${lmodel}, CharsetConvertType.None);			 	 
 		}
 
 		catch (SerializerException e) {
 			logger.error("Deserialize ${model} failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4103",
-					"Deserialize ${model} failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString("4103",
+					"Deserialize ${model} failed!", e.getMessage());			
 		}
 
 		catch (CodeException e) {
 			logger.error("insert ${model} failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(e.code(),
-					"insert ${model} failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString(e.code(),
+					"insert ${model} failed!", e.getMessage());			
 		} catch (Exception e) {
 			logger.error("insert failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4102",
-					"insert  failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString("4102",
+					"insert  failed!", e.getMessage());			
 		}
-		
+		logger.debug(result);
+		return ZipUtils.gzipStr(result);
 	}
 
  
+        /**
+	 *删除${model}对象
+	 *
+	 * @param Condition对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${model}[AtsMsg字符串压缩字节码]
+	 */
 	@Override
 	public byte[] delete(byte[] deleteCondition)  {
+	        String result = "";
 		try {
-			if (_permissionCheck != null) {
-				int pCode = _permissionCheck.check(this);
-				if (pCode != 0) {
-					logger.info("The method delete()--check user defined");
-					return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(
-							"3101", "permissionCheck faild"));
-				}
-			}
+			 
 			String msg = ZipUtils.ungzipByte(deleteCondition);
-			Condition condition;
-
-			condition = MsgHelper.Deserialize(msg, Condition.class,
+			logger.debug("after ungzipByte param:" + msg);
+			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
 			${ibsServer}.delete(condition);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("0000", "sucess"));
+			result = MsgHelper.AtsMessageToString("0000", "sucess");		
 		} catch (SerializerException e) {
 			logger.error("Deserialize ${model} failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4103",
-					"Deserialize Condition failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString("4103",
+					"Deserialize Condition failed!", e.getMessage());		
 		}
 		catch (CodeException e) {
 			logger.error("delete  failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(e.code(),
-					"delete  failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString(e.code(),
+					"delete  failed!", e.getMessage());			
 		} catch (Exception e) {
 			logger.error("delete failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4102",
-					"delete  failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString("4102",
+					"delete  failed!", e.getMessage());			
 		}
-		
+		logger.debug(result);
+		return ZipUtils.gzipStr(result);
 	}
 
 	
+	/**
+	 *更新${model}方法
+	 *
+	 * @param ${lmodel}b对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @param Condition对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return ${lmodel}[AtsMsg字符串压缩字节码]
+	 */
 	@Override
 	public byte[] update(byte[] ${lmodel}b,byte[] updateCondition) {
+	        String result = "";
 		try {
-			if (_permissionCheck != null) {
-				int pCode = _permissionCheck.check(this);
-				if (pCode != 0) {
-					logger.info("The method delete()--check user defined");
-					return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(
-							"3101", "permissionCheck faild"));
-				}
-			}
+			 
 			String msg = ZipUtils.ungzipByte(updateCondition);
 			String msg2 = ZipUtils.ungzipByte(${lmodel}b);
-			Condition condition;
-			${model} ${lmodel};
-
-			condition = MsgHelper.Deserialize(msg, Condition.class,
+			logger.debug("after ungzipByte param1:" + msg);
+			logger.debug("after ungzipByte param2:" + msg2);			 
+			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
-			${lmodel} = MsgHelper.Deserialize(msg2, ${model}.class,
+			${model} ${lmodel} = MsgHelper.Deserialize(msg2, ${model}.class,
 					CharsetConvertType.None);
 			${ibsServer}.update(${lmodel}, condition);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("0000",
-					"sucess"));
+			result = MsgHelper.AtsMessageToString("0000", "sucess");		
 		} catch (SerializerException e) {
 			logger.error("Deserialize failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4103",
-					"Deserialize failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString("4103",
+					"Deserialize failed!", e.getMessage());			
 		}
 
 		catch (CodeException e) {
 			logger.error("update failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(e.code(),
-					"update  failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString(e.code(),
+					"update  failed!", e.getMessage());			
 		} catch (Exception e) {
 			logger.error("update failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4102",
-					"delete  failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString("4102",
+					"delete  failed!", e.getMessage());			
 		}
+		logger.debug(result);
+		return ZipUtils.gzipStr(result);
 	}
-	
-	@Override
-	public byte[] select(byte[] queryCondition) {
-		
+
+	/**
+	 * 批量更新${model}对象，先删除后增加
+	 * @param ${lmodel}s对象集合[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @param Condition对象[MsgHelper.Serialize序列化字符串压缩字节码]
+	 * @return 更新成功的记录集合[AtsMsg字符串压缩字节码]
+	 */	
+        @Override
+	public byte[] updateBatch(byte[] ${lmodel}s,byte[] updateCondition) {
+	        String result = "";
 		try {
-			if (_permissionCheck != null) {
-				int pCode = _permissionCheck.check(this);
-				if (pCode != 0) {
-					logger.info("The method delete()--check user defined");
-					return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("3101",
-							"permissionCheck faild"));
-				}
-			}
-			String msg = ZipUtils.ungzipByte(queryCondition);
-			Condition condition;
-			condition = MsgHelper.Deserialize(msg, Condition.class,
+			 
+			String msg = ZipUtils.ungzipByte(updateCondition);
+			String msg2 = ZipUtils.ungzipByte(${lmodel}s);
+			logger.debug("after ungzipByte param1:" + msg);
+			logger.debug("after ungzipByte param2:" + msg2);
+			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
-			${ibsServer}.select(condition);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("0000", "sucess"));
+			List<${model}> ${lmodel} = MsgHelper.Deserialize2(msg2, ${model}.class,
+					CharsetConvertType.None);
+			${ibsServer}.updateBatch(${lmodel}, condition);
+			result = MsgHelper.AtsMessageToString("0000",
+					"sucess");			
 		} catch (SerializerException e) {
 			logger.error("Deserialize failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4103",
-					"Deserialize Condition failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString("4103",
+					"Deserialize failed!", e.getMessage());			
+		}
+
+		catch (CodeException e) {
+			logger.error("update failed!", e);
+			result = MsgHelper.AtsMessageToString(e.code(),
+					"update  failed!", e.getMessage());			
+		} catch (Exception e) {
+			logger.error("update failed!", e);
+			result = MsgHelper.AtsMessageToString("4102",
+					"delete  failed!", e.getMessage());			
+		}
+		logger.debug(result);
+		return ZipUtils.gzipStr(result);
+	}
+	
+
+        /**
+	 *根据Condition对象查询出${lmodel}集合对象
+	 *
+	 * @param Condition对象[字符串压缩字节码]
+	 * @return ${lmodel}[字符串压缩字节码]
+	 */
+	@Override
+	public byte[] select(byte[] queryCondition) {
+		String result = "";
+		try {
+			 
+			String msg = ZipUtils.ungzipByte(queryCondition);
+			logger.debug("after ungzipByte param:" + msg);			 
+			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
+					CharsetConvertType.None);
+			List<${model}> lt=${ibsServer}.select(condition);
+			result = MsgHelper.SerializerObjectToATSMessage(lt, CharsetConvertType.None);			
+		} catch (SerializerException e) {
+			logger.error("Deserialize failed!", e);
+			result = MsgHelper.AtsMessageToString("4103",
+					"Deserialize Condition failed!", e.getMessage());			
 		} catch (CodeException e) {
 			logger.error("select failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString(e.code(),
-					"select  failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString(e.code(),
+					"select  failed!", e.getMessage());			
 		} catch (Exception e) {
 			logger.error("select failed!", e);
-			return ZipUtils.gzipStr(MsgHelper.AtsMessageToString("4102",
-					"select failed!", e.getMessage()));
+			result = MsgHelper.AtsMessageToString("4102",
+					"select failed!", e.getMessage());			
 		}
+		logger.debug(result);
+		return ZipUtils.gzipStr(result);
+	}
+	
+	/**
+	 *根据Condition对象查询出${lmodel}集合数量
+	 *
+	 * @param Condition对象[字符串压缩字节码]
+	 * @return ${lmodel}数量[字符串压缩字节码]
+	 */
+	@Override
+	public byte[] selectCount(byte[] queryCondition)
+	{
+		String result = "";
+		try {
+			 
+			String msg = ZipUtils.ungzipByte(queryCondition);
+			logger.debug("after ungzipByte param:" + msg);			 
+			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
+					CharsetConvertType.None);
+			HashMap<String,BigDecimal> countMap=${ibsServer}.selectCount(condition);
+			result = MsgHelper.SerializerObjectToATSMessage(countMap, CharsetConvertType.None);			
+		} catch (SerializerException e) {
+			logger.error("Deserialize failed!", e);
+			result = MsgHelper.AtsMessageToString("4103",
+					"Deserialize Condition failed!", e.getMessage());			
+		} catch (CodeException e) {
+			logger.error("select failed!", e);
+			result = MsgHelper.AtsMessageToString(e.code(),
+					"select  failed!", e.getMessage());			
+		} catch (Exception e) {
+			logger.error("select failed!", e);
+			result = MsgHelper.AtsMessageToString("4102",
+					"select failed!", e.getMessage());			
+		}
+		logger.debug(result);
+		return ZipUtils.gzipStr(result);
+	}
+	
+	/**
+	 *根据Condition对象分页查询出${lmodel}集合
+	 *
+	 * @param Condition对象[字符串压缩字节码]
+	 * @return ${lmodel}[字符串压缩字节码]
+	 */
+	@Override
+	public byte[] selectPage(byte[] queryCondition)
+	{
+		String result = "";
+		try {			 
+			String msg = ZipUtils.ungzipByte(queryCondition);
+			logger.debug("after ungzipByte param:" + msg);			 
+			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
+					CharsetConvertType.None);
+			List<${model}> lt=${ibsServer}.selectPage(condition);
+			result = MsgHelper.SerializerObjectToATSMessage(lt, CharsetConvertType.None);			
+		} catch (SerializerException e) {
+			logger.error("Deserialize failed!", e);
+			result = MsgHelper.AtsMessageToString("4103",
+					"Deserialize Condition failed!", e.getMessage());
+				
+		} catch (CodeException e) {
+			logger.error("select failed!", e);
+			result = MsgHelper.AtsMessageToString(e.code(),
+					"select  failed!", e.getMessage());				
+		} catch (Exception e) {
+			logger.error("select failed!", e);
+			result = MsgHelper.AtsMessageToString("4102",
+					"select failed!", e.getMessage());			
+		}
+		logger.debug(result);
+		return ZipUtils.gzipStr(result);
 	}
 
 }

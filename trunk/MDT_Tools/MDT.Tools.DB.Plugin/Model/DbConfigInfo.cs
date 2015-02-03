@@ -4,6 +4,12 @@ namespace MDT.Tools.DB.Plugin.Model
 {
     internal class DbConfigInfo
     {
+        private string _dbId = "";
+        public string DbId
+        {
+            get { return _dbId; }
+            set { _dbId = value; }
+        }
         private string _dbServerName = "";
 
         public string DbServerName
@@ -19,6 +25,13 @@ namespace MDT.Tools.DB.Plugin.Model
             set { _dbUserName = value; }
         }
         private string _dbUserPwd = "";
+        
+        private string _dbEncoder = "";
+        public string DbEncoder
+        {
+            get { return _dbEncoder; }
+            set { _dbEncoder = value; }
+        }
 
         public string DbUserPwd
         {
@@ -39,11 +52,14 @@ namespace MDT.Tools.DB.Plugin.Model
             get { return _dbConfigName; }
             set { _dbConfigName = value; }
         }
+
+        public bool IsDelete { get; set; }
+
         public string ConnectionString
         {
             get 
             {
-                return string.Format("\"Data Source ={0}; User Id ={1}; Password ={2}\"", _dbServerName, _dbUserName, _dbUserPwd);
+                return string.Format("Data Source ={0}; User Id ={1}; Password ={2}", _dbServerName, _dbUserName, _dbUserPwd);
             }
             set
             {

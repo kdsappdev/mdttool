@@ -1,4 +1,4 @@
-﻿namespace KnightsWarriorAutoupdater
+﻿namespace MDT.ThirdParty.Controls
 {
     partial class DownloadProgress
     {
@@ -67,7 +67,7 @@
             this.buttonOk.Name = "buttonOk";
             this.buttonOk.Size = new System.Drawing.Size(83, 23);
             this.buttonOk.TabIndex = 2;
-            this.buttonOk.Text = "Cancel";
+            this.buttonOk.Text = "取消";
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.OnCancel);
             // 
@@ -98,18 +98,18 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(33, 43);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(221, 12);
+            this.label4.Size = new System.Drawing.Size(149, 12);
             this.label4.TabIndex = 0;
-            this.label4.Text = "other tasks during the installation.";
+            this.label4.Text = "使用计算机执行其它任务。";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(33, 26);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(371, 12);
+            this.label2.Size = new System.Drawing.Size(221, 12);
             this.label2.TabIndex = 0;
-            this.label2.Text = "This may take several minutes.You can use your computer to do";
+            this.label2.Text = "这将花费几分钟时间，安装期间，你可以";
             // 
             // label3
             // 
@@ -117,9 +117,9 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label3.Location = new System.Drawing.Point(11, 8);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(144, 13);
+            this.label3.Size = new System.Drawing.Size(145, 13);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Updating MDT Smart Kit";
+            this.label3.Text = "正在更新 MDT Smart Kit";
             // 
             // panel2
             // 
@@ -130,10 +130,11 @@
             this.panel2.Controls.Add(this.label5);
             this.panel2.Controls.Add(this.label7);
             this.panel2.Controls.Add(this.label6);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.panel2.Location = new System.Drawing.Point(-3, 66);
+            this.panel2.Location = new System.Drawing.Point(0, 63);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(502, 133);
+            this.panel2.Size = new System.Drawing.Size(498, 179);
             this.panel2.TabIndex = 4;
             // 
             // progressBarTotal
@@ -157,27 +158,27 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(31, 71);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(95, 12);
+            this.label1.Size = new System.Drawing.Size(35, 12);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Total Progress:";
+            this.label1.Text = "进度:";
             // 
             // labelCurrent
             // 
             this.labelCurrent.AutoSize = true;
             this.labelCurrent.Location = new System.Drawing.Point(31, 32);
             this.labelCurrent.Name = "labelCurrent";
-            this.labelCurrent.Size = new System.Drawing.Size(77, 12);
+            this.labelCurrent.Size = new System.Drawing.Size(47, 12);
             this.labelCurrent.TabIndex = 3;
-            this.labelCurrent.Text = "Downloading:";
+            this.labelCurrent.Text = "下载中:";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(245, 9);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(137, 12);
+            this.label5.Size = new System.Drawing.Size(89, 12);
             this.label5.TabIndex = 0;
-            this.label5.Text = "From:    Remote Server";
+            this.label5.Text = "从：远程服务器";
             // 
             // label7
             // 
@@ -186,16 +187,16 @@
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(125, 12);
             this.label7.TabIndex = 0;
-            this.label7.Text = "Name:  MDT Smart Kit";
+            this.label7.Text = "名称： MDT Smart Kit";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(33, 111);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(149, 12);
+            this.label6.Size = new System.Drawing.Size(65, 12);
             this.label6.TabIndex = 0;
-            this.label6.Text = "Preparing Application...";
+            this.label6.Text = "准备......";
             // 
             // panel3
             // 
@@ -244,7 +245,7 @@
             this.MinimizeBox = false;
             this.Name = "DownloadProgress";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Updating MDT Smart Kit";
+            this.Text = "MDT Smart Kit 更新中";
             this.Load += new System.EventHandler(this.OnFormLoad);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.panel1.ResumeLayout(false);

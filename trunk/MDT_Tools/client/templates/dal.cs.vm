@@ -16,22 +16,22 @@ namespace ${dalNameSpace}
 {
 	/// <summary>
 #if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
-	/// ${tableInfo.TableComments} 数据访问服务
+	/// ${tableInfo.TableComments} 数据访问服务#set($comments=${tableInfo.TableComments})
 #else
-	/// ${tableInfo.TableName}
+	/// ${tableInfo.TableName}#set($comments=$model)
 #end
 	/// </summary>
 	/// <remarks>
-	/// $date: 创建. ${pluginName} <br/>
+	/// $date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
 	/// </remarks>
 	public class ${model}DALServer: BaseDALServer,I${model}DALServer
 	{
 		
 		${region}region Insert
 		/// <summary>
-		/// 增加${model}方法
+		/// 增加 $comments 方法
 		/// </summary>
-		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}${lmodel}对象</param>
 		/// <returns>AtsMsg对象</returns>
 		public AtsMsg<${model}> Insert(${model} ${lmodel})
 		{
@@ -45,7 +45,11 @@ namespace ${dalNameSpace}
 		${region}endregion
 
 		${region}region Delete
-		 
+		/// <summary>
+		/// 删除 $comments 方法
+		/// </summary>
+		/// <param name="deleteCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
 		public AtsMsg<${model}> Delete(Condition deleteCondition)
 		{
 			string str = MsgHelper.Serializer(deleteCondition);
@@ -58,7 +62,12 @@ namespace ${dalNameSpace}
 		${region}endregion
 
 		${region}region Update
-		 
+		/// <summary>
+		/// 更新 $comments 方法
+		/// </summary>
+		/// <param name="${lmodel}">${model}对象</param>
+		/// <param name="updateCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
 		public AtsMsg<${model}> Update(${model} ${lmodel},Condition updateCondition)
 		{
 			string str1 = MsgHelper.Serializer(${lmodel});
@@ -71,16 +80,73 @@ namespace ${dalNameSpace}
 		}
 		${region}endregion
 		
-		${region}region Update
-		 
-		public AtsMsg<${model}> Select(Condition queryCondition)
+		${region}region UpdateBatch
+		/// <summary>
+		/// 批量更新 $comments 方法
+		/// </summary>
+		/// <param name="List<${lmodel}>">${model}对象集合</param>
+		/// <param name="updateCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<List<${model}>> UpdateBatch(List<${model}> ${lmodel}s,Condition updateCondition)
+		{
+			string str1 = MsgHelper.Serializer(${lmodel}s);
+			string str2 = MsgHelper.Serializer(updateCondition);
+			var args = new[]{ str1,str2 };
+			const string strURL = "/ats/services/I${model}Service?wsdl";
+			const string strClassName = "I${model}Service";
+			const string strMonthedName = "updateBatch";
+			return ServersHelper.GetResultMSG<List<${model}>>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+		
+		${region}region Select
+		/// <summary>
+		/// 查找 $comments 方法
+		/// </summary>
+		/// <param name="queryCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<List<${model}>> Select(Condition queryCondition)
 		{			 
 			string str = MsgHelper.Serializer(queryCondition);
 			var args = new[]{ str };
 			const string strURL = "/ats/services/I${model}Service?wsdl";
 			const string strClassName = "I${model}Service";
 			const string strMonthedName = "select";
-			return ServersHelper.GetResultMSG<${model}>(strURL, strClassName, strMonthedName,args);
+			return ServersHelper.GetResultMSG<List<${model}>>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+		
+		${region}region SelectCount
+		/// <summary>
+		/// 查找 $comments 数量方法
+		/// </summary>
+		/// <param name="queryCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<Dictionary<string,int>> SelectCount(Condition queryCondition)
+		{			 
+			string str = MsgHelper.Serializer(queryCondition);
+			var args = new[]{ str };
+			const string strURL = "/ats/services/I${model}Service?wsdl";
+			const string strClassName = "I${model}Service";
+			const string strMonthedName = "selectCount";
+			return ServersHelper.GetResultMSG<Dictionary<string,int>>(strURL, strClassName, strMonthedName,args);
+		}
+		${region}endregion
+		
+		${region}region SelectPage
+		/// <summary>
+		/// 分页查找 $comments 方法
+		/// </summary>
+		/// <param name="queryCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
+		public AtsMsg<List<${model}>> SelectPage(Condition queryCondition)
+		{			 
+			string str = MsgHelper.Serializer(queryCondition);
+			var args = new[]{ str };
+			const string strURL = "/ats/services/I${model}Service?wsdl";
+			const string strClassName = "I${model}Service";
+			const string strMonthedName = "selectPage";
+			return ServersHelper.GetResultMSG<List<${model}>>(strURL, strClassName, strMonthedName,args);
 		}
 		${region}endregion
 	}

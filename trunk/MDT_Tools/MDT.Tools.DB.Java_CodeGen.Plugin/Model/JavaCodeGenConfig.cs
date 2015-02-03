@@ -13,5 +13,9 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Model
        public bool IsShowGenCode { get; set; }
        public string CodeRule { get; set; }
        public string Ibatis { get; set; }
+
+       public bool IsDelete { get; set; }
+       public string DisplayName { get; set; }
+       public string Id { get; set; }
     }
 }

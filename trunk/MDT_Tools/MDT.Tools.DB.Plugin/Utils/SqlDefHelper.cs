@@ -1,6 +1,6 @@
 ﻿namespace MDT.Tools.DB.Plugin.Utils
 {
-    internal static class SqlDefHelper
+    public static class SqlDefHelper
     {
         public static string GetTableNames(string dbType)
         {
@@ -13,8 +13,8 @@
                 case "Sql Server":
                     sql = SqlServerTlSqlDefHelper.QueryAllTableInfo;
                     break;
-                
-                    
+
+
             }
             return sql;
         }
@@ -54,6 +54,9 @@
         public const string QueryTableColumnInfo = "SELECT a.table_name,a.column_name,a.data_type,a.data_length,a.nullable,a.data_scale,a.data_precision,a.data_default,a.column_id,b.comments  FROM user_tab_columns a INNER JOIN user_col_comments b       ON a.table_name = b.table_name          AND a.column_name = b.column_name where a.table_name=@tableName";
         public const string QueryAllTablePrimaryKeyInfo = "select cu.*, au.constraint_type from user_cons_columns cu, user_constraints au where cu.constraint_name = au.constraint_name";
     }
+
+
+
     #endregion
 
     #region Sql Server

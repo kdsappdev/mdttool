@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE abatorConfiguration PUBLIC "-//Apache Software Foundation//DTD Abator for iBATIS Configuration 1.0//EN" "abator-config_1_0.dtd">
+
+<abatorConfiguration>
+  <abatorContext id="ATS" generatorSet="Java2">
+
+    <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver" connectionURL="jdbc:oracle:thin:@192.168.20.2:1521:orcl" userId="fpptest" password="fpptest">
+      <classPathEntry location=".\lib\classes12.jar" />
+    </jdbcConnection>
+
+    <javaTypeResolver>
+      <property name="forceBigDecimals" value="true" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="ats.common.model.po" targetProject="ORA_ATS">
+      <property name="enableSubPackages" value="false" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="ats.common.model.dao" targetProject="ORA_ATS">
+      <property name="enableSubPackages" value="false" />
+    </sqlMapGenerator>
+
+    <daoGenerator type="SPRING" targetPackage="ats.common.model.dao" targetProject="ORA_ATS">
+      <property name="enableSubPackages" value="false" />
+    </daoGenerator>
+
+	<!--table config start-->
+	<table schema="" tableName="BSS_EXRT_RCV_SET_TBL" domainObjectName="BssExrtRcvSetTbl" />
+	<table schema="" tableName="CCBATM_PDWT_PRC" domainObjectName="CcbatmPdwtPrc" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_CCBATM_PDWT_PRC.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="CCB_EXGSETL_OFR" domainObjectName="CcbExgsetlOfr" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_CCB_EXGSETL_OFR.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="CCB_FX_OFR" domainObjectName="CcbFxOfr" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_CCB_FX_OFR.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="CCB_IRS_ANC_OFR" domainObjectName="CcbIrsAncOfr" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_CCB_IRS_ANC_OFR.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="CCB_PDWT_PRTFL_PRC" domainObjectName="CcbPdwtPrtflPrc" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_CCB_PDWT_PRTFL_PRC.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="CCB_PM_OFR" domainObjectName="CcbPmOfr" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_CCB_PM_OFR.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="CCYPAIR_TBL" domainObjectName="CcypairTbl" />	
+	<table schema="" tableName="CCY_TBL" domainObjectName="CcyTbl" />
+	<table schema="" tableName="CFETS_HOL_PRD_TBL" domainObjectName="CfetsHolPrdTbl" />
+	<table schema="" tableName="CFETS_WKEND_DT_DEF_TBL" domainObjectName="CfetsWkendDtDefTbl" />
+	<table schema="" tableName="CNTER_NATDBT_OFR" domainObjectName="CnterNatdbtOfr" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_CNTER_NATDBT_OFR.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="DATA_FRMT_PRC_CFG_TBL" domainObjectName="DataFrmtPrcCfgTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_DATA_FRMT_PRC_CFG_TBL.nextVal from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="DATA_OVD_CFG_TBL" domainObjectName="DataOvdCfgTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_DATA_OVD_CFG_TBL.nextVal from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="DATA_THRT_CFG_TBL" domainObjectName="DataThrtCfgTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_DATA_THRT_CFG_TBL.nextVal from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="DDLN_DEF_TBL" domainObjectName="DdlnDefTbl" />		
+	<table schema="" tableName="DTSR_DEF_TBL" domainObjectName="DtsrDefTbl" >
+		<generatedKey column="DTSR_SN" sqlStatement="select SEQ_DTSR_DEF_TBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="DTSR_ST_TBL" domainObjectName="DtsrStTbl" />
+	<table schema="" tableName="FWD_SWAP_OFR_PNTDIF_SET_TBL" domainObjectName="FwdSwapOfrPntdifSetTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_FWDSWAPOFRPNTDIFSETTBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MDL_GRP_TBL" domainObjectName="MdlGrpTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_MDL_GRP_TBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MDL_MNPLT_TBL" domainObjectName="MdlMnpltTbl" />
+	<table schema="" tableName="MDL_TBL" domainObjectName="MdlTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_MDL_TBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MENU_GRP_TBL" domainObjectName="MenuGrpTbl" >
+		<generatedKey column="MENU_GRP_SN" sqlStatement="select SEQ_MENU_GRP_TBL.nextVal from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MENU_TBL" domainObjectName="MenuTbl" >
+		<generatedKey column="MENU_SN" sqlStatement="select SEQ_MENU_TBL.nextVal from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MKT_BSS_EXRT_HIST_TBL" domainObjectName="MktBssExrtHistTbl" />
+	<table schema="" tableName="MKT_BSS_EXRT_TBL" domainObjectName="MktBssExrtTbl" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_MKT_BSS_EXRT_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MKT_FX_OFR_ACS" domainObjectName="MktFxOfrAcs" />
+	<table schema="" tableName="MKT_FX_PDWT_OFR_ACS_TBL" domainObjectName="MktFxPdwtOfrAcsTbl" />
+	<table schema="" tableName="MKT_FX_PDWT_OFR_HIST_TBL" domainObjectName="MktFxPdwtOfrHistTbl" />
+	<table schema="" tableName="MKT_FX_PDWT_OFR_SET_TBL" domainObjectName="MktFxPdwtOfrSetTbl" />
+	<table schema="" tableName="MKT_FX_PDWT_OFR_TBL" domainObjectName="MktFxPdwtOfrTbl" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_MKT_FX_PDWT_OFR_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MKT_INTRT_EXG_OFR_HIST_TBL" domainObjectName="MktIntrtExgOfrHistTbl" />
+	<table schema="" tableName="MKT_INTRT_EXG_OFR_RCV_SET_TBL" domainObjectName="MktIntrtExgOfrRcvSetTbl" />
+	<table schema="" tableName="MKT_INTRT_EXG_OFR_TBL" domainObjectName="MktIntrtExgOfrTbl" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_MKT_INTRT_EXG_OFR_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MKT_INTRT_FTRS_OFR_HIST_TBL" domainObjectName="MktIntrtFtrsOfrHistTbl" />
+	<table schema="" tableName="MKT_INTRT_FTRS_OFR_TBL" domainObjectName="MktIntrtFtrsOfrTbl" />
+	<table schema="" tableName="MKT_INTRT_FTRS_RCV_SET_TBL" domainObjectName="MktIntrtFtrsRcvSetTbl" />
+	<table schema="" tableName="MKT_INTRT_OFR_ACS" domainObjectName="MktIntrtOfrAcs" />
+	<table schema="" tableName="MKT_INTRT_OFR_HIST_TBL" domainObjectName="MktIntrtOfrHistTbl" />
+	<table schema="" tableName="MKT_INTRT_OFR_RCV_SET_TBL" domainObjectName="MktIntrtOfrRcvSetTbl" />
+	<table schema="" tableName="MKT_INTRT_OFR_TBL" domainObjectName="MktIntrtOfrTbl" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_MKT_INTRT_OFR_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MKT_PM_OFR_ACS" domainObjectName="MktPmOfrAcs" />
+	<table schema="" tableName="MNUL_OFR_RCDTBL" domainObjectName="MnulOfrRcdtbl" >
+		<generatedKey column="OFR_ID" sqlStatement="select to_char(SEQ_MNUL_OFR_RCDTBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="MNUL_OFR_RCRD_HIST_TBL" domainObjectName="MnulOfrRcrdHistTbl" />
+	<table schema="" tableName="OFR_ACRS_CLC_SET_TBL" domainObjectName="OfrAcrsClcSetTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_OFR_ACRS_CLC_SET_TBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="OFR_BLDVWAP_WGT_TBL" domainObjectName="OfrBldvwapWgtTbl" />
+	<table schema="" tableName="OFR_BLD_ALGR_CFG_TBL" domainObjectName="OfrBldAlgrCfgTbl" />
+	<table schema="" tableName="OFR_BLD_WGT_PRMTBL" domainObjectName="OfrBldWgtPrmtbl" />
+	<table schema="" tableName="OFR_BRWS_CFG_TBL" domainObjectName="OfrBrwsCfgTbl" />	
+	<table schema="" tableName="OFR_FLT_CTRL_TBL" domainObjectName="OfrFltCtrlTbl" />
+	<table schema="" tableName="OFR_GRPG_DEF_TBL" domainObjectName="OfrGrpgDefTbl" >
+		<generatedKey column="EXRTFXOFR_CTLG_ID" sqlStatement="select to_char(SEQ_OFR_GRPG_DEF_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="OFR_GRPG_TBL" domainObjectName="OfrGrpgTbl" >
+		<generatedKey column="OFR_GRPG_ID" sqlStatement="select to_char(SEQ_OFR_GRPG_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="OFR_SCN_DTSR_TBL" domainObjectName="OfrScnDtsrTbl" />
+	<table schema="" tableName="OFR_TEMP_PNTDIF_ADJ_HIST_TBL" domainObjectName="OfrTempPntdifAdjHistTbl" />
+	<table schema="" tableName="OFR_TEMP_PNTDIF_ADJ_RCDTBL" domainObjectName="OfrTempPntdifAdjRcdtbl" >
+		<generatedKey column="PRC_ADJ_ID" sqlStatement="select to_char(SEQ_OFR_TEMP_PNTDIF_ADJ_RCDTBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="OFR_TLR_CHK_TBL" domainObjectName="OfrTlrChkTbl" />
+	<table schema="" tableName="OFR_WARN_CFG_TBL" domainObjectName="OfrWarnCfgTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_OFR_WARN_CFG_TBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="OFR_WARN_RCDTBL" domainObjectName="OfrWarnRcdtbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_OFR_WARN_RCDTBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="OFR_WNINF_TBL" domainObjectName="OfrWninfTbl" >
+		<generatedKey column="MSG_ID" sqlStatement="select to_char(SEQ_OFR_WNINF_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="OTPT_DATA_CFG_TBL" domainObjectName="OtptDataCfgTbl">
+		<generatedKey column="SEQ_NO" sqlStatement="select to_char(SEQ_OTPT_DATA_CFG_TBL.nextVal) autoid  from dual" identity="false" />
+	</table>
+	<table schema="" tableName="RCV_DATA_CFG_TBL" domainObjectName="RcvDataCfgTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_RCV_DATA_CFG_TBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="RL_MDL_MNPLT_TBL" domainObjectName="RlMdlMnpltTbl" />
+	<table schema="" tableName="RL_MDL_TBL" domainObjectName="RlMdlTbl" />
+	<table schema="" tableName="RL_OFR_GRPG_TBL" domainObjectName="RlOfrGrpgTbl" />
+	<table schema="" tableName="RL_TBL" domainObjectName="RlTbl" >
+		<generatedKey column="RL_ID" sqlStatement="select to_char(SEQ_RL_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="RSK_PREM_PNTDIF_RCDTBL" domainObjectName="RskPremPntdifRcdtbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_RSK_PREM_PNTDIF_RCDTBL.nextVal from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="RSK_PREM_PNTDIF_RCRD_HIST_TBL" domainObjectName="RskPremPntdifRcrdHistTbl" />
+	<table schema="" tableName="SCN_APL_HIST_TBL" domainObjectName="ScnAplHistTbl" />
+	<table schema="" tableName="SCN_APL_TBL" domainObjectName="ScnAplTbl" />
+	<table schema="" tableName="SCN_DEF_TBL" domainObjectName="ScnDefTbl" >
+		<generatedKey column="SCN_ID" sqlStatement="select to_char(SEQ_SCN_DEF_TBL.nextVal) autoid  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="SPOT_OFR_PNTDIF_SET_TBL" domainObjectName="SpotOfrPntdifSetTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_SPOT_OFR_PNTDIF_SET_TBL.nextVal  from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="STM_CD_PARVAL_TBL" domainObjectName="StmCdParvalTbl" />
+	<table schema="" tableName="STM_CD_PRMTBL" domainObjectName="StmCdPrmtbl" />
+	<table schema="" tableName="UNIT_CNV_CEFT_TBL" domainObjectName="UnitCnvCeftTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_UNIT_CNV_CEFT_TBL.nextVal from dual" identity="false"/>
+	</table>
+	<table schema="" tableName="USR_CFG_TBL" domainObjectName="UsrCfgTbl" />
+	<table schema="" tableName="USR_SSN_CTRL_TBL" domainObjectName="UsrSsnCtrlTbl" >
+		<generatedKey column="SEQ_NO" sqlStatement="select SEQ_USR_SSN_CTRL_TBL.nextVal from dual" identity="false"/>
+	</table>
+
+	<!--table config end-->
+
+  </abatorContext>
+</abatorConfiguration>

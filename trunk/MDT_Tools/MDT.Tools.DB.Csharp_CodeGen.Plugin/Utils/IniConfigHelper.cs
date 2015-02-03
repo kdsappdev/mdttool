@@ -2,111 +2,213 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using MDT.Tools.Core.Utils;
-using MDT.Tools.DB.Csharp_CodeGen.Plugin.Model;
+using System.Runtime.InteropServices;
+using System.Data;
 
+using MDT.Tools.Core.Utils;
+using MDT.Tools.DB.Common;
+using DNCCFrameWork.DataAccess;
+using MDT.Tools.DB.Csharp_CodeGen.Plugin.Model;
 
 namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Utils
 {
     internal class IniConfigHelper
     {
-        [System.Runtime.InteropServices.DllImport("kernel32")]
-        private static extern long WritePrivateProfileString(string lpApplicationName, string lpKeyName, string lpString, string lpFileName);
-        [System.Runtime.InteropServices.DllImport("kernel32")]
-        private static extern long GetPrivateProfileString(string lpApplicationName, string lpKeyName, string lpDefault, System.Text.StringBuilder lpReturnedString, int nSize, string lpFileName);
 
-        private static void CreateFile()
-        {
-            FileHelper.CreateDirectory(FilePathHelper.SystemConfig);
-            if (!File.Exists(FilePathHelper.SystemConfig))
-            {
-                FileStream fs = File.Create(FilePathHelper.SystemConfig);
-                fs.Close();
-            }
-            
-        }
-        private const string Group = "CsharpCodeGenConfig";
-        private const string ModelNameSpace = "ModelNameSpace";
-        private const string DALNameSpace = "DALNameSpace";
-        private const string IDALNameSpace = "IDALNameSpace";
-        private const string BLLNameSpace = "BLLNameSpace";
-        private const string PluginName = "PluginName";
-        private const string OutPut = "OutPut";
-        private const string TableFilter = "TableFilter";
-        private const string IsShowGenCode = "IsShowGenCode";
-        private const string IsShowComment = "IsShowComment";
-        private const string CodeRule = "CodeRule";
-        private const string Ibatis = "Ibatis";
-        public static bool Write(CsharpCodeGenConfig cms, ref string message)
+        static IDbHelper db = new DbFactory(@"data source=control\db.plugin.Csharp.db", "SqlLiteHelper").IDbHelper;
+
+
+        public static bool writeDefaultDBInfo(CsharpCodeGenConfig config)
         {
             bool status = false;
-            if (cms != null)
+            try
+            { 
+                string deleteSql = "delete from db_plugin_Csharp_defaultConfig";
+                int result = db.ExecuteNonQuery(deleteSql);
+                status = true;
+                if (config != null)
+                {
+                    status = false;
+                    Dictionary<string, string> dic = new Dictionary<string, string>();
+                    dic.Add("@DisplayName", config.DisplayName);
+                   
+                    string insertSql = "insert into db_plugin_Csharp_defaultConfig(DisplayName) values(@DisplayName)";
+                    result = db.ExecuteNonQuery(insertSql, dic);
+                    status = true;
+                }
+            }
+            catch (Exception e)
             {
+                LogHelper.Error(e.Message);
+            }
+            return status;
+        }
 
+        public static string ReadDefaultDBInfo()
+        {
+            string str = "";
+            try
+            {
+                string sql = "select DisplayName from db_plugin_Csharp_defaultConfig";
+                str = db.ExecuteScalar(sql) + "";
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex);
+            }
+            return str;
+        }
+
+        public static bool deleteDBInfo()
+        {
+            bool status = false;
+            try
+            {
+                string sql = "delete from db_plugin_Csharp_config";
+                db.ExecuteNonQuery(sql);
+                status = true;
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error(e.Message);
+            }
+            return status;
+        }
+
+        public static bool WriteDBInfo(CsharpCodeGenConfig config, ref string message)
+        {
+            bool status = false;
+            if (config != null)
+            {
                 try
                 {
-                    CreateFile();
-                    WritePrivateProfileString(Group, ModelNameSpace, cms.ModelNameSpace, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, IDALNameSpace, cms.IDALNameSpace + "", FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, DALNameSpace, cms.DALNameSpace + "", FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, BLLNameSpace, cms.BLLNameSpace + "", FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, PluginName, cms.PluginName + "", FilePathHelper.SystemConfig);
+                    var dic = new Dictionary<string, string>();
+                    string sql = "";
+                    if (config.IsDelete)
+                    {
+                        sql = "delete from db_plugin_Csharp_config where Id = @Id";
+                        dic.Add("@Id", config.Id);
+                    }
+                    else
+                    {
+                        dic.Add("@ModelNameSpace", config.ModelNameSpace);
+                        dic.Add("@DALNameSpace", config.DALNameSpace);
+                        dic.Add("@IDALNameSpace", config.IDALNameSpace);
+                        dic.Add("@BLLNameSpace", config.BLLNameSpace);
+                        dic.Add("@PluginName", config.PluginName);
+                        dic.Add("@OutPut", config.OutPut);
+                        dic.Add("@TableFilter", config.TableFilter);
+                        dic.Add("@IsShowGenCode", config.IsShowGenCode.ToString());
+                        dic.Add("@IsShowComment", config.IsShowComment.ToString());
+                        dic.Add("@CodeRule", config.CodeRule);
+                        dic.Add("@Ibatis", config.Ibatis);
+                        dic.Add("@DALDLLName", config.DALDllName);
+                        dic.Add("@BLLDLLName", config.BLLDllName);
+                        dic.Add("@DisplayName", config.DisplayName);
 
-                    WritePrivateProfileString(Group, OutPut, cms.OutPut, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, TableFilter, cms.TableFilter, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, IsShowGenCode, cms.IsShowGenCode + "", FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, IsShowComment, cms.IsShowComment + "", FilePathHelper.SystemConfig);
-                   
-                    WritePrivateProfileString(Group, CodeRule, cms.CodeRule, FilePathHelper.SystemConfig);
-                    WritePrivateProfileString(Group, Ibatis, cms.Ibatis + "", FilePathHelper.SystemConfig);
-
-                    status = true;
+                        if (string.IsNullOrEmpty(config.Id))
+                        {
+                            dic.Add("@Id", Guid.NewGuid().ToString());
+                            sql = "insert into db_plugin_Csharp_config(Id, ModelNameSpace, DALNameSpace, IDALNameSpace, BLLNameSpace, PluginName, OutPut, TableFilter"
+                           + ", IsShowGenCode, IsShowComment, CodeRule, Ibatis, DALDLLName, BLLDLLName, DisplayName) values(@Id, @ModelNameSpace, @DALNameSpace, @IDALNameSpace, @BLLNameSpace, @PluginName, @OutPut, @TableFilter"
+                           + ", @IsShowGenCode, @IsShowComment, @CodeRule, @Ibatis, @DALDLLName, @BLLDLLName, @DisplayName)";
+                        }
+                        else
+                        {
+                            dic.Add("@Id", config.Id);
+                            sql = "update db_plugin_Csharp_config set ModelNameSpace=@ModelNameSpace, DALNameSpace=@DALNameSpace, IDALNameSpace=@IDALNameSpace, BLLNameSpace=@BLLNameSpace, PluginName=@PluginName, OutPut=@OutPut, TableFilter=@TableFilter"
+                                + ", IsShowGenCode=@IsShowGenCode, IsShowComment=@IsShowComment, CodeRule=@CodeRule, Ibatis=@Ibatis, DALDLLName=@DALDLLName, BLLDLLName=@BLLDLLName, DisplayName=@DisplayName where Id=@Id";
+                        }                                              
+                    }
+                    db.ExecuteNonQuery(sql, dic);
+                    status = true;           
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    LogHelper.Error(ex);
                     message = ex.Message;
                 }
             }
             return status;
         }
-        public static CsharpCodeGenConfig ReadCsharpModelGenConfig()
-        {
-            CsharpCodeGenConfig cmc = new CsharpCodeGenConfig();
 
+        public static IList<CsharpCodeGenConfig> ReadDBInfo()
+        {
+            IList<CsharpCodeGenConfig> configList = new List<CsharpCodeGenConfig>();
             try
             {
-                StringBuilder sb = new StringBuilder(255);
-                GetPrivateProfileString(Group, ModelNameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.ModelNameSpace = sb.ToString();
-                GetPrivateProfileString(Group, IDALNameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.IDALNameSpace = sb.ToString();
-                GetPrivateProfileString(Group, DALNameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.DALNameSpace = sb.ToString();
-                GetPrivateProfileString(Group, BLLNameSpace, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.BLLNameSpace = sb.ToString();
-                GetPrivateProfileString(Group, PluginName, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.PluginName = sb.ToString();
-                GetPrivateProfileString(Group, OutPut, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.OutPut = sb.ToString();
-                GetPrivateProfileString(Group, TableFilter, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.TableFilter = sb.ToString();
-                GetPrivateProfileString(Group, IsShowGenCode, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.IsShowGenCode = "true".Equals(sb.ToString().ToLower());
 
-                GetPrivateProfileString(Group, IsShowComment, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.IsShowComment = "true".Equals(sb.ToString().ToLower());
+                var dataSet = new DataSet();
+                db.Fill("select * from db_plugin_Csharp_config", dataSet);
+                foreach (DataRow row in dataSet.Tables[0].Rows)
+                {
+                    CsharpCodeGenConfig config = new CsharpCodeGenConfig();
+                    config.BLLDllName = row["BLLDllName"] + "";
+                    config.BLLNameSpace = row["BLLNameSpace"] + "";
+                    config.CodeRule = row["CodeRule"] + "";
+                    config.DALDllName = row["DALDllName"] + "";
+                    config.DALNameSpace = row["DALNameSpace"] + "";
+                    config.DisplayName = row["DisplayName"] + "";
+                    config.Ibatis = row["Ibatis"] + "";
+                    config.IDALNameSpace = row["IDALNameSpace"] + "";
+                    config.IsShowComment = bool.Parse(row["IsShowComment"] + "");
+                    config.IsShowGenCode = bool.Parse(row["IsShowGenCode"] + "");
+                    config.ModelNameSpace = row["ModelNameSpace"] + "";
+                    config.OutPut = row["OutPut"] + "";
+                    config.PluginName = row["PluginName"] + "";
+                    config.TableFilter = row["TableFilter"] + "";
+                    config.Id = row["Id"] + "";
 
-                GetPrivateProfileString(Group, CodeRule, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.CodeRule = sb.ToString();
-                GetPrivateProfileString(Group, Ibatis, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
-                cmc.Ibatis = sb.ToString();
+                    configList.Add(config);
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogHelper.Error(ex);
             }
-            return cmc;
+            return configList;
+        }
+
+        public static CsharpCodeGenConfig getDefaultObject()
+        {
+            CsharpCodeGenConfig config = new CsharpCodeGenConfig();
+            string str = ReadDefaultDBInfo();
+            IList<CsharpCodeGenConfig> configList = ReadDBInfo();
+            if (string.IsNullOrEmpty(str))
+            {
+                config.BLLDllName = "";
+                config.BLLNameSpace = "";
+                config.CodeRule = "";
+                config.DALDllName = "";
+                config.DALNameSpace = "";
+                config.DisplayName = "";
+                config.Ibatis = "";
+                config.Id = "";
+                config.IDALNameSpace = "";
+                config.IsDelete = false;
+                config.IsShowComment = false;
+                config.IsShowGenCode = true;
+                config.ModelNameSpace = "";
+                config.OutPut = "";
+                config.PluginName = "";
+                config.TableFilter = "";
+                
+                return config;
+            }
+            else
+            {
+                foreach (CsharpCodeGenConfig tem in configList)
+                {
+                    if (!string.IsNullOrEmpty(tem.DisplayName))
+                    {
+                        if (str.Equals(tem.DisplayName))
+                        {
+                            config = tem;
+                        }
+                    }
+                }
+            }
+            return config;
         }
     }
 }

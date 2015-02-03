@@ -332,7 +332,6 @@
     <Compile Include="TextEditor\Gui\TextAreaMouseHandler.cs" />
     <Compile Include="TextEditor\Gui\TextAreaUpdate.cs" />
     <Compile Include="TextEditor\Gui\TextEditorControl.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TextEditor\Gui\TextEditorControlBase.cs">
       <SubType>UserControl</SubType>

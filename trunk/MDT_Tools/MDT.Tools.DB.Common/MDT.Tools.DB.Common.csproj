@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="AbstractHandler.cs" />
     <Compile Include="CodeGenHelper.cs" />
+    <Compile Include="DataType.cs" />
     <Compile Include="DataTypeMappingHelper.cs" />
     <Compile Include="DBSubPlugin.cs" />
     <Compile Include="DBType.cs" />

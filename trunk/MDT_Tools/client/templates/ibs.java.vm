@@ -1,9 +1,11 @@
-﻿## model字符串
+## model字符串
 #set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
 ## 第一个字符为小写的model字符串
 #set($lmodel=${codeGenHelper.StrFirstToLower($model)})
 package ${bsPackage};
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 
 import ats.common.model.po.${model};
@@ -16,52 +18,67 @@ import ats.foundation.condition.Condition;
  *${tableInfo.TableName}
 #end
  *
- *$date: 创建. ${pluginName} <br/>
+ *$date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
  */
 public interface I${model}Server {
+	
 	/**
-	 *根据location 查询出${model}集合对象
+	 *增加${model}对象
 	 *
-	 * @param location实体
-	 * @return ${model}集合
-	 */
-	public List<${model}> select(String location) throws CodeException;
-
- 
-	/**
-	 *增加${model}方法
-	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @param ${lmodel}$!{tableInfo.TableComments}对象
 	 * @return ${model}对象
 	 */
 	public ${model} insert(${model} ${lmodel}) throws CodeException;
 
 	/**
-	 *删除${model}方法
+	 *删除${model}对象
 	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @param $!{tableInfo.TableComments}Condition对象
+	 * @return 无
 	 */
 	public void delete(Condition deleteCondition) throws CodeException;
 
 	/**
-	 *更新${model}方法
+	 *更新${model}对象
 	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @param ${lmodel}对象
+	 * @param $!{tableInfo.TableComments}Condition对象
+	 * @return 无
 	 */
 	public void update(${model} ${lmodel},Condition updateCondition) throws CodeException;
 	
 	/**
-	 *批量更新${model}方法,先删除，后插入
+	 *批量更新${model}对象,先删除，后插入
 	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @param ${lmodel}集合
+	 * @param $!{tableInfo.TableComments}Condition对象
+	 * @return 无
 	 */
 	public void updateBatch(List<${model}> ${lmodel}s,Condition deleteCondition) throws CodeException;
 	
 	/**
 	 *根据Condition对象 查询出${model}对象
 	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
-	 * @return ${model}对象
+	 * @param ${lmodel}$!{tableInfo.TableComments}Condtion对象
+	 * @return ${model}对象集合
 	 */
 	public List<${model}> select(Condition queryCondition) throws CodeException;
+	
+	
+	/**
+	 *根据Condition对象 查询出${model}对象数量
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}Condtion对象
+	 * @return ${model}对象数量
+	 */
+	public HashMap<String,BigDecimal> selectCount(Condition queryCondition) throws CodeException;
+	
+	
+	/**
+	 *根据Condition对象 分页查询出${model}对象
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}Condtion对象
+	 * @return ${model}对象集合
+	 */
+	public List<${model}> selectPage(Condition queryCondition) throws CodeException;
 }

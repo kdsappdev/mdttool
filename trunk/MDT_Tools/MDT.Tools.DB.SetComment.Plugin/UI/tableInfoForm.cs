@@ -45,7 +45,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
 
         public setComment sc;
 
-       
+
 
         private void bindSql()
         {
@@ -55,7 +55,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
         }
         private string createTableSql()
         {
-             NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
+            NVelocityHelper nVelocityHelper = new NVelocityHelper(FilePathHelper.TemplatesPath);
             Dictionary<string, object> dic = new Dictionary<string, object>();
             dic.Add("tableInfo", tableInfo);
             dic.Add("codeGenHelper", new CodeGenHelper());
@@ -116,7 +116,7 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                         DBFileHelper.WriteXml(sc.dsTableColumn);
                     }
                 }
-                if (flag&&cbExecuteDB.Checked)
+                if (flag && cbExecuteDB.Checked)
                 {
                     DNCCFrameWork.DataAccess.IDbHelper db =
                         new DNCCFrameWork.DataAccess.DbFactory(
@@ -124,26 +124,28 @@ namespace MDT.Tools.DB.SetComment.Plugin.UI
                             DBType.GetDbProviderString(sc.dbType))
                             .IDbHelper;
                     string[] sql = createCommentSql().Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                    if (sc.OriginalEncoding != null &&
-                        sc.OriginalEncoding != null)
+
+                    foreach (var s in sql)
                     {
-                        foreach (var s in sql)
+                        if (!string.IsNullOrEmpty(s))
                         {
-                            if (!string.IsNullOrEmpty(s))
+                            string t = s.Trim(new[] { '\t', '\r', '\n', ' ', ';' });
+                            if (sc.OriginalEncoding != null &&
+                    sc.TargetEncoding != null)
                             {
-                                string t = s.Trim(new[] { '\t', '\r', '\n', ' ', ';' });
                                 t = EncodingHelper.
                                     ConvertEncoder(sc.TargetEncoding,
                                                    sc.OriginalEncoding,
                                                    t);
-                                if (!string.IsNullOrEmpty(t))
-                                {
-                                    db.ExecuteNonQuery(t);
-                                }
+                            }
+                            if (!string.IsNullOrEmpty(t))
+                            {
+                                db.ExecuteNonQuery(t);
                             }
                         }
-
                     }
+
+
 
                 }
                 MessageBox.Show(this, "执行成功", "提示", MessageBoxButtons.OK,

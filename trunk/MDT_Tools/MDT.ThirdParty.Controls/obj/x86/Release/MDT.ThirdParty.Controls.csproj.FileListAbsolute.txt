@@ -1,0 +1,10 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\MDT.ThirdParty.Controls.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\bin\MDT.ThirdParty.Controls.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.ThirdParty.Controls\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.ThirdParty.Controls\obj\x86\Release\MDT.ThirdParty.Controls.Docking.Resources.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.ThirdParty.Controls\obj\x86\Release\MDT.ThirdParty.Controls.Docking.Strings.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.ThirdParty.Controls\obj\x86\Release\KnightsWarriorAutoupdater.DownloadConfirm.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.ThirdParty.Controls\obj\x86\Release\KnightsWarriorAutoupdater.DownloadProgress.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.ThirdParty.Controls\obj\x86\Release\MDT.ThirdParty.Controls.csproj.GenerateResource.Cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.ThirdParty.Controls\obj\x86\Release\MDT.ThirdParty.Controls.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.ThirdParty.Controls\obj\x86\Release\MDT.ThirdParty.Controls.pdb

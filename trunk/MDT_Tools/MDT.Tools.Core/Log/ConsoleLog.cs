@@ -24,5 +24,10 @@ namespace MDT.Tools.Core.Log
        {
            Error(ex.Message);
        }
+
+        public void Info(string str)
+        {
+            Console.WriteLine(str);
+        }
     }
 }

@@ -140,7 +140,7 @@ local function parse_shortcut (s)
     end) then return res end
 end
 
-local function add_menu_items (item,tbl)
+function add_menu_items (item,tbl)
     for i = 1,#tbl,2 do
         item.MenuItems:Add(create_menu_item(tbl[i],tbl[i+1]))
     end

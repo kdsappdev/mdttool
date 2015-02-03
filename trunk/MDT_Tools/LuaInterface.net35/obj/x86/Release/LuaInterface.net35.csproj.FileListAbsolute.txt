@@ -1,0 +1,5 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\LuaInterface.net35\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\新建文件夹 (3)\trunk\MDT_Tools\client\bin\LuaInterface.x86.dll
+C:\Users\Administrator\新建文件夹 (3)\trunk\MDT_Tools\client\bin\LuaInterface.x86.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\LuaInterface.net35\obj\x86\Release\LuaInterface.x86.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\LuaInterface.net35\obj\x86\Release\LuaInterface.x86.pdb

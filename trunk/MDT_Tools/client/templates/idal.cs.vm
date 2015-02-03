@@ -20,7 +20,7 @@ namespace ${idalNameSpace}
 #end
 	/// </summary>
 	/// <remarks>
-	/// $date: 创建. ${pluginName} <br/>
+	/// $date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
 	/// </remarks>
 	public interface I${model}DALServer: IBaseDALServer
 	{
@@ -29,24 +29,65 @@ namespace ${idalNameSpace}
 		/// <summary>
 		/// 增加${model}方法
 		/// </summary>
-		/// <param name="${lmodel}">$!{tableInfo.TableComments}</param>
+		/// <param name="${lmodel}">$!{tableInfo.TableComments}${model}对象</param>
 		/// <returns>AtsMsg对象</returns>
 		AtsMsg<${model}> Insert(${model} ${lmodel});
 		${region}endregion
 
 		${region}region Delete
-		
+		/// <summary>
+		/// 删除${model}方法
+		/// </summary>
+		/// <param name="deleteCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
 		AtsMsg<${model}> Delete(Condition deleteCondition);
 		${region}endregion
 
 		${region}region Update
-		 
+		/// <summary>
+		/// 更新${model}方法
+		/// </summary>
+		/// <param name="${lmodel}">${model}对象</param>
+		/// <param name="updateCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
 		AtsMsg<${model}> Update(${model} ${lmodel},Condition updateCondition);
 		${region}endregion
 		
+		${region}region UpdateBatch
+		/// <summary>
+		/// 批量更新${model}方法
+		/// </summary>
+		/// <param name="List<${lmodel}>">${model}对象集合</param>
+		/// <param name="updateCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
+		AtsMsg<List<${model}>> UpdateBatch(List<${model}> ${lmodel}s,Condition updateCondition);
+		${region}endregion
+		
 		${region}region Select
-		 
-		AtsMsg<${model}> Select(Condition queryCondition);
+		/// <summary>
+		/// 查找${model}方法
+		/// </summary>
+		/// <param name="queryCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
+		AtsMsg<List<${model}>> Select(Condition queryCondition);
+		${region}endregion
+		
+		${region}region SelectCount
+		/// <summary>
+		/// 查找${model}数量方法
+		/// </summary>
+		/// <param name="queryCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
+		AtsMsg<Dictionary<string,int>> SelectCount(Condition queryCondition);
+		${region}endregion
+		
+		${region}region SelectPage
+		/// <summary>
+		/// 分页查找${model}方法
+		/// </summary>
+		/// <param name="queryCondition">Condition对象</param>
+		/// <returns>AtsMsg对象</returns>
+		AtsMsg<List<${model}>> SelectPage(Condition queryCondition);
 		${region}endregion
 	}
 }

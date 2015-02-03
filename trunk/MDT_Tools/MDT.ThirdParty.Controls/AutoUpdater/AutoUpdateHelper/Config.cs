@@ -18,27 +18,43 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace KnightsWarriorAutoupdater
+namespace MDT.ThirdParty.Controls
 {
     public class Config
     {
         #region The private fields
         private bool enabled = true;
         private string serverUrl = string.Empty;
+        private List<string> serverList = new List<string>();
+        private string version = "1.0.0.0";
         private UpdateFileList updateFileList = new UpdateFileList();
         #endregion
 
         #region The public property
+        [XmlIgnore]
         public bool Enabled
         {
             get { return enabled; }
             set { enabled = value; }
         }
+       
         public string ServerUrl
         {
             get { return serverUrl; }
             set { serverUrl = value; }
         }
+        [XmlIgnore]
+        public List<string> ServerList
+        {
+            get { return serverList; }
+            set { serverList = value; }
+        }
+        public string Version
+        {
+            get { return version; }
+            set { version = value; }
+        }
+
         public UpdateFileList UpdateFileList
         {
             get { return updateFileList; }

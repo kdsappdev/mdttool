@@ -1,20 +1,26 @@
-﻿## model字符串
+## model字符串
 #set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
 ## 第一个字符为小写的model字符串
 #set($lmodel=${codeGenHelper.StrFirstToLower($model)})
 package ${bsPackage}.impl;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.log4j.Logger;
 
 import ats.common.model.po.${model};
 import ats.common.model.po.${model}Example;
 import ats.common.model.dao.${model}DAO;
+import ats.common.model.dao.ExecuteSqlDAO;
+import ats.common.service.forexdeal.helper.ForexDealHelper;
 import ats.pingo.common.datacheck.bs.IDataCheckServer;
 import ${bsPackage}.I${model}Server;
 import ats.foundation.utils.exception.CodeException;
 import ats.foundation.condition.Condition;
 import ats.foundation.condition.ConditionInfo;
+import ats.foundation.condition.BuildConditionType;
 /**
 #if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
  *${tableInfo.TableComments} BS实现
@@ -22,52 +28,31 @@ import ats.foundation.condition.ConditionInfo;
  *${tableInfo.TableName}
 #end
  *
- *$date: 创建. ${pluginName} <br/>
+ *$date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
  */
 public class ${model}Server implements I${model}Server {
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	private IDataCheckServer dataCheckServer;
 	private ${model}DAO ${lmodel}DAO;
+	
+	private ExecuteSqlDAO executeSqlDAO;
+	public void setExecuteSqlDAO(ExecuteSqlDAO executeSqlDAO) {
+		this.executeSqlDAO = executeSqlDAO;
+	}
 
 	public void setDataCheckServer(IDataCheckServer dataCheckServer) {
 		this.dataCheckServer =dataCheckServer;
 	}
 	public void set${model}DAO(${model}DAO ${lmodel}DAO) {
 		this.${lmodel}DAO = ${lmodel}DAO;
-	}
+	}	
 
 	/**
-	 *根据location 查询${model}集合对象
+	 *增加${model}对象
 	 *
-	 * @param location实体
-	 * @return ${model}集合
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<${model}> select(String location) throws CodeException {
-		logger.debug(this.getClass().getName()+".select("+location+")");
-		${model}Example example = new ${model}Example();
-		${model}Example.Criteria critria = example.createCriteria();
-		critria.andLocationEqualTo(location);
-		if(${lmodel}DAO == null){
-			logger.error("Dao is null![${lmodel}Dao]");
-			throw new CodeException("4100","Dao is null![${lmodel}Dao]");
-		}
-		List<${model}> list;
-		try {
-			list = ${lmodel}DAO.selectByExample(example);
-		} catch (Exception e) {
-			throw new CodeException("4102",e.getMessage());
-		}
-		logger.info("the List<${model}> size is :"+list.size());
-		return list;
-	}
-
-	/**
-	 *增加${model}方法
-	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @param ${lmodel}$!{tableInfo.TableComments}对象
 	 * @return ${model}对象
+	 * @Exception CodeException
 	 */
 	@Override
 	public ${model} insert(${model} ${lmodel}) throws CodeException {
@@ -82,7 +67,9 @@ public class ${model}Server implements I${model}Server {
 		}
 		try {
 			${lmodel}DAO.insert(${lmodel});
+			
 		} catch (Exception e) {
+		         logger.error(e.getMessage());
 			 throw new CodeException("4102",e.getMessage());
 		}	
 		return ${lmodel};
@@ -92,6 +79,8 @@ public class ${model}Server implements I${model}Server {
 	 *删除${model}对象
 	 *
 	 * @param Condition对象
+	 * @return 无
+	 * @Exception CodeException
 	 */
 	@Override
 	public void delete(Condition deleteCondition) throws CodeException {
@@ -102,6 +91,7 @@ public class ${model}Server implements I${model}Server {
 		 }
 		 catch(Exception e)
 		 {
+		        logger.error(e.getMessage());
 			throw new CodeException("4200",e.getMessage());
 		 }
 		if(${lmodel}DAO == null){
@@ -112,23 +102,30 @@ public class ${model}Server implements I${model}Server {
 		String code = "9900";  
 	    try {
 			if(dataCheckServer != null){
-				String paras="";
+				StringBuffer buf = new StringBuffer();
 				for(ConditionInfo conditionInfo:deleteCondition.getConditionInfos())
 				{
-					paras+=conditionInfo.getFieldValue()+"\n";
+					buf.append(conditionInfo.getFieldValue()+"\n");
 				}
+                String paras = buf.toString();
 				code = dataCheckServer.Check_Delete("${tableInfo.tableName}", "", paras);
+			}
+			else {
+			     logger.info("can't execute data cheack server, dataCherckServer is null.");
 			}
 			if("9900".equals(code)){
 				${lmodel}DAO.deleteByExample(example);
 			}else{
+			        logger.error("the ${model} can't delete.");
 				throw new CodeException(code,"the ${model} can't delete");
 			}
 		} 
 	    catch(CodeException e){
+	        logger.error(e.getMessage());
 	    	throw e;
 	    }
 	    catch (Exception e) {
+	                 logger.error(e.getMessage());
 			 throw new CodeException("4102",e.getMessage());
 		}
 	}
@@ -136,14 +133,20 @@ public class ${model}Server implements I${model}Server {
 	/**
 	 *更新${model}对象
 	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
-	 * @return ${model}对象
+	 * @param ${lmodel}对象
+	 * @param $!{tableInfo.TableComments}Condition对象
+	 * @return 无
+	 * @Exception CodeException
 	 */
 	@Override
 	public void update(${model} ${lmodel},Condition updateCondition) throws CodeException  {
 		if(${lmodel} == null){
 			logger.error("${lmodel} is null");
 			throw new CodeException("4002","${lmodel} is null");
+		}
+		if (updateCondition == null) {
+		    logger.error("updateCondition is null");
+			throw new CodeException("4002","updateCondition is null");
 		}
 		${model}Example example=null;
 		 try
@@ -152,6 +155,7 @@ public class ${model}Server implements I${model}Server {
 		 }
 		 catch(Exception e)
 		 {
+		        logger.error(e.getMessage());
 			throw new CodeException("4200",e.getMessage());
 		 }
 		if(${lmodel}DAO == null){
@@ -161,14 +165,18 @@ public class ${model}Server implements I${model}Server {
 	    try {
 			${lmodel}DAO.updateByExample(${lmodel}, example);
 		} catch (Exception e) {
+		        logger.error(e.getMessage());
 			throw new CodeException("4102",e.getMessage());
 		}
 	}
 	
 		/**
-	 *批量更新${model}方法
+	 *批量更新${model}对象
 	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
+	 * @param ${lmodel}对象集合
+	 * @param $!{tableInfo.TableComments}Condition对象
+	 * @return 无
+	 * @Exception CodeException
 	 */
 	public void updateBatch(List<${model}> ${lmodel}s,Condition deleteCondition) throws CodeException
 	{
@@ -180,10 +188,11 @@ public class ${model}Server implements I${model}Server {
 	}
 	
 	/**
-	 *根据QueryCondition对象 查询出${model}对象
+	 *根据QueryCondition对象 查询出${model}对象集合
 	 *
-	 * @param ${lmodel}$!{tableInfo.TableComments}
-	 * @return ${model}对象
+	 * @param $!{tableInfo.TableComments}Condition对象
+	 * @return ${model}对象集合
+	 * @Exception CodeException
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -195,6 +204,7 @@ public class ${model}Server implements I${model}Server {
 		 }
 		 catch(Exception e)
 		 {
+		        logger.error(e.getMessage());
 			throw new CodeException("4200",e.getMessage());
 		 }
 		if(${lmodel}DAO == null){
@@ -205,10 +215,66 @@ public class ${model}Server implements I${model}Server {
 		try {
 			list = ${lmodel}DAO.selectByExample(example);
 		} catch (Exception e) {
+		        logger.error(e.getMessage());
 			throw new CodeException("4102",e.getMessage());
 		}
 		logger.info("the List<${model}> size is:"+list.size());
 		return list;	 
+	}
+	
+	/**
+	 *根据Condition对象 查询出${model}对象数量
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}Condtion对象
+	 * @return ${model}对象数量
+	 * @Exception CodeException
+	 */
+	 @Override
+	public HashMap<String,BigDecimal> selectCount(Condition queryCondition) throws CodeException {
+		HashMap<String,BigDecimal> countMap=null;
+		if(executeSqlDAO == null){
+			logger.error("Dao is null![executeSqlDAO]");
+			throw new CodeException("4100","Dao is null![executeSqlDAO]");
+		}
+		try {
+			String o = (String)queryCondition.BuildCondition(BuildConditionType.OracleSql);
+			#set($temp='##')o = o.replace("${temp}", "*");
+			String sql="select count(*) as Counts from ("+o+")";
+			countMap = executeSqlDAO.query(sql);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new CodeException("4102",e.getMessage());
+		}
+		return countMap;
+	}
+	
+	/**
+	 *根据Condition对象 分页查询出${model}对象
+	 *
+	 * @param ${lmodel}$!{tableInfo.TableComments}Condtion对象
+	 * @return ${model}对象集合
+	 * @Exception CodeException
+	 */
+	 @Override
+	public List<${model}> selectPage(Condition queryCondition) throws CodeException  {
+		List<${model}> list;
+		if(executeSqlDAO == null){
+			logger.error("Dao is null![executeSqlDAO]");
+			throw new CodeException("4100","Dao is null![executeSqlDAO]");
+		}
+		try {
+			String o = (String) queryCondition.BuildCondition(BuildConditionType.OracleSql);
+			#set($temp='##')o = o.replace("${temp}", "*");
+			ArrayList<HashMap<String, Object>> resultMap = (ArrayList<HashMap<String, Object>>) executeSqlDAO
+					.queryForList(o);
+			list = ForexDealHelper.HashMapToPoList(resultMap,
+					${model}.class, false, false);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw new CodeException("4102",e.getMessage());
+		}
+		logger.info("the List<${model}> size is:"+list.size());
+		return list;
 	}
 
 }

@@ -26,7 +26,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             try
             {
                 base.process(drTables, dsTableColumns, dsTablePrimaryKeys);
-                SaveFileEncoding = Encoding.GetEncoding("GBK");
+                //SaveFileEncoding = Encoding.GetEncoding("GBK");
                 CodeLanguage = "Java";
                 OutPut = cmc.OutPut;
                 setEnable(false);
@@ -43,6 +43,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
                         setStatusBar(string.Format("正在生成{0}包路径bs层代码", cmc.BSPackage));
+                        LogHelper.Info("Generating " + cmc.BSPackage + " package path bs layer bs code.");
                         setProgreesEditValue(0);
                         setProgress(0);
                         setProgressMax(drTables.Length);
@@ -68,6 +69,8 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                             setStatusBar(string.Format("正在生成{0}包路径bs中{1}的代码,共{2}个代码，已生成了{3}个代码,过滤了{4}个代码", cmc.BSPackage,
                                                        CodeGenHelper.GetClassName(tableName, cmc.CodeRule)+CodeGenRuleHelper.BSServer,
                                                        drTables.Length, i - j, j));
+                            LogHelper.Info("Generating in " + cmc.BSPackage + " package path bs " + CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.BSServer + " of code,"
+                                + drTables.Length + " of codes," + (i - j) + "of code has generated," + j + " of code was filtered.");
                             setProgress(1);
                         }
                         if (!flag)
@@ -82,13 +85,17 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                 if (!cmc.IsShowGenCode)
                 {
                     setStatusBar(string.Format("{0}包路径bs代码生成成功", cmc.BSPackage));
+                    LogHelper.Info(cmc.BSPackage + " package path bs code has generated success.");
                     openDialog();
                 }
             }
             catch (Exception ex)
             {
+               
                 setStatusBar(string.Format("{0}包路径bs代码生成失败[{1}]", cmc.BSPackage, ex.Message));
 
+                LogHelper.Error(cmc.BSPackage + " package path bs code generated fail " + ex.Message);
+               
             }
             finally
             {

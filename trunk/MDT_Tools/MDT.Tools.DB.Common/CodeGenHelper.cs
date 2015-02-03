@@ -53,6 +53,38 @@ namespace MDT.Tools.DB.Common
             }
             return temp;
         }
+        public static string StrFirstToUpperRemoveFirstUnderline(string str)
+        {
+            string temp = str;
+            if (!string.IsNullOrEmpty(str))
+            {
+                temp = temp.Trim(new[] { '#', ' ', ';', '\r', '\n' });
+                string[] temps = temp.ToLower().Split(new char[] { '_' });
+                temp = "";
+                for (int i = 1; i < temps.Length;i++ )
+                {
+                    temp += StrFirstToUpper(temps[i]);
+                }
+              
+            }
+            return temp;
+        }
+        public static string StrFirstToUpperAndUnderline(string str)
+        {
+            string temp = str;
+            if (!string.IsNullOrEmpty(str))
+            {
+                temp = temp.Trim(new[] { '#', ' ', ';', '\r', '\n' });
+                string[] temps = temp.ToLower().Split(new char[] { '_' });
+                temp = "";
+                foreach (string s in temps)
+                {
+                    temp += StrFirstToUpper(s)+"_";
+                }
+                temp = temp.TrimEnd('_');
+            }
+            return temp;
+        }
         public static string StrFirstToLowerRemoveUnderline(string str)
         {
             string temp = str;
@@ -69,6 +101,7 @@ namespace MDT.Tools.DB.Common
                     {
                         temp += StrFirstToUpper(temps[i]);
                     }
+                    temp = temp.TrimEnd('_');
                 }
                 
             }
@@ -115,7 +148,11 @@ namespace MDT.Tools.DB.Common
             string className = (codeRule == Ibatis ? !string.IsNullOrEmpty(ibatisConfigHelper.GetClassName(tableName))?ibatisConfigHelper.GetClassName(tableName):StrFirstToUpperRemoveUnderline(tableName) : StrFirstToUpperRemoveUnderline(tableName));
             return className;
         }
-
+        public string GetClassName2(string tableName, string codeRule)
+        {
+            string className = (codeRule == Ibatis ? !string.IsNullOrEmpty(ibatisConfigHelper.GetClassName(tableName)) ? ibatisConfigHelper.GetClassName(tableName) : StrFirstToUpperRemoveFirstUnderline(tableName) : StrFirstToUpperRemoveFirstUnderline(tableName));
+            return className;
+        }
         public static bool IsNullOrEmpty(string str)
         {
             return string.IsNullOrEmpty(str);
@@ -151,6 +188,15 @@ namespace MDT.Tools.DB.Common
                     case "DateTime?":
                     case "DateTime":
                         temp = "DateTime.Now";                        
+                        break;
+                    case "BigDecimal":
+                        temp = !string.IsNullOrEmpty(defaultValue) ? "new BigDecimal(" + defaultValue + ")" : "new BigDecimal(0)";
+                        break;
+                    case "Timestamp":
+                        temp = " new Timestamp(System.currentTimeMillis())";
+                        break;
+                    case "Date":
+                        temp = " new Date()";
                         break;
                     default:
                         temp = "\"\"";

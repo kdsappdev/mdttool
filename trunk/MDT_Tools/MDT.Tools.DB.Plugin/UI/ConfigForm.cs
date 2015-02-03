@@ -24,20 +24,36 @@ namespace MDT.Tools.DB.Plugin.UI
         public event dbConfigInfoChanged DBConfigInfoChanged;
         private void btnSave_Click(object sender, EventArgs e)
         {
+            bool status = true;
+            string message = "";
             if (isChanged)
             {
-                IniConfigHelper.DeleteFile();
                 foreach (var dbConfigInfo in dbConfigInfos)
                 {
-                    string message = "";
-                    IniConfigHelper.WriteDBInfo(dbConfigInfo, ref message);
+                   
+                    status = IniConfigHelper.WriteDBInfo(dbConfigInfo, ref message);
+                    if (!status)
+                    {
+                        break;
+                    }
+
                 }
-                if (DBConfigInfoChanged != null)
+                if (status)
                 {
-                    DBConfigInfoChanged();
+                    if (DBConfigInfoChanged != null)
+                    {
+                        DBConfigInfoChanged();
+                    }
                 }
             }
-            Close();
+            if (status)
+            {
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(this,"保存失败[" + message+"]", @"提示");
+            }
         }
 
         private IList<DbConfigInfo> dbConfigInfos = null;
@@ -56,12 +72,15 @@ namespace MDT.Tools.DB.Plugin.UI
             {
                 foreach (var dbConfigInfo in dbConfigInfos)
                 {
-                    TreeNode tn = new TreeNode(dbConfigInfo.DbConfigName);
-                    tn.Tag = dbConfigInfo;
-                    tn.SelectedImageIndex = tn.ImageIndex = 2;
-                    if (dbConfigInfo.DbType == tnOracle.Text)
+                    if (!dbConfigInfo.IsDelete)
                     {
-                        tnOracle.Nodes.Add(tn);
+                        TreeNode tn = new TreeNode(dbConfigInfo.DbConfigName);
+                        tn.Tag = dbConfigInfo;
+                        tn.SelectedImageIndex = tn.ImageIndex = 2;
+                        if (dbConfigInfo.DbType == tnOracle.Text)
+                        {
+                            tnOracle.Nodes.Add(tn);
+                        }
                     }
                 }
             }
@@ -79,8 +98,8 @@ namespace MDT.Tools.DB.Plugin.UI
             {
                 case "Oracle":
                     OracleDBConfigForm of = new OracleDBConfigForm();
-                    DialogResult dr = of.ShowDialog(this);
-                    if (dr.Equals(DialogResult.OK))
+                   of.ShowDialog(this);
+                   if (of.DialogResult.Equals(DialogResult.OK))
                     {
                         dbConfigInfos.Insert(0,of.DbConfigInfo);
                         
@@ -95,15 +114,15 @@ namespace MDT.Tools.DB.Plugin.UI
                         if (dbConfigInfo.DbType == "Oracle")
                         {
                             OracleDBConfigForm of2 = new OracleDBConfigForm(dbConfigInfo);
-                            DialogResult dr2 = of2.ShowDialog(this);
-                            if (dr2.Equals(DialogResult.OK))
+                             of2.ShowDialog(this);
+                            if (of2.DialogResult.Equals(DialogResult.OK))
                             {
-                                dbConfigInfos.Remove(dbConfigInfo);
+                                dbConfigInfo.IsDelete = true;
                                 
                                 createTreeNode();
                                 isChanged = true;
                             }
-                            else if(dr2.Equals(DialogResult.Yes))
+                            else if (of2.DialogResult.Equals(DialogResult.Yes))
                             {
                                 dbConfigInfos.Remove(dbConfigInfo);
                                 dbConfigInfos.Insert(0,of2.DbConfigInfo);

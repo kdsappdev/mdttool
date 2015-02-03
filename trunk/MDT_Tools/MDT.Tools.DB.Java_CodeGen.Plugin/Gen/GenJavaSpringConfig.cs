@@ -42,6 +42,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                     {
                         FileHelper.DeleteDirectory(cmc.OutPut);
                         setStatusBar(string.Format("正在生成Spring配置文件"));
+                        LogHelper.Info("Generating spring configuration file.");
                         setProgreesEditValue(0);
                         setProgress(0);
                         setProgressMax(drTables.Length);
@@ -67,6 +68,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                             setStatusBar(string.Format("正在生成Spring配置{0}的配置,共{1}个配置，已生成了{2}个配置,过滤了{3}个配置",
                                                        tableName,
                                                        drTables.Length, i - j, j));
+                            LogHelper.Info("Generationg spring configuratin + " + tableName + "'s config, " + drTables.Length + " of configuration, " + (i - j) + " of configuration has generated, " + j + " of configuration was filtered.");
                             setProgress(1);
                         }
                         if (!flag)
@@ -87,6 +89,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
                     FileHelper.Write(cmc.OutPut + CodeGenRuleHelper.WebServiceContext, new[] { WebServiceContext.ToString() });
 
                     setStatusBar(string.Format("Spring配置生成成功"));
+                    LogHelper.Info("spring config has generated success.");
                     openDialog();
                 }
                 else
@@ -99,7 +102,7 @@ namespace MDT.Tools.DB.Java_CodeGen.Plugin.Gen
             catch (Exception ex)
             {
                 setStatusBar(string.Format("Spring配置生成失败[{0}]", ex.Message));
-
+                LogHelper.Error("Spring config generated fail " + ex.Message);
             }
             finally
             {

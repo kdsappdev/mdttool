@@ -1,0 +1,10 @@
+#foreach($tableInfo in $tableInfos)
+CREATE SEQUENCE SEQ_${tableInfo.tableName}
+  START WITH 1
+  MAXVALUE 1000000000000000000000000000
+  MINVALUE 0
+  NOCYCLE
+  CACHE 20
+  NOORDER;
+  
+#end

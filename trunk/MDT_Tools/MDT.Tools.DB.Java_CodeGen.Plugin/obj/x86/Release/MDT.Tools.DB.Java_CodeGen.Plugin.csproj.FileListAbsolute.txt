@@ -1,0 +1,7 @@
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.Java_CodeGen.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\client\plugin\MDT.Tools.DB.Java_CodeGen.Plugin.pdb
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Java_CodeGen.Plugin\obj\x86\Release\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Java_CodeGen.Plugin\obj\x86\Release\MDT.Tools.DB.Java_CodeGen.Plugin.UI.Java_CodeGenConfigUI.resources
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Java_CodeGen.Plugin\obj\x86\Release\MDT.Tools.DB.Java_CodeGen.Plugin.csproj.GenerateResource.Cache
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Java_CodeGen.Plugin\obj\x86\Release\MDT.Tools.DB.Java_CodeGen.Plugin.dll
+C:\Users\Administrator\Desktop\mdttool\MDT_Tools\MDT.Tools.DB.Java_CodeGen.Plugin\obj\x86\Release\MDT.Tools.DB.Java_CodeGen.Plugin.pdb

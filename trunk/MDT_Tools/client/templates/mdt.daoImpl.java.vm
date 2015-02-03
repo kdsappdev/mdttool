@@ -1,0 +1,98 @@
+﻿##Ibatis Po
+##
+package $daopackage;
+
+#set ($poname= ${GenHelper.GetProperty($table.TableName)})
+import ${popackage}.${poname};
+import ${popackage}.${poname}Example;
+import java.util.List;
+import java.math.BigDecimal;
+import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
+
+#set ($now=${GenHelper.GetNow()})
+/**
+*${table.TableName}
+*${table.TableComments}
+*Create Time: $now
+*Create By: MDT Smart Kit .
+*/
+public class ${poname}DAOImpl extends SqlMapClientDaoSupport implements ${poname}DAO {
+    public ${poname}DAOImpl() {
+        super();
+    }
+    
+#if(${GenHelper.HasPrimaryKey(${table.TableName})})
+    public ${KeyJavaType} insert(${poname} record) {
+        Object newKey = getSqlMapClientTemplate().insert("${table.TableName}.abatorgenerated_insert", record);
+        return (${KeyJavaType}) newKey;
+    }
+#else
+    public void insert(${poname} record) {
+        getSqlMapClientTemplate().insert("${table.TableName}.abatorgenerated_insert", record);
+    }
+#end
+    public List selectByExample(${poname}Example example) {
+        List list = getSqlMapClientTemplate().queryForList("${table.TableName}.abatorgenerated_selectByExample", example);
+        return list;
+    }
+   
+    public int deleteByExample(${poname}Example example) {
+        int rows = getSqlMapClientTemplate().delete("${table.TableName}.abatorgenerated_deleteByExample", example);
+        return rows;
+    }
+   
+    public int countByExample(${poname}Example example) {
+        Integer count = (Integer)  getSqlMapClientTemplate().queryForObject("${table.TableName}.abatorgenerated_countByExample", example);
+        return count.intValue();
+    }
+ 
+    public int updateByExampleSelective(${poname} record, ${poname}Example example) {
+        UpdateByExampleParms parms = new UpdateByExampleParms(record, example);
+        int rows = getSqlMapClientTemplate().update("${table.TableName}.abatorgenerated_updateByExampleSelective", parms);
+        return rows;
+    }
+    
+    public int updateByExample(${poname} record, ${poname}Example example) {
+        UpdateByExampleParms parms = new UpdateByExampleParms(record, example);
+        int rows = getSqlMapClientTemplate().update("${table.TableName}.abatorgenerated_updateByExample", parms);
+        return rows;
+    }
+
+#if(${GenHelper.HasPrimaryKey(${table.TableName})})
+    public int updateByPrimaryKey(${poname} record) {
+        int rows = getSqlMapClientTemplate().update("${table.TableName}.abatorgenerated_updateByPrimaryKey", record);
+        return rows;
+    }
+    public int updateByPrimaryKeySelective(${poname} record) {
+        int rows = getSqlMapClientTemplate().update("${table.TableName}.abatorgenerated_updateByPrimaryKeySelective", record);
+        return rows;
+    }
+    
+    public int deleteByPrimaryKey(${KeyJavaType} ${KeyField}) {
+        ${poname} key = new ${poname}();
+        key.set${KeyProperty}(${KeyField});
+        int rows = getSqlMapClientTemplate().delete("${table.TableName}.abatorgenerated_deleteByPrimaryKey", key);
+        return rows;
+    } 
+     
+    public ${poname} selectByPrimaryKey(${KeyJavaType} ${KeyField}) {
+        ${poname} key = new ${poname}();
+        key.set${KeyProperty}(${KeyField});
+        ${poname} record = (${poname}) getSqlMapClientTemplate().queryForObject("${table.TableName}.abatorgenerated_selectByPrimaryKey", key);
+        return record;
+    }
+#end
+
+    private static class UpdateByExampleParms extends ${poname}Example {
+        private Object record;
+
+        public UpdateByExampleParms(Object record, ${poname}Example example) {
+            super(example);
+            this.record = record;
+        }
+
+        public Object getRecord() {
+            return record;
+        }
+    }
+}

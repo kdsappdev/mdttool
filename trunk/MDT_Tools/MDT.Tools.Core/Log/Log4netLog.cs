@@ -37,5 +37,9 @@ namespace MDT.Tools.Core.Log
         {
             _log.Error(ex);
         }
+        public void Info(string str)
+        {
+            _log.Info(str);
+        }
     }
 }

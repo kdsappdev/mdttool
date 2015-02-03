@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using MDT.Tools.Core.Utils;
 using MDT.Tools.DB.Plugin.Model;
 using MDT.Tools.DB.Plugin.Utils;
 
@@ -35,7 +36,7 @@ namespace MDT.Tools.DB.Plugin.UI
                                                      {
                                                          DbConfigInfo dbConfigInfo = getDbConfigInfo();
                                                          string conString =
-                                                             dbConfigInfo.ConnectionString.Trim(new char[] {'"'});
+                                                             dbConfigInfo.ConnectionString.Trim(new char[] { '"' });
                                                          string dbProvider =
                                                              DBType.GetDbProviderString(dbConfigInfo.DbType);
                                                          DNCCFrameWork.DataAccess.IDbHelper db =
@@ -59,23 +60,29 @@ namespace MDT.Tools.DB.Plugin.UI
                 MessageBox.Show(this, ex.Message, "异常提示", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
             }
         }
+
+        private string dbId = "";
         private void setDbConfigInfo(DbConfigInfo dbConfigInfo)
         {
+            dbId = dbConfigInfo.DbId;
             teServerName.Text = dbConfigInfo.DbServerName;
             teUserName.Text = dbConfigInfo.DbUserName;
             teUserPwd.Text = dbConfigInfo.DbUserPwd;
             teConfigName.Text = dbConfigInfo.DbConfigName;
+            tbDbEncoder.Text = dbConfigInfo.DbEncoder;
             teConfigName.ReadOnly = true;
 
         }
         private DbConfigInfo getDbConfigInfo()
         {
             DbConfigInfo dbConfigInfo = new DbConfigInfo();
+            dbConfigInfo.DbId = dbId;
             dbConfigInfo.DbServerName = teServerName.Text.Trim();
             dbConfigInfo.DbUserName = teUserName.Text.Trim();
             dbConfigInfo.DbUserPwd = teUserPwd.Text.Trim();
             dbConfigInfo.DbType = "Oracle";
             dbConfigInfo.DbConfigName = teConfigName.Text.Trim();
+            dbConfigInfo.DbEncoder = tbDbEncoder.Text.Trim();
             return dbConfigInfo;
         }
         #region
@@ -99,29 +106,75 @@ namespace MDT.Tools.DB.Plugin.UI
                 errorProvider1.SetError(teUserPwd, emptyMsg);
                 status = false;
             }
-
+            if (string.IsNullOrEmpty(tbDbEncoder.Text))
+            {
+                errorProvider1.SetError(tbDbEncoder, emptyMsg);
+                status = false;
+            }
+            else
+            {
+                try
+                {
+                    Encoding.GetEncoding(tbDbEncoder.Text.Trim());
+                }
+                catch (Exception ex)
+                {
+                    errorProvider1.SetError(tbDbEncoder, ex.Message);
+                    status = false;
+                }
+            }
             if (string.IsNullOrEmpty(teConfigName.Text))
             {
                 errorProvider1.SetError(teConfigName, emptyMsg);
                 status = false;
+            }
+            else
+            {
+                foreach (string str in FileHelper.FileNameNotAllowed)
+                {
+                    if (teConfigName.Text.IndexOf(str) > -1)
+                    {
+                        errorProvider1.SetError(teConfigName, "不能包含特殊字符");
+                        status = false;
+                        break;
+                    }
+                }
             }
             return status;
         }
         #endregion
 
         internal DbConfigInfo DbConfigInfo = null;
+        private DialogResult dialogResult = DialogResult.None;
+        public new DialogResult DialogResult
+        {
+            get { return dialogResult; }
+        }
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             if (checkData())
             {
                 DbConfigInfo = getDbConfigInfo();
+                dialogResult = DialogResult.OK;
                 Close();
             }
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            btnAdd_Click(sender, e);
+            if (checkData())
+            {
+                DbConfigInfo = getDbConfigInfo();
+                dialogResult = DialogResult.Yes;
+                Close();
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            dialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }

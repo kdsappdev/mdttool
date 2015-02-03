@@ -14,7 +14,7 @@ namespace ${bllNameSpace}
 	/// ${guiPluginName}业务接口
 	/// </summary>
 	/// <remarks>
-	/// $date: 创建. ${pluginName} <br/>
+	/// $date: 创建. ${pluginName} 模板版本(v1.0.0.0)<br/>
 	/// </remarks>
 	public interface I${guiPluginName}BLLService: IBaseBLLService
 	{

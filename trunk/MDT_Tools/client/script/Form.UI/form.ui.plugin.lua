@@ -5,7 +5,7 @@ import("System.Drawing")
 import("System.Collections.Generic")
 import("MDT.Tools.Core","MDT.Tools.Core.Resources")
 import("MDT.ThirdParty.Controls","WeifenLuo.WinFormsUI.Docking")
-import("MDT.ThirdParty.Controls","KnightsWarriorAutoupdater")
+import("MDT.ThirdParty.Controls","MDT.ThirdParty.Controls")
 import("MDT Smart Kit","MDT.Tools.UI")
 import("System.Text")
 import("System.Threading")
@@ -18,7 +18,7 @@ local pluginKey=43
 local pluginName='UI插件'
 local description='form框架中提供的基本界面'
 local author='孔德帅'
-local version='1.0.0.0'
+local version='1.0.0.1'
 
 
 function init()
@@ -29,7 +29,11 @@ end
 tsmiHelper=ToolStripMenuItem()
 tsmiCheckUpdate=ToolStripMenuItem()
 toolStripSeparator1=ToolStripSeparator()
+
 tsmiAbout=ToolStripMenuItem()
+--工具
+tsmiTool=ToolStripMenuItem()
+
 --窗口
 tsmiWindow=ToolStripMenuItem()
 tsmiCloseAllDocument=ToolStripMenuItem()
@@ -45,8 +49,12 @@ function load()
 	
 	tsmiHelper.Text = "帮助(&H)"
 	tsmiHelper.DropDownItems:Add(tsmiCheckUpdate)
+	
 	tsmiHelper.DropDownItems:Add(toolStripSeparator1)
 	tsmiHelper.DropDownItems:Add(tsmiAbout)
+	
+	tsmiTool.Text = "工具(&T)"
+	 
 	
 	tsmiWindow.DropDownItems:Add(tsmiCloseAllDocument)
 	tsmiWindow.Text = "窗口(&W)"
@@ -58,13 +66,15 @@ function load()
 	tsmiCloseAllDocument.Image = Resources.closeAllDocment
 	
 	
+	
+	
 	tsmiAbout.Text = "关于"
 	tsmiAbout.Click:Add(tsmiAbout_Click)
 	
 	tsmiCloseAllDocument.Text = "关闭所有文档(&L)"
 	tsmiCloseAllDocument.Click:Add(tsmiCloseAllDocument_Click)
 	
-	
+	application.MainMenu.Items:Add(tsmiTool)
 	application.MainMenu.Items:Add(tsmiWindow)
 	application.MainMenu.Items:Add(tsmiHelper)
 	
@@ -96,6 +106,7 @@ function load()
 	
 	
 	
+	registerObject(pluginKey,"tsmiTool",tsmiTool)
 	registerObject(pluginKey,"tsmiWindow",tsmiWindow)
 	
 	registerObject(pluginKey,"tsmiHelper",tsmiHelper)
@@ -111,8 +122,10 @@ function  StatusBarSizeChanged(sender,e)
 	
 end
 
+ 
+
 function tsmiCheckUpdate_Click(sender,e)
-	ThreadPool.QueueUserWorkItem(pcall(checkUpdate,true))
+	pcall(checkUpdate,true)
 end
 
 function doOther()
@@ -126,12 +139,22 @@ end
 function checkUpdate(flag)
 	
 	local suc,err=pcall(function()
+	
 		local autoUpdater = AutoUpdater()
 		local isUpdate= autoUpdater:IsUpdate()
-		if (isUpdate) then
-			local dr = MessageBox.Show(application.MainMenu, "检查到有新版，是否升级?","提示",MessageBoxButtons.YesNo,MessageBoxIcon.Information)
-			if (dr == DialogResult.Yes) then
-				Process.Start("MDT.Tools.AutoUpdater.exe", "true")
+		 
+		if (isUpdate>0) then
+			
+			if(isUpdate==2)
+			then
+			   dr = MessageBox.Show(application.MainMenu, "检查到有新版，是否升级?","提示",MessageBoxButtons.YesNo,MessageBoxIcon.Information)
+			end
+			if(isUpdate==3)
+			then
+				 dr = MessageBox.Show(application.MainMenu, "检查到有新版，请升级?","提示",MessageBoxButtons.OK,MessageBoxIcon.Information)
+			end
+			if (dr == DialogResult.Yes or dr == DialogResult.OK) then
+				Process.Start("MDT.Tools.AutoUpdater.exe", "-i "..isUpdate.." -c false")
 				pcall(tsbExit_Click,nil,nil)
 			end
 		else 
@@ -142,7 +165,7 @@ function checkUpdate(flag)
 	end)
 	if(flag) then
 	if not suc then
-		MessageBox.Show(application.MainMenu, "检查失败", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
+		MessageBox.Show(application.MainMenu, "检查失败["..err.Message.."]", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information)
 	end
 	end
 	return suc

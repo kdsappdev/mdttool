@@ -1,0 +1,44 @@
+﻿##Ibatis Po
+##
+package $daopackage;
+
+#set ($poname= ${GenHelper.GetProperty($table.TableName)})
+import ${popackage}.${poname};
+import ${popackage}.${poname}Example;
+import java.util.List;
+import java.math.BigDecimal;
+
+#set ($now=${GenHelper.GetNow()})
+/**
+*${table.TableName}
+*${table.TableComments}
+*Create Time: $now
+*Create By: MDT Smart Kit .
+*/
+public interface ${poname}DAO {
+
+#if(${GenHelper.HasPrimaryKey(${table.TableName})})
+    ${KeyJavaType} insert(${poname} record);
+#else
+    void insert(${poname} record);
+#end
+    List selectByExample(${poname}Example example);
+   
+    int deleteByExample(${poname}Example example);
+   
+    int countByExample(${poname}Example example);
+ 
+    int updateByExampleSelective(${poname} record, ${poname}Example example);
+    
+    int updateByExample(${poname} record, ${poname}Example example);
+
+#if(${GenHelper.HasPrimaryKey(${table.TableName})})
+    int updateByPrimaryKey(${poname} record);
+
+    int updateByPrimaryKeySelective(${poname} record);
+    
+    int deleteByPrimaryKey(${KeyJavaType} ${KeyField});
+     
+    ${poname} selectByPrimaryKey(${KeyJavaType} ${KeyField});
+#end
+}

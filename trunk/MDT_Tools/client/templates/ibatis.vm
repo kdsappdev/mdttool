@@ -1,0 +1,21 @@
+#foreach($tableInfo in $tableInfos)
+#set($flag=false)
+#set($pc='')
+#foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($flag=true)
+#set($pc=${column.Name})
+#end
+#end
+#if(!$flag)
+<table schema="" tableName="${tableInfo.tableName}" domainObjectName="${codeGenHelper.StrFirstToUpperRemoveUnderline(${tableInfo.tableName})}" />
+#else
+<table schema="" tableName="${tableInfo.tableName}" domainObjectName="${codeGenHelper.StrFirstToUpperRemoveUnderline(${tableInfo.tableName})}" >
+#if("NUMBER"==${column.DataType})
+	<generatedKey column="$pc" sqlStatement="select SEQ_${tableInfo.tableName}.nextVal from dual" identity="false"/>
+#else
+	<generatedKey column="$pc" sqlStatement="select to_char(SEQ_${tableInfo.tableName}.nextVal) autoid  from dual" identity="false"/>
+#end
+</table>
+#end
+#end

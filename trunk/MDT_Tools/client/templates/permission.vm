@@ -1,0 +1,6 @@
+Service,C,I,A,M,Z,B,S,E
+#foreach($tableInfo in $tableInfos)
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+${model}Service,R,R,R,R,R,R,CRU,CRUD
+#end
+ 

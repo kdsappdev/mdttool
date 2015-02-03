@@ -1,11 +1,15 @@
 ﻿#set($i=0)
+#set($pk='')
 #set($count=${tableInfo.Columns.Count})	
 
-	CREATE OR REPLACE TABLE ${tableInfo.TableName} {
+	CREATE TABLE ${tableInfo.TableName} (
 #foreach($column in $tableInfo.Columns)
+#if(${column.IsPrimaryKeys})
+#set($pk="$pk,$column.Name")
+#end
 #if($codeGenHelper.IsNullOrEmpty(${column.DataPrecision}))
-#if("DATE"==${column.DataType})
-#set($dataType =${column.DataType} + "()")
+#if($codeGenHelper.IsNullOrEmpty(${column.DataLength}))
+#set($dataType =${column.DataType})
 #else
 #set($dataType = ${column.DataType} + "(" + ${column.DataLength} + ")")
 #end
@@ -17,7 +21,13 @@
 #end
 #end
 		#set($i=$i+1)		
-		${column.Name} $dataType #if(${column.DataNullAble} == "N") NULL#else NOT NULL#end #if(!$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) DEFAULT ${column.DataDefault}#else#end#if($i== $count)#else,#end
+		${column.Name} $dataType #if(${column.DataNullAble}) NULL#else NOT NULL#end #if(!$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) DEFAULT ${column.DataDefault}#else#end#if($i== $count)#else,#end
 						
 #end
-	}
+	);
+#set($length=$pk.length - 1)
+#if($length>1)
+  #set($pk=$pk.subString(1,$length))
+	
+	ALTER TABLE ${tableInfo.TableName} ADD CONSTRAINT PK_${tableInfo.TableName} PRIMARY KEY($pk);
+#end

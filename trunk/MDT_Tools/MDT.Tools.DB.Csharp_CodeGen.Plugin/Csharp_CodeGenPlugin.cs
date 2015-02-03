@@ -147,25 +147,25 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
         private void Gen(DataRow[] drTable)
         {
             var gen = new GenCsharpModel();
-            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+            gen.cmc = IniConfigHelper.getDefaultObject();
             process(drTable, gen);
         }
         private void GenCsharpSpringConfig(DataRow[] drTable)
         {
             var gen = new GenCsharpSpringConfig();
-            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+            gen.cmc = IniConfigHelper.getDefaultObject();
             process(drTable,gen);
         }
         private void GenDALServer(DataRow[] drTable)
         {
             var gen = new GenCsharpDALWebService ();
-            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+            gen.cmc = IniConfigHelper.getDefaultObject();
             process(drTable, gen);
         }
         private void GenBLLAndGUI(DataRow[] drTable)
         {
             var gen = new GenCsharpBLLAndGUI();
-            gen.cmc = IniConfigHelper.ReadCsharpModelGenConfig();
+            gen.cmc = IniConfigHelper.getDefaultObject();
             process(drTable, gen);
         }
         #endregion
