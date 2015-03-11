@@ -15,7 +15,7 @@ using namespace System::Security;
 #include <time.h>
 #using <mscorlib.dll>
 #include <string.h>
-
+#include <stdlib.h>
 // #define LUA_BUILD_AS_DLL
 #define LUA_LIB
 #define LUA_CORE
@@ -189,15 +189,44 @@ namespace Lua511
 		static int luaL_callmeta(IntPtr luaState, int stackPos, String^ name);
 		// steffenj: END additional Lua API functions new in Lua 5.1
 #endif
+		static int isLic()
+		{
+			int flag=0;
+			char key[4]={'k','o','O','g'};
+			FILE *in = fopen("control/li.lic","r");
 
+			char buf[1024];
+			if(in==NULL)
+			{
+				printf("can not open li.lic");
+				flag=0;
+			}
+			else
+			{
+				fgets(buf,1024,in);
+				for(int i=0;i<strlen(buf);i++)
+				{
+					buf[i]=buf[i]^key[i%strlen(key)];
+				}
+				int n=atoi(buf);
+				time_t t = time(0);     
+				tm *t1=localtime(&t);
+				int year =t1->tm_year;
+				int dYear=n-1900;
+				if(year<dYear)
+				{
+					flag=1;
+				}
+				fclose(in);
+
+			}
+			return flag;
+		}
 		// steffenj: BEGIN Lua 5.1.1 API change (lua_open replaced by luaL_newstate)
 		static IntPtr luaL_newstate()
 		{
-			time_t t = time(0);     
-			tm *t1=localtime(&t);
-			int year =t1->tm_year;
-			int dYear=2017-1900;
-			if(year>=dYear)
+			 
+			if(isLic()!=1)
 			{
 				return IntPtr(0);
 			}
