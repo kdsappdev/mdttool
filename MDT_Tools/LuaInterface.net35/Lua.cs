@@ -74,7 +74,10 @@ namespace LuaInterface
         /// Used to ensure multiple .net threads all get serialized by this single lock for access to the lua stack/objects
         /// </summary>
         object luaLock = new object();
-
+        public static int isLic()
+        {
+           return LuaDLL.isLic();
+        }
 		public Lua() 
 		{
 			luaState = LuaDLL.luaL_newstate();	// steffenj: Lua 5.1.1 API change (lua_open is gone)
@@ -94,11 +97,11 @@ namespace LuaInterface
 			translator=new ObjectTranslator(this,luaState);
             LuaDLL.lua_replace(luaState, (int)LuaIndexes.LUA_GLOBALSINDEX);
 			LuaDLL.luaL_dostring(luaState, Lua.init_luanet);	// steffenj: lua_dostring renamed to luaL_dostring
-
+            
             // We need to keep this in a managed reference so the delegate doesn't get garbage collected
             panicCallback = new LuaCSFunction(PanicCallback);
             LuaDLL.lua_atpanic(luaState, panicCallback);
-
+            
             //LuaDLL.lua_atlock(luaState, lockCallback = new LuaCSFunction(LockCallback));
             //LuaDLL.lua_atunlock(luaState, unlockCallback = new LuaCSFunction(UnlockCallback));
         }
