@@ -767,7 +767,7 @@ LUALIB_API int isLic()
 				}
 			}
 		}
-		else if(type=='1'||type=='3')
+		 if(type=='1'||type=='3')
 		{
 			flag=3;
 			printf("macc:%s\n",macc);
