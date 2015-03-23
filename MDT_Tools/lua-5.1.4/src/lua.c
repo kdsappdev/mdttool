@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
+#pragma comment(lib,"Iphlpapi.lib") 
 #define lua_c
 
 #include "lua.h"
@@ -369,7 +371,7 @@ static int pmain (lua_State *L) {
 	return 0;
 }
 
-static int isLic()
+static int isLic2()
 {
 	int flag=0;
 	char key[4]={'k','o','O','g'};
@@ -385,7 +387,7 @@ static int isLic()
 	{
 
 		fgets(buf,1024,in);
-		//printf("%s",buf);
+		printf("%s",buf);
 		for(int i=0;i<strlen(buf);i++)
 		{
 			buf[i]=buf[i]^key[i%strlen(key)];
@@ -407,9 +409,86 @@ static int isLic()
 	}
 	return flag;
 }
+typedef struct _ASTAT_
+{
+	ADAPTER_STATUS adapt;
+	NAME_BUFFER    NameBuff [30];
+}ASTAT, * PASTAT;
+
+ASTAT Adapter;
+
+void cpu()
+{
+	SYSTEM_INFO  sysInfo;
+	OSVERSIONINFOEX osvi;
+
+	GetSystemInfo(&sysInfo);
+
+	printf("OemId : %s\n", sysInfo.wReserved);
+	printf("处理器架构 : %u\n", sysInfo.wProcessorArchitecture);
+	printf("页面大小 : %u\n", sysInfo.dwPageSize);
+	printf("应用程序最小地址 : %u\n", sysInfo.lpMinimumApplicationAddress);
+	printf("应用程序最大地址 : %u\n", sysInfo.lpMaximumApplicationAddress);
+	printf("处理器掩码 : %u\n", sysInfo.dwActiveProcessorMask);
+	printf("处理器数量 : %u\n", sysInfo.dwNumberOfProcessors);
+	printf("处理器类型 : %u\n", sysInfo.dwProcessorType);
+	printf("虚拟内存分配粒度 : %u\n", sysInfo.dwAllocationGranularity);
+	printf("处理器级别 : %u\n", sysInfo.wProcessorLevel);
+	printf("处理器版本 : %u\n", sysInfo.wProcessorRevision);
+
+	osvi.dwOSVersionInfoSize=sizeof(osvi);
+	if (GetVersionEx((LPOSVERSIONINFOW)&osvi))
+	{
+		printf("Version     : %u.%u\n", osvi.dwMajorVersion, osvi.dwMinorVersion);
+		printf("Build       : %u\n", osvi.dwBuildNumber);
+		printf("dwOSVersionInfoSize       : %u\n", osvi.dwOSVersionInfoSize);
+		printf("dwPlatformId       : %u\n", osvi.dwPlatformId);
+		printf("wProductType       : %u\n", osvi.wProductType);
+		printf("szCSDVersion       : %u\n", osvi.szCSDVersion);
+		printf("wSuiteMask       : %u\n", osvi.wSuiteMask);
+		printf("Service Pack: %u.%u\n", osvi.wServicePackMajor, osvi.wServicePackMinor);
+	}
+
+
+}
+
+void genLic()
+{
+	printf("genLic-------------------------begin\n");
+	int key[6]={1,0,1,0,0,0};
+	FILE *in = fopen("1.lic","r+");
+	FILE *out = fopen("2.lic","wb");
+	char buf[1024];
+	if(in==NULL)
+	{
+		printf("can not open 1.lic");
+
+	}
+	else
+	{
+
+		fgets(buf,1024,in);
+		fclose(in);
+		printf("buf:%s\n",buf);
+		for(int i=0;i<strlen(buf);i++)
+		{
+			buf[i]=buf[i]^key[i%6];
+		}
+		printf("buf^:%s\n",buf);
+
+		char *buf1=base64Encode(buf,strlen(buf));
+		printf("buf1^:%s\n",buf1);
+		printf("genLic-------------------------end\n");
+		fputs(buf1,out);
+		fclose(out);
+	}
+}
 int main (int argc, char **argv) { 
 
-	isLic();
+	//cpu();
+genLic();
+
+	//isLic();
 	int status;
 	struct Smain s;
 	lua_State *L = lua_open();  /* create state */
