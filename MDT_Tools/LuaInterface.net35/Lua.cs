@@ -76,7 +76,7 @@ namespace LuaInterface
         object luaLock = new object();
         public static int isLic()
         {
-           return LuaDLL.isLic();
+           return LuaDLL.isLic2();
         }
 		public Lua() 
 		{
