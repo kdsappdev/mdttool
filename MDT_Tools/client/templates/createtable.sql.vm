@@ -1,4 +1,5 @@
-﻿#set($i=0)
+﻿#if(${tableInfo.type}=="TABLE")	
+#set($i=0)
 #set($pk='')
 #set($count=${tableInfo.Columns.Count})	
 
@@ -30,4 +31,5 @@
   #set($pk=$pk.subString(1,$length))
 	
 	ALTER TABLE ${tableInfo.TableName} ADD CONSTRAINT PK_${tableInfo.TableName} PRIMARY KEY($pk);
+#end
 #end

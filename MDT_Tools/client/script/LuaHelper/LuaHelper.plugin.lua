@@ -13,8 +13,8 @@ Application=getApplication()
 --插件信息
 local tag=44
 local pluginKey=41
-local pluginName='test'
-local description='test'
+local pluginName='Lua帮助文档'
+local description='Lua帮助文档'
 local author='孔德帅'
 local version='1.0.0.0'
 --插件方法:初始化

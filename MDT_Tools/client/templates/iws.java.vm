@@ -18,6 +18,7 @@ import javax.jws.WebService;
  */
 @WebService
 public interface I${model} {
+#if(${tableInfo.type}=="TABLE")
 	/**
 	 *增加${lmodel}对象
 	 *
@@ -51,7 +52,7 @@ public interface I${model} {
 	 * @return ${lmodel}[AtsMsg字符串压缩字节码]
 	 */
 	public byte[] updateBatch(byte[] ${lmodel}s,byte[] updateCondition);
-	
+#end	
 	/**
 	 *根据Condition对象查询出${lmodel}集合对象
 	 *

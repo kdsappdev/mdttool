@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Diagnostics.CodeAnalysis;
-using MDT.ThirdParty.Controls.Docking;
 
 namespace WeifenLuo.WinFormsUI.Docking
 {
@@ -46,7 +45,8 @@ namespace WeifenLuo.WinFormsUI.Docking
         }
 
         private DockPaneStripBase m_tabStripControl;
-        internal DockPaneStripBase TabStripControl
+
+        public DockPaneStripBase TabStripControl
         {
             get { return m_tabStripControl; }
         }
@@ -100,7 +100,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             m_dockPanel = content.DockHandler.DockPanel;
             m_dockPanel.AddPane(this);
 
-            m_splitter = new SplitterControl(this);
+            m_splitter = content.DockHandler.DockPanel.Extender.DockPaneSplitterControlFactory.CreateSplitterControl(this);
 
             m_nestedDockingStatus = new NestedDockingStatus(this);
 
@@ -126,10 +126,22 @@ namespace WeifenLuo.WinFormsUI.Docking
             DockPanel.ResumeLayout(true, true);
         }
 
+        private bool m_isDisposing;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
+                // IMPORTANT: avoid nested call into this method on Mono. 
+                // https://github.com/dockpanelsuite/dockpanelsuite/issues/16
+                if (Win32Helper.IsRunningOnMono)
+                {
+                    if (m_isDisposing)
+                        return;
+
+                    m_isDisposing = true;
+                }
+
                 m_dockState = DockState.Unknown;
 
                 if (NestedPanesContainer != null)
@@ -451,7 +463,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             get { return (DockState == DockState.Document) ? AppearanceStyle.Document : AppearanceStyle.ToolWindow; }
         }
 
-        internal Rectangle DisplayingRectangle
+        public Rectangle DisplayingRectangle
         {
             get { return ClientRectangle; }
         }
@@ -484,13 +496,13 @@ namespace WeifenLuo.WinFormsUI.Docking
 
         internal void CloseContent(IDockContent content)
         {
-            DockPanel dockPanel = DockPanel;
-
             if (content == null)
                 return;
 
             if (!content.DockHandler.CloseButton)
                 return;
+
+            DockPanel dockPanel = DockPanel;
 
             dockPanel.SuspendLayout(true);
 
@@ -912,7 +924,12 @@ namespace WeifenLuo.WinFormsUI.Docking
                 FloatWindow = DockPanel.FloatWindowFactory.CreateFloatWindow(DockPanel, this);
 
             if (contentFocused != null)
-                DockPanel.ContentFocusManager.Activate(contentFocused);
+            {
+                if (!Win32Helper.IsRunningOnMono)
+                {
+                    DockPanel.ContentFocusManager.Activate(contentFocused);
+                }
+            }
 
             ResumeRefreshStateChange(oldContainer, oldDockState);
         }
@@ -944,13 +961,10 @@ namespace WeifenLuo.WinFormsUI.Docking
 
         private void RefreshStateChange(INestedPanesContainer oldContainer, DockState oldDockState)
         {
-            lock (this)
-            {
-                if (IsRefreshStateChangeSuspended)
-                    return;
+            if (IsRefreshStateChangeSuspended)
+                return;
 
-                SuspendRefreshStateChange();
-            }
+            SuspendRefreshStateChange();
 
             DockPanel.SuspendLayout(true);
 
@@ -1199,6 +1213,8 @@ namespace WeifenLuo.WinFormsUI.Docking
             get { return this; }
         }
 
+        public IDockContent MouseOverTab { get; set; }
+
         #endregion
 
         bool IDockDragSource.IsDockStateValid(DockState dockState)
@@ -1234,6 +1250,10 @@ namespace WeifenLuo.WinFormsUI.Docking
             return new Rectangle(location, size);
         }
 
+        void IDockDragSource.EndDrag()
+        {
+        }
+
         public void FloatAt(Rectangle floatWindowBounds)
         {
             if (FloatWindow == null || FloatWindow.NestedPanes.Count != 1)
@@ -1243,7 +1263,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             DockState = DockState.Float;
 
-            NestedDockingStatus.NestedPanes.Remove(this);
+            NestedDockingStatus.NestedPanes.SwitchPaneWithFirstChild(this);
         }
 
         public void DockTo(DockPane pane, DockStyle dockStyle, int contentIndex)
@@ -1295,6 +1315,34 @@ namespace WeifenLuo.WinFormsUI.Docking
                 DockState = DockState.Document;
         }
 
+        #endregion
+
+        #region cachedLayoutArgs leak workaround
+        
+        /// <summary>
+        /// There's a bug in the WinForms layout engine
+        /// that can result in a deferred layout to not
+        /// properly clear out the cached layout args after
+        /// the layout operation is performed.
+        /// Specifically, this bug is hit when the bounds of
+        /// the Pane change, initiating a layout on the parent
+        /// (DockWindow) which is where the bug hits.
+        /// To work around it, when a pane loses the DockWindow
+        /// as its parent, that parent DockWindow needs to
+        /// perform a layout to flush the cached args, if they exist.
+        /// </summary>
+        private DockWindow _lastParentWindow;
+        protected override void OnParentChanged(EventArgs e)
+        {
+            base.OnParentChanged(e);
+            var newParent = Parent as DockWindow;
+            if (newParent != _lastParentWindow)
+            {
+                if (_lastParentWindow != null)
+                    _lastParentWindow.PerformLayout();
+                _lastParentWindow = newParent;
+            }
+        }
         #endregion
     }
 }

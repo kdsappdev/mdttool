@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
+using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
-
+using DockSample;
+using Lextm.SharpSnmpLib;
 using MDT.Tools.Core.Plugin;
 using MDT.Tools.Core.Plugin.WindowsPlugin;
 using MDT.Tools.Core.UI;
@@ -11,21 +15,73 @@ using MDT.Tools.Core.Utils;
 using MDT.Tools.Core.Resources;
 using System.IO;
 using System.Reflection;
+using Timer = System.Windows.Forms.Timer;
+
 namespace MDT.Tools
 {
     public partial class MainForm : Form, IForm
     {
-
+        private VSToolStripExtender vS2012ToolStripExtender1;
+        private readonly ToolStripRenderer _toolStripProfessionalRenderer = new ToolStripProfessionalRenderer();
+        private readonly ToolStripRenderer _vs2012ToolStripRenderer = new VS2012ToolStripRenderer();
+        private readonly ToolStripRenderer _vs2013ToolStripRenderer = new Vs2013ToolStripRenderer();
+        private AutoHideStripSkin _autoHideStripSkin=new AutoHideStripSkin();
+        private DockPaneStripSkin _dockPaneStripSkin=new DockPaneStripSkin();
+        private string vsVersion = ConfigurationSettings.AppSettings["VsVersion"];
+        private VSToolStripExtender.VsVersion version = VSToolStripExtender.VsVersion.Vs2005;
         public MainForm()
         {
+           
             InitializeComponent();
+            SetSplashScreen();
             Control.CheckForIllegalCrossThreadCalls = false;
+            ThreadPool.RegisterWaitForSingleObject(Program.ewh, OnProgramStarted, null, -1, false);
+            
+            Panel.Skin.AutoHideStripSkin = _autoHideStripSkin;
+            vS2012ToolStripExtender1 = new VSToolStripExtender(components);
+            vS2012ToolStripExtender1.DefaultRenderer = _toolStripProfessionalRenderer;
+            vS2012ToolStripExtender1.VS2012Renderer = _vs2012ToolStripRenderer;
+            vS2012ToolStripExtender1.VS2013Renderer = _vs2013ToolStripRenderer;
+            this.Panel.Theme = new VS2012LightTheme();
+            switch (vsVersion)
+            {
+                case "2012":
+                    this.Panel.Theme = new VS2012LightTheme();
+                    version = VSToolStripExtender.VsVersion.Vs2012;
+                    break;
+                case "2013":
+                    this.Panel.Theme = new VS2013BlueTheme();
+                    version = VSToolStripExtender.VsVersion.Vs2013;
+                    break;
+                default:
+                    this.Panel.Theme = new VS2005Theme();
+                    version = VSToolStripExtender.VsVersion.Vs2005;
+                    break;
+            }
+            this.EnableVSRenderer(version);
             Initialize();
+            
+        }
+
+       
+
+        private void EnableVSRenderer(VSToolStripExtender.VsVersion version)
+        {
+           
+            vS2012ToolStripExtender1.SetStyle(this.mainMenu, version);
+            vS2012ToolStripExtender1.SetStyle(this.mainTool, version);
+            vS2012ToolStripExtender1.SetStyle(this.statusBar, version);
+        }
+        private void OnProgramStarted(object o, bool timedout)
+        {
+            showMaxForm();
         }
 
         private void MainFormLoad(object sender, EventArgs e)
         {
+            
             _pluginManager.Loading();
+            
         }
 
         private void TsmiAboutClick(object sender, EventArgs e)
@@ -37,11 +93,15 @@ namespace MDT.Tools
         #region Initialize
 
         private bool _userClosing = false;
+        private bool _isSaveWorkSpace = false;
+        
         private void Initialize()
         {
             Text = System.Configuration.ConfigurationSettings.AppSettings["App"];
             bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["UserClosing"], out _userClosing);
-            //reStoreWorkSpace();
+            bool.TryParse(System.Configuration.ConfigurationSettings.AppSettings["IsSaveWorkSpace"], out _isSaveWorkSpace);
+
+            
             _pluginUtils = new PluginUtils();
 
             PluginManagers pms = new PluginManagers();
@@ -50,12 +110,16 @@ namespace MDT.Tools
             _pluginManager = pms;
             _pluginManager.Application = this;
             _pluginManager.Init();
-            Text = Text + string.Format(" Beta版本:V{0}(build{1})", ReflectionHelper.GetVersion(this.GetType().Assembly), ReflectionHelper.GetPe32Time(this.GetType().Assembly.Location).ToString("yyyyMMdd"));
+            Text = Text + string.Format(" 版本:V{0}(build:{1})", ReflectionHelper.GetVersion(GetType().Assembly), ReflectionHelper.GetPe32Time(GetType().Assembly).ToString("yyyyMMdd"));
             Icon = Resources.Ico;
             //((System.Reflection.AssemblyDescriptionAttribute)System.Reflection.AssemblyDescriptionAttribute.GetCustomAttribute(this.GetType().Assembly,
             //typeof(System.Reflection.AssemblyDescriptionAttribute))).Description
             notifyIcon1.Text = Text;
             notifyIcon1.Icon = Icon;
+            if (_isSaveWorkSpace)
+            {
+                ReStoreWorkSpace();
+            }
 
 
         }
@@ -112,6 +176,15 @@ namespace MDT.Tools
         {
             _pluginUtils.Remove(name);
         }
+
+        public void Exit()
+        {
+            _pluginManager.Unloading();
+            SaveWorkSpace();
+
+            Process.GetCurrentProcess().Kill();
+        }
+
         private readonly PluginBroadCast _pluginBroadCast = new PluginBroadCast();
 
         public void Subscribe(string name, IPlugin plugin)
@@ -132,11 +205,10 @@ namespace MDT.Tools
 
         private void TsmiExitClick(object sender, EventArgs e)
         {
-            _pluginManager.Unloading();
-            saveWorkSpace();
+            Exit();
 
-            Application.Exit();
         }
+
         #endregion
 
         #region notifyIcon
@@ -189,17 +261,31 @@ namespace MDT.Tools
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
-                this.WindowState = FormWindowState.Maximized;
-                this.Show();
-                this.BringToFront();
-                this.Activate();
-                this.Focus();
+                showMaxForm();
             }
             else
             {
                 this.WindowState = FormWindowState.Minimized;
                 this.Hide();
             }
+        }
+
+        private void showMaxForm()
+        {
+            try
+            {
+                this.WindowState = FormWindowState.Maximized;
+                this.BringToFront();
+                this.Activate();
+                this.Focus();
+                this.Show();
+            }
+            catch (Exception ex)
+            {
+                
+                LogHelper.Error(ex);
+            }
+         
         }
 
         private void NotifyIcon1Click(object sender, EventArgs e)
@@ -221,7 +307,7 @@ namespace MDT.Tools
         #endregion
 
         #region 工作区
-        private void saveWorkSpace()
+        private void SaveWorkSpace()
         {
             try
             {
@@ -234,7 +320,7 @@ namespace MDT.Tools
                 LogHelper.Error(ex);
             }
         }
-        private void reStoreWorkSpace()
+        private void ReStoreWorkSpace()
         {
             try
             {
@@ -256,6 +342,61 @@ namespace MDT.Tools
             IDockContent dc = Assembly.Load(strs[1]).CreateInstance(strs[0]) as IDockContent;
             return dc;
         }
+        #endregion
+
+        #region SplashScreen
+      
+        internal SplashScreen _splashScreen;
+        private void SetSplashScreen()
+        {
+
+            Opacity = 0;
+            string splashPic = ConfigurationSettings.AppSettings["SplashPic"];
+            string splashHeightStr = ConfigurationSettings.AppSettings["SplashHeight"];
+            string splashWidthStr = ConfigurationSettings.AppSettings["SplashWidth"];
+ 
+            _splashScreen = new SplashScreen(Image.FromFile(splashPic, true));
+            int splashHeight;
+            int splashWidth;
+            int.TryParse(splashHeightStr, out splashHeight);
+            int.TryParse(splashWidthStr, out splashWidth);
+            _splashScreen.Width = splashWidth;
+            _splashScreen.Height = splashHeight;
+
+           
+           
+            
+           
+            Timer _timer = new Timer();
+            _timer.Tick += (sender, e) =>
+            {
+                _timer.Enabled = false;
+
+                _splashScreen.Visible = false;
+                _splashScreen.StopAnimate();
+                Opacity = 100;
+                showMaxForm();
+            };
+            
+            _timer.Interval = 4000;
+            _timer.Enabled = true;
+
+
+            Timer _timer2 = new Timer();
+            _timer2.Tick += (sender, e) =>
+            {
+                _splashScreen.Visible = true;
+                _splashScreen.TopMost = true;
+                _timer2.Enabled = false;
+                
+            };
+            _timer2.Interval = 10;
+            _timer2.Enabled = true;
+            
+            
+        }
+
+       
         #endregion
 
     }

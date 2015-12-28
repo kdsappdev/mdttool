@@ -28,6 +28,7 @@ end
 --帮助
 tsmiHelper=ToolStripMenuItem()
 tsmiCheckUpdate=ToolStripMenuItem()
+tsmiHelpDesk=ToolStripMenuItem()
 toolStripSeparator1=ToolStripSeparator()
 
 tsmiAbout=ToolStripMenuItem()
@@ -49,6 +50,7 @@ function load()
 	
 	tsmiHelper.Text = "帮助(&H)"
 	tsmiHelper.DropDownItems:Add(tsmiCheckUpdate)
+	tsmiHelper.DropDownItems:Add(tsmiHelpDesk)
 	
 	tsmiHelper.DropDownItems:Add(toolStripSeparator1)
 	tsmiHelper.DropDownItems:Add(tsmiAbout)
@@ -63,6 +65,9 @@ function load()
 	tsmiCheckUpdate.Text="检查更新"
 	tsmiCheckUpdate.Click:Add(tsmiCheckUpdate_Click)
 	
+	tsmiHelpDesk.Text="技术支持"
+	tsmiHelpDesk.Click:Add(tsmiHelpDesk_Click)
+	
 	tsmiCloseAllDocument.Image = Resources.closeAllDocment
 	
 	
@@ -71,7 +76,7 @@ function load()
 	tsmiAbout.Text = "关于"
 	tsmiAbout.Click:Add(tsmiAbout_Click)
 	
-	tsmiCloseAllDocument.Text = "关闭所有文档(&L)"
+	tsmiCloseAllDocument.Text = "关闭所有窗口(&L)"
 	tsmiCloseAllDocument.Click:Add(tsmiCloseAllDocument_Click)
 	
 	application.MainMenu.Items:Add(tsmiTool)
@@ -79,7 +84,7 @@ function load()
 	application.MainMenu.Items:Add(tsmiHelper)
 	
 	
-	tsbCloseAllDocment.Text="关闭所有文档"
+	tsbCloseAllDocment.Text="关闭所有窗口"
 	tsbCloseAllDocment.Click:Add(tsmiCloseAllDocument_Click)
 	tsbCloseAllDocment.Image = Resources.closeAllDocment
 	
@@ -128,6 +133,10 @@ function tsmiCheckUpdate_Click(sender,e)
 	pcall(checkUpdate,true)
 end
 
+function tsmiHelpDesk_Click(sender,e)
+	Process.Start("MDT.Tools.HelpDesk.exe")
+end
+
 function doOther()
 --check lic
 pcall(checkUpdate,false)--check update
@@ -172,9 +181,8 @@ function checkUpdate(flag)
 	
 end
 
-function tsbExit_Click(sender,e)
-	application.PluginManager:Unloading()
-	Application.Exit()
+function tsbExit_Click(sender,e)	 
+	application:Exit()
 	
 end
 function tsmiAbout_Click(sender,e)

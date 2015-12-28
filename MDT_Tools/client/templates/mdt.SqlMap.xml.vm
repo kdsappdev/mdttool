@@ -54,6 +54,12 @@
     </isParameterPresent>
   </select>
 
+  
+  <select id="abatorgenerated_countByExample" parameterClass="${popackage}.${poname}Example" resultClass="java.lang.Integer" >
+    select count(*) from ${table.TableName}
+    <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
+  </select>
+  #if(${table.type}=="TABLE") 
   <delete id="abatorgenerated_deleteByExample" parameterClass="${popackage}.${poname}Example" >
     delete from ${table.TableName}
     <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
@@ -79,10 +85,6 @@ ${sharp}${field}:${column.JdbcType}${sharp}#else${sharp}${field}:${column.JdbcTy
   </insert>
 
 
-  <select id="abatorgenerated_countByExample" parameterClass="${popackage}.${poname}Example" resultClass="java.lang.Integer" >
-    select count(*) from ${table.TableName}
-    <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
-  </select>
   
   <update id="abatorgenerated_updateByExampleSelective" >
     update ${table.TableName}
@@ -114,7 +116,7 @@ ${sharp}${field}:${column.JdbcType}${sharp}#else${sharp}${field}:${column.JdbcTy
       <include refid="${table.TableName}.abatorgenerated_Example_Where_Clause" />
     </isParameterPresent>
   </update>
-  
+ #end 
 #if(${GenHelper.HasPrimaryKey(${table.TableName})})
   <select id="abatorgenerated_selectByPrimaryKey" resultMap="abatorgenerated_${poname}Result" parameterClass="${popackage}.${poname}" >
     select #foreach($column in ${table.Columns})
@@ -124,7 +126,7 @@ ${sharp}${field}:${column.JdbcType}${sharp}#else${sharp}${field}:${column.JdbcTy
     from ${table.TableName}
     where ${ColumnKey.Name} = ${sharp}${KeyField}:${ColumnKey.JdbcType}${sharp}
   </select>
-  
+  #if(${table.type}=="TABLE") 
   <delete id="abatorgenerated_deleteByPrimaryKey" parameterClass="${popackage}.${poname}" >
     delete from ${table.TableName}
     where ${ColumnKey.Name} = ${sharp}${KeyField}:${ColumnKey.JdbcType}${sharp}
@@ -160,6 +162,6 @@ ${sharp}${field}:${column.JdbcType}${sharp}#else${sharp}${field}:${column.JdbcTy
     </dynamic>
     where ${ColumnKey.Name} = ${sharp}${KeyField}:${ColumnKey.JdbcType}${sharp}
   </update>
-
+#end
 #end
 </sqlMap>

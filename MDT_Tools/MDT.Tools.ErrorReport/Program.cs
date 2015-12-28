@@ -25,6 +25,7 @@ namespace MDT.Tools.ErrorReport
 
                 string info = "";
                 string name = "";
+                string prefix = "";
                 if (args != null && args.Length >= 0)
                 {
 
@@ -41,6 +42,10 @@ namespace MDT.Tools.ErrorReport
                                 name = args[i + 1];
                                 LogHelper.Debug(string.Format("name i:{0}", args[i + 1]));
                                 break;
+                            case "-p":
+                                prefix = args[i + 1];
+                                LogHelper.Debug(string.Format("prefix i:{0}", args[i + 1]));
+                                break;
                            
 
                         }
@@ -56,8 +61,8 @@ namespace MDT.Tools.ErrorReport
                     string[] strs = info.Split('|');
                     if (strs.Length >= 3)
                     {
-                        string guid = Guid.NewGuid().ToString();
                         var er = new ErrorForm(strs[0], strs[1], strs[2], name);
+                        er.Prefix = prefix;
                         Application.Run(er);
                     }
                 }

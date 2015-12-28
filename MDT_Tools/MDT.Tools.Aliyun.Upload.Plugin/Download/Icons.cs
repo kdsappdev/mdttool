@@ -310,30 +310,46 @@ namespace MDT.Tools.Aliyun.Upload.Plugin.Download
   
             //opens the registry for the wanted key.  
             RegistryKey Root = Registry.ClassesRoot;  
-            RegistryKey ExtensionKey = Root.OpenSubKey(extension);  
+            RegistryKey ExtensionKey = Root.OpenSubKey(extension);
+            if (ExtensionKey == null)
+            {
+                return null;
+            }
             ExtensionKey.GetValueNames();  
             RegistryKey ApplicationKey =  
-                Root.OpenSubKey(ExtensionKey.GetValue("").ToString());  
-  
-            //gets the name of the file that have the icon.  
-            string IconLocation =  
-                ApplicationKey.OpenSubKey("DefaultIcon").GetValue("").ToString();  
-            string[] IconPath = IconLocation.Split(',');  
-  
-            if (IconPath[1] == null) IconPath[1] = "0";  
+                Root.OpenSubKey(ExtensionKey.GetValue("").ToString());
+
+            if (ApplicationKey == null)
+            {
+                return null;
+            }
+            //gets the name of the file that have the icon. 
+            string IconLocation = "";
+             IconLocation =  
+                ApplicationKey.OpenSubKey("DefaultIcon").GetValue("").ToString();
+             if (IconLocation == null)
+             {
+                 return null;
+             }
+            string[] IconPath = IconLocation.Split(',');
+            
+            if (IconPath.Count()>=2 && IconPath[1] == null) IconPath[1] = "0";  
             IntPtr[] Large = new IntPtr[1], Small = new IntPtr[1];  
   
             //extracts the icon from the file.  
-            ExtractIconEx(IconPath[0],  
-                Convert.ToInt16(IconPath[1]), Large, Small, 1);
+            if (IconPath.Count() >= 2)
+            {
+                ExtractIconEx(IconPath[0],
+                    Convert.ToInt16(IconPath[1]), Large, Small, 1);
+            }
             Icon icon = null;
             if(size == SystemIconSize.Large)
             {
-                if (Small[0].ToInt32() != 0)
+                if (Large.Count() > 0 && Large[0].ToInt32() != 0)
                icon = Icon.FromHandle(Large[0]);
             }else
             {
-                if(Small[0].ToInt32() != 0)
+                if (Small.Count() >0 && Small[0].ToInt32() != 0)
                 icon = Icon.FromHandle(Small[0]);
             }
 

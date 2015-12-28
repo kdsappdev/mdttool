@@ -41,7 +41,7 @@ namespace MDT.Tools.Template.Plugin.Utils
         private const string IsShowGenCode = "IsShowGenCode";
         private const string CodeLanguage = "CodeLanguage";
         private const string Language = "Language";
-
+        private const string MenuVisable = "MenuVisable";
         public static string ReadIniCN(string lpApplicationName, string lpKeyName, string iniPath)
         {
             string str = "";
@@ -128,6 +128,15 @@ namespace MDT.Tools.Template.Plugin.Utils
                     }
                     GetPrivateProfileString(Group2, CodeLanguage + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
                     templateParas.CodeLanguage = sb.ToString();
+
+                    GetPrivateProfileString(Group2, MenuVisable + i, "", sb, sb.Capacity, FilePathHelper.SystemConfig);
+
+                    bool isMenuVisable = true;
+                    if(!bool.TryParse(sb.ToString(), out isMenuVisable))
+                    {
+                        isMenuVisable = true;
+                    }
+                    templateParas.IsMenuVisable = isMenuVisable;
                 }
             }
             catch (Exception ex)

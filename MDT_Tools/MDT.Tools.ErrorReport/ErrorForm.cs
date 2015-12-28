@@ -17,7 +17,7 @@ namespace MDT.Tools.ErrorReport
         private string bucketName;
         private string accessKey;
         private string name = "";
-
+        public string Prefix = "";
         private ErrorForm()
         {
             InitializeComponent();
@@ -37,16 +37,25 @@ namespace MDT.Tools.ErrorReport
         {
             try
             {
-                btnSend.Enabled = btnCancel.Enabled = false;
                 this.Hide();
+                btnSend.Enabled = btnCancel.Enabled = false;
+                
                 string[] strs = name.Split('|');
-                Random random =new Random();
-                foreach (var str in strs)
+                string[] prefixs = Prefix.Split('|');
+                for(int i=0;i<strs.Length;i++)
                 {
-                    var errorReport = str;
+                    var errorReport = strs[i];
                     OssHelper ossHelper = new OssHelper();
                     ossHelper.OssConfig = new OssConfig() { AccessId = accessId, AccessKey = accessKey, BucketName = bucketName };
-                    ossHelper.UpLoad(errorReport, Guid.NewGuid().ToString() +".LOG");
+                    string guid = Guid.NewGuid().ToString() + ".LOG";
+                    if (prefixs.Length == strs.Length)
+                    {
+                        if (!string.IsNullOrEmpty(prefixs[i]))
+                        {
+                            guid = prefixs[i] + ".LOG";
+                        }
+                    }
+                    ossHelper.UpLoad(errorReport, guid);
 
 
                 }

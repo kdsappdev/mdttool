@@ -47,7 +47,7 @@ namespace MDT.ThirdParty.Controls
             Error(ex.Message);
         }
 
-        private static string datePath()
+        public static string datePath()
         {
             string path = sysStartupPath;
             DateTime dt = DateTime.Now;
@@ -66,13 +66,45 @@ namespace MDT.ThirdParty.Controls
                 if (!File.Exists(path))
                 {
                     CreateDirectory(path);
+                    try
+                    {
+                        string dPath = sysStartupPath + "\\logs";
+                        var a = Directory.GetFiles(dPath);
+                        var date = DateTime.Now.AddDays(-10).ToString("yyyyMMdd");
+                        foreach (var s in a)
+                        {
+
+                            var t = s.Replace(dPath, "").Split(new char[] { '_', '.' });
+                            
+                            if (t.Length == 3 && t[1].CompareTo(date) < 0)
+                            {
+                                try
+                                {
+                                    
+                                    File.Delete(s);
+                                }
+                                catch  (Exception e){
+                                    
+                                    Console.WriteLine(e.StackTrace);
+                                }
+                                
+                            }
+                        }
+
+                    }
+                    catch(Exception e){
+                        Console.WriteLine(e.StackTrace);
+                     
+                    }
                 }
+                 
+
                 FileInfo fi = new FileInfo(path);
                 StreamWriter sw = fi.AppendText();
                 sw.WriteLine(message);
                 sw.Close();
             }
-            catch 
+            catch
             {
 
                 //MessageBox.Show(ex.Message);
@@ -94,6 +126,7 @@ namespace MDT.ThirdParty.Controls
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
+
                     }
                     path = path + "\\";
                 }

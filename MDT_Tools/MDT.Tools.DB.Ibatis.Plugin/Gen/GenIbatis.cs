@@ -71,18 +71,18 @@ namespace MDT.Tools.DB.Ibatis.Plugin.Gen
             dic.Add("daopackage", ConstHelper.DaoPackage);
             dic.Add("popackage", ConstHelper.PoPackage);
             dic.Add("GenHelper", genHelper);
-            string temp = genHelper.GetGeneratedKeyName(table.TableName);
-            if (!string.IsNullOrEmpty(temp))
-            {
+           
                 foreach (var column in table.Columns)
                 {
-                    if (temp.Equals(column.Name))
+                    if (column.IsPrimaryKeys)
                     {
+                        genHelper.hasPrimaryKey = true;
+                        genHelper.getGeneratedKeyField = column.Name;
                         dic.Add("KeyJavaType", column.JavaType);
-                        dic.Add("KeyField", genHelper.GetField(temp));
+                        dic.Add("KeyField", genHelper.GetField(column.Name));
                     }
                 }
-            }
+            
 
             return nVelocityHelper.GenByTemplate("mdt.dao.java.vm", dic);
         }
@@ -94,19 +94,19 @@ namespace MDT.Tools.DB.Ibatis.Plugin.Gen
             dic.Add("daopackage", ConstHelper.DaoPackage);
             dic.Add("popackage", ConstHelper.PoPackage);
             dic.Add("GenHelper", genHelper);
-            string temp = genHelper.GetGeneratedKeyName(table.TableName);
-            if (!string.IsNullOrEmpty(temp))
+
+            foreach (var column in table.Columns)
             {
-                foreach (var column in table.Columns)
+                if (column.IsPrimaryKeys)
                 {
-                    if (temp.Equals(column.Name))
-                    {
-                        dic.Add("KeyJavaType", column.JavaType);
-                        dic.Add("KeyField", genHelper.GetField(temp));
-                        dic.Add("KeyProperty", genHelper.GetProperty(temp));
-                    }
+                    genHelper.hasPrimaryKey = true;
+                    genHelper.getGeneratedKeyField = column.Name;
+                    dic.Add("KeyJavaType", column.JavaType);
+                    dic.Add("KeyField", genHelper.GetField(column.Name));
+                    dic.Add("KeyProperty", genHelper.GetProperty(column.Name));
                 }
             }
+            
 
             return nVelocityHelper.GenByTemplate("mdt.daoImpl.java.vm", dic);
         }
@@ -118,19 +118,19 @@ namespace MDT.Tools.DB.Ibatis.Plugin.Gen
             dic.Add("daopackage", ConstHelper.DaoPackage);
             dic.Add("popackage", ConstHelper.PoPackage);
             dic.Add("GenHelper", genHelper);
-            string temp = genHelper.GetGeneratedKeyName(table.TableName);
-            if (!string.IsNullOrEmpty(temp))
+
+            foreach (var column in table.Columns)
             {
-                foreach (var column in table.Columns)
+                if (column.IsPrimaryKeys)
                 {
-                    if (temp.Equals(column.Name))
-                    {
-                        dic.Add("KeyJavaType", column.JavaType);
-                        dic.Add("ColumnKey", column);
-                        dic.Add("KeyField", genHelper.GetField(temp));
-                    }
+                    genHelper.hasPrimaryKey = true;
+                    genHelper.getGeneratedKeyField = column.Name;
+                    dic.Add("KeyJavaType", column.JavaType);
+                    dic.Add("KeyField", genHelper.GetField(column.Name));
+                    dic.Add("ColumnKey", column);
                 }
             }
+            
 
             return nVelocityHelper.GenByTemplate("mdt.SqlMap.xml.vm", dic);
         }

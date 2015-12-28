@@ -10,6 +10,8 @@
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.Fix.Common.postbuild /o  ..\..\client\plugin
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.Fix.Plugin.postbuild /o  ..\..\client\plugin
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.Lua.Plugin.postbuild /o  ..\..\client\plugin
+"C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.MetaDesinger.Plugin.postbuild /o  ..\..\client\plugin
+"C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.PFS.Monitor.Plugin.postbuild /o  ..\..\client\plugin
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.ThirdParty.Controls.postbuild /o  ..\..\client\bin
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.Aliyun.Common.postbuild /o  ..\..\client\bin
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.Core.postbuild /o  ..\..\client\bin
@@ -17,3 +19,5 @@
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.AutoUpdater.Config.postbuild /o  ..\..\client
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.ErrorReport.postbuild /o  ..\..\client
 "C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.AutoUpdater.postbuild /o  ..\..\client
+"C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.HelpDesk.postbuild /o  ..\..\client
+"C:\Program Files (x86)\Xenocode\Postbuild 2010 for .NET\XBuild.exe" MDT.Tools.SysCheck.postbuild /o  ..\..\client

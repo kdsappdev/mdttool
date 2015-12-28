@@ -26,7 +26,7 @@ namespace ${dalNameSpace}
 	/// </remarks>
 	public class ${model}DALServer: BaseDALServer,I${model}DALServer
 	{
-		
+#if(${tableInfo.type}=="TABLE")		
 		${region}region Insert
 		/// <summary>
 		/// 增加 $comments 方法
@@ -98,7 +98,7 @@ namespace ${dalNameSpace}
 			return ServersHelper.GetResultMSG<List<${model}>>(strURL, strClassName, strMonthedName,args);
 		}
 		${region}endregion
-		
+#end		
 		${region}region Select
 		/// <summary>
 		/// 查找 $comments 方法

@@ -1,0 +1,259 @@
+## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+#set($region="#")
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
+using ${modelNameSpace};
+using Atf.Plugin.Imp;
+using System.Threading;
+using Ats.Foundation.Utils;
+using Ats.Foundation.Condition;
+using Atf.UI.Loading;
+using Atf.Common;
+using Atf.Common.Public.ExportHelper;
+using Atf.Pingo.Utils.Public;
+using Atf.Pingo.Utils.Public.Objects;
+namespace ${bllNameSpace}
+{
+    /// <summary>
+	/// ${guiPluginName}GUI   
+	/// </summary>
+	/// <remarks>
+	/// $date: 创建. ${pluginName} <br/>
+	/// </remarks>
+    public partial class ${guiPluginName}GUI: IPluginDevImpl
+	{
+        ${region}region 属性
+		private I${guiPluginName}BLLService i${guiPluginName}BLLService;
+		public I${guiPluginName}BLLService I${guiPluginName}BLLService
+		{
+			get { return i${guiPluginName}BLLService;}
+			set { i${guiPluginName}BLLService = value;}
+		}
+        private int pageSize;
+        public int PageSize
+        {
+            get { return pageSize; }
+            set { pageSize = value; }
+        }		
+		private int count;
+        private int pageIndex = 1;
+        private List<${model}> list;
+        private Loading loading = new Loading();
+		${region}endregion
+       
+        public ${guiPluginName}GUI()
+        {
+            InitializeComponent();
+            pageControl1.button_Click += new Atf.UI.PageControl.PageControl.ClickDel(pageControl1_button_Click);
+        }
+       
+ 	    ${region}region 初始化刷新数据源
+        private void ${guiPluginName}GUI_Load(object sender, EventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem(o =>
+               {
+                   //数据绑定
+                   BindData();                  
+                   select(false);
+               });
+        }
+
+        private void BindData()
+        {
+            //可根据需要增加控件数据绑定
+        }		
+
+        private void select(bool flag)
+        {
+            try
+            {
+                setUIStatus(false); 
+                if (!flag)
+                {
+                    pageIndex = 1;
+                }
+                Condition condition = getCondition();
+                if (!flag)
+                {
+                    count = i${guiPluginName}BLLService.Select${model}Count(condition);
+                    intPage(count);
+				}
+                if (count > 0)
+                {
+                    condition.Page = true;
+                    list = i${guiPluginName}BLLService.Select${model}Page(condition);
+                }
+                refreshGridControl();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.Message);
+            }
+            finally
+            {
+                setUIStatus(true);
+            }
+        }			
+        ${region}endregion
+		
+        ${region}region Loading
+        protected void setUIStatus(bool status)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action<bool>(setUIStatus), new object[] { status });
+            }
+            else
+            {
+                this.setBtable(status);
+                if (status)//加载完毕，隐藏Loading
+                {
+                    loading.Hide();
+                }
+                else
+                {
+                    loading.Show(gc${model});//加载数据时候，显示Loading
+                }
+            }
+        }
+        private void setBtable(bool flag)
+        {
+            if (this.InvokeRequired)
+            {
+                SimpleBool s = new SimpleBool(setBtable);
+                this.Invoke(s, flag);
+            }
+            else
+            {
+                btExport.Enabled = flag;
+                btSearch.Enabled = flag;
+                pageControl1.Enabled = flag;
+            }
+        }
+        ${region}endregion		
+		
+        ${region}region 查询条件 
+        private Condition getCondition()
+        {
+            Condition co = new Condition();
+            co.TableName = "${tableInfo.tableName}";
+            co.PageSize = this.pageSize;
+            co.PageIndex = this.pageIndex;
+            return co;
+        }
+        ${region}endregion
+
+        ${region}region 分页
+        void pageControl1_button_Click(int pageIndex)
+        {
+            this.pageIndex = pageIndex;
+            ThreadPool.QueueUserWorkItem(o =>
+                {
+                    select(true);
+                });
+        }
+        private void intPage(int dataCount)
+        {
+            if (this.InvokeRequired)
+            {
+                SimpleInt sim = new SimpleInt(intPage);
+                this.Invoke(sim, new object[] { dataCount });
+            }
+            else
+            {
+                pageControl1.PagingUtil(dataCount, pageSize);
+            }
+        }
+        ${region}endregion
+		
+        ${region}region 界面刷新
+        private void refreshGridControl()
+        {
+            if (this.InvokeRequired)
+            {
+                Simple s = new Simple(refreshGridControl);
+                this.Invoke(s, null);
+            }
+            else
+            {
+                this.gc${model}.DataSource = list;
+                gc${model}.RefreshDataSource();
+            }
+        }
+        ${region}endregion
+
+        private void btSearch_Click(object sender, EventArgs e)
+        {
+            ThreadPoolHelper.QueueUserWorkItem(o =>
+                  {
+                      select(false);
+                  });
+        }
+		
+        ${region}region 导出
+        LanguageObject LOExportTitle = new LanguageObject("${guiPluginName}", "${guiPluginName}");
+        private void btExport_Click(object sender, EventArgs e)
+        {
+            string fileName = FileUtils.SaveFileDialog("CSV", "${guiPluginName}", "CSV|*.csv");
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                setBtable(false); //设置页面按钮禁用
+                ThreadPoolHelper.QueueUserWorkItem(o =>
+                {
+                    try
+                    {
+                        export(fileName);//导出
+                        FileUtils.OpenFile(fileName);//打开文件
+                    }
+                    catch (Exception ex)
+                    {
+                        LogHelper.Error(ex);
+                    }
+                    finally
+                    {
+                        expUtil.Hide();
+                        setBtable(true);
+                    }
+
+                });
+            }
+        }
+
+        ExportUtil expUtil = new ExportUtil();
+        private void export(string fileName)
+        {
+            int pages = (int)Math.Ceiling((decimal)count / expUtil.Pagesize); //总页数
+            Condition condition = getCondition();
+            for (int i = 1; i < pages + 1; i++)
+            {
+                condition.PageSize = expUtil.Pagesize;
+                condition.PageIndex = i;
+                List<${model}> li = i${guiPluginName}BLLService.Select${model}Page(condition);
+                List<Object> tempExList = new List<object>();// 定义个List<Object>
+                foreach (${model} po in li)
+                {
+                    tempExList.Add(po);
+                }
+                expUtil.ExportData(gridView1, fileName, count, tempExList, i, pages);
+                if (expUtil.SleepTime > 0)
+                {
+                    Thread.Sleep(expUtil.SleepTime);
+                }
+            }
+            if (pages == 0)
+            {
+                expUtil.ExportHead(gridView1, fileName);
+            }
+        }
+        ${region}endregion
+    }
+}

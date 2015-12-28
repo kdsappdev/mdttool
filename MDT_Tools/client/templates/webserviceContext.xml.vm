@@ -8,9 +8,11 @@
 		<property name="${lmodel}DAO">
 			<ref bean="${model}DAO" />
 		</property>
+		#if(${tableInfo.type}=="TABLE")
 		<property name="dataCheckServer">
 			<ref bean="DataCheckServer_bs" />
 		</property>
+		#end
 		<property name="executeSqlDAO">
 			<ref bean="ExecuteSqlDAO" />
 		</property>

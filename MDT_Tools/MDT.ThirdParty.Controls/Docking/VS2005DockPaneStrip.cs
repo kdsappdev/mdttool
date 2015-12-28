@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.ComponentModel;
-using System.Collections;
-using System.Collections.Generic;
 using MDT.ThirdParty.Controls.Docking;
 
 namespace WeifenLuo.WinFormsUI.Docking
@@ -137,6 +135,7 @@ namespace WeifenLuo.WinFormsUI.Docking
         private static string m_toolTipSelect;
         private static string m_toolTipClose;
         private bool m_closeButtonVisible = false;
+        private int _selectMenuMargin = 5;
 
         #endregion
 
@@ -199,6 +198,12 @@ namespace WeifenLuo.WinFormsUI.Docking
         private ContextMenuStrip SelectMenu
         {
             get { return m_selectMenu; }
+        }
+
+        public int SelectMenuMargin
+        {
+            get { return _selectMenuMargin; }
+            set { _selectMenuMargin = value; }
         }
 
         private static Bitmap ImageButtonClose
@@ -619,42 +624,31 @@ namespace WeifenLuo.WinFormsUI.Docking
         protected override void OnPaint(PaintEventArgs e)
         {
             Rectangle rect = TabsRectangle;
-
+            DockPanelGradient gradient = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.DockStripGradient;
             if (Appearance == DockPane.AppearanceStyle.Document)
             {
                 rect.X -= DocumentTabGapLeft;
 
                 // Add these values back in so that the DockStrip color is drawn
                 // beneath the close button and window list button.
+                // It is possible depending on the DockPanel DocumentStyle to have
+                // a Document without a DockStrip.
                 rect.Width += DocumentTabGapLeft +
                     DocumentTabGapRight +
                     DocumentButtonGapRight +
                     ButtonClose.Width +
                     ButtonWindowList.Width;
-
-                // It is possible depending on the DockPanel DocumentStyle to have
-                // a Document without a DockStrip.
-                if (rect.Width > 0 && rect.Height > 0)
-                {
-                    Color startColor = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.DockStripGradient.StartColor;
-                    Color endColor = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.DockStripGradient.EndColor;
-                    LinearGradientMode gradientMode = DockPane.DockPanel.Skin.DockPaneStripSkin.DocumentGradient.DockStripGradient.LinearGradientMode;
-                    using (LinearGradientBrush brush = new LinearGradientBrush(rect, startColor, endColor, gradientMode))
-                    {
-                        e.Graphics.FillRectangle(brush, rect);
-                    }
-                }
             }
             else
             {
-                Color startColor = DockPane.DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient.StartColor;
-                Color endColor = DockPane.DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient.EndColor;
-                LinearGradientMode gradientMode = DockPane.DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient.LinearGradientMode;
-                using (LinearGradientBrush brush = new LinearGradientBrush(rect, startColor, endColor, gradientMode))
-                {
-                    e.Graphics.FillRectangle(brush, rect);
-                }
+                gradient = DockPane.DockPanel.Skin.DockPaneStripSkin.ToolWindowGradient.DockStripGradient;
             }
+
+            Color startColor = gradient.StartColor;
+            Color endColor = gradient.EndColor;
+            LinearGradientMode gradientMode = gradient.LinearGradientMode;
+
+            DrawingRoutines.SafelyDrawLinearGradient(rect, startColor, endColor, gradientMode, e.Graphics);
             base.OnPaint(e);
             CalculateTabs();
             if (Appearance == DockPane.AppearanceStyle.Document && DockPane.ActiveContent != null)
@@ -672,7 +666,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             Invalidate();
         }
 
-        protected internal override GraphicsPath GetOutline(int index)
+        public override GraphicsPath GetOutline(int index)
         {
 
             if (Appearance == DockPane.AppearanceStyle.Document)
@@ -1002,7 +996,10 @@ namespace WeifenLuo.WinFormsUI.Docking
             {
                 rectTab = GetTabRectangle(Tabs.IndexOf(tabActive));
                 if (rectTab.IntersectsWith(rectTabOnly))
+                {
+                    rectTab.Intersect(rectTabOnly);
                     DrawTab(g, tabActive, rectTab);
+                }
             }
         }
 
@@ -1085,6 +1082,11 @@ namespace WeifenLuo.WinFormsUI.Docking
 
             GraphicsPath.Reset();
             Rectangle rect = GetTabRectangle(Tabs.IndexOf(tab));
+            
+            // Shorten TabOutline so it doesn't get overdrawn by icons next to it
+            rect.Intersect(TabsRectangle);
+            rect.Width--;
+
             if (rtlTransform)
                 rect = DrawHelper.RtlTransform(this, rect);
             if (toScreen)
@@ -1354,9 +1356,6 @@ namespace WeifenLuo.WinFormsUI.Docking
 
         private void WindowList_Click(object sender, EventArgs e)
         {
-            int x = 0;
-            int y = ButtonWindowList.Location.Y + ButtonWindowList.Height;
-
             SelectMenu.Items.Clear();
             foreach (TabVS2005 tab in Tabs)
             {
@@ -1365,7 +1364,31 @@ namespace WeifenLuo.WinFormsUI.Docking
                 item.Tag = tab.Content;
                 item.Click += new EventHandler(ContextMenuItem_Click);
             }
-            SelectMenu.Show(ButtonWindowList, x, y);
+
+            var workingArea = Screen.GetWorkingArea(ButtonWindowList.PointToScreen(new Point(ButtonWindowList.Width / 2, ButtonWindowList.Height / 2)));
+            var menu = new Rectangle(ButtonWindowList.PointToScreen(new Point(0, ButtonWindowList.Location.Y + ButtonWindowList.Height)), SelectMenu.Size);
+            var menuMargined = new Rectangle(menu.X - SelectMenuMargin, menu.Y - SelectMenuMargin, menu.Width + SelectMenuMargin, menu.Height + SelectMenuMargin);
+            if (workingArea.Contains(menuMargined))
+            {
+                SelectMenu.Show(menu.Location);
+            }
+            else
+            {
+                var newPoint = menu.Location;
+                newPoint.X = DrawHelper.Balance(SelectMenu.Width, SelectMenuMargin, newPoint.X, workingArea.Left, workingArea.Right);
+                newPoint.Y = DrawHelper.Balance(SelectMenu.Size.Height, SelectMenuMargin, newPoint.Y, workingArea.Top, workingArea.Bottom);
+                var button = ButtonWindowList.PointToScreen(new Point(0, ButtonWindowList.Height));
+                if (newPoint.Y < button.Y)
+                {
+                    // flip the menu up to be above the button.
+                    newPoint.Y = button.Y - ButtonWindowList.Height;
+                    SelectMenu.Show(newPoint, ToolStripDropDownDirection.AboveRight);
+                }
+                else
+                {
+                    SelectMenu.Show(newPoint);
+                }
+            }
         }
 
         private void ContextMenuItem_Click(object sender, EventArgs e)
@@ -1455,6 +1478,13 @@ namespace WeifenLuo.WinFormsUI.Docking
                     return Tabs.IndexOf(tab);
             }
             return -1;
+        }
+
+        protected override Rectangle GetTabBounds(Tab tab)
+        {
+            GraphicsPath path = GetTabOutline(tab, true, false);
+            RectangleF rectangle = path.GetBounds();
+            return new Rectangle((int)rectangle.Left, (int)rectangle.Top, (int)rectangle.Width, (int)rectangle.Height);
         }
 
         protected override void OnMouseHover(EventArgs e)

@@ -1,0 +1,95 @@
+#set($model=${codeGenHelper.GetClassName2(${tableInfo.tableName},$codeRule)})
+package ats.app.ym.query.api;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ats.app.ym.query.api.po.T${model};
+import ats.app.ym.query.stream.Consts;
+import ats.app.ym.userpermit.UserPermit;
+import ats.app.ym.userpermit.ValidationClient.UserInfo;
+import ats.app.ym.utils.db.DBUtils;
+import ats.foundation.condition.BuildConditionType;
+import ats.foundation.condition.Condition;
+
+public class ${model}Api {
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	public boolean isPermission = false;
+	
+	public Map<String, Object> getT${model}(String sid,Condition queryCondition) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			if (isPermission) {
+				if (sid != null && sid.length() > 0) {
+					UserInfo userInfo = UserPermit.getUserInfo(sid);
+					if (userInfo == null||userInfo.account==null) {
+						result.put("Code", Consts.SessionSecurityCheckCode);
+						result.put("Msg", Consts.SessionSecurityCheckInfo);
+						return result;
+					}
+				} else {
+					result.put("Code", Consts.ArgErrorCode);
+					result.put("Msg", Consts.ArgErrorInfo);
+					return result;
+				}
+			}
+			queryCondition.setTableName("${tableInfo.tableName}");
+			String sql = (String) queryCondition
+					.BuildCondition(BuildConditionType.OracleSql);
+			#set($temp='##')sql = sql.replace("${temp}", "*");
+			logger.info("getT${model}.sql:{}", sql);
+			List<T${model}> lt = DBUtils.queryListThrowsException(sql, null,
+					T${model}.class);
+			logger.debug("getT${model}.size:{}", lt.size());
+			result.put("${model}", lt);
+			result.put("Code", Consts.SuccessCode);
+			result.put("Msg", "Success");
+		} catch (Exception e) {
+			logger.error("", e);
+			result.put("Code", Consts.NoKnowCode);
+			result.put("Msg", e.getMessage());
+		}
+		return result;
+	}
+
+	public Map<String, Object> getT${model}Count(String sid,Condition queryCondition) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+		
+			if (isPermission) {
+				if (sid != null && sid.length() > 0) {
+					UserInfo userInfo = UserPermit.getUserInfo(sid);
+					if (userInfo == null||userInfo.account==null) {
+						result.put("Code", Consts.SessionSecurityCheckCode);
+						result.put("Msg", Consts.SessionSecurityCheckInfo);
+						return result;
+					}
+				} else {
+					result.put("Code", Consts.ArgErrorCode);
+					result.put("Msg", Consts.ArgErrorInfo);
+					return result;
+				}
+			}
+			queryCondition.setTableName("${tableInfo.tableName}");
+			String sql = (String) queryCondition
+					.BuildCondition(BuildConditionType.OracleSql);
+			#set($temp='##')sql = sql.replace("${temp}", "count(*) as Counts");
+			logger.debug("getT${model}Count.sql:{}", sql);
+			Integer count = (Integer) DBUtils.querySimpleObject(sql, null,
+					int.class);
+			logger.debug("Counts:{}", count.intValue());
+			result.put("Counts", count.intValue());
+			result.put("Code", Consts.SuccessCode);
+			result.put("Msg", "Success");
+		} catch (Exception e) {
+			logger.error("", e);
+			result.put("Code", Consts.NoKnowCode);
+			result.put("Msg", e.getMessage());
+		}
+		return result;
+	}
+}

@@ -1,0 +1,228 @@
+## model字符串
+#set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
+## 第一个字符为小写的model字符串
+#set($lmodel=${codeGenHelper.StrFirstToLower($model)})
+#set($region="#")
+namespace ${bllNameSpace}
+{
+    partial class ${guiPluginName}GUI
+    {
+        /// <summary> 
+        /// 必需的设计器变量。
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// 清理所有正在使用的资源。
+        /// </summary>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region 组件设计器生成的代码
+
+        /// <summary> 
+        /// 设计器支持所需的方法 - 不要
+        /// 使用代码编辑器修改此方法的内容。
+        /// </summary>
+        private void InitializeComponent()
+        {
+		    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StudentGUI));
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.pageControl1 = new Atf.UI.PageControl.PageControl();
+            this.gc${model} = new DevExpress.XtraGrid.GridControl();
+            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
+#foreach($tableInfo in $tableInfos)
+#set($i=0)
+#foreach($column in $tableInfo.Columns)        
+#set($i=$i+1) 
+#set($netType=${dataTypeMappingHelper.GetCSharpDataTypeByDbType(${dbType},${column.DataType},${column.DataScale},${column.DataLength},${column.DataNullAble})})
+		    this.gridColumn$i = new DevExpress.XtraGrid.Columns.GridColumn();
+#end#end	
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.btSearch = new DevExpress.XtraEditors.SimpleButton();
+            this.btExport = new DevExpress.XtraEditors.SimpleButton();		
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gc${model})).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // tableLayoutPanel1
+            // 
+			resources.ApplyResources(this.tableLayoutPanel1, "tableLayoutPanel1");
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 300F));
+            this.tableLayoutPanel1.Controls.Add(this.pageControl1, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.gc${model}, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 31);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(771, 415);
+            this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // pageControl1
+            // 
+			resources.ApplyResources(this.pageControl1, "pageControl1");
+            this.pageControl1.Appearance.BackColor = System.Drawing.Color.Transparent;
+            this.pageControl1.Appearance.Options.UseBackColor = true;
+            this.pageControl1.BasePlugin = null;
+            this.pageControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pageControl1.LinkStatus = Atf.Plugin.LinkStatus.Disconnected;
+            this.pageControl1.Location = new System.Drawing.Point(474, 383);
+            this.pageControl1.MenuVisible = true;
+            this.pageControl1.Name = "pageControl1";
+            this.pageControl1.Parameter = null;
+            this.pageControl1.Size = new System.Drawing.Size(294, 29);
+            this.pageControl1.TabIndex = 0;
+            this.pageControl1.TitleVisible = false;
+            this.pageControl1.ToolbarVisible = false;
+            // 
+            // gc${model}
+            // 
+			resources.ApplyResources(this.gc${model}, "gc${model}");
+            this.tableLayoutPanel1.SetColumnSpan(this.gc${model}, 2);
+            this.gc${model}.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gc${model}.Location = new System.Drawing.Point(3, 3);
+            this.gc${model}.MainView = this.gridView1;
+            this.gc${model}.Name = "gc${model}";
+            this.gc${model}.Size = new System.Drawing.Size(655, 333);
+            this.gc${model}.TabIndex = 1;
+            this.gc${model}.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridView1});
+            // 
+            // gridView1
+            // 
+            this.gridView1.Appearance.HeaderPanel.Options.UseTextOptions = true;
+            this.gridView1.Appearance.HeaderPanel.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.gridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+#foreach($tableInfo in $tableInfos)
+#set($i=0)
+#set($count=${tableInfo.Columns.Count})	
+#foreach($column in $tableInfo.Columns)
+#set($i=$i+1)        #set($netType=${dataTypeMappingHelper.GetCSharpDataTypeByDbType(${dbType},${column.DataType},${column.DataScale},${column.DataLength},${column.DataNullAble})})
+            this.gridColumn$i#if($i== $count)#else,
+#end#end #end});
+            this.gridView1.GridControl = this.gc${model};
+            this.gridView1.Name = "gridView1";
+            this.gridView1.OptionsMenu.EnableColumnMenu = false;
+            this.gridView1.OptionsView.ShowGroupPanel = false;
+            this.gridView1.OptionsView.ShowHorizontalLines = DevExpress.Utils.DefaultBoolean.True;
+            this.gridView1.OptionsView.ShowIndicator = false;
+            this.gridView1.OptionsView.ShowVerticalLines = DevExpress.Utils.DefaultBoolean.True;
+#foreach($tableInfo in $tableInfos)
+#set($i=0)
+#set($count=${tableInfo.Columns.Count})
+#foreach($column in $tableInfo.Columns)        
+#set($i=$i+1) 
+#set($netType=${dataTypeMappingHelper.GetCSharpDataTypeByDbType(${dbType},${column.DataType},${column.DataScale},${column.DataLength},${column.DataNullAble})})	  
+            // 
+            // gridColumn$i
+            // 
+			resources.ApplyResources(this.gridColumn$i, "gridColumn$i");
+            this.gridColumn$i#if($i> $count)#else.AppearanceCell.Options.UseTextOptions = true;
+#end
+            this.gridColumn$i#if($i> $count)#else.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Far;
+#end
+            this.gridColumn$i#if($i> $count)#else.FieldName = "$codeGenHelper.StrProperty(${column.Name})";
+#end
+            this.gridColumn$i#if($i> $count)#else.Name = "gridColumn$i";
+#end
+            this.gridColumn$i#if($i> $count)#else.OptionsColumn.AllowEdit = false;
+#end
+            this.gridColumn$i#if($i> $count)#else.OptionsColumn.AllowFocus = false;
+#end
+            this.gridColumn$i#if($i> $count)#else.OptionsColumn.AllowMerge = DevExpress.Utils.DefaultBoolean.False;
+#end
+            this.gridColumn$i#if($i> $count)#else.OptionsColumn.AllowMove = false;
+#end
+            this.gridColumn$i#if($i> $count)#else.OptionsColumn.AllowSort = DevExpress.Utils.DefaultBoolean.False;
+#end
+            this.gridColumn$i#if($i> $count)#else.OptionsFilter.AllowFilter = false;
+#end
+#end#end            
+            // 
+            // tableLayoutPanel2
+            //
+            resources.ApplyResources(this.tableLayoutPanel2, "tableLayoutPanel2");			
+            this.tableLayoutPanel1.SetColumnSpan(this.tableLayoutPanel2, 2);
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel2.Controls.Add(this.btExport, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btSearch, 1, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(765, 29);
+            this.tableLayoutPanel2.TabIndex = 2;
+            // 
+            // btSearch
+            // 
+			resources.ApplyResources(this.btSearch, "btSearch");
+            this.btSearch.Location = new System.Drawing.Point(608, 3);
+            this.btSearch.Name = "btSearch";
+            this.btSearch.Size = new System.Drawing.Size(74, 23);
+            this.btSearch.TabIndex = 1;
+            this.btSearch.Click += new System.EventHandler(this.btSearch_Click);
+            // 
+            // btExport
+            // 
+            resources.ApplyResources(this.btExport, "btExport");			
+			this.btExport.Location = new System.Drawing.Point(688, 3);
+            this.btExport.Name = "btExport";
+            this.btExport.Size = new System.Drawing.Size(74, 23);
+            this.btExport.TabIndex = 0;
+            this.btExport.Click += new System.EventHandler(this.btExport_Click); 			 
+			// 
+            // ${guiPluginName}GUI
+            // 
+			resources.ApplyResources(this, "$this");
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.tableLayoutPanel1);
+            this.Name = "${guiPluginName}GUI";
+            this.Size = new System.Drawing.Size(771, 446);
+            this.Load += new System.EventHandler(this.${guiPluginName}GUI_Load);
+            this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gc${model})).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private Atf.UI.PageControl.PageControl pageControl1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private DevExpress.XtraGrid.GridControl gc${model};
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
+#foreach($tableInfo in $tableInfos)
+#set($i=0)
+#foreach($column in $tableInfo.Columns)        
+#set($i=$i+1) 
+#set($netType=${dataTypeMappingHelper.GetCSharpDataTypeByDbType(${dbType},${column.DataType},${column.DataScale},${column.DataLength},${column.DataNullAble})})
+        private DevExpress.XtraGrid.Columns.GridColumn gridColumn$i;
+#end#end
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private DevExpress.XtraEditors.SimpleButton btExport;
+        private DevExpress.XtraEditors.SimpleButton btSearch;
+
+
+    }
+}

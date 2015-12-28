@@ -34,7 +34,7 @@ namespace MDT.Tools.Aliyun.Upload.Plugin
 
         public override string Description
         {
-            get { return "通过 Aliyun API 请求连接，可以上传文件或文件夹。"; }
+            get { return "通过 Aliyun API 请求连接，可以上传或下载文件（文件夹）。"; }
         }
 
         public override string Author
@@ -58,8 +58,6 @@ namespace MDT.Tools.Aliyun.Upload.Plugin
             RemoveStatus();
         }
         protected delegate void Simple();
-        readonly ToolStripMenuItem _tsbAliyun = new ToolStripMenuItem();
-        readonly ToolStripMenuItem _tsbUpload = new ToolStripMenuItem();
         readonly ToolStripMenuItem _tsbDownload = new ToolStripMenuItem();
         protected void AddTool()
         {
@@ -75,18 +73,10 @@ namespace MDT.Tools.Aliyun.Upload.Plugin
                 {
                     if (v.Text == "工具(&T)")
                     {
-                        v.DropDownItems.Add(_tsbAliyun);
-                        _tsbAliyun.Text = "阿里云";
-
-                        _tsbUpload.Text = "上传";
-                        _tsbUpload.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
-                        _tsbUpload.Click += new EventHandler(_tsbUpload_Click);
-                        _tsbAliyun.DropDownItems.Add(_tsbUpload);
-
-                        _tsbDownload.Text = "下载";
+                        v.DropDownItems.Add(_tsbDownload);
+                        _tsbDownload.Text = "阿里云";
                         _tsbDownload.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
                         _tsbDownload.Click += new EventHandler(_tsbDownload_Click);
-                        _tsbAliyun.DropDownItems.Add(_tsbDownload);
                         break;
                     }
 
@@ -102,11 +92,6 @@ namespace MDT.Tools.Aliyun.Upload.Plugin
             download.Show(Application.Panel);
         }
 
-        void _tsbUpload_Click(object sender, EventArgs e)
-        {
-            var upload = new UploadOSSUI() { Text = _tsbUpload.Text };
-            upload.Show(Application.Panel);
-        }
 
 
         #region 增加状态栏

@@ -105,7 +105,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
         public void GenCodeInterface(TableInfo tableInfo)
         {
             string tableName = tableInfo.TableName;
-            string className = "I" + CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.BLLService; ;
+           // string className = "I" + CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.BLLService; ;
             string path = string.Format(@"{0}", "ibll.cs.vm");
             var dic = GetNVelocityVars();
             dic.Add("tableInfo", tableInfo);
@@ -116,7 +116,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             dic.Add("guiPluginName", cmc.PluginName);
             dic.Add("codeRule", cmc.CodeRule);
             string str = nVelocityHelper.GenByTemplate(path, dic);
-
+            string className = "I" + cmc.PluginName + CodeGenRuleHelper.BLLService; ;
 
             string title = className + ".cs";
 
@@ -132,7 +132,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
         public void GenCode(TableInfo tableInfo)
         {
             string tableName = tableInfo.TableName;
-            string className = CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.BLLService; ;
+            //string className = CodeGenHelper.GetClassName(tableName, cmc.CodeRule) + CodeGenRuleHelper.BLLService; 
             string path = string.Format(@"{0}", "bll.cs.vm");
             var dic = GetNVelocityVars();
             dic.Add("tableInfo", tableInfo);
@@ -143,7 +143,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin.Gen
             dic.Add("guiPluginName", cmc.PluginName);
             dic.Add("codeRule", cmc.CodeRule);
             string str = nVelocityHelper.GenByTemplate(path, dic);
-
+            string className = cmc.PluginName + CodeGenRuleHelper.BLLService; ;
 
             string title = className + ".cs";
 

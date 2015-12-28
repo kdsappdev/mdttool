@@ -27,7 +27,7 @@ using System.Xml;
 
 namespace MDT.ThirdParty.Controls
 {
-    public partial class DownloadProgress : Form
+      partial class DownloadProgress : Form
     {
         #region The private fields
         private bool isFinished = false;
@@ -88,6 +88,8 @@ namespace MDT.ThirdParty.Controls
         long total = 0;
         long nDownloadedTotal = 0;
         private bool bCancel = false;
+        private bool isRetry = true;
+        private int retryCount = 0;
         private void ProcDownload(object o)
         {
             string tempFolderPath = Path.Combine(CommonUnitity.SystemBinUrl, ConstFile.TEMPFOLDERNAME);
@@ -109,7 +111,7 @@ namespace MDT.ThirdParty.Controls
                 {
                     if (this.downloadFileList.Count == 0)
                         break;
-                    this.SetProcessBar(100, (int)(nDownloadedTotal * 100 / total));
+                    this.SetProcessBar(100, (int) (nDownloadedTotal*100/total));
                     DownloadFileInfo file = this.downloadFileList[0];
 
                     LogHelper.Debug(string.Format("Start Download:{0}", file.FileName));
@@ -118,94 +120,154 @@ namespace MDT.ThirdParty.Controls
                     this.ShowCurrentDownloadFileName(file.FileName);
 
                     //Download
-                    if (clientDownload == null)
-                    {
-                        clientDownload = new WebClient();
+                     
+                        using (clientDownload = new HttpWebClient())
+                        {
 
-                        //Added the function to support proxy
-                        clientDownload.Proxy = new System.Net.WebProxy();
-                        clientDownload.Proxy.Credentials = CredentialCache.DefaultCredentials;
-                        clientDownload.Credentials = System.Net.CredentialCache.DefaultCredentials;
-                        //End added
+                            //Added the function to support proxy
+                            clientDownload.Proxy = null;
+                            //clientDownload.Proxy.Credentials = CredentialCache.DefaultCredentials;
+                            //clientDownload.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                            //End added
 
-                        clientDownload.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
-                                                                      {
-                                                                          try
-                                                                          {
-                                                                              this.SetProcessBar(e.ProgressPercentage,
-                                                                                                 (int)
-                                                                                                 ((nDownloadedTotal +
-                                                                                                   e.BytesReceived) * 100 /
-                                                                                                  total));
-                                                                          }
-                                                                          catch (Exception ex)
-                                                                          {
-                                                                              LogHelper.Error(ex);
-                                                                              //EventLog.WriteEntry("DownloadProgress", ex.Message,
-                                                                              //                   EventLogEntryType.Error);
+                            clientDownload.DownloadProgressChanged +=
+                                (object sender, DownloadProgressChangedEventArgs e) =>
+                                    {
+                                        try
+                                        {
+                                            this.SetProcessBar(e.ProgressPercentage,
+                                                               (int)
+                                                               ((nDownloadedTotal +
+                                                                 e.BytesReceived)*100/
+                                                                total));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            LogHelper.Error(ex);
+                                            //EventLog.WriteEntry("DownloadProgress", ex.Message,
+                                            //                   EventLogEntryType.Error);
 
-                                                                          }
+                                        }
 
-                                                                      };
+                                    };
 
-                        clientDownload.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
-                                                                    {
-                                                                        try
+                            clientDownload.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
                                                                         {
-                                                                            //DealWithDownloadErrors();
-                                                                            DownloadFileInfo dfile =
-                                                                                e.UserState as DownloadFileInfo;
-                                                                            nDownloadedTotal += dfile.Size;
-                                                                            this.SetProcessBar(100,
-                                                                                              (int)
-                                                                                              (nDownloadedTotal * 100 /
-                                                                                               total));
+                                                                            try
+                                                                            {
+                                                                                //DealWithDownloadErrors();
+                                                                                DownloadFileInfo dfile =
+                                                                                    e.UserState as DownloadFileInfo;
+                                                                                try
+                                                                                {
+
+
+                                                                                    string newPath = Path.Combine(
+                                                                                        tempFolderPath,
+                                                                                        dfile.FileFullName);
+                                                                                    FileInfo f = new FileInfo(newPath);
+                                                                                    if (dfile.Size != f.Length)
+                                                                                    {
+                                                                                        LogHelper.Error(
+                                                                                            string.Format(
+                                                                                                "{0}.Size({1})!={2}.Size({3})",
+                                                                                                dfile.FileName,
+                                                                                                dfile.Size, f.Name,
+                                                                                                f.Length));
+                                                                                        LogHelper.Error(e.Error);
+                                                                                        isRetry = true;
+                                                                                        retryCount++;
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        isRetry = false;
+                                                                                        retryCount = 0;
+                                                                                        LogHelper.Debug(
+                                                                                            string.Format(
+                                                                                                "Download {0} Success",
+                                                                                                dfile.FileName));
+                                                                                    }
+                                                                                }
+                                                                                catch (Exception ex)
+                                                                                {
+                                                                                    isRetry = true;
+                                                                                    retryCount++;
+                                                                                    LogHelper.Debug(
+                                                                                        string.Format(
+                                                                                            "Download {0} Failed",
+                                                                                            dfile.FileName));
+                                                                                    LogHelper.Error(ex);
+                                                                                }
+                                                                                if (!isRetry)
+                                                                                {
+                                                                                    nDownloadedTotal += dfile.Size;
+                                                                                    this.SetProcessBar(100,
+                                                                                                       (int)
+                                                                                                       (nDownloadedTotal*
+                                                                                                        100/
+                                                                                                        total));
+                                                                                }
 
 
 
-                                                                            evtPerDonwload.Set();
-                                                                        }
-                                                                        catch (Exception ex)
-                                                                        {
-                                                                            LogHelper.Error(ex);
-                                                                            //EventLog.WriteEntry("DownloadProgress", ex.Message,
-                                                                            //EventLogEntryType.Error);
-                                                                        }
+                                                                                evtPerDonwload.Set();
+                                                                            }
+                                                                            catch (Exception ex)
+                                                                            {
+                                                                                isRetry = true;
+                                                                                retryCount++;
+                                                                                LogHelper.Error(ex);
+                                                                            }
 
-                                                                    };
+                                                                        };
+                       
+                        evtPerDonwload.Reset();
+
+                        //Download the folder file
+                        string tempFolderPath1 = CommonUnitity.GetFolderUrl(file);
+                        if (!string.IsNullOrEmpty(tempFolderPath1))
+                        {
+                            tempFolderPath = Path.Combine(CommonUnitity.SystemBinUrl, ConstFile.TEMPFOLDERNAME);
+                            tempFolderPath += tempFolderPath1;
+                        }
+                        else
+                        {
+                            tempFolderPath = Path.Combine(CommonUnitity.SystemBinUrl, ConstFile.TEMPFOLDERNAME);
+                        }
+
+                        clientDownload.DownloadFileAsync(new Uri(file.DownloadUrl),
+                                                         Path.Combine(tempFolderPath, file.FileFullName), file);
+
+                        //Wait for the download complete
+                        evtPerDonwload.WaitOne();
+
+
+                        if (isRetry)
+                        {
+                            LogHelper.Debug(string.Format("{0} retry Download[retry count:{1}]", file.FileName,
+                                                          retryCount));
+                        }
+
+                        if (!isRetry)
+                        {
+                            this.downloadFileList.Remove(file);
+                        }
+                        else if (retryCount >=5)
+                        {
+                            LogHelper.Debug("Retry Timeout");
+                            bCancel = true;
+                        }
+                        }
                     }
-                    evtPerDonwload.Reset();
-
-                    //Download the folder file
-                    string tempFolderPath1 = CommonUnitity.GetFolderUrl(file);
-                    if (!string.IsNullOrEmpty(tempFolderPath1))
-                    {
-                        tempFolderPath = Path.Combine(CommonUnitity.SystemBinUrl, ConstFile.TEMPFOLDERNAME);
-                        tempFolderPath += tempFolderPath1;
-                    }
-                    else
-                    {
-                        tempFolderPath = Path.Combine(CommonUnitity.SystemBinUrl, ConstFile.TEMPFOLDERNAME);
-                    }
-
-                    clientDownload.DownloadFileAsync(new Uri(file.DownloadUrl), Path.Combine(tempFolderPath, file.FileFullName), file);
-
-                    //Wait for the download complete
-                    evtPerDonwload.WaitOne();
-
-
-
-                    //Remove the downloaded files
-                    this.downloadFileList.Remove(file);
-                }
-                if (clientDownload != null)
-                {
-                    clientDownload.Dispose();
-                    clientDownload = null;
-                }
+                        System.GC.Collect();
+                
                 if (bCancel)
                 {
-                    ShowErrorAndRestartApplication();
+                    if(retryCount==5)
+                    {
+                        CommonUnitity.ShowErrorAndRestartApplication(string.Format("{0}更新不成功[网络异常,请确保网络环境稳定],{0}现在将重新启动,尝试再次更新，请单击确定重新启动程序！", ConstFile.AppName, ""), true);
+                    }
+                    CommonUnitity.ShowErrorAndRestartApplication(string.Format("{0}更新不成功[{1}],{0}现在将重新启动,尝试再次更新，请单击确定重新启动程序！", ConstFile.AppName, "用户取消升级"), true);
                 }
 
             }
@@ -213,7 +275,7 @@ namespace MDT.ThirdParty.Controls
             {
                 //EventLog.WriteEntry("DownloadProgress", ex.Message,
                 LogHelper.Error(ex);                                                                                  //EventLogEntryType.Error);
-                ShowErrorAndRestartApplication();
+                CommonUnitity.ShowErrorAndRestartApplication(string.Format("{0}[{1}]",ConstFile.NOTNETWORK, ex.Message), true);
                 //throw;
             }
 
@@ -239,19 +301,10 @@ namespace MDT.ThirdParty.Controls
                     oldPath = Path.Combine(CommonUnitity.SystemBinUrl, file.FileName);
                     newPath = Path.Combine(CommonUnitity.SystemBinUrl + ConstFile.TEMPFOLDERNAME, file.FileName);
                 }
-
-                System.IO.FileInfo f = new FileInfo(newPath);
-                if (!file.Size.ToString().Equals(f.Length.ToString()))
-                {
-                    LogHelper.Debug(string.Format("{0}.Size({1})!={2}.Size({3})", file.FileName, file.Size, f.Name, f.Length));
-                    //EventLog.WriteEntry("DownloadProgress", string.Format("{0}.Size({1})!={2}.Size({3})",file.FileName,file.Size,f.Name,f.Length),
-                    //EventLogEntryType.Error);
-                    ShowErrorAndRestartApplication();
-                }
             }
 
             LogHelper.Debug("All Downloaded");
-             
+
             try
             {
                 foreach (DownloadFileInfo file in this.allFileList)
@@ -318,11 +371,8 @@ namespace MDT.ThirdParty.Controls
             }
             catch (Exception ex)
             {
-
                 LogHelper.Error(ex);
-                 
-                //EventLog.WriteEntry("DownloadProgress", ex.Message, EventLogEntryType.Error);
-                ShowErrorAndRestartApplication();
+                CommonUnitity.ShowErrorAndRestartApplication(string.Format("{0}更新不成功[未知异常,请重启电脑或手动删除程序目录下面后缀为.old的所有文件],请单击退出程序", ConstFile.AppName), false);
             }
             finally
             {
@@ -338,22 +388,47 @@ namespace MDT.ThirdParty.Controls
         }
 
         //To delete or move to old files
+          private int killCount = 0;
         void MoveFolderToOld(string oldPath, string newPath)
         {
-            LogHelper.Debug(string.Format("MoveFolderToOld oldPath:{0},newPath:{1}", oldPath, newPath));
-            if (File.Exists(oldPath + ".old"))
+           
+                if (oldPath.IndexOf(ConstFile.AppExe) >= 0)
+                {
+                    CommonUnitity.KillProcess(ConstFile.AppExe);
+                }
+                LogHelper.Debug(string.Format("MoveFolderToOld oldPath:{0},newPath:{1}", oldPath, newPath));
+                if (File.Exists(oldPath + ".old"))
+                {
+                    LogHelper.Debug("1");
+                    File.Delete(oldPath + ".old");
+                }
+
+                if (File.Exists(oldPath))
+                {
+                    LogHelper.Debug("2");
+                    File.Move(oldPath, oldPath + ".old");
+
+                }
+                LogHelper.Debug("3");
+                File.Move(newPath, oldPath);
+                LogHelper.Debug("4");
+             
+            try
             {
                 File.Delete(oldPath + ".old");
             }
-
-            if (File.Exists(oldPath))
+            catch 
             {
-                File.Move(oldPath, oldPath + ".old");
-
+                
+              
             }
 
-            File.Move(newPath, oldPath);
-            File.Delete(oldPath + ".old");
+            LogHelper.Debug("5");
+                
+               
+           
+          
+            
         }
 
         delegate void ShowCurrentDownloadFileNameCallBack(string name);
@@ -414,29 +489,9 @@ namespace MDT.ThirdParty.Controls
 
         }
 
-        private void DealWithDownloadErrors()
-        {
-            try
-            {
-                //Test Network is OK or not.
-                Config config = Config.LoadConfig(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConstFile.FILENAME));
-                WebClient client = new WebClient();
-                client.DownloadString(config.ServerUrl);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error(ex);
-                // EventLog.WriteEntry("DownloadProgress", ex.Message, EventLogEntryType.Error);
+    
 
-                ShowErrorAndRestartApplication();
-            }
-        }
-
-        private void ShowErrorAndRestartApplication()
-        {
- 
-            CommonUnitity.ShowErrorAndRestartApplication();
-        }
+        
 
         #endregion
     }

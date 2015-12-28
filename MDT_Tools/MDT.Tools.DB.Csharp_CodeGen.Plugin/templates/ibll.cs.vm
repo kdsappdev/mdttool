@@ -6,19 +6,23 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Atf.Common.Core;
 using Ats.Foundation.Message;
 using Ats.YuKon.Common.Core;
 using ${idalNameSpace};
 using ${modelNameSpace};
+using Ats.Foundation.Condition;
 namespace ${bllNameSpace}
 {
 	/// <summary>
 	/// ${guiPluginName}业务接口
 	/// </summary>
 	/// <remarks>
-	/// $date: 创建. ${pluginName} <br/>
+	/// $date: 创建. ${pluginName} 模板版本(v1.0.0.0)<br/>
 	/// </remarks>
-	public interface I${guiPluginName}BLLService: IBaseBLLService
-	{
-	}
+    public interface I${guiPluginName}BLLService: IBaseBLLService
+    {
+        int Select${model}Count(Condition co);
+        List<${model}> Select${model}Page(Condition co);
+    }
 }

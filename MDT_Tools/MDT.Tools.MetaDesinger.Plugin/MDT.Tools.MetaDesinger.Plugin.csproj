@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\client\plugin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -64,6 +64,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UI\Connection.cs" />
+    <Compile Include="UI\ConnectionCollection.cs" />
+    <Compile Include="UI\ConnectorCollection.cs" />
+    <Compile Include="UI\Entity.cs" />
+    <Compile Include="UI\CListBox .cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\CListBoxItem.cs" />
+    <Compile Include="UI\Connector.cs" />
     <Compile Include="UI\DesingerHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -90,10 +99,13 @@
     <Compile Include="UI\DesingerUI.Designer.cs">
       <DependentUpon>DesingerUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\JoinLine.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UI\Recter.cs" />
     <Compile Include="UI\TableDesingerHandler.cs" />
     <Compile Include="UI\TableDesingerLayer.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\TableDesingerLayer.Designer.cs">
       <DependentUpon>TableDesingerLayer.cs</DependentUpon>
@@ -104,6 +116,7 @@
     <Compile Include="UI\TableDesingerUI.Designer.cs">
       <DependentUpon>TableDesingerUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\TDModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
@@ -119,12 +132,12 @@
     <ProjectReference Include="..\MDT.Tools.DB.Common\MDT.Tools.DB.Common.csproj">
       <Project>{B75768DD-8D6D-4E35-AEB7-F24BB3EFC8C0}</Project>
       <Name>MDT.Tools.DB.Common</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="UI\DataDesingerUI.resx">
       <DependentUpon>DataDesingerUI.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DesingerLayer.resx">
       <DependentUpon>DesingerLayer.cs</DependentUpon>
@@ -132,6 +145,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\DesingerUI.resx">
       <DependentUpon>DesingerUI.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\JoinLine.resx">
+      <DependentUpon>JoinLine.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\TableDesingerLayer.resx">

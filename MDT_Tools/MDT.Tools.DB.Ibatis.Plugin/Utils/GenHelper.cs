@@ -51,20 +51,17 @@ namespace MDT.Tools.DB.Ibatis.Plugin.Utils
             }
             return retval;
         }
-
+        internal bool hasPrimaryKey = false;
         public bool HasPrimaryKey(string tableName)
         {
-            bool flag = false;
-            if (ModelConfigHelper.IsExist(tableName))
-            {
-                flag= ModelConfigHelper.GetModelConfig(tableName).HasGeneratedKey;
-            }
-            return flag;
+
+            return hasPrimaryKey;
         }
 
+        internal string getGeneratedKeyField = "";
         public string GetGeneratedKeyField(string tableName)
         {
-            return GetGeneratedKeyName(tableName);
+            return getGeneratedKeyField;
         }
 
         public string GetGeneratedKeyName(string tableName)

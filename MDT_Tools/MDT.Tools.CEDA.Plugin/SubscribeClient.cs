@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using Ats.Foundation.Message;
+using MDT.Tools.CEDA.Common;
 using MDT.Tools.CEDA.Plugin;
 using MDT.Tools.CEDA.Plugin.DataMemory;
 using MDT.Tools.Core.Log;
@@ -32,7 +33,8 @@ namespace MDT.Tools.CEDA.Plugin
         private ILog logHelper;
         private XMLDataMemory _dataMemory = new XMLDataMemory();
         public static string ModuleName = "Subscribe";
-        private bool encryption = false; 
+        private bool encryption = false;
+        public string clientType { get; set; }
         public SubscribeClient()
         {
             InitializeComponent();
@@ -378,7 +380,7 @@ namespace MDT.Tools.CEDA.Plugin
                 else
                     _clientInfo.Protocol = ClientInfo.PROTOCOL_HTTP;
                 if (cbVS.Checked)
-                    _clientInfo.LoginMessage = CedaObject.GetLoginMessage(txtUserName.Text, txtPwd.Text, txtRole.Text, null, encryption);
+                    _clientInfo.LoginMessage = CedaObject.GetLoginMessage(txtUserName.Text, txtPwd.Text, txtRole.Text, null, encryption, clientType);
             }
             else if ("CEDA".Equals(cbType.Text.Trim()))
             {
@@ -389,7 +391,7 @@ namespace MDT.Tools.CEDA.Plugin
                 else
                     _clientInfo.Protocol = ClientInfo.PROTOCOL_TCP;
                 if (cbVS.Checked)
-                    _clientInfo.LoginMessage = CedaObject.GetLoginMessage(txtUserName.Text, txtPwd.Text, txtRole.Text, null, encryption);
+                    _clientInfo.LoginMessage = CedaObject.GetLoginMessage(txtUserName.Text, txtPwd.Text, txtRole.Text, null, encryption, clientType);
             }
 
             ThreadPool.QueueUserWorkItem(o =>
@@ -614,6 +616,18 @@ namespace MDT.Tools.CEDA.Plugin
         private void rbtnSubImage_CheckedChanged(object sender, EventArgs e)
         {
            lcServerName.Visible = cbServiceName.Visible = rbtnSubImage.Checked;
+        }
+
+        private void ckEncryption_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckEncryption.Checked)
+            {
+                encryption = true;
+            }
+            else
+            {
+                encryption = false;
+            }
         }
     }
 }

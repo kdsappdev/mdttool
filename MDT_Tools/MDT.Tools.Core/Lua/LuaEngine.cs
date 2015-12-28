@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 using MDT.Tools.Core.Utils;
 
 namespace MDT.Tools.Core.Lua
@@ -26,6 +27,7 @@ namespace MDT.Tools.Core.Lua
         private MethodInfo luaDoString = null;
         private MethodInfo luaGetFunction = null;
         private MethodInfo luaRegisterFunction = null;
+        private MethodInfo luaIsLic = null;
         public void Initialize()
         {
             try
@@ -37,13 +39,29 @@ namespace MDT.Tools.Core.Lua
                 }
                 
                Assembly assembly = Assembly.LoadFrom(assemblyName);
-               luavm= assembly.CreateInstance(luaType);
-                Type t = luavm.GetType();
-                luaDispose = ReflectionHelper.GetMethodInfo(t, "Dispose");
-                luaDoFile = ReflectionHelper.GetMethodInfo(t, "DoFile");
-                luaDoString = ReflectionHelper.GetMethodInfo(t, "DoString");
-                luaGetFunction = ReflectionHelper.GetMethodInfo(t, "GetFunction");
-                luaRegisterFunction = ReflectionHelper.GetMethodInfo(t, "RegisterFunction");
+                Type t=assembly.GetType(luaType);
+              
+                
+                //luaIsLic = ReflectionHelper.GetMethodInfo(t, "isLic");
+                int lic= (int) t.InvokeMember("isLic", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Static, null,
+                                              null, null);
+                LogHelper.Debug("Lic:"+lic);
+                if (lic == 1)
+                {
+                    luavm = Activator.CreateInstance(t);
+                    luaDispose = ReflectionHelper.GetMethodInfo(t, "Dispose");
+                    luaDoFile = ReflectionHelper.GetMethodInfo(t, "DoFile");
+                    luaDoString = ReflectionHelper.GetMethodInfo(t, "DoString");
+                    luaGetFunction = ReflectionHelper.GetMethodInfo(t, "GetFunction");
+                    luaRegisterFunction = ReflectionHelper.GetMethodInfo(t, "RegisterFunction");
+                }
+                else
+                {
+                    MessageBox.Show("Licence验证错误,请重新申请", "提示", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LogHelper.Error("Licence验证错误,请重新申请");
+                   Environment.Exit(0);
+                }
+
             }
             catch (Exception ex)
             {
@@ -74,6 +92,7 @@ namespace MDT.Tools.Core.Lua
         {
             return luaDoString.Invoke(luavm, new object[] { luaStr }) as object[];
         }
+       
 
         public object[] Invoke(string luaFunction, params object[] args)
         {

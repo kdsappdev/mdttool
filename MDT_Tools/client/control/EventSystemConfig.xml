@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="GBK"?>
+<SystemConfig>
+  
+  #这里是过滤等级,填写信息，警告，错误，严重的错误，四个中的一个。
+  <key name="levelComboBox" value="信息" />
+
+ 
+  #这里是每个级别的颜色，填写rgb三原色的数字表示形式，中间按逗号隔开
+  
+  <key name="errorColorPickEdit" value="255,255,128" />
+  <key name="warnColorPickEdit" value="0,128,192" />
+  <key name="infoColorPickEdit" value="128,0,64" />
+  <key name="fatalErrorColorPickEdit" value="0,128,0" />
+  
+
+  # 这里是响铃的模式，写响铃一次，或循环播放
+  <key name="infoVoiceT" value="响铃一次" />
+  <key name="warnVioceT" value="响铃一次" />
+  <key name="errorVoiceT" value="循环播放" />
+  <key name="fatalErrorVT" value="循环播放" />
+  #这里是每个级别的声音，请按正常路径填写
+  <key name="infoVoiceBt" value="" />
+  <key name="warningVoiceBt" value="" />
+  <key name="errorVoiceBt" value="" />
+  <key name="fatalErrorVoiceBt" value="" />
+  </SystemConfig>

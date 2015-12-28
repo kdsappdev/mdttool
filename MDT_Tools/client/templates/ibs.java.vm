@@ -21,7 +21,7 @@ import ats.foundation.condition.Condition;
  *$date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
  */
 public interface I${model}Server {
-	
+	#if(${tableInfo.type}=="TABLE")
 	/**
 	 *增加${model}对象
 	 *
@@ -55,7 +55,7 @@ public interface I${model}Server {
 	 * @return 无
 	 */
 	public void updateBatch(List<${model}> ${lmodel}s,Condition deleteCondition) throws CodeException;
-	
+	#end
 	/**
 	 *根据Condition对象 查询出${model}对象
 	 *

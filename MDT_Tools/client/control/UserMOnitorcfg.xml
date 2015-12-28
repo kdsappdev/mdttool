@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="GBK"?>
+<SystemConfig>
+  <key name="user_warning_count" value="1" />
+  <key name="music_url" value="D:\sssss\src\MDT_Tools\client\resources\UserMonitorResource\music\斗地主.wav" />
+  <key name="timer_round" value="1" />
+</SystemConfig>

@@ -12,6 +12,12 @@ namespace MDT.Tools.MetaDesinger.Plugin.UI
 {
     public partial class TableDesingerUI : UserControl
     {
+        public delegate void DrawLineDel(
+            TableDesingerUI sourUI, int sourIndex, int sourX, int sourY, TableDesingerUI destUI, int destIndex,
+            int destX, int destY);
+
+        public event DrawLineDel DrawLineEvent;
+        private string seqStr = ",自增长";
         private static Recter recter = new Recter();
         private static TableDesingerUI currTable = null;
         public static TableDesingerUI CurrTable
@@ -23,9 +29,11 @@ namespace MDT.Tools.MetaDesinger.Plugin.UI
                     if(currTable!=null)
                     {
                         currTable.panel1.BackColor = Color.CornflowerBlue;
+                        currTable.clbField.ClearSelected();
                     }
                     currTable = value;
                     currTable.panel1.BackColor = Color.SkyBlue;
+                    //currTable.clbField.SetSelected(0,true);
                     currTable.BringToFront();
 
                     Rectangle r = currTable.Bounds;
@@ -42,6 +50,7 @@ namespace MDT.Tools.MetaDesinger.Plugin.UI
                 recter.Draw(e.Graphics);
             }
             base.OnPaint(e);
+             
         }
 
         private int clbFieldHeigh;
@@ -57,14 +66,17 @@ namespace MDT.Tools.MetaDesinger.Plugin.UI
         {
             if(TableInfo!=null)
             {
-                lcTitle.Text = string.Format("{0}{1}",TableInfo.TableName,string.IsNullOrEmpty(TableInfo.TableComments)?"":"("+TableInfo.TableComments+")");
+                lcTitle.Text = string.Format("{0}", TableInfo.TableName);
                 
-                toolTip1.SetToolTip(lcTitle,string.Format("{0}",lcTitle.Text));
+                toolTip1.SetToolTip(lcTitle,string.Format("{0}",string.IsNullOrEmpty(TableInfo.TableComments)?"":TableInfo.TableComments));
+
+                clbField.CItem.Add(new CListBoxItem() { CnItem = "", DisItem = "*(所有列)", Site = clbField });
                 foreach (var col in TableInfo.Columns)
                 {
-                    clbField.Items.Add(string.Format("{0}{1}", col.Name,
-                                                     string.IsNullOrEmpty(col.Comments) ? "" : "(" + col.Comments + ")"));
+                    clbField.CItem.Add(new CListBoxItem(){CnItem = col.Comments,DisItem = col.Name,Site = clbField});
+                    clbField.Items.Add(new CListBoxItem() { CnItem = col.Comments, DisItem = col.Name });
                 }
+                
             }
         }
 
@@ -129,6 +141,125 @@ namespace MDT.Tools.MetaDesinger.Plugin.UI
         {
 
         }
+
+        
+        #region 设置seq
+        private void clbField_MouseDown(object sender, MouseEventArgs e)
+        {
+            CurrTable = this;
+            if (e.Button == MouseButtons.Right&&clbField.SelectedIndex>=1)
+            {
+               
+                if (clbField.Items[clbField.SelectedIndex].ToString().Contains(seqStr))
+                {
+                    tsmiSeq.Checked = true;
+                }
+                else
+                {
+                    tsmiSeq.Checked = false;
+                }
+                cmsField.Show(clbField, e.Location);
+            }
+            else
+            {
+
+                int idx =  clbField.IndexFromPoint(e.Location);
+                if (idx > -1 && idx < clbField.Items.Count)
+                {
+                    CListBoxItem item = clbField.CItem[idx];
+                    bool isCheck = item.isCheck(e.Location);
+                    if (isCheck)
+                    {
+                        item.IsSelected = !item.IsSelected;
+                        if (idx == 0)
+                        {
+                            for (int i = 1; i < clbField.Items.Count; i++)
+                            {
+                                CListBoxItem it = clbField.CItem[i];
+
+                                it.IsSelected = item.IsSelected;
+                            }
+                        }
+                    }
+                    clbField.Invalidate();
+
+                }
+
+                int index = ((ListBox)sender).IndexFromPoint(e.X, e.Y);
+
+                if (index >= 1)
+                {
+                    var p = this.Parent.PointToClient(PointToScreen(new Point(e.X, e.Y + 28)));
+                    ((ListBox)sender).DoDragDrop(new object[] { this, index, p.X, p.Y }, DragDropEffects.Link);
+                }
+            }
+        }
+
+        private void tsmiSeq_CheckedChanged(object sender, EventArgs e)
+        {
+            int index = clbField.SelectedIndex;
+            var col = TableInfo.Columns[index - 1];
+            if(tsmiSeq.Checked)
+            {
+              
+                clbField.Items[index]=string.Format("{0}{1}", col.Name,
+                                                     seqStr);
+            }
+            else
+            {
+                clbField.Items[index]=string.Format("{0}{1}", col.Name,
+                                                     "");
+            }
+
+        }
+        #endregion
+
+        private void clbField_DragDrop(object sender, DragEventArgs e)
+        {
+            
+                int index = clbField.IndexFromPoint(clbField.PointToClient(new Point(e.X, e.Y)));
+                if (index >= 1 && e.Data.GetDataPresent(typeof (object[])))
+                {
+                    index -= 1;
+                    object[] os = (object[]) e.Data.GetData(typeof (object[]));
+                    TableDesingerUI sourUI = (TableDesingerUI) os[0];
+                    int sourIndex = (int) os[1] - 1;
+                    int sourX = (int) os[2];
+                    int sourY = (int) os[3];
+                    if (DrawLineEvent != null&&sourUI!=this)
+                    {
+                        var p =this.Parent.PointToClient(new Point(e.X, e.Y));
+                        DrawLineEvent(sourUI, sourIndex, sourX, sourY, this, index,
+                                      p.X, p.Y);
+                    }
+
+
+
+                }
+             
+
+        }
+
+        private void clbField_DragOver(object sender, DragEventArgs e)
+        {
+            int index = clbField.IndexFromPoint(clbField.PointToClient(new Point(e.X, e.Y)));
+            if (index >= 1)
+            {
+                e.Effect = DragDropEffects.Link;
+                 
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        #region 获取界面数据
+        #endregion
+
+        
+
+
 
     }
 }

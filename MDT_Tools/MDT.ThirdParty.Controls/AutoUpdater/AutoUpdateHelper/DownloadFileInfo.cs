@@ -18,7 +18,7 @@ using System.IO;
 
 namespace MDT.ThirdParty.Controls
 {
-    public class DownloadFileInfo
+      class DownloadFileInfo
     {
         #region The private fields
         string downloadUrl = string.Empty;

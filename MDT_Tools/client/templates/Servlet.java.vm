@@ -1,0 +1,75 @@
+#set($model=${codeGenHelper.GetClassName2(${tableInfo.tableName},$codeRule)})
+package ats.app.ym.query.httphandler;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ats.app.ym.query.api.${model}Api;
+import ats.app.ym.query.api.ConditionUtils;
+import ats.app.ym.query.api.po.T${model};
+import ats.app.ym.query.stream.Consts;
+import ats.foundation.condition.Condition;
+import ats.message2.CharsetConvertType;
+import ats.message2.MsgHelper;
+import ats.message2.Exception.SerializerException;
+
+@SuppressWarnings("serial")
+public class ${model}Servlet extends HttpServlet {
+
+	private boolean ispermission = false;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private ${model}Api api = new ${model}Api();
+
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		String isper = config.getInitParameter("isPermission");
+		 
+		if (isper != null && isper.length() > 0) {
+			ispermission = "true".equals(isper.toLowerCase());
+			api.isPermission = ispermission;
+		}
+	}
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		doPost(req, resp);
+	}
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		logger.info("getQueryString:"+req.getQueryString());
+		String sid = req.getRequestedSessionId();
+		resp.setCharacterEncoding("utf-8");
+		String str = "";
+		Map<String, Object> result = new HashMap<String, Object>();
+		Condition queryCondition = null;
+		try {			 
+			Map map = req.getParameterMap();
+			queryCondition = ConditionUtils.urlParaToConditon(map,
+					T${model}.class);
+			result = api.getT${model}(sid,queryCondition);
+			str = MsgHelper.Serializer(result, CharsetConvertType.None);
+		} catch (SerializerException e) {
+			str = String.format("{\"Code\":\"%s\",\"Msg\":\"%s\"}",
+					Consts.NoKnowCode, e.getMessage());
+			logger.error(str, e);
+		} catch (Exception e) {			
+			str = String.format("{\"Code\":\"%s\",\"Msg\":\"%s\"}",
+					Consts.ArgErrorCode, Consts.ArgErrorInfo+ "[" + e.getMessage() + "]");
+		}
+		logger.info(str);
+		resp.getWriter().print(str);
+		resp.getWriter().close();
+	}
+}

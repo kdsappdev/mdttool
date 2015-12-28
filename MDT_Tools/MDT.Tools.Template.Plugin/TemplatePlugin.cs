@@ -114,6 +114,7 @@ namespace MDT.Tools.Template.Plugin
                         string[] strs = template.MenuName.Split(new[]{"|"},StringSplitOptions.RemoveEmptyEntries);
                         string menuName = "";
                         var tsmiTemplate = new ToolStripMenuItem();
+                        tsmiTemplate.Visible = template.IsMenuVisable;
                         if (template.DataTye == "DB")
                         {
 							SetEnable(false);

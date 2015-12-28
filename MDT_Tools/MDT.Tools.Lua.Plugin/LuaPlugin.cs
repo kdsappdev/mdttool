@@ -86,7 +86,7 @@ namespace MDT.Tools.Lua.Plugin
                     {
                         ILuaEngine luaEngine = LuaHelper.CreateLuaEngine();
                         luaEngine.BindLuaFunctions(this);
-                        LogHelper.Debug(luaEngine.ToString());
+                        //LogHelper.Debug(luaEngine.ToString());
                         luaEngine.DoFile(fileName);
                         object[] luaPa = luaEngine.Invoke("init");
                         if (luaPa != null && luaPa.Length == 6)
@@ -103,6 +103,7 @@ namespace MDT.Tools.Lua.Plugin
                             }
                             LuaScriptPlugin lsp = new LuaScriptPlugin(tag, pluginKey, luaPa[2] + "", luaPa[3] + "", luaPa[4] + "", luaPa[5] + "");
                             lsp.LuaEngine = luaEngine;
+                            lsp.fileName = fileName.Replace(System.Windows.Forms.Application.StartupPath+"\\","");
                             lsp.Application = Application;
                             if (luaPlugins.ContainsKey(lsp.PluginKey))
                             {
@@ -255,6 +256,13 @@ namespace MDT.Tools.Lua.Plugin
         {
             dr[columnName] = value;
         }
+
+        [AttrLuaFunc("getType", "获取getType", "Type name")]
+        public Type getType(string name)
+        {
+            return Type.GetType(name, false, true);
+        }
+
         #endregion
 
         #region dataTable

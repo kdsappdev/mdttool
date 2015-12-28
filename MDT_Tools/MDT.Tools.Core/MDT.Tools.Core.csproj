@@ -95,12 +95,9 @@
       <HintPath>..\MDT.Tools\lib\log4net.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MDT.ThirdParty.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\client\bin\MDT.ThirdParty.Controls.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\client\bin\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="NVelocity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -205,6 +202,7 @@
     <Content Include="Plugin\说明.txt" />
     <None Include="Resources\logo.ico" />
     <Content Include="Resources\Ico.ico" />
+    <Content Include="Resources\monitor.png" />
     <Content Include="Resources\start.png" />
     <Content Include="Resources\closeAllDocment.png" />
     <Content Include="Resources\setting.ico" />
@@ -252,6 +250,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MDT.Tools.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MDT.ThirdParty.Controls\MDT.ThirdParty.Controls.csproj">
+      <Project>{C3DDB32F-3E50-484A-9142-F93472A14323}</Project>
+      <Name>MDT.ThirdParty.Controls</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

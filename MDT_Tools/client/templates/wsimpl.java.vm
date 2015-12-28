@@ -1,3 +1,8 @@
+##
+##2015.09.02 1.0.3.1 孔德帅 去掉参数日志及结果日志，改为审计记录这些日志
+##
+##
+
 ## model字符串
 #set($model=${codeGenHelper.GetClassName(${tableInfo.tableName},$codeRule)})
 ## 第一个字符为小写的model字符串
@@ -28,7 +33,7 @@ import ats.foundation.utils.exception.CodeException;
  *${tableInfo.TableName}
 #end
  *
- *$date: 创建. ${pluginName} 模板版本(v1.0.3.0)<br/>
+ *$date: 创建. ${pluginName} 模板版本(v1.0.3.1)<br/>
  */
 public class ${model}Service extends BaseWebService implements I${model} {
 	private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -39,7 +44,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 		this.${ibsServer} = ${ibsServer};
 	}
 
-
+#if(${tableInfo.type}=="TABLE")
         /**
 	 *增加${lmodel}对象
 	 *
@@ -51,8 +56,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 	        String result = "";
 		try {		 
 			
-			String msg = ZipUtils.ungzipByte(${lmodel}b); 
-			logger.debug("after ungzipByte param:" + msg);
+			String msg = ZipUtils.ungzipByte(${lmodel}b); 			
 			${model} ${lmodel} = MsgHelper.Deserialize(msg, ${model}.class,
 					CharsetConvertType.None);			
 			${ibsServer}.insert(${lmodel});
@@ -73,8 +77,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 			logger.error("insert failed!", e);
 			result = MsgHelper.AtsMessageToString("4102",
 					"insert  failed!", e.getMessage());			
-		}
-		logger.debug(result);
+		}		
 		return ZipUtils.gzipStr(result);
 	}
 
@@ -90,8 +93,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 	        String result = "";
 		try {
 			 
-			String msg = ZipUtils.ungzipByte(deleteCondition);
-			logger.debug("after ungzipByte param:" + msg);
+			String msg = ZipUtils.ungzipByte(deleteCondition);			
 			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
 			${ibsServer}.delete(condition);
@@ -109,8 +111,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 			logger.error("delete failed!", e);
 			result = MsgHelper.AtsMessageToString("4102",
 					"delete  failed!", e.getMessage());			
-		}
-		logger.debug(result);
+		}		
 		return ZipUtils.gzipStr(result);
 	}
 
@@ -128,9 +129,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 		try {
 			 
 			String msg = ZipUtils.ungzipByte(updateCondition);
-			String msg2 = ZipUtils.ungzipByte(${lmodel}b);
-			logger.debug("after ungzipByte param1:" + msg);
-			logger.debug("after ungzipByte param2:" + msg2);			 
+			String msg2 = ZipUtils.ungzipByte(${lmodel}b);					 
 			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
 			${model} ${lmodel} = MsgHelper.Deserialize(msg2, ${model}.class,
@@ -151,8 +150,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 			logger.error("update failed!", e);
 			result = MsgHelper.AtsMessageToString("4102",
 					"delete  failed!", e.getMessage());			
-		}
-		logger.debug(result);
+		}		
 		return ZipUtils.gzipStr(result);
 	}
 
@@ -168,9 +166,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 		try {
 			 
 			String msg = ZipUtils.ungzipByte(updateCondition);
-			String msg2 = ZipUtils.ungzipByte(${lmodel}s);
-			logger.debug("after ungzipByte param1:" + msg);
-			logger.debug("after ungzipByte param2:" + msg2);
+			String msg2 = ZipUtils.ungzipByte(${lmodel}s);			
 			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
 			List<${model}> ${lmodel} = MsgHelper.Deserialize2(msg2, ${model}.class,
@@ -192,12 +188,11 @@ public class ${model}Service extends BaseWebService implements I${model} {
 			logger.error("update failed!", e);
 			result = MsgHelper.AtsMessageToString("4102",
 					"delete  failed!", e.getMessage());			
-		}
-		logger.debug(result);
+		}		
 		return ZipUtils.gzipStr(result);
 	}
 	
-
+#end
         /**
 	 *根据Condition对象查询出${lmodel}集合对象
 	 *
@@ -209,8 +204,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 		String result = "";
 		try {
 			 
-			String msg = ZipUtils.ungzipByte(queryCondition);
-			logger.debug("after ungzipByte param:" + msg);			 
+			String msg = ZipUtils.ungzipByte(queryCondition);					 
 			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
 			List<${model}> lt=${ibsServer}.select(condition);
@@ -227,8 +221,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 			logger.error("select failed!", e);
 			result = MsgHelper.AtsMessageToString("4102",
 					"select failed!", e.getMessage());			
-		}
-		logger.debug(result);
+		}		
 		return ZipUtils.gzipStr(result);
 	}
 	
@@ -244,8 +237,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 		String result = "";
 		try {
 			 
-			String msg = ZipUtils.ungzipByte(queryCondition);
-			logger.debug("after ungzipByte param:" + msg);			 
+			String msg = ZipUtils.ungzipByte(queryCondition);				 
 			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
 			HashMap<String,BigDecimal> countMap=${ibsServer}.selectCount(condition);
@@ -262,8 +254,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 			logger.error("select failed!", e);
 			result = MsgHelper.AtsMessageToString("4102",
 					"select failed!", e.getMessage());			
-		}
-		logger.debug(result);
+		}		
 		return ZipUtils.gzipStr(result);
 	}
 	
@@ -278,8 +269,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 	{
 		String result = "";
 		try {			 
-			String msg = ZipUtils.ungzipByte(queryCondition);
-			logger.debug("after ungzipByte param:" + msg);			 
+			String msg = ZipUtils.ungzipByte(queryCondition);				 
 			Condition condition = MsgHelper.Deserialize(msg, Condition.class,
 					CharsetConvertType.None);
 			List<${model}> lt=${ibsServer}.selectPage(condition);
@@ -297,8 +287,7 @@ public class ${model}Service extends BaseWebService implements I${model} {
 			logger.error("select failed!", e);
 			result = MsgHelper.AtsMessageToString("4102",
 					"select failed!", e.getMessage());			
-		}
-		logger.debug(result);
+		}		
 		return ZipUtils.gzipStr(result);
 	}
 

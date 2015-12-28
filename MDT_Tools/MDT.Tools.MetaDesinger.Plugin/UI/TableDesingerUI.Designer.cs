@@ -29,16 +29,20 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TableDesingerUI));
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.clbField = new System.Windows.Forms.CheckedListBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnMinMax = new System.Windows.Forms.Button();
             this.lcTitle = new System.Windows.Forms.Label();
+            this.cmsField = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiSeq = new System.Windows.Forms.ToolStripMenuItem();
+            this.clbField = new MDT.Tools.MetaDesinger.Plugin.UI.CListBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.cmsField.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -59,18 +63,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 7F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(207, 176);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // clbField
-            // 
-            this.clbField.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.clbField.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.clbField.FormattingEnabled = true;
-            this.clbField.Location = new System.Drawing.Point(7, 39);
-            this.clbField.Margin = new System.Windows.Forms.Padding(0);
-            this.clbField.Name = "clbField";
-            this.clbField.Size = new System.Drawing.Size(193, 128);
-            this.clbField.TabIndex = 0;
-            this.clbField.SizeChanged += new System.EventHandler(this.clbField_SizeChanged);
             // 
             // panel1
             // 
@@ -95,7 +87,7 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(193, 32);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
@@ -126,8 +118,42 @@
             this.lcTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.lcTitle_MouseDown);
             this.lcTitle.MouseUp += new System.Windows.Forms.MouseEventHandler(this.lcTitle_MouseUp);
             // 
+            // cmsField
+            // 
+            this.cmsField.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiSeq});
+            this.cmsField.Name = "cmsField";
+            this.cmsField.Size = new System.Drawing.Size(143, 26);
+            // 
+            // tsmiSeq
+            // 
+            this.tsmiSeq.CheckOnClick = true;
+            this.tsmiSeq.Name = "tsmiSeq";
+            this.tsmiSeq.Size = new System.Drawing.Size(142, 22);
+            this.tsmiSeq.Text = "自增长(Seq)";
+            this.tsmiSeq.CheckedChanged += new System.EventHandler(this.tsmiSeq_CheckedChanged);
+            // 
+            // clbField
+            // 
+            this.clbField.AllowDrop = true;
+            this.clbField.BorderStyle = System.Windows.Forms.BorderStyle.None;
+             
+            this.clbField.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.clbField.FormattingEnabled = true;
+            this.clbField.Location = new System.Drawing.Point(7, 39);
+            this.clbField.Margin = new System.Windows.Forms.Padding(0);
+            this.clbField.Name = "clbField";
+            this.clbField.Size = new System.Drawing.Size(193, 128);
+            this.clbField.TabIndex = 0;
+            this.clbField.DragOver += new System.Windows.Forms.DragEventHandler(this.clbField_DragOver);
+            this.clbField.SizeChanged += new System.EventHandler(this.clbField_SizeChanged);
+ 
+            this.clbField.DragDrop += new System.Windows.Forms.DragEventHandler(this.clbField_DragDrop);
+            this.clbField.MouseDown += new System.Windows.Forms.MouseEventHandler(this.clbField_MouseDown);
+            // 
             // TableDesingerUI
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
@@ -138,6 +164,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.cmsField.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -146,10 +173,12 @@
 
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.CheckedListBox clbField;
+        private CListBox clbField;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Button btnMinMax;
         private System.Windows.Forms.Label lcTitle;
+        private System.Windows.Forms.ContextMenuStrip cmsField;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSeq;
     }
 }

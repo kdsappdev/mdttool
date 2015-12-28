@@ -13,6 +13,7 @@ namespace MDT.Tools.Lua.Plugin
         public ILuaEngine LuaEngine { get { return luaEngine; } set { luaEngine = value; } }
         #region 插件信息
 
+        public string fileName = "";
         private int _tag = 0;
         private string _description;
         private string _author;

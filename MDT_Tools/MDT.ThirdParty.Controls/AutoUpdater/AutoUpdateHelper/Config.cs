@@ -28,9 +28,15 @@ namespace MDT.ThirdParty.Controls
         private List<string> serverList = new List<string>();
         private string version = "1.0.0.0";
         private UpdateFileList updateFileList = new UpdateFileList();
+        private int type = 0;
         #endregion
 
         #region The public property
+        public int Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
         [XmlIgnore]
         public bool Enabled
         {
@@ -65,10 +71,23 @@ namespace MDT.ThirdParty.Controls
         #region The public method
         public static Config LoadConfig(string file)
         {
-            XmlSerializer xs = new XmlSerializer(typeof(Config));
-            StreamReader sr = new StreamReader(file);
-            Config config = xs.Deserialize(sr) as Config;
-            sr.Close();
+            Config config = null;
+            try
+            {
+                XmlSerializer xs = new XmlSerializer(typeof(Config));
+                StreamReader sr = new StreamReader(file);
+                  config = xs.Deserialize(sr) as Config;
+                sr.Close();
+            }
+            catch  
+            {
+                
+                 
+            }
+            if(config==null)
+            {
+                config=new Config();
+            }
 
             return config;
         }

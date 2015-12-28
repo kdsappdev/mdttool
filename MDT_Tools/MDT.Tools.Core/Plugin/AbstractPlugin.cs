@@ -104,7 +104,7 @@ namespace MDT.Tools.Core.Plugin
             get
             {
                 Type type = this.GetType();//+ "Build:(" + ReflectionHelper.GetPe32Time(type.Assembly.Location) + ")"; ;
-                return ReflectionHelper.GetVersion(type.Assembly);
+                return ReflectionHelper.GetVersion(type.Assembly)+ "(build:" + ReflectionHelper.GetPe32Time(type.Assembly).ToString("yyyyMMdd") + ")";
             }
         }
         public abstract string Author { get; }

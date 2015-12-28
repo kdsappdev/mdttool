@@ -24,8 +24,8 @@ application=getApplication()
 --插件信息
 local tag=51
 local pluginKey=51
-local pluginName='查看数据库数据插件'
-local description='查看当前数据库的表内容信息'
+local pluginName='Sql查询分析插件'
+local description='根据Sql查询数据库数据'
 local author='孔德帅'
 local version='1.0.0.0'
 --插件方法:初始化

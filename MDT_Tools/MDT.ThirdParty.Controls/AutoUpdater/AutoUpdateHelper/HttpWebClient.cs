@@ -8,7 +8,7 @@ namespace MDT.ThirdParty.Controls
 {
     public class HttpWebClient : WebClient
     {
-        private int timeOut = 5;
+        private int timeOut = 30;
         public int TimeOut
         {
             get { return timeOut; }
@@ -18,8 +18,10 @@ namespace MDT.ThirdParty.Controls
         protected override WebRequest GetWebRequest(Uri address)
         {
             HttpWebRequest request = (HttpWebRequest)base.GetWebRequest(address);
-            //request.Timeout = 1000 * TimeOut;
-            //request.ReadWriteTimeout = 1000 * TimeOut;
+            request.Timeout = 1000 * TimeOut;
+            request.ReadWriteTimeout = 1000 * TimeOut;
+            request.KeepAlive = false;
+            request.ProtocolVersion = HttpVersion.Version10;
             return request;
         }
     }

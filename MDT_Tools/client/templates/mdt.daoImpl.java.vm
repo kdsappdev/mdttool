@@ -20,7 +20,7 @@ public class ${poname}DAOImpl extends SqlMapClientDaoSupport implements ${poname
     public ${poname}DAOImpl() {
         super();
     }
-    
+#if(${table.type}=="TABLE")    
 #if(${GenHelper.HasPrimaryKey(${table.TableName})})
     public ${KeyJavaType} insert(${poname} record) {
         Object newKey = getSqlMapClientTemplate().insert("${table.TableName}.abatorgenerated_insert", record);
@@ -30,11 +30,7 @@ public class ${poname}DAOImpl extends SqlMapClientDaoSupport implements ${poname
     public void insert(${poname} record) {
         getSqlMapClientTemplate().insert("${table.TableName}.abatorgenerated_insert", record);
     }
-#end
-    public List selectByExample(${poname}Example example) {
-        List list = getSqlMapClientTemplate().queryForList("${table.TableName}.abatorgenerated_selectByExample", example);
-        return list;
-    }
+#end    
    
     public int deleteByExample(${poname}Example example) {
         int rows = getSqlMapClientTemplate().delete("${table.TableName}.abatorgenerated_deleteByExample", example);
@@ -57,8 +53,15 @@ public class ${poname}DAOImpl extends SqlMapClientDaoSupport implements ${poname
         int rows = getSqlMapClientTemplate().update("${table.TableName}.abatorgenerated_updateByExample", parms);
         return rows;
     }
+#end
+
+	public List selectByExample(${poname}Example example) {
+        List list = getSqlMapClientTemplate().queryForList("${table.TableName}.abatorgenerated_selectByExample", example);
+        return list;
+    }
 
 #if(${GenHelper.HasPrimaryKey(${table.TableName})})
+#if(${tableInfo.type}=="TABLE")
     public int updateByPrimaryKey(${poname} record) {
         int rows = getSqlMapClientTemplate().update("${table.TableName}.abatorgenerated_updateByPrimaryKey", record);
         return rows;
@@ -74,7 +77,7 @@ public class ${poname}DAOImpl extends SqlMapClientDaoSupport implements ${poname
         int rows = getSqlMapClientTemplate().delete("${table.TableName}.abatorgenerated_deleteByPrimaryKey", key);
         return rows;
     } 
-     
+#end     
     public ${poname} selectByPrimaryKey(${KeyJavaType} ${KeyField}) {
         ${poname} key = new ${poname}();
         key.set${KeyProperty}(${KeyField});
@@ -82,7 +85,7 @@ public class ${poname}DAOImpl extends SqlMapClientDaoSupport implements ${poname
         return record;
     }
 #end
-
+#if(${tableInfo.type}=="TABLE")
     private static class UpdateByExampleParms extends ${poname}Example {
         private Object record;
 
@@ -95,4 +98,5 @@ public class ${poname}DAOImpl extends SqlMapClientDaoSupport implements ${poname
             return record;
         }
     }
+#end
 }

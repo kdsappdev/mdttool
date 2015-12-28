@@ -24,7 +24,7 @@ namespace ${idalNameSpace}
 	/// </remarks>
 	public interface I${model}DALServer: IBaseDALServer
 	{
-	
+#if(${tableInfo.type}=="TABLE")	
 		${region}region Insert
 		/// <summary>
 		/// 增加${model}方法
@@ -62,7 +62,7 @@ namespace ${idalNameSpace}
 		/// <returns>AtsMsg对象</returns>
 		AtsMsg<List<${model}>> UpdateBatch(List<${model}> ${lmodel}s,Condition updateCondition);
 		${region}endregion
-		
+#end		
 		${region}region Select
 		/// <summary>
 		/// 查找${model}方法

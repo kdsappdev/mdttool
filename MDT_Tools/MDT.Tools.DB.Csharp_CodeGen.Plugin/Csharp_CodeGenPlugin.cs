@@ -91,6 +91,7 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
         private readonly ToolStripMenuItem _tsiDALGen = new ToolStripMenuItem();
         private readonly ToolStripMenuItem _tsiBLLGen = new ToolStripMenuItem();
         private readonly ToolStripMenuItem _tsispringConfigGen = new ToolStripMenuItem();
+        private readonly ToolStripMenuItem _tsipageGen = new ToolStripMenuItem();
         
         protected override void AddContextMenu()
         {
@@ -105,19 +106,22 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
                 _tsiGen.Text = "Csharp代码生成";
                 _tsiModelGen.Text = "Model代码生成";
                 _tsiDALGen.Text = "DALWebService代码生成";
-                _tsiBLLGen.Text = "BLL&GUI代码生成";
+                _tsiBLLGen.Text = "BLL代码生成";
                 _tsispringConfigGen.Text = "Spring配置生成";
+                _tsipageGen.Text = "分页GUI代码生成";
                 _tsiGen.Enabled = false;
-               
-                _tsiGen.DropDownItems.AddRange(new[] { _tsiModelGen, _tsiDALGen,_tsiBLLGen, _tsispringConfigGen });
+
+                _tsiGen.DropDownItems.AddRange(new[] { _tsiModelGen, _tsiDALGen, _tsiBLLGen, _tsispringConfigGen, _tsipageGen });
                  _tsiModelGen.Click +=(_tsiModelGen_Click);
                  _tsiDALGen.Click += (_tsiDALGen_Click);
                  _tsiBLLGen.Click += (_tsiBLLGen_Click);
                  _tsispringConfigGen.Click += (_tsispringConfigGen_Click);
+                 _tsipageGen.Click += (_tsipageGen_Click);
                  
             }
         }
 
+      
         void _tsiBLLGen_Click(object sender, EventArgs e)
         {
             var drTable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentCheckTable) as DataRow[];
@@ -144,6 +148,13 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
 
             ThreadPool.QueueUserWorkItem(o => Gen(drTable));
         }
+        void _tsipageGen_Click(object sender, EventArgs e)
+        {           
+            var drTable = getObject(PluginShareHelper.DBPluginKey, PluginShareHelper.DBPlugin_DBCurrentCheckTable) as DataRow[];
+
+            ThreadPool.QueueUserWorkItem(o => GenCsharpPage(drTable));
+        }
+
         private void Gen(DataRow[] drTable)
         {
             var gen = new GenCsharpModel();
@@ -165,6 +176,12 @@ namespace MDT.Tools.DB.Csharp_CodeGen.Plugin
         private void GenBLLAndGUI(DataRow[] drTable)
         {
             var gen = new GenCsharpBLLAndGUI();
+            gen.cmc = IniConfigHelper.getDefaultObject();
+            process(drTable, gen);
+        }
+        private void GenCsharpPage(DataRow[] drTable)
+        {
+            var gen = new GenCsharpPage();
             gen.cmc = IniConfigHelper.getDefaultObject();
             process(drTable, gen);
         }

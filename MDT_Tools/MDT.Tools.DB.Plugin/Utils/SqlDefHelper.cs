@@ -50,7 +50,8 @@
     #region Oracle Sql
     internal static class OraclePlSqlDefHelper
     {
-        public const string QueryAllTableInfo = "select a.table_name name,b.comments, b.table_type type from user_tables a inner join user_tab_comments b on a.table_name=b.table_name order by a.table_name";
+        //public const string QueryAllTableInfo = "select a.table_name name,b.comments, b.table_type type from user_tables a inner join user_tab_comments b on a.table_name=b.table_name order by a.table_name";
+        public const string QueryAllTableInfo = "SELECT   a.object_name NAME, b.comments, b.table_type TYPE     FROM user_objects a INNER JOIN user_tab_comments b          ON a.object_name = b.table_name WHERE object_type IN('TABLE','VIEW') ORDER BY a.object_name";
         public const string QueryTableColumnInfo = "SELECT a.table_name,a.column_name,a.data_type,a.data_length,a.nullable,a.data_scale,a.data_precision,a.data_default,a.column_id,b.comments  FROM user_tab_columns a INNER JOIN user_col_comments b       ON a.table_name = b.table_name          AND a.column_name = b.column_name where a.table_name=@tableName";
         public const string QueryAllTablePrimaryKeyInfo = "select cu.*, au.constraint_type from user_cons_columns cu, user_constraints au where cu.constraint_name = au.constraint_name";
     }

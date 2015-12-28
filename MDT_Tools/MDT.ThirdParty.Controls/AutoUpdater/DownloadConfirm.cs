@@ -21,11 +21,11 @@ using System.Windows.Forms;
 
 namespace MDT.ThirdParty.Controls
 {
-    public partial class DownloadConfirm : Form
+    partial class DownloadConfirm : Form
     {
         #region The private fields
         
-        List<DownloadFileInfo> downloadFileList = null;
+       internal List<DownloadFileInfo> downloadFileList = null;
         public bool IsCanCancel
         {
             set { btnCancel.Visible = value; }
@@ -34,6 +34,11 @@ namespace MDT.ThirdParty.Controls
         #endregion
 
         #region The constructor of DownloadConfirm
+        public DownloadConfirm()
+        {
+            InitializeComponent();
+           
+        }
         public DownloadConfirm(List<DownloadFileInfo> downloadfileList)
         {
             InitializeComponent();

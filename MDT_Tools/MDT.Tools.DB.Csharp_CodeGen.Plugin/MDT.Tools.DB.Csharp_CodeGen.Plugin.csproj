@@ -103,6 +103,7 @@
     <Compile Include="Csharp_CodeGenPlugin.cs" />
     <Compile Include="Gen\GenCsharpModel.cs" />
     <Compile Include="Gen\GenCsharpDALWebService.cs" />
+    <Compile Include="Gen\GenCsharpPage.cs" />
     <Compile Include="Gen\GenCsharpSpringConfig.cs" />
     <Compile Include="Gen\GenCsharpBLLAndGUI.cs" />
     <Compile Include="Model\CsharpCodeGenConfig.cs" />
@@ -171,6 +172,7 @@
     <None Include="MDT.Tools.pfx" />
     <None Include="templates\object.xml.vm">
     </None>
+    <None Include="templates\page.cs.vm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

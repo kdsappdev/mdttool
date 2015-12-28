@@ -29,14 +29,21 @@ namespace MDT.Tools.AutoUpdater
                 string AutoUpdaterClass = System.Configuration.ConfigurationSettings.AppSettings["AutoUpdaterClass"];
                 string AppName = System.Configuration.ConfigurationSettings.AppSettings["AppName"];
                 string AppExe = System.Configuration.ConfigurationSettings.AppSettings["AppExe"];
-
+                string Type = System.Configuration.ConfigurationSettings.AppSettings["Type"];
+                int type = 0;
+                int.TryParse(Type, out type);
                 string IsUpdate = "IsUpdate";
                 string Update = "Update";
                 string RollBack = "RollBack";
                 string SetAppName = "SetAppName";
+                string SetType = "SetType";
                 string SetAppExe = "SetAppExe";
                 string SetServerUrl = "SetServerUrl";
+                string SetAppPid = "SetAppPid";
+                string SetAppE = "SetAppE";
+                string ei = "";
                 string autoUpdaterUrl = "";
+                int pid = 0;
                 #endregion
                 LogHelper.Info("读取配置成功");
                 int isUpdate = 0;
@@ -62,6 +69,14 @@ namespace MDT.Tools.AutoUpdater
                             case "-uc":
                                 autoUpdaterUrl = args[i + 1];
                                 LogHelper.Info(string.Format("autoUpdaterUrl:{0}", args[i + 1]));
+                                break;
+                            case "-p":
+                                int.TryParse(args[i + 1], out pid);
+                                LogHelper.Info(string.Format("pid:{0}", args[i + 1]));
+                                break;
+                            case "-e":
+                                ei = args[i + 1];
+                                LogHelper.Info(string.Format("e:{0}", args[i + 1]));
                                 break;
 
                         }
@@ -90,6 +105,18 @@ namespace MDT.Tools.AutoUpdater
                     LogHelper.Debug(string.Format("SetAppName Invoke success[{0}]",AppName));
                     o.GetType().GetMethod(SetAppExe).Invoke(o, new object[] { AppExe });
                     LogHelper.Debug(string.Format("SetAppExe Invoke success[{0}]", AppExe));
+                    o.GetType().GetMethod(SetType).Invoke(o, new object[] { type });
+                    LogHelper.Debug(string.Format("SetType Invoke success[{0}]", type));
+                    if (pid != 0)
+                    {
+                        o.GetType().GetMethod(SetAppPid).Invoke(o, new object[] {pid});
+                        LogHelper.Debug(string.Format("SetAppPid Invoke success[{0}]", pid));
+                    }
+                    if (!string.IsNullOrEmpty(ei))
+                    {
+                        o.GetType().GetMethod(SetAppE).Invoke(o, new object[] { ei });
+                        LogHelper.Debug(string.Format("SetAppE Invoke success[{0}]", ei));
+                    }
                     if(!string.IsNullOrEmpty(autoUpdaterUrl))
                     {
                         o.GetType().GetMethod(SetServerUrl).Invoke(o, new object[] { autoUpdaterUrl });
@@ -123,7 +150,7 @@ namespace MDT.Tools.AutoUpdater
                             if (bHasError)
                             {
                                 LogHelper.Debug(string.Format("RollBack Invoke Begin")); ;
-                                o.GetType().GetMethod(RollBack).Invoke(o, null); ;
+                                o.GetType().GetMethod(RollBack).Invoke(o, null);
                                 LogHelper.Debug(string.Format("RollBack Invoke End")); 
 
                             }

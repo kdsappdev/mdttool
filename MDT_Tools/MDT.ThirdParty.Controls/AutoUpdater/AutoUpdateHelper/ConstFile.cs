@@ -18,12 +18,13 @@ using System.Text;
 
 namespace MDT.ThirdParty.Controls
 {
-    public class ConstFile
+     class ConstFile
     {
-        private static string appExe = "";
+         public static string AppE { get; set; }
+         private static string appExe = "";
         public static string AppExe
         {
-            get { return appName; }
+            get { return appExe; }
             set
             {
                 appExe = value;
@@ -31,13 +32,16 @@ namespace MDT.ThirdParty.Controls
                  
             }
         }
+
+        public static int AppPid { get; set; }
+
         private static string appName = "";
         public static string AppName
         {
             get { return appName; }
             set { appName = value;
                 CANCELORNOT = string.Format("{0} 正在更新中。你真的要取消吗？",value);
-                NOTNETWORK = string.Format("{0}更新不成功, {0}现在将重新启动,尝试再次更新，请单击确定重新启动程序！",value);
+                NOTNETWORK = string.Format("{0}更新不成功,{0}现在将重新启动,尝试再次更新，请单击确定重新启动程序！",value);
             }
         }
         public static string TEMPFOLDERNAME = "temp";
@@ -47,6 +51,6 @@ namespace MDT.ThirdParty.Controls
         public static string MESSAGETITLE = "自动升级";
         public static string CANCELORNOT = "MDT Smart Kit 正在更新中。你真的要取消吗？";
         public static string APPLYTHEUPDATE = "程序需要重新启动来应用更新，请单击确定重新启动程序！";
-        public static string NOTNETWORK = "MDT Smart Kit更新不成功, MDT Smart Kit现在将重新启动,尝试再次更新，请单击确定重新启动程序！";
+        public static string NOTNETWORK = "MDT Smart Kit更新不成功,MDT Smart Kit现在将重新启动,尝试再次更新，请单击确定重新启动程序！";
     }
 }

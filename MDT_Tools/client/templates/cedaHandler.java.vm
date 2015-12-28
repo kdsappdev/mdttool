@@ -1,0 +1,58 @@
+#set($model=${codeGenHelper.GetClassName2(${tableInfo.tableName},$codeRule)})
+package ats.app.ym.query.cedahandler;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.adaptiveMQ2.message.Message;
+
+import ats.app.ym.ceda.server.ContentHandler;
+import ats.app.ym.query.api.${model}Api;
+import ats.app.ym.query.api.security.SecurityCheckResult;
+import ats.app.ym.query.api.security.SqlInjSecurityCheck;
+
+import ats.app.ym.query.stream.Consts;
+import ats.foundation.condition.Condition;
+
+import ats.message2.CharsetConvertType;
+import ats.message2.MsgHelper;
+
+public class ${model}Handler extends ContentHandler {
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private ${model}Api api = new ${model}Api();
+	private SqlInjSecurityCheck securityCheck = new SqlInjSecurityCheck();
+
+	public ${model}Handler() {
+		securityCheck.init();
+	}
+
+	public Map<String, Object> handle(String topic, Message message,
+			String content, Map<String, Object> map, boolean fromList) {
+		String sid = message.getSignalID();
+		logger.debug("sid:{}", sid);
+		Map<String, Object> result = new HashMap<String, Object>();
+
+		try {
+			api.isPermission = isIspermission();
+			Condition queryCondition = MsgHelper.Deserialize(content,
+					Condition.class, CharsetConvertType.None);
+			SecurityCheckResult scr = securityCheck.Check(sid, queryCondition);
+			if (scr != null && scr.Result) {
+				result = api.getT${model}(sid, queryCondition);
+			} else {
+				result.put("Code", scr.Code);
+				result.put("Msg", scr.Info);
+			}
+		} catch (Exception e) {
+			logger.error("", e);
+			result.put("Code", Consts.NoKnowCode);
+			result.put("Msg", e.getMessage());
+		}
+		logger.info("result:{}", result);
+		return result;
+
+	}
+}

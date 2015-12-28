@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
+using MDT.Tools.Core.Utils;
+
 namespace MDT.Tools.DB.Common
 {
     public class CodeGenHelper
@@ -60,12 +62,19 @@ namespace MDT.Tools.DB.Common
             {
                 temp = temp.Trim(new[] { '#', ' ', ';', '\r', '\n' });
                 string[] temps = temp.ToLower().Split(new char[] { '_' });
-                temp = "";
-                for (int i = 1; i < temps.Length;i++ )
+                if (temps.Length > 1)
                 {
-                    temp += StrFirstToUpper(temps[i]);
+                    temp = "";
+                    for (int i = 1; i < temps.Length; i++)
+                    {
+                        temp += StrFirstToUpper(temps[i]);
+                    }
                 }
-              
+                else
+                {
+                    temp = StrFirstToUpper(temp.ToLower());
+                }
+
             }
             return temp;
         }
@@ -150,7 +159,9 @@ namespace MDT.Tools.DB.Common
         }
         public string GetClassName2(string tableName, string codeRule)
         {
+             
             string className = (codeRule == Ibatis ? !string.IsNullOrEmpty(ibatisConfigHelper.GetClassName(tableName)) ? ibatisConfigHelper.GetClassName(tableName) : StrFirstToUpperRemoveFirstUnderline(tableName) : StrFirstToUpperRemoveFirstUnderline(tableName));
+           
             return className;
         }
         public static bool IsNullOrEmpty(string str)

@@ -8,7 +8,7 @@ using MDT.ThirdParty.Controls.Docking;
 
 namespace WeifenLuo.WinFormsUI.Docking
 {
-    internal abstract class InertButtonBase : Control
+    public abstract class InertButtonBase : Control
     {
         protected InertButtonBase()
         {

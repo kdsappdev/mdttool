@@ -13,6 +13,8 @@ using System.Threading;
 using System.Diagnostics;
 using MDT.Tools.Aliyun.Common.Oss;
 using WeifenLuo.WinFormsUI.Docking;
+using MDT.Tools.Core.Log;
+using MDT.Tools.Aliyun.Upload.Plugin.DataMemory;
 
 namespace MDT.Tools.Aliyun.Upload.Plugin.UploadUI
 {
@@ -21,14 +23,19 @@ namespace MDT.Tools.Aliyun.Upload.Plugin.UploadUI
         private OssConfig ossConfig=null;
         private OssClient ossClient = null;
         private string selectedPath = "";
+        private ILog logHelper;
+        private static string ModuleName = "UploadOSSUI";
+        private XMLDataMemory _dataMemory = new XMLDataMemory();
         public UploadOSSUI()
         {
             InitializeComponent();
         }
         private void UploadOSSUI_Load(object sender, EventArgs e)
         {
+            logHelper = new Log4netLog();
             ossConfig = new OssConfig();
             setEnaled(false);
+            GetMemory();
            
         }
 
@@ -209,73 +216,81 @@ namespace MDT.Tools.Aliyun.Upload.Plugin.UploadUI
        #region  文件上传
        public void MutiPartUpload(string fileName, string key)
        {
-           setTexItems("开始上传:" + key);
-           InitiateMultipartUploadRequest initRequest =
-                           new InitiateMultipartUploadRequest(ossConfig.BucketName, key);
-           InitiateMultipartUploadResult initResult = ossClient.InitiateMultipartUpload(initRequest);
-
-
-           // 设置每块为 1M 
-           int partSize = 1024 * 1024 * 1;
-
-           FileInfo partFile = new FileInfo(fileName);
-
-           // 计算分块数目 
-           int partCount = (int)(partFile.Length / partSize);
-           if (partFile.Length % partSize != 0)
+           try
            {
-               partCount++;
 
+               setTexItems("开始上传:" + key);
+               InitiateMultipartUploadRequest initRequest =
+                               new InitiateMultipartUploadRequest(ossConfig.BucketName, key);
+               InitiateMultipartUploadResult initResult = ossClient.InitiateMultipartUpload(initRequest);
+
+
+               // 设置每块为 1M 
+               int partSize = 1024 * 1024 * 1;
+
+               FileInfo partFile = new FileInfo(fileName);
+
+               // 计算分块数目 
+               int partCount = (int)(partFile.Length / partSize);
+               if (partFile.Length % partSize != 0)
+               {
+                   partCount++;
+
+               }
+               setTexItems("数据分块上传，一共:" + partCount + "块");
+               // 新建一个List保存每个分块上传后的ETag和PartNumber 
+               List<PartETag> partETags = new List<PartETag>();
+
+               for (int i = 0; i < partCount; i++)
+               {
+                   int number = i + 1;
+                   setTexItems("第" + number + "块,上传开始");
+                   // 获取文件流 
+                   FileStream fis = new FileStream(partFile.FullName, FileMode.Open);
+
+                   // 跳到每个分块的开头 
+                   long skipBytes = partSize * i;
+                   fis.Position = skipBytes;
+                   //fis.skip(skipBytes); 
+
+                   // 计算每个分块的大小 
+                   long size = partSize < partFile.Length - skipBytes ?
+                           partSize : partFile.Length - skipBytes;
+
+                   // 创建UploadPartRequest，上传分块 
+                   UploadPartRequest uploadPartRequest = new UploadPartRequest(ossConfig.BucketName, key, initResult.UploadId);
+                   uploadPartRequest.InputStream = fis;
+                   uploadPartRequest.PartSize = size;
+                   uploadPartRequest.PartNumber = (i + 1);
+                   UploadPartResult uploadPartResult = ossClient.UploadPart(uploadPartRequest);
+
+                   // 将返回的PartETag保存到List中。 
+                   partETags.Add(uploadPartResult.PartETag);
+
+                   // 关闭文件 
+                   fis.Close();
+                   setTexItems("第" + number + "块,上传完毕");
+               }
+
+               CompleteMultipartUploadRequest completeReq = new CompleteMultipartUploadRequest(ossConfig.BucketName, key, initResult.UploadId);
+               foreach (PartETag partETag in partETags)
+               {
+                   completeReq.PartETags.Add(partETag);
+               }
+               //  红色标注的是与JAVA的SDK有区别的地方 
+
+               //完成分块上传 
+               setTexItems("合并数据块开始");
+               CompleteMultipartUploadResult completeResult = ossClient.CompleteMultipartUpload(completeReq);
+               setTexItems("合并数据块结束");
+               // 返回最终文件的MD5，用于用户进行校验 
+
+               setTexItems(key + " 上传成功.");
            }
-           setTexItems("数据分块上传，一共:" + partCount + "块");
-           // 新建一个List保存每个分块上传后的ETag和PartNumber 
-           List<PartETag> partETags = new List<PartETag>();
-
-           for (int i = 0; i < partCount; i++)
+           catch (Exception ex)
            {
-               int number = i + 1;
-               setTexItems("第" + number + "块,上传开始");
-               // 获取文件流 
-               FileStream fis = new FileStream(partFile.FullName, FileMode.Open);
-
-               // 跳到每个分块的开头 
-               long skipBytes = partSize * i;
-               fis.Position = skipBytes;
-               //fis.skip(skipBytes); 
-
-               // 计算每个分块的大小 
-               long size = partSize < partFile.Length - skipBytes ?
-                       partSize : partFile.Length - skipBytes;
-
-               // 创建UploadPartRequest，上传分块 
-               UploadPartRequest uploadPartRequest = new UploadPartRequest(ossConfig.BucketName, key, initResult.UploadId);
-               uploadPartRequest.InputStream = fis;
-               uploadPartRequest.PartSize = size;
-               uploadPartRequest.PartNumber = (i + 1);
-               UploadPartResult uploadPartResult = ossClient.UploadPart(uploadPartRequest);
-
-               // 将返回的PartETag保存到List中。 
-               partETags.Add(uploadPartResult.PartETag);
-
-               // 关闭文件 
-               fis.Close();
-               setTexItems("第"+ number+ "块,上传完毕");
+               logHelper.Error(ex.Message);
            }
-
-           CompleteMultipartUploadRequest completeReq = new CompleteMultipartUploadRequest(ossConfig.BucketName, key, initResult.UploadId);
-           foreach (PartETag partETag in partETags)
-           {
-               completeReq.PartETags.Add(partETag);
-           }
-           //  红色标注的是与JAVA的SDK有区别的地方 
-
-           //完成分块上传 
-           setTexItems("合并数据块开始");
-           CompleteMultipartUploadResult completeResult = ossClient.CompleteMultipartUpload(completeReq);
-           setTexItems("合并数据块结束");
-           // 返回最终文件的MD5，用于用户进行校验 
-
-           setTexItems(key + " 上传成功.");
 
        }
        #endregion 
@@ -407,6 +422,7 @@ namespace MDT.Tools.Aliyun.Upload.Plugin.UploadUI
                     setEnaled(true);
                     setConnEnaled(true);
                     setItems(buck);
+                    SetMemory();
                 }
                 catch (Exception ex)
                 {
@@ -417,7 +433,31 @@ namespace MDT.Tools.Aliyun.Upload.Plugin.UploadUI
             });
            
         }
+        #region Memory
+        private void GetMemory()
+        {
+            teaccessId.Text = GetMemory(MemoryName.AccessKeyId);
+            teaccesskey.Text = GetMemory(MemoryName.AccessKey);
+        }
 
+        private string GetMemory(MemoryName mn)
+        {
+            return _dataMemory.GetData(string.Format("{0}_{1}", ModuleName, mn));
+        }
+
+        private void SetMemory()
+        {
+            string id = teaccessId.Text.Trim();
+            string key = teaccesskey.Text.Trim();
+            SetMemory(MemoryName.AccessKeyId, id);
+            SetMemory(MemoryName.AccessKey, key);
+        }
+
+        private void SetMemory(MemoryName mn, string value)
+        {
+            _dataMemory.SetData(string.Format("{0}_{1}", ModuleName, mn), value);
+        }
+        #endregion
         private void tsbupload_Click(object sender, EventArgs e)
         {
             string Bucket =cbBucket.Text.Trim();
@@ -428,11 +468,12 @@ namespace MDT.Tools.Aliyun.Upload.Plugin.UploadUI
             }
             if (rbUpFile.Checked == true)
             {
-                uploadFile();
+                ThreadPool.QueueUserWorkItem(o => { uploadFile(); });
+                
             }
             else if (rbUpfolder.Checked == true)
             {
-                uploadFolder();
+                ThreadPool.QueueUserWorkItem(o => { uploadFolder(); });
             }
         }
 

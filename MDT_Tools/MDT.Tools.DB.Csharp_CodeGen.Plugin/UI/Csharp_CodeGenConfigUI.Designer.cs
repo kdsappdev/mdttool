@@ -281,6 +281,7 @@
             this.rbtnIbatis.TabIndex = 2;
             this.rbtnIbatis.Text = "ibatis";
             this.rbtnIbatis.UseVisualStyleBackColor = true;
+            this.rbtnIbatis.Visible = false;
             this.rbtnIbatis.CheckedChanged += new System.EventHandler(this.rbtnIbatis_CheckedChanged);
             // 
             // tbIbatis
@@ -290,6 +291,7 @@
             this.tbIbatis.Name = "tbIbatis";
             this.tbIbatis.Size = new System.Drawing.Size(100, 21);
             this.tbIbatis.TabIndex = 3;
+            this.tbIbatis.Visible = false;
             // 
             // btnIbatisBrower
             // 
@@ -299,6 +301,7 @@
             this.btnIbatisBrower.TabIndex = 4;
             this.btnIbatisBrower.Text = "浏览";
             this.btnIbatisBrower.UseVisualStyleBackColor = true;
+            this.btnIbatisBrower.Visible = false;
             this.btnIbatisBrower.Click += new System.EventHandler(this.btnIbatisBrower_Click);
             // 
             // label5
@@ -347,6 +350,7 @@
             this.cbShowComment.TabIndex = 8;
             this.cbShowComment.Text = "是否显示注释信息";
             this.cbShowComment.UseVisualStyleBackColor = true;
+            this.cbShowComment.Visible = false;
             // 
             // tbBLLNameSpace
             // 

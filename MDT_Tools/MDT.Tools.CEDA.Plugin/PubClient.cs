@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using MDT.Tools.CEDA.Common;
 using MDT.Tools.Core.Utils;
 using com.adaptiveMQ2.client;
 using com.adaptiveMQ2.message;
@@ -26,6 +27,7 @@ namespace MDT.Tools.CEDA.Plugin
         private XMLDataMemory _dataMemory = new XMLDataMemory();
         public static string ModuleName = "Publish";
         private bool encryption = false;
+        public string clientType { get; set; }
         public PubClient()
         {
             InitializeComponent();
@@ -136,7 +138,7 @@ namespace MDT.Tools.CEDA.Plugin
                     _clientInfo.Protocol = ClientInfo.PROTOCOL_HTTP;
                 if (cbVS.Checked)
                 {
-                    _clientInfo.LoginMessage = CedaObject.GetLoginMessage(txtUserName.Text, txtPwd.Text, txtRole.Text, null, encryption);
+                    _clientInfo.LoginMessage = CedaObject.GetLoginMessage(txtUserName.Text, txtPwd.Text, txtRole.Text, null, encryption, clientType);
                 }
 
             }
@@ -149,7 +151,7 @@ namespace MDT.Tools.CEDA.Plugin
                 else
                     _clientInfo.Protocol = ClientInfo.PROTOCOL_TCP;
                 if (cbVS.Checked)
-                    _clientInfo.LoginMessage = CedaObject.GetLoginMessage(txtUserName.Text, txtPwd.Text, txtRole.Text, null, encryption);
+                    _clientInfo.LoginMessage = CedaObject.GetLoginMessage(txtUserName.Text, txtPwd.Text, txtRole.Text, null, encryption, clientType);
             }
 
             string temp = string.Format("Address:{0}:{1},Topic:{2}", _clientInfo.AddressHost, _clientInfo.AddressPort,
@@ -372,6 +374,21 @@ namespace MDT.Tools.CEDA.Plugin
                 tbtnJson.Enabled = true;
             }
         }
+
+        private void ckEncryption_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ckEncryption.Checked)
+            {
+                encryption = true;
+            }
+            else
+            {
+                encryption = false;
+            }
+
+        }
+
+       
 
       
 

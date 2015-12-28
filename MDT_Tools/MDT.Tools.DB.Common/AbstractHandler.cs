@@ -60,18 +60,33 @@ namespace MDT.Tools.DB.Common
                 {
                     string tableName = drTable["name"] + "";
                     string tableComments = drTable["comments"] + "";
-                   
+                    string tableType = drTable["type"]+"";
                     TableInfo tableInfo = new TableInfo();
                     tableInfo.TableName = tableName;
-                    tableInfo.TableComments = tableComments;
-
+                    tableInfo.TableComments = tableComments+"视图";
+                    tableInfo.Type = tableType;
                     DataRow[] drTableColumns = dsTableColumns.Tables[dbName + DBtablesColumns].Select("TABLE_NAME = '" + drTable["name"].ToString() + "'", "COLUMN_ID ASC");
 
                     foreach (var drTableColumn in drTableColumns)
                     {
                         ColumnInfo columnInfo = new ColumnInfo();
                         columnInfo.Name = drTableColumn["COLUMN_NAME"] as string;//列名
+                       
+
                         columnInfo.Comments = drTableColumn["COMMENTS"] as string;//列说明
+                        if (tableInfo.Type == "VIEW")
+                        {
+                            DataRow[] temps = dsTableColumns.Tables[dbName + DBtablesColumns].Select("column_name = '" + columnInfo.Name + "'", "COLUMN_ID ASC");
+                            foreach (var dataRow in temps)
+                            {
+                                string str = dataRow["COMMENTS"] as string;
+                                if(!string.IsNullOrEmpty(str))
+                                {
+                                    columnInfo.Comments = str;
+                                    break;
+                                }
+                            }
+                        }
                         columnInfo.DataType = drTableColumn["DATA_TYPE"] as string;//列类型
                     
                         columnInfo.DataScale = drTableColumn["DATA_SCALE"] + "";//列精度

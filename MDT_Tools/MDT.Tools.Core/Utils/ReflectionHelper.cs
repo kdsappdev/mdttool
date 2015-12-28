@@ -93,11 +93,7 @@ namespace MDT.Tools.Core.Utils
                     {
                         asm = Assembly.LoadFrom(file);
                     }
-                }
-                catch (Exception ex)
-                {
-                    //LogHelper.Error(ex);
-                }
+               
 
                 if (asm == null)
                 {
@@ -118,33 +114,42 @@ namespace MDT.Tools.Core.Utils
                         }
                     }
                 }
+                }
+                catch (Exception ex)
+                {
+                    //LogHelper.Error(ex);
+                }
             }
 
         }
         #endregion
 
         #region 获取dll编译时间
-        public static DateTime GetPe32Time(string fileName)
+        public static DateTime GetPe32Time(Assembly assembly)
         {
-            int seconds;
-            using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open, FileAccess.Read)))
-            {
-                var bs = br.ReadBytes(2);
-                const string msg = "非法的PE32文件";
-                if (bs.Length != 2) throw new Exception(msg);
-                if (bs[0] != 'M' || bs[1] != 'Z') throw new Exception(msg);
-                br.BaseStream.Seek(0x3c, SeekOrigin.Begin);
-                var offset = br.ReadByte();
-                br.BaseStream.Seek(offset, SeekOrigin.Begin);
-                bs = br.ReadBytes(4);
-                if (bs.Length != 4) throw new Exception(msg);
-                if (bs[0] != 'P' || bs[1] != 'E' || bs[2] != 0 || bs[3] != 0) throw new Exception(msg);
-                bs = br.ReadBytes(4);
-                if (bs.Length != 4) throw new Exception(msg);
-                seconds = br.ReadInt32();
-            }
-            return DateTime.SpecifyKind(new DateTime(1970, 1, 1), DateTimeKind.Utc).
-               AddSeconds(seconds).ToLocalTime();
+            DateTime dt=new DateTime(2000,1,1);
+            //string fileName = assembly.Location;
+            //int seconds;
+            //using (var br = new BinaryReader(new FileStream(fileName, FileMode.Open, FileAccess.Read)))
+            //{
+            //    var bs = br.ReadBytes(2);
+            //    const string msg = "非法的PE32文件";
+            //    if (bs.Length != 2) throw new Exception(msg);
+            //    if (bs[0] != 'M' || bs[1] != 'Z') throw new Exception(msg);
+            //    br.BaseStream.Seek(0x3c, SeekOrigin.Begin);
+            //    var offset = br.ReadByte();
+            //    br.BaseStream.Seek(offset, SeekOrigin.Begin);
+            //    bs = br.ReadBytes(4);
+            //    if (bs.Length != 4) throw new Exception(msg);
+            //    if (bs[0] != 'P' || bs[1] != 'E' || bs[2] != 0 || bs[3] != 0) throw new Exception(msg);
+            //    bs = br.ReadBytes(4);
+            //    if (bs.Length != 4) throw new Exception(msg);
+            //    seconds = br.ReadInt32();
+            //}
+            //DateTime dt= DateTime.SpecifyKind(new DateTime(1970, 1, 1), DateTimeKind.Utc).
+            //   AddSeconds(seconds).ToLocalTime();
+            dt=dt.AddDays(assembly.GetName().Version.Build);
+            return dt;
         }
         #endregion
 

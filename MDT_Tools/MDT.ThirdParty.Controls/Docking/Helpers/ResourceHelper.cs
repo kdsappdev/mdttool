@@ -15,15 +15,7 @@ namespace WeifenLuo.WinFormsUI.Docking
             get
             {
                 if (_resourceManager == null)
-                    try
-                    {
-                        _resourceManager = new ResourceManager("WeifenLuo.WinFormsUI.Docking.Strings", typeof(ResourceHelper).Assembly);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
-
+                    _resourceManager = new ResourceManager("WeifenLuo.WinFormsUI.Docking.Strings", typeof(ResourceHelper).Assembly);
                 return _resourceManager;
             }
 
@@ -31,16 +23,7 @@ namespace WeifenLuo.WinFormsUI.Docking
 
         public static string GetString(string name)
         {
-            string str = "";
-            try
-            {
-                str = ResourceManager.GetString(name);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return str;
+            return ResourceManager.GetString(name);
         }
     }
 }

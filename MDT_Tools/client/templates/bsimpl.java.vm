@@ -15,7 +15,9 @@ import ats.common.model.po.${model}Example;
 import ats.common.model.dao.${model}DAO;
 import ats.common.model.dao.ExecuteSqlDAO;
 import ats.common.service.forexdeal.helper.ForexDealHelper;
+#if(${tableInfo.type}=="TABLE")
 import ats.pingo.common.datacheck.bs.IDataCheckServer;
+#end
 import ${bsPackage}.I${model}Server;
 import ats.foundation.utils.exception.CodeException;
 import ats.foundation.condition.Condition;
@@ -32,21 +34,24 @@ import ats.foundation.condition.BuildConditionType;
  */
 public class ${model}Server implements I${model}Server {
 	private Logger logger = Logger.getLogger(this.getClass().getName());
+	#if(${tableInfo.type}=="TABLE")
 	private IDataCheckServer dataCheckServer;
+	#end
 	private ${model}DAO ${lmodel}DAO;
 	
 	private ExecuteSqlDAO executeSqlDAO;
 	public void setExecuteSqlDAO(ExecuteSqlDAO executeSqlDAO) {
 		this.executeSqlDAO = executeSqlDAO;
 	}
-
+	public void set${model}DAO(${model}DAO ${lmodel}DAO) {
+		this.${lmodel}DAO = ${lmodel}DAO;
+	}
+	#if(${tableInfo.type}=="TABLE")
 	public void setDataCheckServer(IDataCheckServer dataCheckServer) {
 		this.dataCheckServer =dataCheckServer;
 	}
-	public void set${model}DAO(${model}DAO ${lmodel}DAO) {
-		this.${lmodel}DAO = ${lmodel}DAO;
-	}	
-
+		
+	
 	/**
 	 *增加${model}对象
 	 *
@@ -186,7 +191,7 @@ public class ${model}Server implements I${model}Server {
 			insert(${lmodel});
 		}
 	}
-	
+	#end
 	/**
 	 *根据QueryCondition对象 查询出${model}对象集合
 	 *
@@ -218,7 +223,7 @@ public class ${model}Server implements I${model}Server {
 		        logger.error(e.getMessage());
 			throw new CodeException("4102",e.getMessage());
 		}
-		logger.info("the List<${model}> size is:"+list.size());
+		logger.debug("the List<${model}> size is:"+list.size());
 		return list;	 
 	}
 	
@@ -238,9 +243,8 @@ public class ${model}Server implements I${model}Server {
 		}
 		try {
 			String o = (String)queryCondition.BuildCondition(BuildConditionType.OracleSql);
-			#set($temp='##')o = o.replace("${temp}", "*");
-			String sql="select count(*) as Counts from ("+o+")";
-			countMap = executeSqlDAO.query(sql);
+			#set($temp='*')o = o.replace("${temp}", "count(*) as Counts");
+			countMap = executeSqlDAO.query(o);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new CodeException("4102",e.getMessage());
@@ -273,7 +277,7 @@ public class ${model}Server implements I${model}Server {
 			logger.error(e.getMessage());
 			throw new CodeException("4102",e.getMessage());
 		}
-		logger.info("the List<${model}> size is:"+list.size());
+		logger.debug("the List<${model}> size is:"+list.size());
 		return list;
 	}
 

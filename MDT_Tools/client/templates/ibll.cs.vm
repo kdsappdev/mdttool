@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using Atf.Common.Core;
 using ${modelNameSpace};
+using Ats.Foundation.Condition;
 namespace ${bllNameSpace}
 {
 	/// <summary>
@@ -16,7 +17,9 @@ namespace ${bllNameSpace}
 	/// <remarks>
 	/// $date: 创建. ${pluginName} 模板版本(v1.0.0.0)<br/>
 	/// </remarks>
-	public interface I${guiPluginName}BLLService: IBaseBLLService
-	{
-	}
+    public interface I${guiPluginName}BLLService: IBaseBLLService
+    {
+        int Select${model}Count(Condition co);
+        List<${model}> Select${model}Page(Condition co);
+    }
 }

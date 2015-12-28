@@ -1,9 +1,9 @@
-package ats.app.ym.db;
+package ats.app.ym.query.api.po;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
-
+import com.alibaba.fastjson.annotation.JSONField;
  /**
 #if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
    *${tableInfo.TableComments} Po对象
@@ -11,13 +11,15 @@ import java.util.Date;
    *${tableInfo.TableName}
  #end
   *
-  *$date: 创建. ${pluginName} 模板版本(v1.0.0.0) <br/>
+  *$date: 创建. ${pluginName} 模板版本(v1.0.0.1) <br/>
   */
 public class T${codeGenHelper.GetClassName2(${tableInfo.tableName},$codeRule)} {
 
 	#foreach($column in $tableInfo.Columns)
 #set($netType=${dataTypeMappingHelper.GetJavaDataTypeByDbType(${dbType},${column.DataType},${column.DataScale},${column.DataLength},${column.DataNullAble})})
+	@JSONField(name = "$codeGenHelper.StrProperty(${column.Name})",serialize=true)
 		public $netType $codeGenHelper.StrFirstToUpperAndUnderline(${column.Name})#if(!$column.DataNullAble || !$codeGenHelper.IsNullOrEmpty(${column.DataDefault})) = ${codeGenHelper.GetDefaultValueByDataType(${netType}, ${column.DataDefault})}#end;#if(${column.Comments})//${column.Comments}#end
+		
 		
 	#end
 }

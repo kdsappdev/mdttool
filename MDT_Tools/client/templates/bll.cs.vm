@@ -10,6 +10,8 @@ using Ats.Foundation.Message;
 using Atf.Common.Core;
 using ${idalNameSpace};
 using ${modelNameSpace};
+using Ats.Foundation.Condition;
+using Atf.Common;
 namespace ${bllNameSpace}
 {
 	/// <summary>
@@ -28,5 +30,48 @@ namespace ${bllNameSpace}
 			set { i${lmodel}DALServer = value;}
 		}
 		${region}endregion
-	}
+       
+ 	    public int Select${model}Count(Condition co)
+        {
+            int Count = 0;
+            try
+            {                             
+                AtsMsg<Dictionary<string, int>> msg = i${lmodel}DALServer.SelectCount(co);
+                if (WebServicesHelper.CheckResult(msg.Header, true))
+                {
+                    Count = msg.Body["COUNTS"];
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.Message);
+            }
+            return Count;
+        }
+
+        public List<${model}> Select${model}Page(Condition co)
+        {
+            List<${model}> nmdpList = new List<${model}>();
+            try
+            {                           
+                AtsMsg<List<${model}>> msg = i${lmodel}DALServer.SelectPage(co);
+                if (WebServicesHelper.CheckResult(msg.Header, true))
+                {
+                    nmdpList = msg.Body;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.Message);
+            }
+            if (nmdpList == null)
+            {
+                nmdpList = new List<${model}>();
+            }
+            return nmdpList;
+        }
+
+    }
 }
+	
+	

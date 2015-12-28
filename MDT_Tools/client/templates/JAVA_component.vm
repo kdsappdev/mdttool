@@ -13,12 +13,11 @@
 #end
 #end
 #macro(Jcp_parseAGroup2 $p)
-		t.${group.Name}=new ArrayList<G${group.Name}>();
-		for( G${group.Name} g : ${group.Name})
-		{
+		t.set${group.Name}(new ArrayList<G${group.Name}>());
+		for (G${group.Name} g : get${group.Name}()) {
 			G${group.Name} g${group.Name}=g.Clone();		 
-			t.${group.Name}.Add(g${group.Name});
-		}	
+			t.get${group.Name}().add(g${group.Name});
+		}
 #end
 #macro(Jcp_parseAComponent2 $p)
 	t.g${p.Name}=${p.Name};
@@ -91,9 +90,10 @@ import ats.bbox.common.mo.BaseMessage;
 import ats.bbox.common.mo.MessageDictionary;
 import ats.bbox.framework.utils.DataTypeConverter;
 import java.util.List;
+import java.util.ArrayList;
 /**
  *
- *$date: 创建. ${pluginName} 模板版本(v1.0.1.0)<br/>
+ *$date: 创建. ${pluginName} 模板版本(v1.0.1.1)<br/>
  */
 public class ${p.Name} extends BaseMessage{
 #Jcp_paraeAFix($p)

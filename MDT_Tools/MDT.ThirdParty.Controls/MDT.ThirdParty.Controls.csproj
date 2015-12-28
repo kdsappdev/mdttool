@@ -39,7 +39,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\client\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -91,6 +91,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -98,15 +99,20 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutoUpdater\AutoUpdateHelper\AutoUpdater.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\BigInteger.cs" />
     <Compile Include="AutoUpdater\AutoUpdateHelper\CommonUnitity.cs" />
     <Compile Include="AutoUpdater\AutoUpdateHelper\Config.cs" />
     <Compile Include="AutoUpdater\AutoUpdateHelper\ConstFile.cs" />
     <Compile Include="AutoUpdater\AutoUpdateHelper\DownloadFileInfo.cs" />
+    <Compile Include="AutoUpdater\AutoUpdateHelper\HttpWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="AutoUpdater\AutoUpdateHelper\IAutoUpdater.cs" />
     <Compile Include="AutoUpdater\AutoUpdateHelper\LocalFile.cs" />
     <Compile Include="AutoUpdater\AutoUpdateHelper\RemoteFile.cs" />
@@ -123,6 +129,76 @@
     <Compile Include="AutoUpdater\DownloadProgress.designer.cs">
       <DependentUpon>DownloadProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="AutoUpdater\LogHelper.cs" />
+    <Compile Include="Docking\DockPanel.Appearance.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\DrawingRoutines.cs" />
+    <Compile Include="Docking\InertButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ITheme.cs" />
+    <Compile Include="Docking\other\VS2012ColorTable.cs" />
+    <Compile Include="Docking\other\VS2012ToolStripRenderer.cs" />
+    <Compile Include="Docking\other\VS2013ColorTable.cs" />
+    <Compile Include="Docking\other\VS2013ToolStripRenderer.cs" />
+    <Compile Include="Docking\other\VSToolStripExtender.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\other\VSToolStripExtender.Designer.cs">
+      <DependentUpon>VSToolStripExtender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Docking\Resources1.Designer.cs" />
+    <Compile Include="Docking\Strings.Designer.cs" />
+    <Compile Include="Docking\ThemeBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2012Light\Resources.Designer.cs" />
+    <Compile Include="Docking\ThemeVS2012Light\Strings.Designer.cs" />
+    <Compile Include="Docking\ThemeVS2012Light\VS2012LightAutoHideStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2012Light\VS2012LightAutoHideWindowControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2012Light\VS2012LightDockPaneCaption.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2012Light\VS2012LightDockPaneStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2012Light\VS2012LightDockWindow.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2012Light\VS2012LightSplitterControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2012Light\VS2012LightTheme.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2013Blue\Resources.Designer.cs" />
+    <Compile Include="Docking\ThemeVS2013Blue\Strings.Designer.cs" />
+    <Compile Include="Docking\ThemeVS2013Blue\VS2013BlueDockPaneStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2013Blue\VS2013BlueSplitterControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\ThemeVS2013Blue\VS2013BlueTheme.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Docking\VS2005Theme.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Loading\LoadingResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LoadingResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Loading\MyOpaqueLayer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Loading\OpaqueCommand.cs" />
     <Compile Include="TextEditor\Actions\BookmarkActions.cs" />
     <Compile Include="TextEditor\Actions\CaretActions.cs" />
     <Compile Include="TextEditor\Actions\ClipBoardActions.cs" />
@@ -212,11 +288,6 @@
     <Compile Include="Docking\Measures.cs" />
     <Compile Include="Docking\NestedDockingStatus.cs" />
     <Compile Include="Docking\NestedPaneCollection.cs" />
-    <Compile Include="Docking\Resources1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Docking\SplitterBase.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -332,6 +403,7 @@
     <Compile Include="TextEditor\Gui\TextAreaMouseHandler.cs" />
     <Compile Include="TextEditor\Gui\TextAreaUpdate.cs" />
     <Compile Include="TextEditor\Gui\TextEditorControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="TextEditor\Gui\TextEditorControlBase.cs">
       <SubType>UserControl</SubType>
@@ -356,6 +428,54 @@
     <Compile Include="TextEditor\Util\TipSplitter.cs" />
     <Compile Include="TextEditor\Util\TipText.cs" />
     <Compile Include="TextEditor\Util\XmlFoldingStrategy.cs" />
+    <Compile Include="Thrift\Collections\TCollections.cs" />
+    <Compile Include="Thrift\Collections\THashSet.cs" />
+    <Compile Include="Thrift\Protocol\TAbstractBase.cs" />
+    <Compile Include="Thrift\Protocol\TBase.cs" />
+    <Compile Include="Thrift\Protocol\TBase64Utils.cs" />
+    <Compile Include="Thrift\Protocol\TBinaryProtocol.cs" />
+    <Compile Include="Thrift\Protocol\TCompactProtocol.cs" />
+    <Compile Include="Thrift\Protocol\TField.cs" />
+    <Compile Include="Thrift\Protocol\TJSONProtocol.cs" />
+    <Compile Include="Thrift\Protocol\TList.cs" />
+    <Compile Include="Thrift\Protocol\TMap.cs" />
+    <Compile Include="Thrift\Protocol\TMessage.cs" />
+    <Compile Include="Thrift\Protocol\TMessageType.cs" />
+    <Compile Include="Thrift\Protocol\TMultiplexedProcessor.cs" />
+    <Compile Include="Thrift\Protocol\TMultiplexedProtocol.cs" />
+    <Compile Include="Thrift\Protocol\TProtocol.cs" />
+    <Compile Include="Thrift\Protocol\TProtocolDecorator.cs" />
+    <Compile Include="Thrift\Protocol\TProtocolException.cs" />
+    <Compile Include="Thrift\Protocol\TProtocolFactory.cs" />
+    <Compile Include="Thrift\Protocol\TProtocolUtil.cs" />
+    <Compile Include="Thrift\Protocol\TSet.cs" />
+    <Compile Include="Thrift\Protocol\TStruct.cs" />
+    <Compile Include="Thrift\Protocol\TType.cs" />
+    <Compile Include="Thrift\Server\TServer.cs" />
+    <Compile Include="Thrift\Server\TServerEventHandler.cs" />
+    <Compile Include="Thrift\Server\TSimpleServer.cs" />
+    <Compile Include="Thrift\Server\TThreadedServer.cs" />
+    <Compile Include="Thrift\Server\TThreadPoolServer.cs" />
+    <Compile Include="Thrift\TApplicationException.cs" />
+    <Compile Include="Thrift\TException.cs" />
+    <Compile Include="Thrift\TProcessor.cs" />
+    <Compile Include="Thrift\Transport\TBufferedTransport.cs" />
+    <Compile Include="Thrift\Transport\TFramedTransport.cs" />
+    <Compile Include="Thrift\Transport\THttpClient.cs" />
+    <Compile Include="Thrift\Transport\THttpHandler.cs" />
+    <Compile Include="Thrift\Transport\TMemoryBuffer.cs" />
+    <Compile Include="Thrift\Transport\TNamedPipeClientTransport.cs" />
+    <Compile Include="Thrift\Transport\TNamedPipeServerTransport.cs" />
+    <Compile Include="Thrift\Transport\TServerSocket.cs" />
+    <Compile Include="Thrift\Transport\TServerTransport.cs" />
+    <Compile Include="Thrift\Transport\TSilverlightSocket.cs" />
+    <Compile Include="Thrift\Transport\TSocket.cs" />
+    <Compile Include="Thrift\Transport\TStreamTransport.cs" />
+    <Compile Include="Thrift\Transport\TTLSServerSocket.cs" />
+    <Compile Include="Thrift\Transport\TTLSSocket.cs" />
+    <Compile Include="Thrift\Transport\TTransport.cs" />
+    <Compile Include="Thrift\Transport\TTransportException.cs" />
+    <Compile Include="Thrift\Transport\TTransportFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Docking\DockPanel.bmp" />
@@ -448,6 +568,85 @@
     <EmbeddedResource Include="TextEditor\Resources\RightArrow.cur" />
     <EmbeddedResource Include="TextEditor\Resources\SyntaxModes.xml" />
     <EmbeddedResource Include="TextEditor\Resources\TextEditorControl.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MDT.Tools.Aliyun.Common\MDT.Tools.Aliyun.Common.csproj">
+      <Project>{B02EE0A8-0A37-4783-AFDB-5273A12A0A31}</Project>
+      <Name>MDT.Tools.Aliyun.Common</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Docking\ThemeVS2012Light\Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Docking\ThemeVS2012Light\Strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Docking\ThemeVS2013Blue\Resources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Docking\ThemeVS2013Blue\Strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Loading\loading.gif" />
+    <EmbeddedResource Include="Loading\loading2.gif" />
+    <EmbeddedResource Include="Loading\LoadingResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LoadingResource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Docking\Resources\DockIndicator_PaneDiamond.png" />
+    <Content Include="Docking\Resources\DockIndicator_PaneDiamond_Bottom.png" />
+    <Content Include="Docking\Resources\Dockindicator_PaneDiamond_Fill.png" />
+    <Content Include="Docking\Resources\DockIndicator_PaneDiamond_Hotspot.png" />
+    <Content Include="Docking\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
+    <Content Include="Docking\Resources\DockIndicator_PaneDiamond_HotspotIndex_VS2012.png" />
+    <Content Include="Docking\Resources\DockIndicator_PaneDiamond_Left.png" />
+    <Content Include="Docking\Resources\DockIndicator_PaneDiamond_Right.png" />
+    <Content Include="Docking\Resources\DockIndicator_PaneDiamond_Top.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelBottom.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelBottom_Active.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelFill.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelFill_Active.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelLeft.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelLeft_Active.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelRight.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelRight_Active.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelTop.png" />
+    <Content Include="Docking\Resources\DockIndicator_PanelTop_Active.png" />
+    <Content Include="Docking\Resources\DockPane_AutoHide.png" />
+    <Content Include="Docking\Resources\DockPane_Close.png" />
+    <Content Include="Docking\Resources\DockPane_Dock.png" />
+    <Content Include="Docking\Resources\DockPane_Option.png" />
+    <Content Include="Docking\Resources\DockPane_OptionOverflow.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\ActiveTabHover_Close.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\ActiveTab_Close.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\Dockindicator_PaneDiamond.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockIndicator_PaneDiamond1.bmp" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\Dockindicator_PaneDiamond_Fill.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\Dockindicator_PaneDiamond_Hotspot.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockIndicator_PaneDiamond_HotspotIndex.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockIndicator_PanelBottom.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockIndicator_PanelFill.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockIndicator_PanelLeft.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockIndicator_PanelRight.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockIndicator_PanelTop.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockPane_AutoHide.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockPane_Close.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockPane_Dock.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockPane_Option.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\DockPane_OptionOverflow.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\InactiveTabHover_Close.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\LostFocusTabHover_Close.png" />
+    <Content Include="Docking\ThemeVS2012Light\Resources\LostFocusTab_Close.png" />
+    <Content Include="Docking\ThemeVS2013Blue\Resources\ActiveTabHover_Close.png" />
+    <Content Include="Docking\ThemeVS2013Blue\Resources\ActiveTab_Close.png" />
+    <Content Include="Docking\ThemeVS2013Blue\Resources\DockPane_Close.png" />
+    <Content Include="Docking\ThemeVS2013Blue\Resources\DockPane_Close_disabled.png" />
+    <Content Include="Docking\ThemeVS2013Blue\Resources\LostFocusTab_Close.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

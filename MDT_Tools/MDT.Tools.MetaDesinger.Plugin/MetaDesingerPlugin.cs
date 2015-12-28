@@ -13,7 +13,7 @@ namespace MDT.Tools.MetaDesinger.Plugin
     public class MetaDesingerPlugin : DBSubPlugin
     {
         #region 插件信息
-        private int _tag = 31;
+        private int _tag = 33;
         public override int Tag
         {
             get { return _tag; }
@@ -22,7 +22,7 @@ namespace MDT.Tools.MetaDesinger.Plugin
 
         public override int PluginKey
         {
-            get { return 31; }
+            get { return 33; }
         }
 
         public override string PluginName
@@ -72,6 +72,7 @@ namespace MDT.Tools.MetaDesinger.Plugin
             DataDesingerUI ui=new DataDesingerUI();
             ui.Text = PluginName;
             ui.tableDesingerLayer1.DBSubPlugin = this;
+            ui.tableDesingerLayer1.DataDesingerUI = ui;
             //ui.desingerUI1.desingerLayer1.DBSubPlugin = this;
             ui.Show(Application.Panel);
         }

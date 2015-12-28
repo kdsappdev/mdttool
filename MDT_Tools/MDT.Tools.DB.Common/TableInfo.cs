@@ -6,6 +6,12 @@ namespace MDT.Tools.DB.Common
 {
     public class TableInfo
     {
+        private string type;
+        public string Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
         private string tableName;
 
         public string TableName

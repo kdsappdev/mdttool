@@ -9,7 +9,7 @@
 	</tstamp>	  
 
 	<property name="release.URL" value="http://atflite.oss-cn-hangzhou.aliyuncs.com/" />
-	<property name="c.URL" value="http://www.cfets.net:8000/" />
+	<property name="c.URL" value="http://atflite.oss-cn-hangzhou.aliyuncs.com/x86/AutoUpdateService.xml" />
 	<property name="release.dir" value="../../../release" />
 	<property name="release.dir.temp" value="./client" />
 	<property name="release.dir.x86" value="${release.dir}/MSK/x86" />
@@ -36,7 +36,7 @@
 
 				<echo message="${line.separator}****** Generating AutoUpdate Configuration"/>
 				<exec dir="${release.dir.temp}" executable="cmd.exe">
-					<arg line="/c MDT.Tools.AutoUpdater.Config.exe -u ${release.URL} -uc ${c.URL}x86/"/>
+					<arg line="/c MDT.Tools.AutoUpdater.Config.exe -u ${release.URL} -uc ${c.URL}"/>
 				</exec>
 
 				<echo message="${line.separator}****** Copying new file to ${release.dir.x86}"/>

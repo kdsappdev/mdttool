@@ -17,13 +17,13 @@ import java.math.BigDecimal;
 */
 public interface ${poname}DAO {
 
+#if(${table.type}=="TABLE")    
 #if(${GenHelper.HasPrimaryKey(${table.TableName})})
     ${KeyJavaType} insert(${poname} record);
 #else
     void insert(${poname} record);
 #end
-    List selectByExample(${poname}Example example);
-   
+     
     int deleteByExample(${poname}Example example);
    
     int countByExample(${poname}Example example);
@@ -31,14 +31,19 @@ public interface ${poname}DAO {
     int updateByExampleSelective(${poname} record, ${poname}Example example);
     
     int updateByExample(${poname} record, ${poname}Example example);
+#end
 
+	List selectByExample(${poname}Example example);
+	
 #if(${GenHelper.HasPrimaryKey(${table.TableName})})
-    int updateByPrimaryKey(${poname} record);
+#if(${table.type}=="TABLE")
+	int updateByPrimaryKey(${poname} record);
 
     int updateByPrimaryKeySelective(${poname} record);
     
     int deleteByPrimaryKey(${KeyJavaType} ${KeyField});
-     
+    #end
+	
     ${poname} selectByPrimaryKey(${KeyJavaType} ${KeyField});
 #end
 }

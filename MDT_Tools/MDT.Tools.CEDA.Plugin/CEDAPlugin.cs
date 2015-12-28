@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using MDT.Tools.Core.Plugin;
+using System.IO;
+using System.Windows.Forms;
+using MDT.Tools.Core.Utils;
+using System.Runtime.InteropServices;
 
 namespace MDT.Tools.CEDA.Plugin
 {
     public class CEDAPlugin : AbstractPlugin
     {
+
         #region 插件信息
 
         private int _tag = 71;
@@ -41,10 +45,43 @@ namespace MDT.Tools.CEDA.Plugin
 
         #endregion
 
+       
+        private string clientType = "";
+        private static readonly string LocalEnv = System.Windows.Forms.Application.StartupPath + "\\control\\LocalEnv.ini";
+        [DllImport("kernel32")]//返回取得字符串缓冲区的长度
+        private static extern long GetPrivateProfileString(string section, string key,
+            string def, StringBuilder retVal, int size, string filePath);
         protected override void load()
         {
             AddTool();
+            try
+            {
+                clientType = ReadIniData("Config", "clientType", "E", LocalEnv);
+                   
+            }
+            catch (Exception e)
+            {
+                LogHelper.Error(e.Message);
+            }
         }
+
+        #region
+        public  string ReadIniData(string Section,string Key,string NoText,string iniFilePath)
+        {
+            if(File.Exists(iniFilePath))
+            {
+                StringBuilder temp = new StringBuilder(1024);
+                GetPrivateProfileString(Section,Key,NoText,temp,1024,iniFilePath);
+                return temp.ToString();
+            }
+            else
+            {
+                return "E";
+            }
+        }
+
+        #endregion
+
 
         protected delegate void Simple();
         readonly ToolStripMenuItem _tsbRequest = new ToolStripMenuItem();
@@ -92,18 +129,21 @@ namespace MDT.Tools.CEDA.Plugin
         void _tsbPublish_Click(object sender, EventArgs e)
         {
             var client = new PubClient {Text = _tsbPublish.Text};
+            client.clientType = this.clientType;
             client.Show(Application.Panel);
         }
 
         void _tsbSubscribe_Click(object sender, EventArgs e)
         {
             var client = new SubscribeClient() { Text = _tsbSubscribe.Text };
+            client.clientType = this.clientType;
             client.Show(Application.Panel);
         }
 
         void _tsbRequest_Click(object sender, EventArgs e)
         {
             var client = new RequestClient() { Text = _tsbRequest.Text };
+            client.clientType = this.clientType;
             client.Show(Application.Panel);
         }
     }

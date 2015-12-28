@@ -28,5 +28,7 @@ namespace MDT.Tools.Template.Plugin.Model
         public bool IsShowGenCode { get; set; }
         public string CodeLanguage { get; set; }
         public string Language { get; set; }
+
+        public bool IsMenuVisable { get; set; }
     }
 }

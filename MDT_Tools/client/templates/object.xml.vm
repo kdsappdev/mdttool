@@ -17,5 +17,6 @@
 	<!-- ${guiPluginName} GUI-->
 	<object id="${guiPluginName}GUI" type="${bllNameSpace}.${guiPluginName}GUI,${bllDllName}">
 		<property name="I${guiPluginName}BLLService" ref="I${guiPluginName}BLLService"/>
+		<property name="PageSize" value="200"/>
 	</object>
 

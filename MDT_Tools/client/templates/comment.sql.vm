@@ -1,4 +1,4 @@
-﻿
+﻿#if(${tableInfo.type}=="TABLE")
 
 #if(!$codeGenHelper.IsNullOrEmpty(${tableInfo.TableComments}))
 	comment on table ${tableInfo.TableName} is '${tableInfo.TableComments}';
@@ -10,6 +10,7 @@
 #else
 #if($column.IsChanged)
 	comment on column ${tableInfo.TableName}.${column.Name} is '';
+#end
 #end
 #end
 #end

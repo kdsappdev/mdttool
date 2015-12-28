@@ -616,6 +616,7 @@ namespace MDT.Tools.CEDA.Plugin
             this.ckEncryption.TabIndex = 33;
             this.ckEncryption.Text = "加密";
             this.ckEncryption.UseVisualStyleBackColor = true;
+            this.ckEncryption.CheckedChanged += new System.EventHandler(this.ckEncryption_CheckedChanged);
             // 
             // ckSSL
             // 

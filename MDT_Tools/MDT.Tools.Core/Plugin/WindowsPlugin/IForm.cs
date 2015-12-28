@@ -40,7 +40,7 @@ namespace MDT.Tools.Core.Plugin.WindowsPlugin
         void RegisterObject(string name, object obj);
         object GetObject(string name);
         void Remove(string name);
-
+        void Exit();
         void Subscribe(string name, IPlugin plugin);
         void Unsubscribe(string name,IPlugin plugin);
         void BroadCast(string name, object o);
