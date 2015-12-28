@@ -773,7 +773,7 @@ LUALIB_API int isLic()
 			printf("macc:%s\n",macc);
 			char* mac=getMac();
 			printf("mac:%s\n",mac);
-			if(strcmp(mac,macc)==0)
+			if(strstr(macc,mac)!=NULL)
 			{
 				flag=1;
 			}			 
@@ -781,7 +781,7 @@ LUALIB_API int isLic()
 	}
 	printf("flag:%d\n",flag);
 	return flag;
-}
+}  
 
 LUALIB_API lua_State *luaL_newstate (void) {
 	if(isLic()!=1)
